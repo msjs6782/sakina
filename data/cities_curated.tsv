@@ -1,0 +1,277 @@
+# id	name_ar	name_en	country	zone	approx_lat	approx_lon	geonames_country (if different)
+riyadh	الرياض	Riyadh	SA	Asia/Riyadh	24.69	46.72
+jeddah	جدة	Jeddah	SA	Asia/Riyadh	21.54	39.17
+makkah	مكة المكرمة	Makkah	SA	Asia/Riyadh	21.42	39.83
+madinah	المدينة المنورة	Madinah	SA	Asia/Riyadh	24.47	39.61
+dammam	الدمام	Dammam	SA	Asia/Riyadh	26.43	50.10
+khobar	الخبر	Al Khobar	SA	Asia/Riyadh	26.28	50.21
+dhahran	الظهران	Dhahran	SA	Asia/Riyadh	26.29	50.11
+jubail	الجبيل	Jubail	SA	Asia/Riyadh	27.01	49.66
+qatif	القطيف	Qatif	SA	Asia/Riyadh	26.56	50.01
+hofuf	الهفوف (الأحساء)	Hofuf (Al-Ahsa)	SA	Asia/Riyadh	25.38	49.59
+taif	الطائف	Taif	SA	Asia/Riyadh	21.27	40.42
+tabuk	تبوك	Tabuk	SA	Asia/Riyadh	28.38	36.57
+buraidah	بريدة	Buraidah	SA	Asia/Riyadh	26.33	43.97
+unaizah	عنيزة	Unaizah	SA	Asia/Riyadh	26.08	43.99
+hail	حائل	Hail	SA	Asia/Riyadh	27.52	41.69
+abha	أبها	Abha	SA	Asia/Riyadh	18.22	42.50
+khamis	خميس مشيط	Khamis Mushait	SA	Asia/Riyadh	18.31	42.73
+jazan	جازان	Jazan	SA	Asia/Riyadh	16.89	42.55
+najran	نجران	Najran	SA	Asia/Riyadh	17.49	44.13
+baha	الباحة	Al Baha	SA	Asia/Riyadh	20.01	41.47
+arar	عرعر	Arar	SA	Asia/Riyadh	30.98	41.04
+sakaka	سكاكا	Sakaka	SA	Asia/Riyadh	29.97	40.21
+yanbu	ينبع	Yanbu	SA	Asia/Riyadh	24.09	38.06
+kharj	الخرج	Al Kharj	SA	Asia/Riyadh	24.16	47.31
+hafar	حفر الباطن	Hafar Al-Batin	SA	Asia/Riyadh	28.43	45.96
+bisha	بيشة	Bisha	SA	Asia/Riyadh	20.00	42.60
+rabigh	رابغ	Rabigh	SA	Asia/Riyadh	22.80	39.03
+ula	العلا	AlUla	SA	Asia/Riyadh	26.61	37.92
+majmaah	المجمعة	Al Majmaah	SA	Asia/Riyadh	25.90	45.35
+dawadmi	الدوادمي	Ad Dawadimi	SA	Asia/Riyadh	24.51	44.39
+qurayyat	القريات	Al Qurayyat	SA	Asia/Riyadh	31.33	37.34
+dubai	دبي	Dubai	AE	Asia/Dubai	25.20	55.27
+abudhabi	أبوظبي	Abu Dhabi	AE	Asia/Dubai	24.45	54.38
+sharjah	الشارقة	Sharjah	AE	Asia/Dubai	25.35	55.39
+alain	العين	Al Ain	AE	Asia/Dubai	24.21	55.74
+ajman	عجمان	Ajman	AE	Asia/Dubai	25.41	55.45
+rak	رأس الخيمة	Ras Al Khaimah	AE	Asia/Dubai	25.79	55.94
+fujairah	الفجيرة	Fujairah	AE	Asia/Dubai	25.13	56.33
+kuwait	مدينة الكويت	Kuwait City	KW	Asia/Kuwait	29.37	47.98
+jahra	الجهراء	Al Jahra	KW	Asia/Kuwait	29.34	47.66
+doha	الدوحة	Doha	QA	Asia/Qatar	25.29	51.53
+manama	المنامة	Manama	BH	Asia/Bahrain	26.23	50.59
+muharraq	المحرق	Muharraq	BH	Asia/Bahrain	26.26	50.61
+muscat	مسقط	Muscat	OM	Asia/Muscat	23.59	58.41
+salalah	صلالة	Salalah	OM	Asia/Muscat	17.02	54.09
+sohar	صحار	Sohar	OM	Asia/Muscat	24.35	56.71
+nizwa	نزوى	Nizwa	OM	Asia/Muscat	22.93	57.53
+sur	صور	Sur	OM	Asia/Muscat	22.57	59.53
+sanaa	صنعاء	Sanaa	YE	Asia/Aden	15.35	44.21
+aden	عدن	Aden	YE	Asia/Aden	12.78	45.04
+taiz	تعز	Taiz	YE	Asia/Aden	13.58	44.02
+mukalla	المكلا	Mukalla	YE	Asia/Aden	14.54	49.12
+hodeidah	الحديدة	Hodeidah	YE	Asia/Aden	14.80	42.95
+baghdad	بغداد	Baghdad	IQ	Asia/Baghdad	33.31	44.36
+basra	البصرة	Basra	IQ	Asia/Baghdad	30.51	47.78
+mosul	الموصل	Mosul	IQ	Asia/Baghdad	36.34	43.13
+erbil	أربيل	Erbil	IQ	Asia/Baghdad	36.19	44.01
+najaf	النجف	Najaf	IQ	Asia/Baghdad	32.00	44.33
+karbala	كربلاء	Karbala	IQ	Asia/Baghdad	32.62	44.02
+sulaymaniyah	السليمانية	Sulaymaniyah	IQ	Asia/Baghdad	35.56	45.43
+kirkuk	كركوك	Kirkuk	IQ	Asia/Baghdad	35.47	44.39
+amman	عمّان	Amman	JO	Asia/Amman	31.95	35.93
+irbid	إربد	Irbid	JO	Asia/Amman	32.56	35.85
+zarqa	الزرقاء	Zarqa	JO	Asia/Amman	32.07	36.09
+aqaba	العقبة	Aqaba	JO	Asia/Amman	29.53	35.01
+jerusalem	القدس	Jerusalem	PS	Asia/Jerusalem	31.78	35.23	IL
+gaza	غزة	Gaza	PS	Asia/Gaza	31.50	34.47
+hebron	الخليل	Hebron	PS	Asia/Hebron	31.53	35.10
+nablus	نابلس	Nablus	PS	Asia/Hebron	32.22	35.26
+ramallah	رام الله	Ramallah	PS	Asia/Hebron	31.90	35.20
+beirut	بيروت	Beirut	LB	Asia/Beirut	33.89	35.50
+tripolilb	طرابلس	Tripoli	LB	Asia/Beirut	34.44	35.83
+sidon	صيدا	Sidon	LB	Asia/Beirut	33.56	35.37
+damascus	دمشق	Damascus	SY	Asia/Damascus	33.51	36.29
+aleppo	حلب	Aleppo	SY	Asia/Damascus	36.20	37.16
+homs	حمص	Homs	SY	Asia/Damascus	34.73	36.71
+latakia	اللاذقية	Latakia	SY	Asia/Damascus	35.52	35.78
+hama	حماة	Hama	SY	Asia/Damascus	35.13	36.75
+cairo	القاهرة	Cairo	EG	Africa/Cairo	30.04	31.24
+alexandria	الإسكندرية	Alexandria	EG	Africa/Cairo	31.20	29.92
+giza	الجيزة	Giza	EG	Africa/Cairo	30.01	31.21
+aswan	أسوان	Aswan	EG	Africa/Cairo	24.09	32.90
+luxor	الأقصر	Luxor	EG	Africa/Cairo	25.69	32.64
+portsaid	بورسعيد	Port Said	EG	Africa/Cairo	31.26	32.30
+mansoura	المنصورة	Mansoura	EG	Africa/Cairo	31.04	31.38
+tanta	طنطا	Tanta	EG	Africa/Cairo	30.79	31.00
+asyut	أسيوط	Asyut	EG	Africa/Cairo	27.18	31.18
+suez	السويس	Suez	EG	Africa/Cairo	29.97	32.53
+sharm	شرم الشيخ	Sharm El Sheikh	EG	Africa/Cairo	27.91	34.33
+hurghada	الغردقة	Hurghada	EG	Africa/Cairo	27.26	33.81
+khartoum	الخرطوم	Khartoum	SD	Africa/Khartoum	15.50	32.56
+omdurman	أم درمان	Omdurman	SD	Africa/Khartoum	15.64	32.48
+portsudan	بورتسودان	Port Sudan	SD	Africa/Khartoum	19.62	37.22
+tripoli	طرابلس	Tripoli	LY	Africa/Tripoli	32.89	13.19
+benghazi	بنغازي	Benghazi	LY	Africa/Tripoli	32.12	20.07
+misrata	مصراتة	Misrata	LY	Africa/Tripoli	32.38	15.09
+tunis	تونس	Tunis	TN	Africa/Tunis	36.81	10.18
+sfax	صفاقس	Sfax	TN	Africa/Tunis	34.74	10.76
+sousse	سوسة	Sousse	TN	Africa/Tunis	35.83	10.64
+algiers	الجزائر	Algiers	DZ	Africa/Algiers	36.75	3.06
+oran	وهران	Oran	DZ	Africa/Algiers	35.70	-0.63
+constantine	قسنطينة	Constantine	DZ	Africa/Algiers	36.37	6.61
+annaba	عنابة	Annaba	DZ	Africa/Algiers	36.90	7.77
+casablanca	الدار البيضاء	Casablanca	MA	Africa/Casablanca	33.57	-7.59
+rabat	الرباط	Rabat	MA	Africa/Casablanca	34.02	-6.84
+marrakesh	مراكش	Marrakesh	MA	Africa/Casablanca	31.63	-8.01
+fes	فاس	Fes	MA	Africa/Casablanca	34.03	-5.00
+tangier	طنجة	Tangier	MA	Africa/Casablanca	35.76	-5.83
+agadir	أكادير	Agadir	MA	Africa/Casablanca	30.43	-9.60
+nouakchott	نواكشوط	Nouakchott	MR	Africa/Nouakchott	18.09	-15.98
+mogadishu	مقديشو	Mogadishu	SO	Africa/Mogadishu	2.04	45.34
+djibouti	جيبوتي	Djibouti	DJ	Africa/Djibouti	11.59	43.15
+istanbul	إسطنبول	Istanbul	TR	Europe/Istanbul	41.01	28.98
+ankara	أنقرة	Ankara	TR	Europe/Istanbul	39.93	32.86
+izmir	إزمير	Izmir	TR	Europe/Istanbul	38.42	27.14
+bursa	بورصة	Bursa	TR	Europe/Istanbul	40.19	29.06
+antalya	أنطاليا	Antalya	TR	Europe/Istanbul	36.90	30.70
+trabzon	طرابزون	Trabzon	TR	Europe/Istanbul	41.00	39.72
+konya	قونية	Konya	TR	Europe/Istanbul	37.87	32.48
+gaziantep	غازي عنتاب	Gaziantep	TR	Europe/Istanbul	37.07	37.38
+tehran	طهران	Tehran	IR	Asia/Tehran	35.69	51.39
+mashhad	مشهد	Mashhad	IR	Asia/Tehran	36.30	59.61
+isfahan	أصفهان	Isfahan	IR	Asia/Tehran	32.65	51.67
+shiraz	شيراز	Shiraz	IR	Asia/Tehran	29.59	52.58
+tabriz	تبريز	Tabriz	IR	Asia/Tehran	38.08	46.29
+ahvaz	الأهواز	Ahvaz	IR	Asia/Tehran	31.32	48.67
+karachi	كراتشي	Karachi	PK	Asia/Karachi	24.86	67.01
+lahore	لاهور	Lahore	PK	Asia/Karachi	31.55	74.34
+islamabad	إسلام آباد	Islamabad	PK	Asia/Karachi	33.68	73.05
+rawalpindi	راولبندي	Rawalpindi	PK	Asia/Karachi	33.60	73.04
+peshawar	بيشاور	Peshawar	PK	Asia/Karachi	34.01	71.58
+faisalabad	فيصل آباد	Faisalabad	PK	Asia/Karachi	31.42	73.08
+multan	ملتان	Multan	PK	Asia/Karachi	30.20	71.47
+quetta	كويتا	Quetta	PK	Asia/Karachi	30.18	66.98
+kabul	كابل	Kabul	AF	Asia/Kabul	34.53	69.17
+kandahar	قندهار	Kandahar	AF	Asia/Kabul	31.61	65.71
+herat	هرات	Herat	AF	Asia/Kabul	34.35	62.20
+delhi	نيودلهي	New Delhi	IN	Asia/Kolkata	28.61	77.21
+mumbai	مومباي	Mumbai	IN	Asia/Kolkata	19.08	72.88
+hyderabad	حيدر آباد	Hyderabad	IN	Asia/Kolkata	17.39	78.49
+bangalore	بنغالور	Bengaluru	IN	Asia/Kolkata	12.97	77.59
+chennai	تشيناي	Chennai	IN	Asia/Kolkata	13.08	80.27
+kolkata	كولكاتا	Kolkata	IN	Asia/Kolkata	22.57	88.36
+lucknow	لكناو	Lucknow	IN	Asia/Kolkata	26.85	80.95
+calicut	كاليكوت	Kozhikode	IN	Asia/Kolkata	11.26	75.78
+srinagar	سريناغار	Srinagar	IN	Asia/Kolkata	34.08	74.80
+dhaka	دكا	Dhaka	BD	Asia/Dhaka	23.81	90.41
+chittagong	شيتاغونغ	Chittagong	BD	Asia/Dhaka	22.36	91.78
+colombo	كولومبو	Colombo	LK	Asia/Colombo	6.93	79.85
+male	ماليه	Male	MV	Indian/Maldives	4.18	73.51
+jakarta	جاكرتا	Jakarta	ID	Asia/Jakarta	-6.21	106.85
+surabaya	سورابايا	Surabaya	ID	Asia/Jakarta	-7.25	112.75
+bandung	باندونغ	Bandung	ID	Asia/Jakarta	-6.92	107.61
+medan	ميدان	Medan	ID	Asia/Jakarta	3.59	98.67
+bandaaceh	باندا آتشيه	Banda Aceh	ID	Asia/Jakarta	5.55	95.32
+makassar	ماكاسار	Makassar	ID	Asia/Makassar	-5.15	119.43
+kualalumpur	كوالالمبور	Kuala Lumpur	MY	Asia/Kuala_Lumpur	3.14	101.69
+georgetown	جورج تاون (بينانغ)	George Town (Penang)	MY	Asia/Kuala_Lumpur	5.41	100.33
+johorbahru	جوهور بارو	Johor Bahru	MY	Asia/Kuala_Lumpur	1.49	103.74
+kotakinabalu	كوتا كينابالو	Kota Kinabalu	MY	Asia/Kuching	5.98	116.07
+singapore	سنغافورة	Singapore	SG	Asia/Singapore	1.29	103.85
+bandarseribegawan	بندر سري بكاوان	Bandar Seri Begawan	BN	Asia/Brunei	4.89	114.94
+bangkok	بانكوك	Bangkok	TH	Asia/Bangkok	13.76	100.50
+manila	مانيلا	Manila	PH	Asia/Manila	14.60	120.98
+beijing	بكين	Beijing	CN	Asia/Shanghai	39.90	116.41
+shanghai	شنغهاي	Shanghai	CN	Asia/Shanghai	31.23	121.47
+guangzhou	قوانغتشو	Guangzhou	CN	Asia/Shanghai	23.13	113.26
+tokyo	طوكيو	Tokyo	JP	Asia/Tokyo	35.68	139.69
+seoul	سيول	Seoul	KR	Asia/Seoul	37.57	126.98
+tashkent	طشقند	Tashkent	UZ	Asia/Tashkent	41.30	69.24
+samarkand	سمرقند	Samarkand	UZ	Asia/Samarkand	39.65	66.96
+bukhara	بخارى	Bukhara	UZ	Asia/Samarkand	39.77	64.42
+almaty	ألماتي	Almaty	KZ	Asia/Almaty	43.24	76.89
+astana	أستانا	Astana	KZ	Asia/Almaty	51.17	71.45
+bishkek	بيشكك	Bishkek	KG	Asia/Bishkek	42.87	74.59
+dushanbe	دوشنبه	Dushanbe	TJ	Asia/Dushanbe	38.56	68.79
+ashgabat	عشق آباد	Ashgabat	TM	Asia/Ashgabat	37.95	58.38
+baku	باكو	Baku	AZ	Asia/Baku	40.41	49.87
+moscow	موسكو	Moscow	RU	Europe/Moscow	55.76	37.62
+kazan	قازان	Kazan	RU	Europe/Moscow	55.80	49.11
+grozny	غروزني	Grozny	RU	Europe/Moscow	43.32	45.69
+makhachkala	محج قلعة	Makhachkala	RU	Europe/Moscow	42.98	47.50
+ufa	أوفا	Ufa	RU	Asia/Yekaterinburg	54.74	55.97
+london	لندن	London	GB	Europe/London	51.51	-0.13
+birmingham	برمنغهام	Birmingham	GB	Europe/London	52.49	-1.89
+manchester	مانشستر	Manchester	GB	Europe/London	53.48	-2.24
+glasgow	غلاسكو	Glasgow	GB	Europe/London	55.86	-4.25
+dublin	دبلن	Dublin	IE	Europe/Dublin	53.35	-6.26
+paris	باريس	Paris	FR	Europe/Paris	48.86	2.35
+marseille	مرسيليا	Marseille	FR	Europe/Paris	43.30	5.37
+lyon	ليون	Lyon	FR	Europe/Paris	45.76	4.84
+brussels	بروكسل	Brussels	BE	Europe/Brussels	50.85	4.35
+amsterdam	أمستردام	Amsterdam	NL	Europe/Amsterdam	52.37	4.90
+rotterdam	روتردام	Rotterdam	NL	Europe/Amsterdam	51.92	4.48
+berlin	برلين	Berlin	DE	Europe/Berlin	52.52	13.40
+hamburg	هامبورغ	Hamburg	DE	Europe/Berlin	53.55	9.99
+munich	ميونخ	Munich	DE	Europe/Berlin	48.14	11.58
+frankfurt	فرانكفورت	Frankfurt	DE	Europe/Berlin	50.11	8.68
+cologne	كولونيا	Cologne	DE	Europe/Berlin	50.94	6.96
+vienna	فيينا	Vienna	AT	Europe/Vienna	48.21	16.37
+zurich	زيورخ	Zurich	CH	Europe/Zurich	47.38	8.54
+geneva	جنيف	Geneva	CH	Europe/Zurich	46.20	6.14
+rome	روما	Rome	IT	Europe/Rome	41.90	12.50
+milan	ميلانو	Milan	IT	Europe/Rome	45.46	9.19
+madrid	مدريد	Madrid	ES	Europe/Madrid	40.42	-3.70
+barcelona	برشلونة	Barcelona	ES	Europe/Madrid	41.39	2.17
+granada	غرناطة	Granada	ES	Europe/Madrid	37.18	-3.60
+lisbon	لشبونة	Lisbon	PT	Europe/Lisbon	38.72	-9.14
+athens	أثينا	Athens	GR	Europe/Athens	37.98	23.73
+stockholm	ستوكهولم	Stockholm	SE	Europe/Stockholm	59.33	18.07
+oslo	أوسلو	Oslo	NO	Europe/Oslo	59.91	10.75
+copenhagen	كوبنهاغن	Copenhagen	DK	Europe/Copenhagen	55.68	12.57
+helsinki	هلسنكي	Helsinki	FI	Europe/Helsinki	60.17	24.94
+warsaw	وارسو	Warsaw	PL	Europe/Warsaw	52.23	21.01
+sarajevo	سراييفو	Sarajevo	BA	Europe/Sarajevo	43.86	18.41
+tirana	تيرانا	Tirana	AL	Europe/Tirane	41.33	19.82
+pristina	بريشتينا	Pristina	XK	Europe/Belgrade	42.66	21.17
+sofia	صوفيا	Sofia	BG	Europe/Sofia	42.70	23.32
+bucharest	بوخارست	Bucharest	RO	Europe/Bucharest	44.43	26.10
+kyiv	كييف	Kyiv	UA	Europe/Kiev	50.45	30.52
+reykjavik	ريكيافيك	Reykjavik	IS	Atlantic/Reykjavik	64.15	-21.94
+lagos	لاغوس	Lagos	NG	Africa/Lagos	6.52	3.38
+kano	كانو	Kano	NG	Africa/Lagos	12.00	8.52
+abuja	أبوجا	Abuja	NG	Africa/Lagos	9.08	7.40
+dakar	داكار	Dakar	SN	Africa/Dakar	14.72	-17.47
+bamako	باماكو	Bamako	ML	Africa/Bamako	12.64	-8.00
+niamey	نيامي	Niamey	NE	Africa/Niamey	13.51	2.11
+ndjamena	نجامينا	N'Djamena	TD	Africa/Ndjamena	12.13	15.06
+addisababa	أديس أبابا	Addis Ababa	ET	Africa/Addis_Ababa	9.03	38.74
+nairobi	نيروبي	Nairobi	KE	Africa/Nairobi	-1.29	36.82
+mombasa	مومباسا	Mombasa	KE	Africa/Nairobi	-4.04	39.67
+daressalaam	دار السلام	Dar es Salaam	TZ	Africa/Dar_es_Salaam	-6.79	39.21
+zanzibar	زنجبار	Zanzibar	TZ	Africa/Dar_es_Salaam	-6.17	39.20
+kampala	كمبالا	Kampala	UG	Africa/Kampala	0.35	32.58
+johannesburg	جوهانسبرغ	Johannesburg	ZA	Africa/Johannesburg	-26.20	28.05
+capetown	كيب تاون	Cape Town	ZA	Africa/Johannesburg	-33.92	18.42
+durban	ديربان	Durban	ZA	Africa/Johannesburg	-29.86	31.02
+accra	أكرا	Accra	GH	Africa/Accra	5.60	-0.19
+conakry	كوناكري	Conakry	GN	Africa/Conakry	9.64	-13.58
+abidjan	أبيدجان	Abidjan	CI	Africa/Abidjan	5.36	-4.01
+newyork	نيويورك	New York	US	America/New_York	40.71	-74.01
+washington	واشنطن	Washington, D.C.	US	America/New_York	38.91	-77.04
+boston	بوسطن	Boston	US	America/New_York	42.36	-71.06
+philadelphia	فيلادلفيا	Philadelphia	US	America/New_York	39.95	-75.17
+atlanta	أتلانتا	Atlanta	US	America/New_York	33.75	-84.39
+miami	ميامي	Miami	US	America/New_York	25.76	-80.19
+detroit	ديترويت	Detroit	US	America/Detroit	42.33	-83.05
+dearborn	ديربورن	Dearborn	US	America/Detroit	42.32	-83.18
+chicago	شيكاغو	Chicago	US	America/Chicago	41.88	-87.63
+houston	هيوستن	Houston	US	America/Chicago	29.76	-95.37
+dallas	دالاس	Dallas	US	America/Chicago	32.78	-96.80
+denver	دنفر	Denver	US	America/Denver	39.74	-104.99
+phoenix	فينيكس	Phoenix	US	America/Phoenix	33.45	-112.07
+losangeles	لوس أنجلوس	Los Angeles	US	America/Los_Angeles	34.05	-118.24
+sanfrancisco	سان فرانسيسكو	San Francisco	US	America/Los_Angeles	37.77	-122.42
+seattle	سياتل	Seattle	US	America/Los_Angeles	47.61	-122.33
+toronto	تورونتو	Toronto	CA	America/Toronto	43.65	-79.38
+montreal	مونتريال	Montreal	CA	America/Toronto	45.50	-73.57
+ottawa	أوتاوا	Ottawa	CA	America/Toronto	45.42	-75.70
+calgary	كالغاري	Calgary	CA	America/Edmonton	51.05	-114.07
+edmonton	إدمونتون	Edmonton	CA	America/Edmonton	53.55	-113.49
+vancouver	فانكوفر	Vancouver	CA	America/Vancouver	49.28	-123.12
+mexicocity	مكسيكو سيتي	Mexico City	MX	America/Mexico_City	19.43	-99.13
+saopaulo	ساو باولو	São Paulo	BR	America/Sao_Paulo	-23.55	-46.63
+rio	ريو دي جانيرو	Rio de Janeiro	BR	America/Sao_Paulo	-22.91	-43.17
+buenosaires	بوينس آيرس	Buenos Aires	AR	America/Argentina/Buenos_Aires	-34.60	-58.38
+santiago	سانتياغو	Santiago	CL	America/Santiago	-33.45	-70.67
+bogota	بوغوتا	Bogotá	CO	America/Bogota	4.71	-74.07
+caracas	كاراكاس	Caracas	VE	America/Caracas	10.48	-66.90
+lima	ليما	Lima	PE	America/Lima	-12.05	-77.04
+sydney	سيدني	Sydney	AU	Australia/Sydney	-33.87	151.21
+melbourne	ملبورن	Melbourne	AU	Australia/Melbourne	-37.81	144.96
+brisbane	بريزبن	Brisbane	AU	Australia/Brisbane	-27.47	153.03
+perth	بيرث	Perth	AU	Australia/Perth	-31.95	115.86
+adelaide	أديلايد	Adelaide	AU	Australia/Adelaide	-34.93	138.60
+auckland	أوكلاند	Auckland	NZ	Pacific/Auckland	-36.85	174.76

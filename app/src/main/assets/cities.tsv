@@ -1,0 +1,278 @@
+# id	name_ar	name_en	country	country_ar	country_en	latitude	longitude	zone
+# Coordinates: GeoNames (CC BY 4.0) via cities.json. Arabic names and time zones: curated for Sakina.
+riyadh	الرياض	Riyadh	SA	السعودية	Saudi Arabia	24.68773	46.72185	Asia/Riyadh
+jeddah	جدة	Jeddah	SA	السعودية	Saudi Arabia	21.49012	39.18624	Asia/Riyadh
+makkah	مكة المكرمة	Makkah	SA	السعودية	Saudi Arabia	21.42664	39.82563	Asia/Riyadh
+madinah	المدينة المنورة	Madinah	SA	السعودية	Saudi Arabia	24.46861	39.61417	Asia/Riyadh
+dammam	الدمام	Dammam	SA	السعودية	Saudi Arabia	26.43442	50.10326	Asia/Riyadh
+khobar	الخبر	Al Khobar	SA	السعودية	Saudi Arabia	26.27944	50.20833	Asia/Riyadh
+dhahran	الظهران	Dhahran	SA	السعودية	Saudi Arabia	26.28864	50.11396	Asia/Riyadh
+jubail	الجبيل	Jubail	SA	السعودية	Saudi Arabia	27.01740	49.62251	Asia/Riyadh
+qatif	القطيف	Qatif	SA	السعودية	Saudi Arabia	26.56542	50.00890	Asia/Riyadh
+hofuf	الهفوف (الأحساء)	Hofuf (Al-Ahsa)	SA	السعودية	Saudi Arabia	25.36467	49.58764	Asia/Riyadh
+taif	الطائف	Taif	SA	السعودية	Saudi Arabia	21.27028	40.41583	Asia/Riyadh
+tabuk	تبوك	Tabuk	SA	السعودية	Saudi Arabia	28.39980	36.57151	Asia/Riyadh
+buraidah	بريدة	Buraidah	SA	السعودية	Saudi Arabia	26.32599	43.97497	Asia/Riyadh
+unaizah	عنيزة	Unaizah	SA	السعودية	Saudi Arabia	26.10000	44.00000	Asia/Riyadh
+hail	حائل	Hail	SA	السعودية	Saudi Arabia	27.52188	41.69073	Asia/Riyadh
+abha	أبها	Abha	SA	السعودية	Saudi Arabia	18.21639	42.50528	Asia/Riyadh
+khamis	خميس مشيط	Khamis Mushait	SA	السعودية	Saudi Arabia	18.30000	42.73333	Asia/Riyadh
+jazan	جازان	Jazan	SA	السعودية	Saudi Arabia	16.88917	42.55111	Asia/Riyadh
+najran	نجران	Najran	SA	السعودية	Saudi Arabia	17.49326	44.12766	Asia/Riyadh
+baha	الباحة	Al Baha	SA	السعودية	Saudi Arabia	20.01288	41.46767	Asia/Riyadh
+arar	عرعر	Arar	SA	السعودية	Saudi Arabia	30.97531	41.03808	Asia/Riyadh
+sakaka	سكاكا	Sakaka	SA	السعودية	Saudi Arabia	29.96974	40.20641	Asia/Riyadh
+yanbu	ينبع	Yanbu	SA	السعودية	Saudi Arabia	24.08954	38.06180	Asia/Riyadh
+kharj	الخرج	Al Kharj	SA	السعودية	Saudi Arabia	24.15541	47.33457	Asia/Riyadh
+hafar	حفر الباطن	Hafar Al-Batin	SA	السعودية	Saudi Arabia	28.43279	45.97077	Asia/Riyadh
+bisha	بيشة	Bisha	SA	السعودية	Saudi Arabia	20.00054	42.60520	Asia/Riyadh
+rabigh	رابغ	Rabigh	SA	السعودية	Saudi Arabia	22.79856	39.03493	Asia/Riyadh
+ula	العلا	AlUla	SA	السعودية	Saudi Arabia	26.60853	37.92316	Asia/Riyadh
+majmaah	المجمعة	Al Majmaah	SA	السعودية	Saudi Arabia	25.91097	45.35665	Asia/Riyadh
+dawadmi	الدوادمي	Ad Dawadimi	SA	السعودية	Saudi Arabia	24.50772	44.39237	Asia/Riyadh
+qurayyat	القريات	Al Qurayyat	SA	السعودية	Saudi Arabia	31.33176	37.34282	Asia/Riyadh
+dubai	دبي	Dubai	AE	الإمارات	United Arab Emirates	25.07725	55.30927	Asia/Dubai
+abudhabi	أبوظبي	Abu Dhabi	AE	الإمارات	United Arab Emirates	24.45118	54.39696	Asia/Dubai
+sharjah	الشارقة	Sharjah	AE	الإمارات	United Arab Emirates	25.33420	55.41221	Asia/Dubai
+alain	العين	Al Ain	AE	الإمارات	United Arab Emirates	24.19167	55.76056	Asia/Dubai
+ajman	عجمان	Ajman	AE	الإمارات	United Arab Emirates	25.40177	55.47878	Asia/Dubai
+rak	رأس الخيمة	Ras Al Khaimah	AE	الإمارات	United Arab Emirates	25.78953	55.94320	Asia/Dubai
+fujairah	الفجيرة	Fujairah	AE	الإمارات	United Arab Emirates	25.11641	56.34141	Asia/Dubai
+kuwait	مدينة الكويت	Kuwait City	KW	الكويت	Kuwait	29.36700	47.97429	Asia/Kuwait
+jahra	الجهراء	Al Jahra	KW	الكويت	Kuwait	29.33750	47.65806	Asia/Kuwait
+doha	الدوحة	Doha	QA	قطر	Qatar	25.28545	51.53096	Asia/Qatar
+manama	المنامة	Manama	BH	البحرين	Bahrain	26.22787	50.58565	Asia/Bahrain
+muharraq	المحرق	Muharraq	BH	البحرين	Bahrain	26.25722	50.61194	Asia/Bahrain
+muscat	مسقط	Muscat	OM	عُمان	Oman	23.58413	58.40778	Asia/Muscat
+salalah	صلالة	Salalah	OM	عُمان	Oman	17.01505	54.09237	Asia/Muscat
+sohar	صحار	Sohar	OM	عُمان	Oman	24.34745	56.70937	Asia/Muscat
+nizwa	نزوى	Nizwa	OM	عُمان	Oman	22.93333	57.53333	Asia/Muscat
+sur	صور	Sur	OM	عُمان	Oman	22.56667	59.52889	Asia/Muscat
+sanaa	صنعاء	Sanaa	YE	اليمن	Yemen	15.35452	44.20646	Asia/Aden
+aden	عدن	Aden	YE	اليمن	Yemen	12.77957	45.03852	Asia/Aden
+taiz	تعز	Taiz	YE	اليمن	Yemen	13.57952	44.02091	Asia/Aden
+mukalla	المكلا	Mukalla	YE	اليمن	Yemen	14.54248	49.12424	Asia/Aden
+hodeidah	الحديدة	Hodeidah	YE	اليمن	Yemen	14.79781	42.95452	Asia/Aden
+baghdad	بغداد	Baghdad	IQ	العراق	Iraq	33.34058	44.40088	Asia/Baghdad
+basra	البصرة	Basra	IQ	العراق	Iraq	30.50852	47.78040	Asia/Baghdad
+mosul	الموصل	Mosul	IQ	العراق	Iraq	36.33500	43.11889	Asia/Baghdad
+erbil	أربيل	Erbil	IQ	العراق	Iraq	36.19117	44.00943	Asia/Baghdad
+najaf	النجف	Najaf	IQ	العراق	Iraq	32.02594	44.34625	Asia/Baghdad
+karbala	كربلاء	Karbala	IQ	العراق	Iraq	32.61603	44.02488	Asia/Baghdad
+sulaymaniyah	السليمانية	Sulaymaniyah	IQ	العراق	Iraq	35.56496	45.43290	Asia/Baghdad
+kirkuk	كركوك	Kirkuk	IQ	العراق	Iraq	35.46806	44.39222	Asia/Baghdad
+amman	عمّان	Amman	JO	الأردن	Jordan	31.95522	35.94503	Asia/Amman
+irbid	إربد	Irbid	JO	الأردن	Jordan	32.55556	35.85000	Asia/Amman
+zarqa	الزرقاء	Zarqa	JO	الأردن	Jordan	32.07275	36.08796	Asia/Amman
+aqaba	العقبة	Aqaba	JO	الأردن	Jordan	29.52667	35.00778	Asia/Amman
+jerusalem	القدس	Jerusalem	PS	فلسطين	Palestine	31.76904	35.21633	Asia/Jerusalem
+gaza	غزة	Gaza	PS	فلسطين	Palestine	31.50161	34.46672	Asia/Gaza
+hebron	الخليل	Hebron	PS	فلسطين	Palestine	31.52935	35.09380	Asia/Hebron
+nablus	نابلس	Nablus	PS	فلسطين	Palestine	32.22111	35.25444	Asia/Hebron
+ramallah	رام الله	Ramallah	PS	فلسطين	Palestine	31.89964	35.20422	Asia/Hebron
+beirut	بيروت	Beirut	LB	لبنان	Lebanon	33.89332	35.50157	Asia/Beirut
+tripolilb	طرابلس	Tripoli	LB	لبنان	Lebanon	34.43352	35.84415	Asia/Beirut
+sidon	صيدا	Sidon	LB	لبنان	Lebanon	33.55751	35.37148	Asia/Beirut
+damascus	دمشق	Damascus	SY	سوريا	Syria	33.51020	36.29128	Asia/Damascus
+aleppo	حلب	Aleppo	SY	سوريا	Syria	36.20124	37.16117	Asia/Damascus
+homs	حمص	Homs	SY	سوريا	Syria	34.72405	36.72559	Asia/Damascus
+latakia	اللاذقية	Latakia	SY	سوريا	Syria	35.53125	35.79088	Asia/Damascus
+hama	حماة	Hama	SY	سوريا	Syria	35.13179	36.75783	Asia/Damascus
+cairo	القاهرة	Cairo	EG	مصر	Egypt	30.06263	31.24967	Africa/Cairo
+alexandria	الإسكندرية	Alexandria	EG	مصر	Egypt	31.20176	29.91582	Africa/Cairo
+giza	الجيزة	Giza	EG	مصر	Egypt	30.00944	31.20861	Africa/Cairo
+aswan	أسوان	Aswan	EG	مصر	Egypt	24.09082	32.89942	Africa/Cairo
+luxor	الأقصر	Luxor	EG	مصر	Egypt	25.69893	32.64210	Africa/Cairo
+portsaid	بورسعيد	Port Said	EG	مصر	Egypt	31.26531	32.30190	Africa/Cairo
+mansoura	المنصورة	Mansoura	EG	مصر	Egypt	31.03637	31.38069	Africa/Cairo
+tanta	طنطا	Tanta	EG	مصر	Egypt	30.78847	31.00192	Africa/Cairo
+asyut	أسيوط	Asyut	EG	مصر	Egypt	27.18096	31.18368	Africa/Cairo
+suez	السويس	Suez	EG	مصر	Egypt	29.97371	32.52627	Africa/Cairo
+sharm	شرم الشيخ	Sharm El Sheikh	EG	مصر	Egypt	27.91582	34.32995	Africa/Cairo
+hurghada	الغردقة	Hurghada	EG	مصر	Egypt	27.25738	33.81291	Africa/Cairo
+khartoum	الخرطوم	Khartoum	SD	السودان	Sudan	15.55177	32.53241	Africa/Khartoum
+omdurman	أم درمان	Omdurman	SD	السودان	Sudan	15.64453	32.47773	Africa/Khartoum
+portsudan	بورتسودان	Port Sudan	SD	السودان	Sudan	19.61745	37.21644	Africa/Khartoum
+tripoli	طرابلس	Tripoli	LY	ليبيا	Libya	32.88743	13.18733	Africa/Tripoli
+benghazi	بنغازي	Benghazi	LY	ليبيا	Libya	32.11486	20.06859	Africa/Tripoli
+misrata	مصراتة	Misrata	LY	ليبيا	Libya	32.37535	15.09254	Africa/Tripoli
+tunis	تونس	Tunis	TN	تونس	Tunisia	36.81897	10.16579	Africa/Tunis
+sfax	صفاقس	Sfax	TN	تونس	Tunisia	34.74056	10.76028	Africa/Tunis
+sousse	سوسة	Sousse	TN	تونس	Tunisia	35.82539	10.63699	Africa/Tunis
+algiers	الجزائر	Algiers	DZ	الجزائر	Algeria	36.73225	3.08746	Africa/Algiers
+oran	وهران	Oran	DZ	الجزائر	Algeria	35.69906	-0.63588	Africa/Algiers
+constantine	قسنطينة	Constantine	DZ	الجزائر	Algeria	36.36500	6.61472	Africa/Algiers
+annaba	عنابة	Annaba	DZ	الجزائر	Algeria	36.90000	7.76667	Africa/Algiers
+casablanca	الدار البيضاء	Casablanca	MA	المغرب	Morocco	33.58831	-7.61138	Africa/Casablanca
+rabat	الرباط	Rabat	MA	المغرب	Morocco	34.01325	-6.83255	Africa/Casablanca
+marrakesh	مراكش	Marrakesh	MA	المغرب	Morocco	31.63416	-7.99994	Africa/Casablanca
+fes	فاس	Fes	MA	المغرب	Morocco	34.03313	-5.00028	Africa/Casablanca
+tangier	طنجة	Tangier	MA	المغرب	Morocco	35.76727	-5.79975	Africa/Casablanca
+agadir	أكادير	Agadir	MA	المغرب	Morocco	30.42018	-9.59815	Africa/Casablanca
+nouakchott	نواكشوط	Nouakchott	MR	موريتانيا	Mauritania	18.08581	-15.97850	Africa/Nouakchott
+mogadishu	مقديشو	Mogadishu	SO	الصومال	Somalia	2.03711	45.34375	Africa/Mogadishu
+djibouti	جيبوتي	Djibouti	DJ	جيبوتي	Djibouti	11.58901	43.14503	Africa/Djibouti
+istanbul	إسطنبول	Istanbul	TR	تركيا	Türkiye	41.01384	28.94966	Europe/Istanbul
+ankara	أنقرة	Ankara	TR	تركيا	Türkiye	39.91987	32.85427	Europe/Istanbul
+izmir	إزمير	Izmir	TR	تركيا	Türkiye	38.41273	27.13838	Europe/Istanbul
+bursa	بورصة	Bursa	TR	تركيا	Türkiye	40.19559	29.06013	Europe/Istanbul
+antalya	أنطاليا	Antalya	TR	تركيا	Türkiye	36.90812	30.69556	Europe/Istanbul
+trabzon	طرابزون	Trabzon	TR	تركيا	Türkiye	41.00500	39.72694	Europe/Istanbul
+konya	قونية	Konya	TR	تركيا	Türkiye	37.87135	32.48464	Europe/Istanbul
+gaziantep	غازي عنتاب	Gaziantep	TR	تركيا	Türkiye	37.05944	37.38250	Europe/Istanbul
+tehran	طهران	Tehran	IR	إيران	Iran	35.69439	51.42151	Asia/Tehran
+mashhad	مشهد	Mashhad	IR	إيران	Iran	36.29807	59.60567	Asia/Tehran
+isfahan	أصفهان	Isfahan	IR	إيران	Iran	32.65246	51.67462	Asia/Tehran
+shiraz	شيراز	Shiraz	IR	إيران	Iran	29.61031	52.53113	Asia/Tehran
+tabriz	تبريز	Tabriz	IR	إيران	Iran	38.08000	46.29190	Asia/Tehran
+ahvaz	الأهواز	Ahvaz	IR	إيران	Iran	31.31901	48.68420	Asia/Tehran
+karachi	كراتشي	Karachi	PK	باكستان	Pakistan	24.86080	67.01040	Asia/Karachi
+lahore	لاهور	Lahore	PK	باكستان	Pakistan	31.55800	74.35071	Asia/Karachi
+islamabad	إسلام آباد	Islamabad	PK	باكستان	Pakistan	33.72148	73.04329	Asia/Karachi
+rawalpindi	راولبندي	Rawalpindi	PK	باكستان	Pakistan	33.59733	73.04790	Asia/Karachi
+peshawar	بيشاور	Peshawar	PK	باكستان	Pakistan	34.00800	71.57849	Asia/Karachi
+faisalabad	فيصل آباد	Faisalabad	PK	باكستان	Pakistan	31.41554	73.08969	Asia/Karachi
+multan	ملتان	Multan	PK	باكستان	Pakistan	30.19679	71.47824	Asia/Karachi
+quetta	كويتا	Quetta	PK	باكستان	Pakistan	30.18414	67.00141	Asia/Karachi
+kabul	كابل	Kabul	AF	أفغانستان	Afghanistan	34.52813	69.17233	Asia/Kabul
+kandahar	قندهار	Kandahar	AF	أفغانستان	Afghanistan	31.61332	65.71013	Asia/Kabul
+herat	هرات	Herat	AF	أفغانستان	Afghanistan	34.34817	62.19967	Asia/Kabul
+delhi	نيودلهي	New Delhi	IN	الهند	India	28.62137	77.21480	Asia/Kolkata
+mumbai	مومباي	Mumbai	IN	الهند	India	19.07283	72.88261	Asia/Kolkata
+hyderabad	حيدر آباد	Hyderabad	IN	الهند	India	17.38405	78.45636	Asia/Kolkata
+bangalore	بنغالور	Bengaluru	IN	الهند	India	12.97194	77.59369	Asia/Kolkata
+chennai	تشيناي	Chennai	IN	الهند	India	13.08784	80.27847	Asia/Kolkata
+kolkata	كولكاتا	Kolkata	IN	الهند	India	22.56263	88.36304	Asia/Kolkata
+lucknow	لكناو	Lucknow	IN	الهند	India	26.83928	80.92313	Asia/Kolkata
+calicut	كاليكوت	Kozhikode	IN	الهند	India	11.24802	75.78040	Asia/Kolkata
+srinagar	سريناغار	Srinagar	IN	الهند	India	34.08565	74.80555	Asia/Kolkata
+dhaka	دكا	Dhaka	BD	بنغلاديش	Bangladesh	23.71040	90.40744	Asia/Dhaka
+chittagong	شيتاغونغ	Chittagong	BD	بنغلاديش	Bangladesh	22.33840	91.83168	Asia/Dhaka
+colombo	كولومبو	Colombo	LK	سريلانكا	Sri Lanka	6.93548	79.84868	Asia/Colombo
+male	ماليه	Male	MV	جزر المالديف	Maldives	4.17521	73.50916	Indian/Maldives
+jakarta	جاكرتا	Jakarta	ID	إندونيسيا	Indonesia	-6.21462	106.84513	Asia/Jakarta
+surabaya	سورابايا	Surabaya	ID	إندونيسيا	Indonesia	-7.24917	112.75083	Asia/Jakarta
+bandung	باندونغ	Bandung	ID	إندونيسيا	Indonesia	-6.92222	107.60694	Asia/Jakarta
+medan	ميدان	Medan	ID	إندونيسيا	Indonesia	3.58333	98.66667	Asia/Jakarta
+bandaaceh	باندا آتشيه	Banda Aceh	ID	إندونيسيا	Indonesia	5.54167	95.33333	Asia/Jakarta
+makassar	ماكاسار	Makassar	ID	إندونيسيا	Indonesia	-5.14861	119.43194	Asia/Makassar
+kualalumpur	كوالالمبور	Kuala Lumpur	MY	ماليزيا	Malaysia	3.14120	101.68653	Asia/Kuala_Lumpur
+georgetown	جورج تاون (بينانغ)	George Town (Penang)	MY	ماليزيا	Malaysia	5.41123	100.33543	Asia/Kuala_Lumpur
+johorbahru	جوهور بارو	Johor Bahru	MY	ماليزيا	Malaysia	1.46550	103.75780	Asia/Kuala_Lumpur
+kotakinabalu	كوتا كينابالو	Kota Kinabalu	MY	ماليزيا	Malaysia	5.97490	116.07240	Asia/Kuching
+singapore	سنغافورة	Singapore	SG	سنغافورة	Singapore	1.28967	103.85007	Asia/Singapore
+bandarseribegawan	بندر سري بكاوان	Bandar Seri Begawan	BN	بروناي	Brunei	4.89035	114.94006	Asia/Brunei
+bangkok	بانكوك	Bangkok	TH	تايلاند	Thailand	13.75398	100.50144	Asia/Bangkok
+manila	مانيلا	Manila	PH	الفلبين	Philippines	14.60420	120.98220	Asia/Manila
+beijing	بكين	Beijing	CN	الصين	China	39.90750	116.39723	Asia/Shanghai
+shanghai	شنغهاي	Shanghai	CN	الصين	China	31.22222	121.45806	Asia/Shanghai
+guangzhou	قوانغتشو	Guangzhou	CN	الصين	China	23.11667	113.25000	Asia/Shanghai
+tokyo	طوكيو	Tokyo	JP	اليابان	Japan	35.68950	139.69171	Asia/Tokyo
+seoul	سيول	Seoul	KR	كوريا الجنوبية	South Korea	37.56600	126.97840	Asia/Seoul
+tashkent	طشقند	Tashkent	UZ	أوزبكستان	Uzbekistan	41.26465	69.21627	Asia/Tashkent
+samarkand	سمرقند	Samarkand	UZ	أوزبكستان	Uzbekistan	39.65456	66.96445	Asia/Samarkand
+bukhara	بخارى	Bukhara	UZ	أوزبكستان	Uzbekistan	39.77026	64.43069	Asia/Samarkand
+almaty	ألماتي	Almaty	KZ	كازاخستان	Kazakhstan	43.25249	76.91150	Asia/Almaty
+astana	أستانا	Astana	KZ	كازاخستان	Kazakhstan	51.18010	71.44598	Asia/Almaty
+bishkek	بيشكك	Bishkek	KG	قيرغيزستان	Kyrgyzstan	42.87000	74.59000	Asia/Bishkek
+dushanbe	دوشنبه	Dushanbe	TJ	طاجيكستان	Tajikistan	38.53575	68.77905	Asia/Dushanbe
+ashgabat	عشق آباد	Ashgabat	TM	تركمانستان	Turkmenistan	37.95000	58.38333	Asia/Ashgabat
+baku	باكو	Baku	AZ	أذربيجان	Azerbaijan	40.37767	49.89201	Asia/Baku
+moscow	موسكو	Moscow	RU	روسيا	Russia	55.75204	37.61781	Europe/Moscow
+kazan	قازان	Kazan	RU	روسيا	Russia	55.78874	49.12214	Europe/Moscow
+grozny	غروزني	Grozny	RU	روسيا	Russia	43.31195	45.68895	Europe/Moscow
+makhachkala	محج قلعة	Makhachkala	RU	روسيا	Russia	42.97782	47.50027	Europe/Moscow
+ufa	أوفا	Ufa	RU	روسيا	Russia	54.74306	55.96779	Asia/Yekaterinburg
+london	لندن	London	GB	المملكة المتحدة	United Kingdom	51.50853	-0.12574	Europe/London
+birmingham	برمنغهام	Birmingham	GB	المملكة المتحدة	United Kingdom	52.48142	-1.89983	Europe/London
+manchester	مانشستر	Manchester	GB	المملكة المتحدة	United Kingdom	53.48095	-2.23743	Europe/London
+glasgow	غلاسكو	Glasgow	GB	المملكة المتحدة	United Kingdom	55.86515	-4.25763	Europe/London
+dublin	دبلن	Dublin	IE	أيرلندا	Ireland	53.33306	-6.24889	Europe/Dublin
+paris	باريس	Paris	FR	فرنسا	France	48.85341	2.34880	Europe/Paris
+marseille	مرسيليا	Marseille	FR	فرنسا	France	43.29695	5.38107	Europe/Paris
+lyon	ليون	Lyon	FR	فرنسا	France	45.74906	4.84789	Europe/Paris
+brussels	بروكسل	Brussels	BE	بلجيكا	Belgium	50.85045	4.34878	Europe/Brussels
+amsterdam	أمستردام	Amsterdam	NL	هولندا	Netherlands	52.37403	4.88969	Europe/Amsterdam
+rotterdam	روتردام	Rotterdam	NL	هولندا	Netherlands	51.92250	4.47917	Europe/Amsterdam
+berlin	برلين	Berlin	DE	ألمانيا	Germany	52.52437	13.41053	Europe/Berlin
+hamburg	هامبورغ	Hamburg	DE	ألمانيا	Germany	53.55073	9.99302	Europe/Berlin
+munich	ميونخ	Munich	DE	ألمانيا	Germany	48.13743	11.57549	Europe/Berlin
+frankfurt	فرانكفورت	Frankfurt	DE	ألمانيا	Germany	50.11552	8.68417	Europe/Berlin
+cologne	كولونيا	Cologne	DE	ألمانيا	Germany	50.93333	6.95000	Europe/Berlin
+vienna	فيينا	Vienna	AT	النمسا	Austria	48.20849	16.37208	Europe/Vienna
+zurich	زيورخ	Zurich	CH	سويسرا	Switzerland	47.36667	8.55000	Europe/Zurich
+geneva	جنيف	Geneva	CH	سويسرا	Switzerland	46.20222	6.14569	Europe/Zurich
+rome	روما	Rome	IT	إيطاليا	Italy	41.89193	12.51133	Europe/Rome
+milan	ميلانو	Milan	IT	إيطاليا	Italy	45.46427	9.18951	Europe/Rome
+madrid	مدريد	Madrid	ES	إسبانيا	Spain	40.41650	-3.70256	Europe/Madrid
+barcelona	برشلونة	Barcelona	ES	إسبانيا	Spain	41.38879	2.15899	Europe/Madrid
+granada	غرناطة	Granada	ES	إسبانيا	Spain	37.18817	-3.60667	Europe/Madrid
+lisbon	لشبونة	Lisbon	PT	البرتغال	Portugal	38.72509	-9.14980	Europe/Lisbon
+athens	أثينا	Athens	GR	اليونان	Greece	37.98376	23.72784	Europe/Athens
+stockholm	ستوكهولم	Stockholm	SE	السويد	Sweden	59.32938	18.06871	Europe/Stockholm
+oslo	أوسلو	Oslo	NO	النرويج	Norway	59.91273	10.74609	Europe/Oslo
+copenhagen	كوبنهاغن	Copenhagen	DK	الدنمارك	Denmark	55.67594	12.56553	Europe/Copenhagen
+helsinki	هلسنكي	Helsinki	FI	فنلندا	Finland	60.16952	24.93545	Europe/Helsinki
+warsaw	وارسو	Warsaw	PL	بولندا	Poland	52.22977	21.01178	Europe/Warsaw
+sarajevo	سراييفو	Sarajevo	BA	البوسنة والهرسك	Bosnia and Herzegovina	43.84864	18.35644	Europe/Sarajevo
+tirana	تيرانا	Tirana	AL	ألبانيا	Albania	41.32744	19.81866	Europe/Tirane
+pristina	بريشتينا	Pristina	XK	كوسوفو	Kosovo	42.67272	21.16688	Europe/Belgrade
+sofia	صوفيا	Sofia	BG	بلغاريا	Bulgaria	42.69751	23.32415	Europe/Sofia
+bucharest	بوخارست	Bucharest	RO	رومانيا	Romania	44.43225	26.10626	Europe/Bucharest
+kyiv	كييف	Kyiv	UA	أوكرانيا	Ukraine	50.45466	30.52380	Europe/Kiev
+reykjavik	ريكيافيك	Reykjavik	IS	آيسلندا	Iceland	64.13548	-21.89541	Atlantic/Reykjavik
+lagos	لاغوس	Lagos	NG	نيجيريا	Nigeria	6.45407	3.39467	Africa/Lagos
+kano	كانو	Kano	NG	نيجيريا	Nigeria	12.00012	8.51672	Africa/Lagos
+abuja	أبوجا	Abuja	NG	نيجيريا	Nigeria	9.05785	7.49508	Africa/Lagos
+dakar	داكار	Dakar	SN	السنغال	Senegal	14.69370	-17.44406	Africa/Dakar
+bamako	باماكو	Bamako	ML	مالي	Mali	12.60915	-7.97522	Africa/Bamako
+niamey	نيامي	Niamey	NE	النيجر	Niger	13.51366	2.10980	Africa/Niamey
+ndjamena	نجامينا	N'Djamena	TD	تشاد	Chad	12.10672	15.04440	Africa/Ndjamena
+addisababa	أديس أبابا	Addis Ababa	ET	إثيوبيا	Ethiopia	9.02497	38.74689	Africa/Addis_Ababa
+nairobi	نيروبي	Nairobi	KE	كينيا	Kenya	-1.28333	36.81667	Africa/Nairobi
+mombasa	مومباسا	Mombasa	KE	كينيا	Kenya	-4.05466	39.66359	Africa/Nairobi
+daressalaam	دار السلام	Dar es Salaam	TZ	تنزانيا	Tanzania	-6.82349	39.26951	Africa/Dar_es_Salaam
+zanzibar	زنجبار	Zanzibar	TZ	تنزانيا	Tanzania	-6.16394	39.19793	Africa/Dar_es_Salaam
+kampala	كمبالا	Kampala	UG	أوغندا	Uganda	0.31628	32.58219	Africa/Kampala
+johannesburg	جوهانسبرغ	Johannesburg	ZA	جنوب أفريقيا	South Africa	-26.20227	28.04363	Africa/Johannesburg
+capetown	كيب تاون	Cape Town	ZA	جنوب أفريقيا	South Africa	-33.92584	18.42322	Africa/Johannesburg
+durban	ديربان	Durban	ZA	جنوب أفريقيا	South Africa	-29.85790	31.02920	Africa/Johannesburg
+accra	أكرا	Accra	GH	غانا	Ghana	5.55602	-0.19690	Africa/Accra
+conakry	كوناكري	Conakry	GN	غينيا	Guinea	9.53795	-13.67729	Africa/Conakry
+abidjan	أبيدجان	Abidjan	CI	ساحل العاج	Côte d'Ivoire	5.35444	-4.00167	Africa/Abidjan
+newyork	نيويورك	New York	US	الولايات المتحدة	United States	40.71427	-74.00597	America/New_York
+washington	واشنطن	Washington, D.C.	US	الولايات المتحدة	United States	38.89511	-77.03637	America/New_York
+boston	بوسطن	Boston	US	الولايات المتحدة	United States	42.35843	-71.05977	America/New_York
+philadelphia	فيلادلفيا	Philadelphia	US	الولايات المتحدة	United States	39.95238	-75.16362	America/New_York
+atlanta	أتلانتا	Atlanta	US	الولايات المتحدة	United States	33.74900	-84.38798	America/New_York
+miami	ميامي	Miami	US	الولايات المتحدة	United States	25.77427	-80.19366	America/New_York
+detroit	ديترويت	Detroit	US	الولايات المتحدة	United States	42.33143	-83.04575	America/Detroit
+dearborn	ديربورن	Dearborn	US	الولايات المتحدة	United States	42.32226	-83.17631	America/Detroit
+chicago	شيكاغو	Chicago	US	الولايات المتحدة	United States	41.85003	-87.65005	America/Chicago
+houston	هيوستن	Houston	US	الولايات المتحدة	United States	29.76328	-95.36327	America/Chicago
+dallas	دالاس	Dallas	US	الولايات المتحدة	United States	32.78306	-96.80667	America/Chicago
+denver	دنفر	Denver	US	الولايات المتحدة	United States	39.73915	-104.98470	America/Denver
+phoenix	فينيكس	Phoenix	US	الولايات المتحدة	United States	33.44838	-112.07404	America/Phoenix
+losangeles	لوس أنجلوس	Los Angeles	US	الولايات المتحدة	United States	34.05223	-118.24368	America/Los_Angeles
+sanfrancisco	سان فرانسيسكو	San Francisco	US	الولايات المتحدة	United States	37.77493	-122.41942	America/Los_Angeles
+seattle	سياتل	Seattle	US	الولايات المتحدة	United States	47.60621	-122.33207	America/Los_Angeles
+toronto	تورونتو	Toronto	CA	كندا	Canada	43.70643	-79.39864	America/Toronto
+montreal	مونتريال	Montreal	CA	كندا	Canada	45.50884	-73.58781	America/Toronto
+ottawa	أوتاوا	Ottawa	CA	كندا	Canada	45.41117	-75.69812	America/Toronto
+calgary	كالغاري	Calgary	CA	كندا	Canada	51.05011	-114.08529	America/Edmonton
+edmonton	إدمونتون	Edmonton	CA	كندا	Canada	53.55014	-113.46871	America/Edmonton
+vancouver	فانكوفر	Vancouver	CA	كندا	Canada	49.24966	-123.11934	America/Vancouver
+mexicocity	مكسيكو سيتي	Mexico City	MX	المكسيك	Mexico	19.42847	-99.12766	America/Mexico_City
+saopaulo	ساو باولو	São Paulo	BR	البرازيل	Brazil	-23.54750	-46.63611	America/Sao_Paulo
+rio	ريو دي جانيرو	Rio de Janeiro	BR	البرازيل	Brazil	-22.90642	-43.18223	America/Sao_Paulo
+buenosaires	بوينس آيرس	Buenos Aires	AR	الأرجنتين	Argentina	-34.61315	-58.37723	America/Argentina/Buenos_Aires
+santiago	سانتياغو	Santiago	CL	تشيلي	Chile	-33.45694	-70.64827	America/Santiago
+bogota	بوغوتا	Bogotá	CO	كولومبيا	Colombia	4.60971	-74.08175	America/Bogota
+caracas	كاراكاس	Caracas	VE	فنزويلا	Venezuela	10.48801	-66.87919	America/Caracas
+lima	ليما	Lima	PE	بيرو	Peru	-12.04318	-77.02824	America/Lima
+sydney	سيدني	Sydney	AU	أستراليا	Australia	-33.86785	151.20732	Australia/Sydney
+melbourne	ملبورن	Melbourne	AU	أستراليا	Australia	-37.81400	144.96332	Australia/Melbourne
+brisbane	بريزبن	Brisbane	AU	أستراليا	Australia	-27.46794	153.02809	Australia/Brisbane
+perth	بيرث	Perth	AU	أستراليا	Australia	-31.95224	115.86140	Australia/Perth
+adelaide	أديلايد	Adelaide	AU	أستراليا	Australia	-34.92866	138.59863	Australia/Adelaide
+auckland	أوكلاند	Auckland	NZ	نيوزيلندا	New Zealand	-36.84853	174.76349	Pacific/Auckland

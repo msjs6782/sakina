@@ -1,0 +1,177 @@
+name: Build, test and release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      signed: ${{ steps.signing.outputs.signed }}
+      version: ${{ steps.names.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Prepare release signing
+        id: signing
+        env:
+          PASS: ${{ secrets.SAKINA_KEYSTORE_PASSWORD }}
+        run: |
+          if [ -n "$PASS" ]; then
+            {
+              echo "SAKINA_KEYSTORE=$GITHUB_WORKSPACE/signing/sakina-release.p12"
+              echo "SAKINA_KEYSTORE_PASSWORD=$PASS"
+              echo "SAKINA_KEY_PASSWORD=$PASS"
+              echo "SAKINA_KEY_ALIAS=sakina"
+            } >> "$GITHUB_ENV"
+            echo "signed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::SAKINA_KEYSTORE_PASSWORD secret is missing; the release APK will not be published."
+            echo "signed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Unit tests
+        run: |
+          mkdir -p ci-out
+          set -o pipefail
+          ./gradlew testDebugUnitTest --no-daemon --console=plain 2>&1 | tee ci-out/unit-tests.log
+
+      - name: Build APKs
+        run: |
+          set -o pipefail
+          ./gradlew assembleDebug assembleRelease --no-daemon --console=plain 2>&1 | tee ci-out/build.log
+
+      - name: Report build errors
+        if: failure()
+        run: |
+          cat ci-out/*.log 2>/dev/null | grep -E "^e: |error:|What went wrong|FAILED|Exception|> " | head -120 > ci-out/errors.txt || true
+          MSG=$(sed ':a;N;$!ba;s/%/%25/g;s/\r/%0D/g;s/\n/%0A/g' ci-out/errors.txt)
+          echo "::error title=Build errors::$MSG"
+          cp -r app/build/reports/tests ci-out/test-reports 2>/dev/null || true
+          cp -r app/build/test-results ci-out/test-results 2>/dev/null || true
+
+      - name: Name and verify APKs
+        id: names
+        run: |
+          VERSION="0.1.${GITHUB_RUN_NUMBER}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          mkdir -p out
+          cp app/build/outputs/apk/debug/app-debug.apk out/sakina-debug.apk
+          cp app/build/outputs/apk/release/app-release.apk "out/sakina-${VERSION}.apk"
+          APKSIGNER=$(ls "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -1)
+          "$APKSIGNER" verify --print-certs "out/sakina-${VERSION}.apk" | grep -E "SHA-256|DN" | tee out/signature.txt
+          ls -la out | tee ci-out/apk-sizes.txt
+          grep -E "tests completed|Reference comparison" -r app/build/test-results 2>/dev/null | head -5 > ci-out/test-summary.txt || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apks
+          path: out/
+
+      - name: Publish build results to the ci-results branch
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p ci-out
+          cp out/signature.txt ci-out/ 2>/dev/null || true
+          cp -r app/build/test-results ci-out/test-results 2>/dev/null || true
+          bash ci/publish_results.sh ci-out build
+
+  ui-check:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - api: 34
+            target: google_apis
+            suite: full
+          - api: 26
+            target: default
+            suite: smoke
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: apks
+          path: out
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run on an Android emulator and take screenshots
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          target: ${{ matrix.target }}
+          arch: x86_64
+          profile: pixel_6
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          disable-animations: true
+          script: bash ci/screenshots.sh out/sakina-debug.apk screenshots-${{ matrix.api }} ${{ matrix.suite }}
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots-${{ matrix.api }}
+          path: screenshots-${{ matrix.api }}/
+
+      - name: Publish screenshots to the ci-results branch
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p screenshots-${{ matrix.api }}
+          bash ci/publish_results.sh screenshots-${{ matrix.api }} ui-${{ matrix.api }}
+
+  release:
+    needs: [build, ui-check]
+    if: needs.build.outputs.signed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: apks
+          path: out
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          cp "out/sakina-${VERSION}.apk" sakina.apk
+          {
+            echo "نسخة تجريبية من «سكينة»."
+            echo
+            echo "نزّل ملف sakina.apk وثبّته. كل نسخة جديدة تُثبَّت فوق السابقة دون فقدان بياناتك."
+            echo
+            echo "بصمة التوقيع:"
+            echo '```'
+            cat out/signature.txt
+            echo '```'
+          } > notes.md
+          gh release create "v${VERSION}" sakina.apk --title "سكينة ${VERSION}" --notes-file notes.md --latest
