@@ -49,7 +49,7 @@ object Demo {
                     cities.firstOrNull { it.id == id }?.let { s = SettingsOps.addAndActivate(s, SettingsOps.cityLocation(it)) }
                 }
                 e.getString("demo_active")?.let { s = SettingsOps.activate(s, "city:$it") }
-                e.getString("demo_manual")?.split('|')?.takeIf { it.size == 4 }?.let { f ->
+                e.getString("demo_manual")?.split(',')?.takeIf { it.size == 4 }?.let { f ->
                     s = SettingsOps.addAndActivate(s, SavedLocation(SettingsOps.newId("manual"), f[0], f[0], f[1].toDouble(), f[2].toDouble(), f[3], LocationSource.MANUAL))
                 }
                 e.getString("demo_travel")?.let { id ->

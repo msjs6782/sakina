@@ -216,6 +216,7 @@ private fun PlaceForm(
     source: LocationSource,
     note: String?,
     vm: MainViewModel,
+    suggestedZone: Pair<String, String>? = null,
 ) {
     val str = LocalStrings.current
     val fmt = LocalFmt.current
@@ -248,6 +249,9 @@ private fun PlaceForm(
             Icon(SakinaIcons.Globe, null, Modifier.size(18.dp))
             Spacer(Modifier.width(8.dp))
             Text(zone?.let { z -> z + " (" + fmt.utcOffset(ZoneId.of(z), AppClock.now()) + ")" } ?: str.chooseZone)
+        }
+        if (suggestedZone != null && suggestedZone.second != zone) {
+            TextButton(onClick = { zone = suggestedZone.second }) { Text(str.useCityZone(suggestedZone.first, fmt.ltr(suggestedZone.second))) }
         }
         if (tried && zone == null) Text(str.zoneRequired, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
         if (source == LocationSource.GPS) NoteText(str.gpsZoneNote)
@@ -317,6 +321,7 @@ fun GpsPlaceScreen(vm: MainViewModel, purpose: PlacePurpose) {
                         purpose, nameAr, nameEn,
                         String.format(Locale.US, "%.5f", g.latitude), String.format(Locale.US, "%.5f", g.longitude),
                         ZoneId.systemDefault().id, LocationSource.GPS, note, vm,
+                        suggestedZone = near?.let { (if (str.isAr) it.nameAr else it.nameEn) to it.zone },
                     )
                 }
                 else -> Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {

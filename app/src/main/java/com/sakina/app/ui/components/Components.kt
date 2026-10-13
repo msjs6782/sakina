@@ -49,6 +49,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.sakina.app.core.prayer.PrayerKey
 import com.sakina.app.ui.LocalStrings
+import com.sakina.app.ui.theme.KufiDigits
+import androidx.compose.ui.text.font.FontWeight
 
 fun prayerIcon(key: PrayerKey): ImageVector = when (key) {
     PrayerKey.FAJR -> SakinaIcons.Fajr
@@ -97,7 +99,8 @@ fun SectionCard(
 
 /** Renders digits in equal-width cells so a ticking countdown does not jitter. Always laid out left to right. */
 @Composable
-fun MonoDigits(text: String, style: TextStyle, color: Color, modifier: Modifier = Modifier) {
+fun MonoDigits(text: String, baseStyle: TextStyle, color: Color, modifier: Modifier = Modifier) {
+    val style = baseStyle.copy(fontFamily = KufiDigits, fontWeight = FontWeight.Medium)
     val measurer = rememberTextMeasurer()
     val density = LocalDensity.current
     val cell: Dp = remember(style, density) {

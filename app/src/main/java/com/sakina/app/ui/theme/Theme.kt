@@ -33,6 +33,9 @@ val Plex = FontFamily(
     Font(R.font.plex_bold, FontWeight.Bold),
 )
 
+/** Tabular Arabic-Indic and Latin digits (Noto Kufi Arabic, subset) for countdowns. */
+val KufiDigits = FontFamily(Font(R.font.kufi_digits, FontWeight.Medium))
+
 val Amiri = FontFamily(
     Font(R.font.amiri_regular, FontWeight.Normal),
     Font(R.font.amiri_bold, FontWeight.Bold),
@@ -140,7 +143,7 @@ private fun sahar(dark: Boolean): ColorScheme = if (!dark) lightColorScheme(
 
 private fun raml(dark: Boolean): ColorScheme = if (!dark) lightColorScheme(
     primary = Color(0xFF8A5A2B), onPrimary = Color.White, primaryContainer = Color(0xFFFFDCC0), onPrimaryContainer = Color(0xFF2E1500),
-    secondary = Color(0xFF5F6F37), onSecondary = Color.White, secondaryContainer = Color(0xFFE1F0B1), onSecondaryContainer = Color(0xFF1A2100),
+    secondary = Color(0xFF5F6F37), onSecondary = Color.White, secondaryContainer = Color(0xFFF3E2C7), onSecondaryContainer = Color(0xFF2B1D0C),
     tertiary = Color(0xFF4F6354), onTertiary = Color.White, tertiaryContainer = Color(0xFFD1E8D5), onTertiaryContainer = Color(0xFF0C1F13),
     background = Color(0xFFFBF7F1), onBackground = Color(0xFF201B16), surface = Color(0xFFFBF7F1), onSurface = Color(0xFF201B16),
     surfaceVariant = Color(0xFFEFE0D3), onSurfaceVariant = Color(0xFF51443A),
@@ -149,7 +152,7 @@ private fun raml(dark: Boolean): ColorScheme = if (!dark) lightColorScheme(
     outline = Color(0xFF84746A), outlineVariant = Color(0xFFD6C3B5),
 ) else darkColorScheme(
     primary = Color(0xFFF2B985), onPrimary = Color(0xFF4B2800), primaryContainer = Color(0xFF6B4318), onPrimaryContainer = Color(0xFFFFDCC0),
-    secondary = Color(0xFFC5D497), onSecondary = Color(0xFF2F3810), secondaryContainer = Color(0xFF47562C), onSecondaryContainer = Color(0xFFE1F0B1),
+    secondary = Color(0xFFC5D497), onSecondary = Color(0xFF2F3810), secondaryContainer = Color(0xFF4A3B26), onSecondaryContainer = Color(0xFFF3E2C7),
     tertiary = Color(0xFFB5CCB9), onTertiary = Color(0xFF213527), tertiaryContainer = Color(0xFF374B3D), onTertiaryContainer = Color(0xFFD1E8D5),
     background = Color(0xFF18130F), onBackground = Color(0xFFEDE0D7), surface = Color(0xFF18130F), onSurface = Color(0xFFEDE0D7),
     surfaceVariant = Color(0xFF51443A), onSurfaceVariant = Color(0xFFD6C3B5),

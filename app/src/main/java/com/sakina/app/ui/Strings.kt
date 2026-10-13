@@ -21,9 +21,13 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     /** Applies the user's digit choice to fixed text (both directions, so it is idempotent). */
     fun digits(text: String): String {
         val sb = StringBuilder(text.length)
+        var isolated = 0
         for (c in text) {
+            if (c == '\u2066') isolated++
+            if (c == '\u2069' && isolated > 0) isolated--
             sb.append(
                 when {
+                    isolated > 0 -> c
                     arabicDigits && c in '0'..'9' -> '\u0660' + (c - '0')
                     !arabicDigits && c in '\u0660'..'\u0669' -> '0' + (c - '\u0660')
                     !arabicDigits && c == '\u066b' -> '.'                    else -> c
@@ -129,6 +133,8 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     fun ishaInterval(min: String, ramadan: Boolean) = if (ramadan) t("العشاء بعد المغرب بـ$min دقيقة (رمضان)", "Isha $min minutes after Maghrib (Ramadan)") else t("العشاء بعد المغرب بـ$min دقيقة", "Isha $min minutes after Maghrib")
     val offsetsApplied get() = t("إزاحات يدوية مطبّقة", "Manual offsets applied")
     val tableNoSuffix get() = t("الأوقات بلا ص/م في الجدول.", "Times are shown without AM/PM in the table.")
+    val tableScrollHint get() = t("اسحب الجدول أفقيًا لرؤية بقية الأوقات.", "Swipe the table sideways to see the remaining times.")
+    fun useCityZone(city: String, zone: String) = t("استخدام منطقة $city: $zone", "Use $city's zone: $zone")
 
     fun issue(i: DayIssue) = when (i) {
         DayIssue.NO_SUNSET -> t("لا تغرب الشمس في هذا اليوم عند هذا الموقع، فتعذّر حساب المغرب والعشاء والفجر.", "The sun does not set here on this day, so Maghrib, Isha and Fajr cannot be calculated.")
@@ -244,7 +250,7 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     }
     val sunThemeNote get() = t("«الشمس»: فاتح من الشروق حتى المغرب في الموقع المختار، وداكن بعده.", "“Sun”: light from sunrise to Maghrib at the chosen place, dark otherwise.")
     val dynamicColor get() = t("ألوان النظام الديناميكية", "System dynamic colors")
-    val dynamicColorNote get() = t("تستخدم ألوان خلفية جهازك (Android 12 فأعلى).", "Uses your wallpaper colors (Android 12 and later).")
+    val dynamicColorNote get() = t("تستخدم ألوان خلفية جهازك (\u2066Android 12\u2069 فأعلى).", "Uses your wallpaper colors (Android 12 and later).")
     val dynamicUnsupported get() = t("غير متاحة في هذا الإصدار من Android.", "Not available on this Android version.")
     val language get() = t("اللغة", "Language")
     val timeFormat get() = t("تنسيق الوقت", "Time format")
@@ -285,10 +291,10 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val aboutPrivacy get() = t("الخصوصية", "Privacy")
     val aboutPrivacyBody get() = t("كل الحسابات على جهازك. لا حساب ولا خادم ولا تتبّع. الموقع يُطلب فقط حين تضغط «موقعي الحالي»، ولا يُرسل لأي جهة.", "Everything is calculated on your device. No account, no server, no tracking. Location is read only when you tap “Current location” and is sent nowhere.")
     val aboutSources get() = t("المصادر والتراخيص", "Sources and licenses")
-    val srcAlgorithm get() = t("معادلات موضع الشمس: Jean Meeus، «Astronomical Algorithms». واختُبرت النتائج مقابل مكتبة Adhan (رخصة MIT) وجداول أم القرى الرسمية لمكة.", "Solar equations: Jean Meeus, “Astronomical Algorithms”. Results are tested against the Adhan library (MIT License) and official Umm al-Qura tables for Makkah.")
-    val srcCalendar get() = t("التقويم: أم القرى كما في مكتبة Java الزمنية (HijrahChronology).", "Calendar: Umm al-Qura as published in Java's time library (HijrahChronology).")
-    val srcCities get() = t("إحداثيات المدن: GeoNames (رخصة CC BY 4.0). الأسماء العربية والمناطق الزمنية: مراجعة سكينة.", "City coordinates: GeoNames (CC BY 4.0). Arabic names and time zones: curated by Sakina.")
-    val srcFonts get() = t("الخطوط: IBM Plex Sans Arabic وAmiri (رخصة SIL Open Font 1.1).", "Fonts: IBM Plex Sans Arabic and Amiri (SIL Open Font License 1.1).")
+    val srcAlgorithm get() = t("معادلات موضع الشمس من كتاب \u2066Astronomical Algorithms\u2069 لـ\u2066Jean Meeus\u2069. واختُبرت النتائج مقابل مكتبة \u2066Adhan (MIT)\u2069 وجداول أم القرى الرسمية لمكة.", "Solar equations: Jean Meeus, “Astronomical Algorithms”. Results are tested against the Adhan library (MIT License) and official Umm al-Qura tables for Makkah.")
+    val srcCalendar get() = t("التقويم: أم القرى كما في مكتبة \u2066Java (HijrahChronology)\u2069، ومطابق لتقويم أندرويد.", "Calendar: Umm al-Qura as published in Java's time library (HijrahChronology).")
+    val srcCities get() = t("إحداثيات المدن: \u2066GeoNames (CC BY 4.0)\u2069. الأسماء العربية والمناطق الزمنية: مراجعة سكينة.", "City coordinates: GeoNames (CC BY 4.0). Arabic names and time zones: curated by Sakina.")
+    val srcFonts get() = t("الخطوط: \u2066IBM Plex Sans Arabic\u2069 و\u2066Amiri\u2069 و\u2066Noto Kufi Arabic\u2069 للأرقام، برخصة \u2066SIL OFL 1.1\u2069.", "Fonts: IBM Plex Sans Arabic, Amiri and Noto Kufi Arabic for digits (SIL Open Font License 1.1).")
     val showLicense get() = t("عرض نص الرخصة", "Show license text")
 
     // Onboarding

@@ -441,7 +441,9 @@ private fun FocusLayout(m: HomeModel, s: AppSettings) {
     val fmt = LocalFmt.current
     val ex = LocalExtras.current
     val period = skyPeriod(m.day, m.now)
-    val tall = LocalConfiguration.current.screenHeightDp > 600
+    val config = LocalConfiguration.current
+    val tall = config.screenHeightDp > 700
+    val ring = minOf(300, (config.screenHeightDp * 0.38f).toInt(), config.screenWidthDp - 72).coerceAtLeast(180).dp
     HeroSurface(period, Modifier.fillMaxWidth(), corner = 32.dp) {
         Column(
             Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = if (tall) 32.dp else 20.dp),
@@ -453,7 +455,7 @@ private fun FocusLayout(m: HomeModel, s: AppSettings) {
                 Text(str.noTimesToday, color = ex.heroOn, textAlign = TextAlign.Center)
             } else {
                 Spacer(Modifier.height(16.dp))
-                Box(Modifier.widthIn(max = 300.dp).fillMaxWidth().aspectRatio(1f), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(ring), contentAlignment = Alignment.Center) {
                     val track = if (ex.heroIsGradient) Color.White.copy(alpha = 0.18f) else MaterialTheme.colorScheme.outlineVariant
                     val fill = if (ex.heroIsGradient) Color.White else MaterialTheme.colorScheme.primary
                     val progress = (m.progress ?: 0f).coerceIn(0f, 1f)
@@ -486,19 +488,20 @@ private fun FocusLayout(m: HomeModel, s: AppSettings) {
         }
     }
     IssuesBanner(m.day)
-    // A compact strip of today's six times.
-    Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        m.day.times.forEach { t ->
-            val isNext = m.next?.let { it.key == t.key && it.date == m.today } ?: false
-            Column(
-                Modifier.clip(RoundedCornerShape(16.dp))
-                    .background(if (isNext) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerLow)
-                    .padding(horizontal = 12.dp, vertical = 10.dp)
-                    .widthIn(min = 64.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(str.prayer(t.key), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(t.instant?.let { fmt.time(it, m.zone, suffix = false) } ?: "—", style = MaterialTheme.typography.titleMedium)
+    // Today's six times in a compact 3 × 2 grid.
+    m.day.times.chunked(3).forEach { row ->
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            row.forEach { t ->
+                val isNext = m.next?.let { it.key == t.key && it.date == m.today } ?: false
+                Column(
+                    Modifier.weight(1f).clip(RoundedCornerShape(16.dp))
+                        .background(if (isNext) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerLow)
+                        .padding(horizontal = 8.dp, vertical = 10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(str.prayer(t.key), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+                    Text(t.instant?.let { fmt.time(it, m.zone) } ?: "—", style = MaterialTheme.typography.titleMedium, maxLines = 1)
+                }
             }
         }
     }
@@ -510,7 +513,7 @@ private fun DashboardLayout(m: HomeModel, s: AppSettings) {
     val fmt = LocalFmt.current
     val ex = LocalExtras.current
     val period = skyPeriod(m.day, m.now)
-    HeroSurface(period, Modifier.fillMaxWidth(), corner = 24.dp) {
+    HeroSurface(period, Modifier.fillMaxWidth(), corner = 24.dp, decorate = false) {
         val next = m.next
         Row(Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 16.dp), verticalAlignment = Alignment.CenterVertically) {
             if (next == null) {

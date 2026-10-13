@@ -128,8 +128,13 @@ class Fmt(val lang: Lang, val clock24: Boolean, val arabicDigits: Boolean) {
         } else {
             if (value >= 0) (if (ar) "ق" else "E") else (if (ar) "غ" else "W")
         }
-        return digits(String.format(Locale.US, "%.4f°", abs(value))) + " " + dir
+        var n = digits(String.format(Locale.US, "%.4f°", abs(value)))
+        if (arabicDigits) n = n.replace('.', '\u066B')
+        return ltr(n) + " " + dir
     }
+
+    /** Wraps left-to-right text (offsets, coordinates) so it keeps its order inside Arabic sentences. */
+    fun ltr(text: String) = "\u2066" + text + "\u2069"
 
     /** "UTC+3", "UTC+5:30" for a zone at an instant. */
     fun utcOffset(zone: ZoneId, at: Instant): String {
@@ -138,7 +143,7 @@ class Fmt(val lang: Lang, val clock24: Boolean, val arabicDigits: Boolean) {
         val a = abs(total)
         val h = a / 3600
         val m = (a % 3600) / 60
-        return "UTC" + sign + digits(if (m == 0) "$h" else "$h:${two(m)}")
+        return ltr("UTC" + sign + digits(if (m == 0) "$h" else "$h:${two(m)}"))
     }
 }
 

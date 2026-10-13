@@ -183,12 +183,20 @@ private fun TableView(schedule: PrayerSchedule, today: LocalDate, days: Int, s: 
     SectionCard(padding = PaddingValues(vertical = 8.dp)) {
         BoxWithConstraints(Modifier.fillMaxWidth()) {
             val density = LocalDensity.current
-            val dateCol = 74.dp
-            val minCol = with(density) { 46.dp * (fontScale.coerceAtLeast(1f)) }
+            val dateCol = 62.dp
+            val minCol = with(density) { 44.dp * fontScale.coerceIn(1f, 1.4f) }
             val col: Dp = max(minCol, (maxWidth - dateCol - 8.dp) / 6)
             val totalWidth = dateCol + col * 6 + 8.dp
             val scroll = rememberScrollState()
-            Column(Modifier.horizontalScroll(scroll, enabled = totalWidth > maxWidth).width(max(totalWidth, maxWidth))) {
+            val scrollable = totalWidth > maxWidth
+            Column(Modifier.horizontalScroll(scroll, enabled = scrollable).width(max(totalWidth, maxWidth))) {
+                if (scrollable) {
+                    Row(Modifier.padding(horizontal = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(SakinaIcons.Info, null, Modifier.size(14.dp), tint = MaterialTheme.colorScheme.tertiary)
+                        Spacer(Modifier.width(6.dp))
+                        NoteText(str.tableScrollHint)
+                    }
+                }
                 Row(Modifier.padding(horizontal = 4.dp, vertical = 6.dp)) {
                     Text("", modifier = Modifier.width(dateCol))
                     PrayerKey.entries.forEach {
@@ -207,7 +215,7 @@ private fun TableView(schedule: PrayerSchedule, today: LocalDate, days: Int, s: 
                         Modifier.padding(horizontal = 4.dp).clip(RoundedCornerShape(10.dp)).background(bg).padding(vertical = 7.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Column(Modifier.width(dateCol).padding(start = 6.dp)) {
+                        Column(Modifier.width(dateCol).padding(start = 4.dp)) {
                             Text(fmt.weekday(day.date.dayOfWeek, short = true), style = MaterialTheme.typography.labelMedium.copy(fontWeight = if (isToday) FontWeight.Bold else FontWeight.Medium))
                             Text(fmt.gregorianShort(day.date), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }

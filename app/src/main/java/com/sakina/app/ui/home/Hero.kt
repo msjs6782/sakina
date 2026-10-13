@@ -64,7 +64,7 @@ fun skyPeriod(day: DayTimes, now: Instant): SkyPeriod {
 
 /** The decorated surface behind the next-prayer card: sky gradient, starry indigo, or a flat sand panel. */
 @Composable
-fun HeroSurface(period: SkyPeriod, modifier: Modifier = Modifier, corner: Dp = 28.dp, content: @Composable BoxScope.() -> Unit) {
+fun HeroSurface(period: SkyPeriod, modifier: Modifier = Modifier, corner: Dp = 28.dp, decorate: Boolean = true, content: @Composable BoxScope.() -> Unit) {
     val ex = LocalExtras.current
     val shape = RoundedCornerShape(corner)
     var m = modifier.clip(shape).background(ex.heroBrush(period))
@@ -86,7 +86,7 @@ fun HeroSurface(period: SkyPeriod, modifier: Modifier = Modifier, corner: Dp = 2
                 cubicTo(left + w * 0.72f, top + h * 0.1f, left + w, top + h * 0.2f, left + w, top + h * 0.42f)
                 lineTo(left + w, bottom)
             }
-            drawPath(path, archColor, style = Stroke(width = 2.dp.toPx()))
+            if (decorate) drawPath(path, archColor, style = Stroke(width = 2.dp.toPx()))
             if (ex.stars) {
                 val rnd = Random(7)
                 repeat(26) {

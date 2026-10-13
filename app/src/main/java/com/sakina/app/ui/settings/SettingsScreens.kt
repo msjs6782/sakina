@@ -335,6 +335,7 @@ fun AboutScreen(vm: MainViewModel) {
             listOf(
                 "licenses/OFL-IBMPlexSansArabic.txt" to "IBM Plex Sans Arabic — OFL 1.1",
                 "licenses/OFL-Amiri.txt" to "Amiri — OFL 1.1",
+                "licenses/OFL-NotoKufiArabic.txt" to "Noto Kufi Arabic — OFL 1.1",
                 "licenses/MIT-Adhan.txt" to "Adhan — MIT",
             ).forEach { (asset, title) ->
                 TextButton(onClick = { vm.push(Route.License(asset, title)) }) { Text(title) }
