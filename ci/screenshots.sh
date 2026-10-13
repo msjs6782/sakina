@@ -153,7 +153,9 @@ if [ "$SUITE" = "full" ]; then
   adb shell cmd window user-rotation lock 1 >/dev/null 2>&1 || true
   sleep 3
   shot 51_landscape_home 7 "${BASE[@]}"
-  shot 52_landscape_times 7 "${BASE[@]}" --es demo_tab times --es demo_view week
+  adb shell settings put system user_rotation 1
+  sleep 2
+  shot 52_landscape_dashboard 7 "${BASE[@]}" --es demo_layout DASHBOARD
   adb shell cmd window user-rotation lock 0 >/dev/null 2>&1 || true
   adb shell settings put system user_rotation 0
   sleep 2

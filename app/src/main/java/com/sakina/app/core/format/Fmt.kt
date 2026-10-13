@@ -143,7 +143,8 @@ class Fmt(val lang: Lang, val clock24: Boolean, val arabicDigits: Boolean) {
         val a = abs(total)
         val h = a / 3600
         val m = (a % 3600) / 60
-        return ltr("UTC" + sign + digits(if (m == 0) "$h" else "$h:${two(m)}"))
+        // Latin digits on purpose: "UTC+3" is a Latin code and mixing in Arabic-Indic digits breaks its order.
+        return ltr("UTC" + sign + (if (m == 0) "$h" else "$h:${two(m)}"))
     }
 }
 

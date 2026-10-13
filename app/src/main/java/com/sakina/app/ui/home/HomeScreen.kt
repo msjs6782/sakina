@@ -428,10 +428,24 @@ private fun Cards(m: HomeModel, s: AppSettings) {
 // ---------- layouts ----------
 
 @Composable
+private fun wide(): Boolean = LocalConfiguration.current.screenWidthDp >= 600
+
+@Composable
 private fun BalancedLayout(m: HomeModel, s: AppSettings) {
-    NextHero(m)
-    IssuesBanner(m.day)
-    TodayList(m, s)
+    if (wide()) {
+        // Landscape and large screens: hero and today's times side by side.
+        Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                NextHero(m)
+                IssuesBanner(m.day)
+            }
+            Column(Modifier.weight(1f)) { TodayList(m, s) }
+        }
+    } else {
+        NextHero(m)
+        IssuesBanner(m.day)
+        TodayList(m, s)
+    }
     Cards(m, s)
 }
 
@@ -529,7 +543,7 @@ private fun DashboardLayout(m: HomeModel, s: AppSettings) {
     }
     IssuesBanner(m.day)
     val offsets = s.calcConfig.offsets
-    m.day.times.chunked(2).forEach { pair ->
+    m.day.times.chunked(if (wide()) 3 else 2).forEach { pair ->
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             pair.forEach { t ->
                 val isNext = m.next?.let { it.key == t.key && it.date == m.today } ?: false

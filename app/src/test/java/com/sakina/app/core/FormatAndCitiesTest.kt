@@ -38,6 +38,7 @@ class FormatAndCitiesTest {
         assertEquals("00:00", f.countdown(Duration.ofSeconds(-50)))
         assertEquals("2:05", f.hoursMinutes(Duration.ofMinutes(125)))
         assertEquals("\u2066UTC+3\u2069", f.utcOffset(riyadh, t))
+        assertEquals("\u2066UTC+3\u2069", Fmt(Lang.AR, false, true).utcOffset(riyadh, t))
         assertEquals("\u2066UTC+5:30\u2069", f.utcOffset(ZoneId.of("Asia/Kolkata"), t))
         assertEquals("14 October 2026", f.gregorian(LocalDate.of(2026, 10, 14)))
         assertEquals("٣ جمادى الأولى ١٤٤٨ هـ", Fmt(Lang.AR, false, true).hijri(HijriDate(1448, 5, 3)))
