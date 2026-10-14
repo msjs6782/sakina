@@ -1,5 +1,6 @@
 package com.sakina.app.data
 
+import com.sakina.app.core.alerts.AlertSettings
 import com.sakina.app.core.format.Fmt
 import com.sakina.app.core.format.Lang
 import com.sakina.app.core.prayer.AsrMethod
@@ -94,6 +95,8 @@ data class AppSettings(
     val travel: TravelState? = null,
     val homeLayout: HomeLayout = HomeLayout.BALANCED,
     val homeCards: List<CardPref> = DEFAULT_CARDS,
+    /** Adhan, alerts and reminders. Everything is off until the user turns it on. */
+    val alerts: AlertSettings = AlertSettings(),
 ) {
     val calcConfig: CalcConfig
         get() = CalcConfig(method, asr, highLatitude, ummAlQuraIsha, offsets.toCore())

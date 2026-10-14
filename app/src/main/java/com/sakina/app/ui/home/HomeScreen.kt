@@ -31,7 +31,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.material3.IconButton
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+import com.sakina.app.SakinaApp
+import com.sakina.app.alerts.AlertsCenter
+import com.sakina.app.ui.alerts.QuietDialog
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -115,8 +123,13 @@ fun HomeScreen(vm: MainViewModel, s: AppSettings, contentPadding: PaddingValues)
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
-        HomeHeader(s, now, zone)
+        var showQuiet by remember { mutableStateOf(false) }
+        val app = LocalContext.current.applicationContext as SakinaApp
+        val quiet = remember(now.epochSecond / 2) { app.alertState.quietUntil }
+        HomeHeader(s, now, zone, quiet != null) { showQuiet = true }
         LocationStrip(vm, s)
+        if (quiet != null) QuietStrip(quiet, zone ?: ZoneId.systemDefault())
+        if (showQuiet) QuietDialog(onDismiss = { showQuiet = false })
         if (loc == null || zone == null || !loc.isUsable) {
             NoLocationCard(vm)
         } else {
@@ -144,7 +157,7 @@ fun HomeScreen(vm: MainViewModel, s: AppSettings, contentPadding: PaddingValues)
 }
 
 @Composable
-private fun HomeHeader(s: AppSettings, now: Instant, zone: ZoneId?) {
+private fun HomeHeader(s: AppSettings, now: Instant, zone: ZoneId?, quiet: Boolean, onQuiet: () -> Unit) {
     val fmt = LocalFmt.current
     val str = LocalStrings.current
     val date = now.atZone(zone ?: ZoneId.systemDefault()).toLocalDate()
@@ -160,6 +173,27 @@ private fun HomeHeader(s: AppSettings, now: Instant, zone: ZoneId?) {
         Column(horizontalAlignment = Alignment.End) {
             if (hijri != null) Text(fmt.hijri(hijri), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurface)
             Text(fmt.gregorian(date, withYear = true, withWeekday = true), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        IconButton(onClick = onQuiet, modifier = Modifier.testTag("home_quiet")) {
+            Icon(
+                if (quiet) SakinaIcons.BellOff else SakinaIcons.Bell, str.quietTitle,
+                tint = if (quiet) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+@Composable
+private fun QuietStrip(until: Instant, zone: ZoneId) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    val context = LocalContext.current
+    Surface(shape = RoundedCornerShape(18.dp), color = MaterialTheme.colorScheme.secondaryContainer, modifier = Modifier.fillMaxWidth()) {
+        Row(Modifier.padding(horizontal = 14.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(SakinaIcons.BellOff, null, Modifier.size(20.dp), tint = MaterialTheme.colorScheme.onSecondaryContainer)
+            Spacer(Modifier.width(10.dp))
+            Text(str.quietActive(fmt.time(until, zone)), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSecondaryContainer, modifier = Modifier.weight(1f))
+            TextButton(onClick = { AlertsCenter.endQuiet(context) }) { Text(str.quietEndNow) }
         }
     }
 }

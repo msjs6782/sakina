@@ -55,4 +55,14 @@ object SakinaIcons {
     val Moon: ImageVector by lazy { icon("Moon", "M20 14.5 A8 8 0 1 1 9.5 4 A6.5 6.5 0 0 0 20 14.5 Z") }
     val Sun: ImageVector by lazy { icon("Sun", "M16 12 A4 4 0 1 1 8 12 A4 4 0 1 1 16 12 Z M12 3 V5 M12 19 V21 M3 12 H5 M19 12 H21 M5.6 5.6 L7 7 M17 17 L18.4 18.4 M5.6 18.4 L7 17 M17 7 L18.4 5.6") }
     val Table: ImageVector by lazy { icon("Table", "M4 5 H20 V19 H4 Z M4 10 H20 M4 14.5 H20 M10 5 V19") }
+    val Bell: ImageVector by lazy { icon("Bell", "M6 16.5 V11 A6 6 0 0 1 18 11 V16.5 L19.5 18 H4.5 Z M10 20.5 A2 2 0 0 0 14 20.5") }
+    val BellOff: ImageVector by lazy { icon("BellOff", "M6 16.5 V11 A6 6 0 0 1 15.5 6.2 M18 11 V16.5 L19.5 18 H8 M10 20.5 A2 2 0 0 0 14 20.5 M4 4 L20 20") }
+    val Play: ImageVector by lazy { icon("Play", "M8 5.5 L18.5 12 L8 18.5 Z") }
+    val StopSq: ImageVector by lazy { icon("StopSq", "M7 7 H17 V17 H7 Z") }
+    val Volume: ImageVector by lazy { icon("Volume", "M4 9.5 H8 L13 5.5 V18.5 L8 14.5 H4 Z M16 9 A4 4 0 0 1 16 15 M18.5 6.5 A7.5 7.5 0 0 1 18.5 17.5") }
+    val Music: ImageVector by lazy { icon("Music", "M9 17.5 V6 L19 4 V15.5 M9 17.5 A2.5 2.5 0 1 1 4 17.5 A2.5 2.5 0 1 1 9 17.5 Z M19 15.5 A2.5 2.5 0 1 1 14 15.5 A2.5 2.5 0 1 1 19 15.5 Z") }
+    val Shield: ImageVector by lazy { icon("Shield", "M12 3 L19.5 6 V11.5 C19.5 16 16.5 19.5 12 21 C7.5 19.5 4.5 16 4.5 11.5 V6 Z M9 12 L11.2 14.2 L15.2 10") }
+    val Battery: ImageVector by lazy { icon("Battery", "M4 8 H18 V16 H4 Z M18 10.5 H20 V13.5 H18 M7 11 V13 M10 11 V13") }
+    val Flask: ImageVector by lazy { icon("Flask", "M9.5 3.5 H14.5 M10.5 3.5 V9 L5.5 18.5 A1.5 1.5 0 0 0 6.8 20.5 H17.2 A1.5 1.5 0 0 0 18.5 18.5 L13.5 9 V3.5 M7.8 15 H16.2") }
+    val Repeat: ImageVector by lazy { icon("Repeat", "M17 3.5 L20 6.5 L17 9.5 M4 11.5 V9.5 A3 3 0 0 1 7 6.5 H20 M7 20.5 L4 17.5 L7 14.5 M20 12.5 V14.5 A3 3 0 0 1 17 17.5 H4") }
 }

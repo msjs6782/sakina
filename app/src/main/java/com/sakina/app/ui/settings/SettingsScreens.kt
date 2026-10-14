@@ -39,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.sakina.app.BuildConfig
@@ -85,6 +86,16 @@ fun SettingsScreen(vm: MainViewModel, s: AppSettings, contentPadding: PaddingVal
         SectionCard(padding = PaddingValues(6.dp)) {
             NavRow(SakinaIcons.Pin, str.locations, s.activeLocation?.name(str.lang) ?: str.chooseLocationTitle, onClick = { vm.push(Route.Locations) })
             NavRow(SakinaIcons.Clock, str.settingsCalc, str.methodName(s.method), onClick = { vm.push(Route.Calc) })
+        }
+        SectionCard(padding = PaddingValues(6.dp)) {
+            val on = com.sakina.app.core.prayer.PrayerKey.prayers.count { s.alerts.prayer(it).mode != com.sakina.app.core.alerts.AlertMode.OFF }
+            NavRow(
+                SakinaIcons.Bell, str.settingsAlerts,
+                if (!s.alerts.anyEnabled) str.alertsAllOff else str.alertsOnCount(LocalFmt.current.num(on)),
+                onClick = { vm.push(Route.Alerts) },
+                modifier = Modifier.testTag("nav_alerts"),
+            )
+            NavRow(SakinaIcons.Repeat, str.settingsReminders, s.alerts.allReminders.count { it.enabled }.let { if (it == 0) str.alertsAllOff else str.alertsOnCount(LocalFmt.current.num(it)) }, onClick = { vm.push(Route.Reminders) })
         }
         SectionCard(padding = PaddingValues(6.dp)) {
             NavRow(SakinaIcons.Palette, str.settingsAppearance, str.styleName(s.style) + " · " + str.themeName(s.themeMode) + " · " + (if (s.language == Lang.AR) "العربية" else "English"), onClick = { vm.push(Route.Appearance) })

@@ -1,6 +1,9 @@
 package com.sakina.app.ui
 
 import androidx.compose.runtime.staticCompositionLocalOf
+import com.sakina.app.core.alerts.AlertMode
+import com.sakina.app.core.alerts.NotifyStyle
+import com.sakina.app.core.alerts.ReminderKind
 import com.sakina.app.core.calendar.Occasion
 import com.sakina.app.core.format.Lang
 import com.sakina.app.core.prayer.AsrMethod
@@ -306,7 +309,7 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val methodChoiceNote get() = t("اختر الطريقة المعتمدة في بلدك أو مسجدك. يمكنك تغييرها لاحقًا.", "Choose the method used in your country or mosque. You can change it later.")
     val locationStepNote get() = t("يمكنك التخطي الآن؛ القرآن والأذكار لا تحتاج موقعًا.", "You can skip for now; Quran and adhkar don't need a place.")
     val readyTitle get() = t("كل شيء جاهز", "All set")
-    val readyBody get() = t("التنبيهات متوقفة افتراضيًا، وستتمكن من تفعيلها حين تُضاف في المرحلة القادمة.", "Alerts are off by default; you can enable them when they arrive in the next phase.")
+    val readyBody get() = t("كل التنبيهات متوقفة افتراضيًا. فعّل ما تريد من الإعدادات ← الأذان والتنبيهات.", "All alerts are off by default. Turn on what you want in Settings → Adhan and alerts.")
     val start get() = t("ابدأ", "Start")
     fun stepOf(i: String, n: String) = t("الخطوة $i من $n", "Step $i of $n")
 
@@ -314,10 +317,9 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val quranSoon get() = t("القرآن الكريم", "The Holy Quran")
     val quranSoonBody get() = t("يُبنى في المرحلتين ٣ و٤: النص العثماني كاملًا دون إنترنت، الترجمة والتفسير، البحث والعلامات والختمة، ثم صفحات مصحف المدينة المطبوع.", "Built in phases 3 and 4: the full Uthmani text offline, translation and tafsir, search, bookmarks and khatma, then the printed Madinah Mushaf pages.")
     val discoverSoon get() = t("اكتشف", "Discover")
-    val discoverSoonBody get() = t("ستجمع هنا الأدوات القادمة. ما يعمل الآن: المواقيت، المواقع والسفر، والمظهر.", "Upcoming tools will gather here. Working now: prayer times, places and travel, and appearance.")
+    val discoverSoonBody get() = t("ستجمع هنا الأدوات القادمة. ما يعمل الآن: المواقيت، المواقع والسفر، المظهر، والأذان والتنبيهات والتذكيرات.", "Upcoming tools will gather here. Working now: prayer times, places and travel, appearance, and adhan, alerts and reminders.")
     val plannedTitle get() = t("قادم", "Coming")
     val planned get() = (if (isAr) listOf(
-        "الأذان والتنبيهات والتذكيرات" to "المرحلة ٢",
         "القرآن النصي والترجمة والتفسير" to "المرحلة ٣",
         "المصحف المطبوع" to "المرحلة ٤",
         "الاستماع للتلاوة" to "المرحلة ٥",
@@ -326,7 +328,6 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
         "الويدجت والاختصارات" to "المرحلة ٨",
         "السجل والتصدير ومساجدي والنسخ الاحتياطي" to "المرحلة ٩",
     ) else listOf(
-        "Adhan, alerts and reminders" to "Phase 2",
         "Quran text, translation and tafsir" to "Phase 3",
         "Printed Mushaf" to "Phase 4",
         "Recitation audio" to "Phase 5",
@@ -335,6 +336,238 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
         "Widgets and shortcuts" to "Phase 8",
         "Log, export, my mosques and backup" to "Phase 9",
     )).map { digits(it.first) to digits(it.second) }
+
+    // ---------- Alerts (phase 2) ----------
+    val settingsAlerts get() = t("الأذان والتنبيهات", "Adhan and alerts")
+    val settingsReminders get() = t("التذكيرات الشخصية", "Personal reminders")
+    val alertsAllOff get() = t("كل التنبيهات متوقفة", "All alerts are off")
+    fun alertsOnCount(n: String) = t("مفعّل: $n", "On: $n")
+
+    fun modeName(m: AlertMode) = when (m) {
+        AlertMode.OFF -> t("إيقاف", "Off")
+        AlertMode.NOTIFY -> t("إشعار بصوت", "Notification with sound")
+        AlertMode.SILENT -> t("إشعار صامت", "Silent notification")
+        AlertMode.VIBRATE -> t("اهتزاز فقط", "Vibration only")
+        AlertMode.ADHAN -> t("تشغيل التسجيل المختار", "Play the chosen recording")
+        AlertMode.EXCERPT -> t("مقتطف ٢٠ ثانية", "20-second excerpt")
+    }
+    fun modeShort(m: AlertMode) = when (m) {
+        AlertMode.OFF -> t("متوقف", "Off")
+        AlertMode.NOTIFY -> t("إشعار", "Notification")
+        AlertMode.SILENT -> t("صامت", "Silent")
+        AlertMode.VIBRATE -> t("اهتزاز", "Vibrate")
+        AlertMode.ADHAN -> t("أذان", "Adhan")
+        AlertMode.EXCERPT -> t("مقتطف", "Excerpt")
+    }
+    fun modeDetail(m: AlertMode) = when (m) {
+        AlertMode.OFF -> t("لا شيء عند دخول الوقت.", "Nothing at the prayer time.")
+        AlertMode.NOTIFY -> t("إشعار بصوت الإشعارات في جهازك.", "A notification with your device's notification sound.")
+        AlertMode.SILENT -> t("إشعار يظهر دون صوت ولا اهتزاز.", "A notification without sound or vibration.")
+        AlertMode.VIBRATE -> t("إشعار مع اهتزاز دون صوت.", "A notification that vibrates, without sound.")
+        AlertMode.ADHAN -> t("يشغّل التسجيل كاملًا مع زر إيقاف.", "Plays the whole recording, with a stop button.")
+        AlertMode.EXCERPT -> t("يشغّل أول ٢٠ ثانية من التسجيل ثم يخفت.", "Plays the first 20 seconds, then fades out.")
+    }
+    fun styleNameN(st: NotifyStyle) = when (st) {
+        NotifyStyle.NORMAL -> t("بصوت", "With sound")
+        NotifyStyle.SILENT -> t("صامت", "Silent")
+        NotifyStyle.VIBRATE -> t("اهتزاز", "Vibrate")
+    }
+
+    // Status and permissions
+    val alertStatus get() = t("حالة التنبيهات", "Alert status")
+    fun nextAlert(what: String, time: String) = t("التنبيه القادم: $what — $time", "Next alert: $what — $time")
+    val noScheduled get() = t("لا يوجد تنبيه مجدول.", "No alert is scheduled.")
+    val scheduledInexact get() = t("مجدول بتوقيت تقريبي (قد يتأخر دقائق) لأن إذن المنبهات الدقيقة غير ممنوح.", "Scheduled with approximate timing (may be minutes late) because exact-alarm access is not granted.")
+    val scheduledAlarmClock get() = t("مجدول كمنبّه نظام.", "Scheduled as a system alarm.")
+    val permNotif get() = t("إذن الإشعارات", "Notification permission")
+    val permNotifBody get() = t("مطلوب لعرض أي تنبيه من سكينة.", "Needed to show any Sakina alert.")
+    val permNotifOff get() = t("الإشعارات متوقفة لسكينة في إعدادات أندرويد.", "Notifications are turned off for Sakina in Android settings.")
+    val permExact get() = t("المنبهات الدقيقة", "Exact alarms")
+    val permExactBody get() = t("يجعل الأذان يصل في دقيقته. بدونه قد يؤخّر أندرويد التنبيه.", "Lets the adhan arrive on the minute. Without it Android may delay alerts.")
+    val permBattery get() = t("استثناء البطارية", "Battery exemption")
+    val permBatteryBody get() = t("اختياري: يقلّل تأخير التنبيهات على بعض الأجهزة التي تقيّد التطبيقات بشدة.", "Optional: reduces delays on devices that restrict apps aggressively.")
+    val allow get() = t("سماح", "Allow")
+    val allowed get() = t("ممنوح", "Granted")
+    val openSettings get() = t("فتح الإعدادات", "Open settings")
+    val channelsTitle get() = t("قنوات الإشعارات", "Notification channels")
+    val channelsBody get() = t("يمكنك تغيير صوت كل نوع أو إيقافه من إعدادات أندرويد.", "You can change the sound of each type, or turn it off, in Android settings.")
+    fun channelsBlocked(n: String) = t("قنوات متوقفة في أندرويد: $n", "Channels turned off in Android: $n")
+    val reliabilityTitle get() = t("الموثوقية وقيود النظام", "Reliability and system limits")
+    val reliabilityBody get() = t(
+        "تُجدول سكينة التنبيه القادم فقط، وتعيد الجدولة عند تغيير الإعدادات أو الوقت أو المنطقة الزمنية وبعد إعادة تشغيل الجهاز. وضع توفير الطاقة (Doze) وقيود الشركات المصنّعة قد تؤخّر التنبيهات. إذا أوقفت التطبيق إجباريًا من إعدادات أندرويد تتوقف كل تنبيهاته حتى تفتحه مجددًا. التنبيه المتأخر أكثر من دقيقتين يظهر إشعارًا صامتًا بدل تشغيل الأذان، ولا يتكرر التنبيه نفسه.",
+        "Sakina schedules only the next alert and reschedules after settings, clock or time-zone changes and after a reboot. Doze and manufacturer restrictions can delay alerts. If you force-stop the app in Android settings, its alerts stop until you open it again. An alert more than two minutes late shows a silent notification instead of playing the adhan, and the same alert never repeats.",
+    )
+    val useAlarmClock get() = t("استخدام منبّه النظام للتنبيهات", "Use system alarms for alerts")
+    val useAlarmClockBody get() = t("أعلى موثوقية في وضع توفير الطاقة، لكن يظهر رمز المنبّه في شريط الحالة.", "Most reliable in Doze, but shows the alarm icon in the status bar.")
+
+    // Prayer pages
+    val perPrayerTitle get() = t("لكل صلاة", "Per prayer")
+    val atAdhanTime get() = t("عند دخول الوقت", "At the prayer time")
+    val prayerSound get() = t("صوت هذه الصلاة", "Sound for this prayer")
+    val useGeneral get() = t("مثل الإعداد العام", "Same as general")
+    val useFajrSound get() = t("مثل إعداد الفجر", "Same as Fajr setting")
+    val customForPrayer get() = t("تخصيص لهذه الصلاة", "Custom for this prayer")
+    val preThisPrayer get() = t("تنبيه قبل الأذان", "Alert before the adhan")
+    val iqamaThisPrayer get() = t("تذكير الإقامة بعد الأذان", "Iqama reminder after the adhan")
+    fun inheritValue(v: String) = t("العام ($v)", "General ($v)")
+    val minutesOff get() = t("متوقف", "Off")
+    fun minutesValue(n: String) = t("$n د", "$n min")
+    val iqamaNote get() = t("الإقامة هنا وقت تحدده أنت، وليست بيانات مباشرة من المسجد.", "Iqama here is a time you set, not live data from a mosque.")
+    val unavailableWarning get() = t("لا يُرسل تنبيه في الأيام التي يتعذّر فيها حساب هذا الوقت.", "No alert is sent on days when this time cannot be calculated.")
+
+    // General settings
+    val soundsTitle get() = t("الأصوات", "Sounds")
+    val generalSound get() = t("الصوت العام", "General sound")
+    val fajrSound get() = t("صوت الفجر", "Fajr sound")
+    val volume get() = t("مستوى الصوت", "Volume")
+    fun volumeValue(n: String) = t("$n٪", "$n%")
+    val preview get() = t("معاينة", "Preview")
+    val stopPreview get() = t("إيقاف المعاينة", "Stop preview")
+    val chooseSound get() = t("اختيار الصوت", "Choose sound")
+    val pickFile get() = t("ملف من الجهاز…", "File from device…")
+    val fileCopied get() = t("نُسخ الملف إلى التطبيق.", "The file was copied into the app.")
+    val fileTooLarge get() = t("الملف أكبر من ٢٠ م.ب.", "The file is larger than 20 MB.")
+    val fileNotAudio get() = t("تعذّر قراءة الملف كصوت.", "The file could not be read as audio.")
+    val fileFailed get() = t("تعذّر نسخ الملف.", "The file could not be copied.")
+    val recordingsTitle get() = t("تسجيلات الأذان المرفقة", "Bundled adhan recordings")
+    val candidateBadge get() = t("مرشّح · يحتاج مراجعة المحتوى", "Candidate · needs content review")
+    val recordingsNote get() = t("هذان تسجيلان مرشّحان من ويكيميديا كومنز، بمصدر وترخيص موثّقين، ولم تُعتمد مراجعة محتواهما بعد. يمكنك استخدام ملف من جهازك بدلًا منهما.", "These two candidate recordings come from Wikimedia Commons with a documented source and license; their content has not been approved yet. You can use a file from your device instead.")
+    val sourceLabel get() = t("المصدر", "Source")
+    val licenseLabel get() = t("الترخيص", "License")
+    val authorLabel get() = t("المؤلف", "Author")
+    val durationLabel get() = t("المدة", "Duration")
+    val checksumLabel get() = t("بصمة \u2066SHA-256\u2069", "SHA-256")
+    val openSourcePage get() = t("فتح صفحة المصدر في المتصفح", "Open the source page in a browser")
+    val routeTitle get() = t("مسار صوت الأذان", "Adhan audio route")
+    val routeNotification get() = t("يتبع وضع الرنين", "Follow the ringer")
+    val routeNotificationBody get() = t("لا صوت إذا كان الجوال صامتًا أو على الاهتزاز؛ يظهر إشعار بدلًا منه.", "No sound when the phone is silent or on vibrate; a notification is shown instead.")
+    val routeAlarm get() = t("مسار المنبّه", "Alarm stream")
+    val routeAlarmBody get() = t("يعمل حتى في الوضع الصامت، بمستوى صوت المنبّه.", "Plays even in silent mode, at alarm volume.")
+    val generalPre get() = t("التنبيه قبل الأذان (عام)", "Alert before the adhan (general)")
+    val generalIqama get() = t("تذكير الإقامة (عام)", "Iqama reminder (general)")
+    val deliveryStyle get() = t("طريقة الإشعار", "Delivery")
+    val cardToggle get() = t("بطاقة الصلاة القادمة في الإشعارات", "Next-prayer card in notifications")
+    val cardToggleBody get() = t("تعرض الموعد والتاريخ والمتبقي ووقت آخر تحديث. المتبقي لقطة تتحدث كل بضع دقائق وقد يؤخّرها أندرويد.", "Shows the time, date, remaining time and last update. The remaining time is a snapshot refreshed every few minutes and Android may delay it.")
+    val suhoorSetting get() = t("تذكير السحور", "Suhoor reminder")
+    val suhoorNote get() = t("تذكير قبل الفجر بالمدة التي تختارها، وليس وقت إمساك ملزمًا.", "A reminder before Fajr by the time you choose; not a binding imsak time.")
+    val ramadanOnly get() = t("في رمضان فقط", "In Ramadan only")
+    val suhoorBefore get() = t("قبل الفجر", "Before Fajr")
+    val testsTitle get() = t("تجربة التنبيهات", "Test alerts")
+    val testsBody get() = t("يُرسل التنبيه بعد ١٠ ثوانٍ عبر مسار الجدولة نفسه، ويعرض متى وصل فعلًا.", "Sends an alert in 10 seconds through the same scheduling path, and shows when it actually arrived.")
+    val testNotify get() = t("إشعار تجريبي", "Test notification")
+    val testAdhan get() = t("أذان تجريبي", "Test adhan")
+    val testExcerpt get() = t("مقتطف تجريبي", "Test excerpt")
+    val testScheduled get() = t("سيصل خلال ١٠ ثوانٍ تقريبًا.", "It will arrive in about 10 seconds.")
+    val recentTitle get() = t("آخر الأحداث", "Recent events")
+    val recentEmpty get() = t("لا أحداث بعد.", "No events yet.")
+    fun outcomeName(o: String) = when (o) {
+        "fire" -> t("أُرسل", "Sent")
+        "fire_late_silent" -> t("أُرسل صامتًا (متأخر)", "Sent silently (late)")
+        "skip_late" -> t("تُجوّز (متأخر جدًا)", "Skipped (too late)")
+        "skip_duplicate" -> t("تُجوّز (مكرر)", "Skipped (duplicate)")
+        "skip_quiet" -> t("تُجوّز (هدوء)", "Skipped (quiet)")
+        "playing" -> t("بدأ التشغيل", "Playback started")
+        "playing_fallback_sound" -> t("بدأ بالصوت البديل", "Started with fallback sound")
+        "completed" -> t("اكتمل", "Completed")
+        "excerpt_done" -> t("انتهى المقتطف", "Excerpt finished")
+        "stopped_by_user" -> t("أوقفته", "Stopped by you")
+        "focus_lost" -> t("توقف (صوت آخر)", "Stopped (other audio)")
+        "in_call" -> t("لم يُشغّل (مكالمة)", "Not played (call)")
+        "ringer_silent", "ringer_vibrate" -> t("لم يُشغّل (وضع الرنين)", "Not played (ringer mode)")
+        "notifications_blocked" -> t("الإشعارات ممنوعة", "Notifications blocked")
+        "fgs_failed" -> t("رفض أندرويد التشغيل", "Android refused playback")
+        else -> o
+    }
+    fun eventLabel(id: String): String {
+        val f = id.split(':')
+        val kind = f.getOrNull(0) ?: return id
+        val subject = f.getOrNull(1) ?: ""
+        val prayerName = runCatching { prayer(PrayerKey.valueOf(subject)) }.getOrNull()
+        val reminderName = runCatching { reminderName(ReminderKind.valueOf(subject)) }.getOrNull()
+        return when (kind) {
+            "ADHAN" -> t("وقت ", "") + (prayerName ?: subject)
+            "PRE" -> t("قبل ", "Before ") + (prayerName ?: subject)
+            "IQAMA" -> t("إقامة ", "Iqama ") + (prayerName ?: subject)
+            "SUHOOR" -> suhoorSetting
+            "REMINDER" -> reminderName ?: subject
+            "TEST" -> testsTitle
+            "QUIET" -> quietTitle
+            else -> id
+        }
+    }
+
+    // Reminders
+    fun reminderName(k: ReminderKind) = when (k) {
+        ReminderKind.DUHA -> t("صلاة الضحى", "Duha prayer")
+        ReminderKind.WITR -> t("صلاة الوتر", "Witr prayer")
+        ReminderKind.QIYAM -> t("قيام الليل", "Night prayer (Qiyam)")
+        ReminderKind.ADHKAR_MORNING -> t("أذكار الصباح", "Morning adhkar")
+        ReminderKind.ADHKAR_EVENING -> t("أذكار المساء", "Evening adhkar")
+        ReminderKind.ADHKAR_SLEEP -> t("أذكار النوم", "Adhkar before sleep")
+        ReminderKind.ADHKAR_WAKING -> t("أذكار الاستيقاظ", "Adhkar on waking")
+        ReminderKind.FRIDAY -> t("الجمعة", "Friday")
+    }
+    val remindersNote get() = t("تذكيرات بوقت مدني تختاره أنت في المنطقة الزمنية للموقع الحالي، وأيام تحددها.", "Reminders at a civil time you choose, in the current place's time zone, on the days you pick.")
+    val reminderTime get() = t("الوقت", "Time")
+    val reminderDays get() = t("الأيام", "Days")
+    val everyDay get() = t("كل يوم", "Every day")
+    val pickTime get() = t("اختيار الوقت", "Pick time")
+
+    // Quiet mode
+    val quietTitle get() = t("هدوء مؤقت", "Quiet for a while")
+    val quietBody get() = t("يوقف أذان سكينة وتنبيهاتها وتذكيراتها خلال المدة، دون تأجيلها. القراءة والمواقيت تبقى متاحة، ولا يتغيّر شيء في المكالمات أو التطبيقات الأخرى.", "Stops Sakina's adhan, alerts and reminders for the period, without postponing them. Reading and prayer times stay available; calls and other apps are not affected.")
+    fun quietFor(d: String) = d
+    fun quietActive(time: String) = t("هدوء حتى $time", "Quiet until $time")
+    val quietEndNow get() = t("إنهاء الآن", "End now")
+    val androidSound get() = t("إعدادات الصوت في أندرويد", "Android sound settings")
+    val quietDurations get() = listOf(30L to t("٣٠ دقيقة", "30 min"), 60L to t("ساعة", "1 hour"), 120L to t("ساعتان", "2 hours"), 240L to t("٤ ساعات", "4 hours"), 480L to t("٨ ساعات", "8 hours"))
+
+    // Notification texts
+    val chGroupPrayer get() = t("الصلوات", "Prayers")
+    val chGroupReminder get() = t("التذكيرات", "Reminders")
+    val chPrayerSound get() = t("وقت الصلاة: إشعار بصوت", "Prayer time: with sound")
+    val chPrayerSoundDesc get() = t("إشعار بصوت الإشعارات عند دخول الوقت.", "A notification with sound at the prayer time.")
+    val chPrayerSilent get() = t("وقت الصلاة: صامت", "Prayer time: silent")
+    val chPrayerSilentDesc get() = t("إشعار دون صوت عند دخول الوقت، وسجل الأذان بعد انتهائه.", "A silent notification at the prayer time, and a record after the adhan.")
+    val chPrayerVibrate get() = t("وقت الصلاة: اهتزاز", "Prayer time: vibrate")
+    val chPrayerVibrateDesc get() = t("اهتزاز دون صوت عند دخول الوقت.", "Vibration without sound at the prayer time.")
+    val chAdhan get() = t("تشغيل الأذان", "Adhan playback")
+    val chAdhanDesc get() = t("الإشعار الظاهر أثناء تشغيل الأذان مع زر الإيقاف.", "Shown while the adhan plays, with a stop button.")
+    val chReminderSound get() = t("تذكيرات: بصوت", "Reminders: with sound")
+    val chReminderSilent get() = t("تذكيرات: صامتة", "Reminders: silent")
+    val chReminderVibrate get() = t("تذكيرات: اهتزاز", "Reminders: vibrate")
+    val chReminderDesc get() = t("التنبيه قبل الأذان والإقامة والسحور والتذكيرات الشخصية.", "Pre-adhan, iqama, suhoor and personal reminders.")
+    val chCard get() = t("بطاقة الصلاة القادمة", "Next-prayer card")
+    val chCardDesc get() = t("بطاقة دائمة اختيارية تعرض الصلاة القادمة.", "An optional persistent card with the next prayer.")
+    fun lateNote(min: String) = t("وصل متأخرًا $min د", "arrived $min min late")
+    fun prayerTimeTitle(name: String) = t("حان وقت صلاة $name", "Time for $name")
+    fun preTitle(name: String, min: String) = t("بعد $min د: أذان $name", "In $min min: $name")
+    fun iqamaTitle(name: String) = t("تذكير الإقامة: $name", "Iqama reminder: $name")
+    fun iqamaText(min: String) = t("بعد الأذان بـ$min د · وقت حددته أنت", "$min min after the adhan · a time you set")
+    val suhoorTitle get() = t("تذكير السحور", "Suhoor reminder")
+    fun suhoorText(fajr: String, min: String) = t("الفجر $fajr (بعد $min د)", "Fajr at $fajr (in $min min)")
+    fun reminderTitle(k: ReminderKind) = when (k) {
+        ReminderKind.FRIDAY -> t("تذكير الجمعة", "Friday reminder")
+        ReminderKind.DUHA, ReminderKind.WITR, ReminderKind.QIYAM -> t("تذكير: ", "Reminder: ") + reminderName(k)
+        else -> reminderName(k)
+    }
+    fun reminderText(time: String) = t("تذكيرك الشخصي عند $time", "Your personal reminder at $time")
+    val testTitle get() = t("تنبيه تجريبي من سكينة", "Sakina test alert")
+    fun testText(scheduled: String, delivered: String) = t("مجدول $scheduled · وصل $delivered", "Scheduled $scheduled · arrived $delivered")
+    val stop get() = t("إيقاف", "Stop")
+    val cardNoTimes get() = t("لا صلاة قادمة يمكن حسابها", "No upcoming prayer can be calculated")
+    fun cardUpdated(time: String) = t("آخر تحديث $time", "Updated $time")
+    fun cardRemaining(d: String) = t("متبقٍّ نحو $d", "about $d left")
+    fun quietUntil(time: String) = t("هدوء حتى $time", "Quiet until $time")
+    fun adhanPlayingTitle(name: String) = t("أذان $name", "Adhan · $name")
+    val adhanTestTitle get() = t("أذان تجريبي", "Test adhan")
+    val excerptNote get() = t("مقتطف ٢٠ ثانية", "20-second excerpt")
+    val tapStop get() = t("اضغط «إيقاف» لإسكاته", "Tap Stop to silence it")
+    val playFailedNote get() = t("تعذّر تشغيل الصوت", "the sound could not play")
+    val noteInCall get() = t("لم يُشغّل الأذان أثناء مكالمة", "not played during a call")
+    val noteRinger get() = t("لم يُشغّل الأذان لأن الجوال صامت", "not played because the phone is silent")
+    val noteFocusLost get() = t("توقف الأذان لصوت آخر", "the adhan stopped for other audio")
+    val noteMuted get() = t("مستوى الصوت صفر", "volume is zero")
 }
 
 val LocalStrings = staticCompositionLocalOf { Strings(Lang.AR) }

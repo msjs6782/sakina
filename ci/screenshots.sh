@@ -57,6 +57,20 @@ tap() {
   sleep 1.2
 }
 
+CHECKS="$OUT/checks.txt"
+: > "$CHECKS"
+CRITICAL=0
+check() {  # check <name> <PASS|FAIL> <details> [critical]
+  echo "CHECK $1: $2 $3" | tee -a "$CHECKS"
+  if [ "$2" = "FAIL" ] && [ "${4:-}" = "critical" ]; then CRITICAL=$((CRITICAL + 1)); fi
+}
+shade_open() { adb shell cmd statusbar expand-notifications >/dev/null 2>&1 || adb shell service call statusbar 1 >/dev/null 2>&1; sleep 2; }
+save_log() { adb logcat -d >> "$OUT/logcat_part2.txt"; adb logcat -c; }
+shade_close() { adb shell cmd statusbar collapse >/dev/null 2>&1 || adb shell service call statusbar 2 >/dev/null 2>&1; sleep 1; }
+notif_posted() { adb shell dumpsys notification --noredact 2>/dev/null | grep -c "|$PKG|$1|" ; }
+adhan_running() { adb shell dumpsys activity services "$PKG/com.sakina.app.alerts.AdhanService" 2>/dev/null | grep -c "ServiceRecord" ; }
+alarm_dump() { adb shell dumpsys alarm 2>/dev/null | grep -B3 -A8 "$PKG" ; }
+
 T_AFTERNOON="2026-10-14T13:20:00Z"   # 16:20 in Riyadh: between Asr and Maghrib
 T_NIGHT="2026-10-14T18:30:00Z"       # 21:30 in Riyadh: after Isha
 T_FAJR="2026-10-15T01:50:00Z"        # 04:50 in Riyadh: after Fajr
@@ -161,10 +175,141 @@ if [ "$SUITE" = "full" ]; then
   sleep 2
 fi
 
-adb logcat -d > "$OUT/logcat_part2.txt"
+# ---------- Phase 2: alerts (real AlarmManager, notifications, playback) ----------
+adb logcat -d > "$OUT/logcat_part2.txt"; adb logcat -c
+REAL=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh,jeddah --es demo_active riyadh)
+if [ "$SDK" -ge 33 ]; then adb shell pm revoke "$PKG" android.permission.POST_NOTIFICATIONS >/dev/null 2>&1 || true; fi
+if [ "$SDK" -ge 31 ]; then adb shell appops set "$PKG" SCHEDULE_EXACT_ALARM default >/dev/null 2>&1 || true; fi
+shot 60_alerts_permissions_missing 7 "${REAL[@]}" --es demo_route alerts
+if [ "$SDK" -ge 33 ]; then adb shell pm grant "$PKG" android.permission.POST_NOTIFICATIONS; fi
+if [ "$SDK" -ge 31 ]; then adb shell appops set "$PKG" SCHEDULE_EXACT_ALARM allow; fi
+shot 61_alerts_permissions_granted 7 "${REAL[@]}" --es demo_route alerts --es demo_alerts FAJR=ADHAN,DHUHR=NOTIFY,ASR=EXCERPT,MAGHRIB=VIBRATE,ISHA=SILENT --ei demo_pre 10 --ei demo_iqama 15
+
+# Turning on an alert by tapping: Settings > Adhan and alerts > Maghrib > Notification with sound.
+start "${REAL[@]}" --es demo_tab settings
+sleep 4
+tap id nav_alerts && tap id prayer_alert_maghrib && cap 62_prayer_page_before
+tap exact "إشعار بصوت" && sleep 1 && cap 63_prayer_page_selected
+adb shell input keyevent 4; sleep 2; cap 64_alerts_after_tap
+
+# The chain alarm is set in AlarmManager at the time the app logged.
+start "${REAL[@]}" --es demo_alerts FAJR=NOTIFY,DHUHR=NOTIFY,ASR=NOTIFY,MAGHRIB=NOTIFY,ISHA=NOTIFY --ez demo_log_alarm true
+sleep 6
+LOGGED=$(adb logcat -d -s SakinaAlerts:I | grep -o "Scheduled .* epochMs=[0-9]*" | tail -1)
+EPOCH=$(echo "$LOGGED" | grep -o "epochMs=[0-9]*" | cut -d= -f2)
+alarm_dump > "$OUT/alarm_dump.txt"
+if [ -n "$EPOCH" ] && grep -q "$EPOCH" "$OUT/alarm_dump.txt"; then check alarm_set PASS "$LOGGED" critical
+elif [ -n "$EPOCH" ] && grep -q "ALERT_FIRE" "$OUT/alarm_dump.txt"; then check alarm_set PASS "fire alarm present; logged $LOGGED" critical
+else check alarm_set FAIL "logged='$LOGGED'" critical; fi
+grep -q "exactAllowReason=permission\|exactAllowReason=policy\|EXACT\|setExact" "$OUT/alarm_dump.txt" && check alarm_exact PASS "exact" || check alarm_exact FAIL "no exact marker in dump (see alarm_dump.txt)"
+
+# A test notification through the real alarm path.
+save_log
+start "${REAL[@]}" --es demo_test NOTIFY:5
+sleep 9
+N=$(notif_posted 900)
+[ "$N" -ge 1 ] && check test_notification PASS "posted" critical || check test_notification FAIL "not posted" critical
+adb logcat -d -s SakinaAlerts:I | grep "Test alert" | tail -2 | tee -a "$CHECKS"
+shade_open; cap 70_test_notification_shade; shade_close
+
+# Adhan playback through the foreground service, then the Stop action.
+save_log
+start "${REAL[@]}" --es demo_test ADHAN:4
+sleep 9
+R=$(adhan_running)
+adb shell dumpsys audio > "$OUT/audio_during_adhan.txt" 2>/dev/null
+grep -q "$PKG" "$OUT/audio_during_adhan.txt" && FOCUS=yes || FOCUS=no
+[ "$R" -ge 1 ] && check adhan_service PASS "running, focus=$FOCUS" critical || check adhan_service FAIL "not running" critical
+adb logcat -d -s SakinaAdhan:I | tail -3 | tee -a "$CHECKS"
+shade_open; cap 71_adhan_playing_shade
+if tap exact "إيقاف"; then
+  sleep 2
+  R2=$(adhan_running)
+  [ "$R2" -eq 0 ] && check adhan_stop PASS "stopped from notification" critical || check adhan_stop FAIL "still running" critical
+else
+  check adhan_stop FAIL "stop action not found" critical
+fi
+cap 72_after_stop; shade_close
+adb logcat -d -s SakinaAdhan:I | grep "finished" | tail -1 | tee -a "$CHECKS"
+
+# The 20-second excerpt ends on its own.
+save_log
+start "${REAL[@]}" --es demo_test EXCERPT:3
+sleep 8
+R=$(adhan_running)
+sleep 20
+R2=$(adhan_running)
+DONE=$(adb logcat -d -s SakinaAdhan:I | grep -c "finished EXCERPT_DONE")
+[ "$R" -ge 1 ] && [ "$R2" -eq 0 ] && [ "$DONE" -ge 1 ] && check excerpt PASS "ran then ended after 20 s" critical || check excerpt FAIL "running=$R after=$R2 done=$DONE" critical
+
+# Quiet mode skips alerts.
+save_log
+start "${REAL[@]}" --ei demo_quiet 30 --es demo_test NOTIFY:4
+sleep 9
+Q=$(adb logcat -d -s SakinaAlerts:I | grep -c "SKIP_QUIET")
+N=$(notif_posted 900)
+[ "$Q" -ge 1 ] && [ "$N" -eq 0 ] && check quiet PASS "test alert skipped" || check quiet FAIL "skip=$Q posted=$N"
+cap 73_quiet_home
+start "${REAL[@]}" --ei demo_quiet 0
+sleep 2
+
+if [ "$SUITE" = "full" ]; then
+  shot 65_reminders 7 "${REAL[@]}" --es demo_route alerts,reminders --es demo_reminders DUHA,ADHKAR_MORNING,FRIDAY
+  shot 66_recordings 7 "${REAL[@]}" --es demo_route alerts,recordings
+  shot 67_prayer_fajr_adhan 7 "${REAL[@]}" --es demo_route alerts,prayer_fajr --es demo_alerts FAJR=ADHAN
+  shot 68_alerts_english 7 "${REAL[@]}" --es demo_lang en --es demo_route alerts --es demo_alerts ASR=ADHAN --ei demo_pre 5
+  shot 69_alerts_dark 7 "${REAL[@]}" --es demo_theme DARK --es demo_route alerts --es demo_alerts ASR=ADHAN
+
+  # Next-prayer card in the notification shade.
+  start "${REAL[@]}" --ez demo_card true
+  sleep 6
+  shade_open; cap 74_card_shade; shade_close
+  [ "$(notif_posted 1)" -ge 1 ] && check card PASS "posted" || check card FAIL "not posted"
+
+  # Exact alarms while the device is idle (Doze).
+  save_log
+  start "${REAL[@]}" --es demo_test NOTIFY:25
+  sleep 3
+  adb shell input keyevent 26
+  adb shell dumpsys deviceidle force-idle >/dev/null 2>&1
+  sleep 30
+  adb shell dumpsys deviceidle unforce >/dev/null 2>&1
+  adb shell input keyevent 224
+  D=$(adb logcat -d -s SakinaAlerts:I | grep "Test alert NOTIFY delivered" | tail -1)
+  [ -n "$D" ] && check doze PASS "$D" || check doze FAIL "no delivery while idle"
+
+  # A time-zone change rebuilds the chain.
+  save_log
+  OLDTZ=$(adb shell getprop persist.sys.timezone | tr -d '\r')
+  adb shell cmd alarm set-timezone America/New_York >/dev/null 2>&1 || adb shell service call alarm 3 s16 America/New_York >/dev/null 2>&1
+  sleep 6
+  adb logcat -d -s SakinaAlerts:I | grep -q "TIMEZONE_CHANGED" && check timezone PASS "rescheduled" || check timezone FAIL "no reschedule logged"
+  adb shell cmd alarm set-timezone "${OLDTZ:-GMT}" >/dev/null 2>&1 || true
+
+  # Reboot: the alarm chain comes back without opening the app.
+  start "${REAL[@]}" --es demo_alerts FAJR=NOTIFY,DHUHR=NOTIFY,ASR=NOTIFY,MAGHRIB=NOTIFY,ISHA=NOTIFY
+  sleep 5
+  adb shell input keyevent 3
+  adb logcat -d > "$OUT/logcat_part3.txt"
+  adb reboot
+  adb wait-for-device
+  for _ in $(seq 1 90); do [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ] && break; sleep 2; done
+  sleep 25
+  adb shell input keyevent 82 >/dev/null 2>&1 || true
+  alarm_dump > "$OUT/alarm_dump_after_reboot.txt"
+  adb logcat -d -s SakinaAlerts:I > "$OUT/alerts_after_reboot.txt"
+  if grep -q "ALERT_FIRE" "$OUT/alarm_dump_after_reboot.txt" && grep -q "BOOT_COMPLETED" "$OUT/alerts_after_reboot.txt"; then
+    check reboot PASS "alarm rescheduled after BOOT_COMPLETED" critical
+  else
+    check reboot FAIL "see alarm_dump_after_reboot.txt" critical
+  fi
+  cat "$OUT/logcat_part3.txt" >> "$OUT/logcat_part2.txt"; rm -f "$OUT/logcat_part3.txt"
+fi
+
+adb logcat -d >> "$OUT/logcat_part2.txt"
 cat "$OUT/logcat_part1.txt" "$OUT/logcat_part2.txt" > "$OUT/logcat.txt"
 rm -f "$OUT"/logcat_part*.txt "$OUT/.ui.xml"
-grep -E "SakinaDemo|AndroidRuntime" "$OUT/logcat.txt" | head -80 > "$OUT/app_log.txt" || true
+grep -E "SakinaDemo|SakinaAlerts|SakinaAdhan|AndroidRuntime: FATAL" "$OUT/logcat.txt" | head -200 > "$OUT/app_log.txt" || true
 grep "HijriCheck" "$OUT/logcat.txt" | tee "$OUT/hijri_check.txt"
 if ! grep -q "HijriCheck compared=.* mismatches=0" "$OUT/logcat.txt"; then
   echo "::warning::Umm al-Qura check against Android ICU did not report zero mismatches (SDK $SDK)"
@@ -176,6 +321,11 @@ if grep -q "FATAL EXCEPTION" "$OUT/logcat.txt"; then
 fi
 if [ "$FAILS" -gt 0 ]; then
   echo "::error::$FAILS expected element(s) were not found on screen (SDK $SDK)"
+  exit 1
+fi
+if [ "$CRITICAL" -gt 0 ]; then
+  echo "::error::$CRITICAL critical alert check(s) failed (SDK $SDK)"
+  grep "FAIL" "$CHECKS"
   exit 1
 fi
 echo "UI check passed (SDK $SDK)"

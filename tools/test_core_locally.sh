@@ -12,7 +12,7 @@ STD="$(jar 'kotlin-stdlib-2*.jar')"
 TESTCP="$STD:$(jar 'junit-4*.jar'):$(jar 'hamcrest-core-*.jar')"
 cd "$ROOT/app"
 java -Dfile.encoding=UTF-8 -cp "$KCP" org.jetbrains.kotlin.cli.jvm.K2JVMCompiler -no-stdlib -no-reflect -nowarn \
-  -jvm-target 17 -cp "$TESTCP" -d "$OUT" src/main/java/com/sakina/app/core src/test/java/com/sakina/app/core
+  -jvm-target 17 -cp "$TESTCP" -d "$OUT" src/main/java/com/sakina/app/core src/test/java/com/sakina/app/core "$ROOT/tools/stubs"
 cp -r src/test/resources/. "$OUT/"
 java -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -cp "$OUT:$TESTCP" org.junit.runner.JUnitCore \
   $(cd src/test/java && find com/sakina/app/core -name '*Test.kt' | sed 's/\.kt$//; s#/#.#g')

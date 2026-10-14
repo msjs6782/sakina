@@ -47,6 +47,15 @@ class Fmt(val lang: Lang, val clock24: Boolean, val arabicDigits: Boolean) {
         return if (ar) "$base ${if (pm) "م" else "ص"}" else "$base ${if (pm) "PM" else "AM"}"
     }
 
+    /** Time with seconds, for test alerts that show how late Android delivered them. */
+    fun timeSeconds(instant: Instant, zone: ZoneId): String {
+        val t = instant.atZone(zone)
+        val base = clock(t.hour, t.minute, suffix = false) + digits(":" + two(t.second))
+        if (clock24) return base
+        val pm = t.hour >= 12
+        return base + " " + if (ar) (if (pm) "م" else "ص") else (if (pm) "PM" else "AM")
+    }
+
     fun amPm(instant: Instant, zone: ZoneId): String? {
         if (clock24) return null
         val pm = instant.atZone(zone).hour >= 12

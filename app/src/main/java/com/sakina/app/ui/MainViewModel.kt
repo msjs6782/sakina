@@ -39,6 +39,10 @@ sealed interface Route {
     data class Manual(val purpose: PlacePurpose) : Route
     data class Gps(val purpose: PlacePurpose) : Route
     data class License(val asset: String, val title: String) : Route
+    data object Alerts : Route
+    data class PrayerAlert(val key: com.sakina.app.core.prayer.PrayerKey) : Route
+    data object Reminders : Route
+    data object Recordings : Route
 }
 
 sealed interface GpsUi {

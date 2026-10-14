@@ -36,6 +36,10 @@ import com.sakina.app.core.prayer.PrayerEngine
 import com.sakina.app.core.prayer.PrayerKey
 import com.sakina.app.data.AppSettings
 import com.sakina.app.data.ThemeMode
+import com.sakina.app.ui.alerts.AlertsScreen
+import com.sakina.app.ui.alerts.PrayerAlertScreen
+import com.sakina.app.ui.alerts.RecordingsScreen
+import com.sakina.app.ui.alerts.RemindersScreen
 import com.sakina.app.ui.components.SakinaIcons
 import com.sakina.app.ui.home.HomeScreen
 import com.sakina.app.ui.location.CityPickerScreen
@@ -123,6 +127,10 @@ private fun RouteScreen(route: Route, vm: MainViewModel, s: AppSettings) {
         is Route.Manual -> ManualPlaceScreen(vm, route.purpose)
         is Route.Gps -> GpsPlaceScreen(vm, route.purpose)
         is Route.License -> LicenseScreen(vm, route.asset, route.title)
+        Route.Alerts -> AlertsScreen(vm, s)
+        is Route.PrayerAlert -> PrayerAlertScreen(vm, s, route.key)
+        Route.Reminders -> RemindersScreen(vm, s)
+        Route.Recordings -> RecordingsScreen(vm)
     }
 }
 
