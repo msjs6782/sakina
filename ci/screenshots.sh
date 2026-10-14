@@ -126,6 +126,8 @@ shade_open() { adb shell cmd statusbar expand-notifications >/dev/null 2>&1 || a
 save_log() { adb logcat -d >> "$OUT/logcat_part2.txt"; adb logcat -c; }
 shade_close() { adb shell cmd statusbar collapse >/dev/null 2>&1 || adb shell service call statusbar 2 >/dev/null 2>&1; sleep 1; }
 notif_posted() { adb shell dumpsys notification --noredact 2>/dev/null | grep -c "|$PKG|$1|" ; }
+# Active notifications only (the dump also lists recently removed ones on some versions).
+notif_active() { adb shell dumpsys notification --noredact 2>/dev/null | grep -cE "NotificationRecord\(.*pkg=$PKG .*id=$1 " ; }
 adhan_running() { adb shell dumpsys activity services "$PKG/com.sakina.app.alerts.AdhanService" 2>/dev/null | grep -c "ServiceRecord" ; }
 alarm_dump() { adb shell dumpsys alarm 2>/dev/null | grep -B3 -A8 "$PKG" ; }
 
@@ -413,10 +415,10 @@ save_log
 start "${L[@]}" --es demo_tab quran
 sleep 8
 tap id quran_listen && sleep 3 && cap 130_listen
-# Streaming Al-Fatiha by Alafasy, started by a tap.
-tap id listen_play_1
-if wait_rlog "playing alafasy:1" 40; then
-  check stream_play PASS "$(rlog | grep -o 'load alafasy:1 from .*' | head -1)" critical
+# Streaming Al-Baqara by Alafasy, started by a tap.
+tap id listen_play_2
+if wait_rlog "playing alafasy:2" 40; then
+  check stream_play PASS "$(rlog | grep -o 'load alafasy:2 from .*' | head -1)" critical
 else
   check stream_play FAIL "$(rlog | tail -4 | tr '\n' ' ')" critical
 fi
@@ -425,14 +427,15 @@ session_dump > "$OUT/media_session.txt"
 grep -qE "state=(3|PLAYING\(3\))" "$OUT/media_session.txt" && check media_session PASS "MediaSession is playing" critical || check media_session FAIL "see media_session.txt" critical
 N=$(notif_posted 4001)
 [ "$N" -ge 1 ] && check media_notification PASS "notification posted" critical || check media_notification FAIL "no media notification" critical
-shade_open; cap 132_listen_notification
-# Pause from the notification.
-# Android 8 shows a "Pause" action in the notification; Android 13+ shows media controls in quick settings.
-if ui_has exact "Pause"; then tap exact "Pause"; else tap id actionPlayPause; fi
-wait_rlog "paused at" 10 && check notif_pause PASS "paused from the system media controls" || check notif_pause FAIL "no pause logged"
-shade_close
-# Speed and seeking from the app.
-tap id listen_toggle && sleep 2
+shade_open; sleep 1; cap 132_listen_notification; shade_close
+# Media keys reach the session the same way as the lock screen, the notification and headset buttons.
+save_log
+adb shell input keyevent 127
+wait_rlog "paused at" 10 && check media_key_pause PASS "paused by the media pause key" critical || check media_key_pause FAIL "no pause logged" critical
+save_log
+adb shell input keyevent 126
+wait_rlog "playing alafasy:2" 10 && check media_key_play PASS "played by the media play key" || check media_key_play FAIL "no play logged"
+sleep 1
 tap id speed_1.25 && sleep 2
 session_dump > "$OUT/media_session_speed.txt"
 grep -q "speed=1.25" "$OUT/media_session_speed.txt" && check speed PASS "speed 1.25 in the session" || check speed FAIL "see media_session_speed.txt"
@@ -459,7 +462,7 @@ save_log
 adb shell am start -n "$PKG/$ACT" --ei demo_quiet 30 >/dev/null
 wait_rlog "session ended: quiet mode" 15 && check quiet_stops PASS "quiet mode ended the session" critical || check quiet_stops FAIL "$(rlog | tail -2 | tr '\n' ' ')" critical
 sleep 2
-tap id listen_play_1; sleep 3
+tap id listen_play_2; sleep 3
 rlog | grep -q "play refused: Sakina quiet mode is on" && check quiet_blocks PASS "play refused during quiet" || check quiet_blocks FAIL "play not refused"
 cap 135_listen_quiet
 adb shell am start -n "$PKG/$ACT" --ei demo_quiet 0 >/dev/null; sleep 2
@@ -517,8 +520,8 @@ wait_rlog "download cancelled alafasy:2" 20
 PARTS=$(adb shell run-as "$PKG" ls files/recitations/alafasy 2>/dev/null | tr -d '\r' | grep -c part)
 rlog | grep -q "download cancelled alafasy:2" && [ "$PARTS" -eq 0 ] && check download_cancel PASS "cancelled, no partial file" || check download_cancel FAIL "parts=$PARTS"
 # Playback goes on after leaving the screen.
-scroll_to id listen_play_1 && tap id listen_play_1
-wait_rlog "playing alafasy:1" 40
+scroll_to id listen_play_2 && tap id listen_play_2
+wait_rlog "playing alafasy:2" 40
 save_log
 adb shell input keyevent 4; sleep 4
 session_dump > "$OUT/media_session_left.txt"
@@ -529,7 +532,8 @@ tap id tab_quran && sleep 2
 tap id quran_listen && sleep 3
 tap id listen_toggle
 if wait_rlog "session ended: paused for 25 s" 45; then
-  for _ in 1 2 3 4 5 6; do sleep 1; N=$(notif_posted 4001); [ "$N" -eq 0 ] && break; done
+  adb shell dumpsys notification --noredact > "$OUT/notifications_after_idle.txt" 2>/dev/null
+  for _ in 1 2 3 4 5 6; do sleep 1; N=$(notif_active 4001); [ "$N" -eq 0 ] && break; done
   [ "$N" -eq 0 ] && check idle_end PASS "paused session ended; notification removed" critical || check idle_end FAIL "notification still shown" critical
 else
   check idle_end FAIL "$(rlog | tail -3 | tr '\n' ' ')" critical
