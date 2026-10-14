@@ -1,0 +1,29 @@
+OK  mon_thu_tahari tirmidhi:745 | at 745 | found in 745 | Ahmad Muhammad Shakir: Sahih; Al-Albani: Sahih; Zubair Ali Zai: Isnaad Sahih
+OK  mon_thu_amal tirmidhi:747 | at 747 | found in 747 | Ahmad Muhammad Shakir: Sahih; Al-Albani: Sahih; Bashar Awad Maarouf: Hasan; Zubair Ali Zai: Isnaad Hasan
+OK  monday_born muslim:1162 | at 1162.02 | found in 1162.02 | -
+OK  white_days tirmidhi:761 | at 761 | found in 761 | Ahmad Muhammad Shakir: Hasan Sahih; Al-Albani: Hasan Sahih; Bashar Awad Maarouf: Hasan; Zubair Ali Zai: Isnaad Hasan
+OK  arafah muslim:1162 | at 1162.01 | found in 1162.01 | -
+OK  ashura muslim:1162 | at 1162.01 | found in 1162.01 | -
+OK  tasua muslim:1134 | at 1134.02 | found in 1134.02 | -
+OK  shawwal_six muslim:1164 | at 1164.01 | found in 1164.01 | -
+OK  eid_forbidden bukhari:1991 | at 1991 | found in 1991,1992 | -
+OK  eid_forbidden_m muslim:1138 | at 1138 | found in 889,1138,827.02 | -
+OK  tashreeq muslim:1141 | at 1141.01 | found in 1141.01 | -
+OK  duha_awwabin muslim:748 | at 748.01 | found in 748.01 | -
+OK  forbidden_times muslim:831 | at 831 | found in 831 | -
+OK  duha_rumh abudawud:1277 | at 1277 | found in 1277 | Al-Albani: Sahih; Muhammad Muhyi Al-Din Abdul Hamid: Sahih; Shuaib Al Arnaut: Sahih; Zubair Ali Zai: Isnaad Sahih
+OK  last_third bukhari:1145 | at 1145 | found in 1145,6321,7494 | -
+OK  isha_half muslim:612 | at 612.04 | found in 612.04 | -
+OK  qadr_odd bukhari:2017 | at 2017 | found in 2017 | -
+OK  ten_ihya bukhari:2024 | at 2024 | found in 2024 | -
+OK  qadr_virtue bukhari:1901 | at 1901 | found in 1901,2014 | -
+OK  qiyam_ramadan bukhari:2009 | at 2009 | found in 37,2009 | -
+OK  suhoor bukhari:1923 | at 1923 | found in 1923 | -
+OK  iftar_time bukhari:1954 | at 1954 | found in 1954 | -
+OK  hasten_iftar bukhari:1957 | at 1957 | found in 1957 | -
+OK  friday_salawat abudawud:1047 | at 1047 | found in 1047,1531 | Al-Albani: Sahih; Muhammad Muhyi Al-Din Abdul Hamid: Sahih; Shuaib Al Arnaut: Sahih Lighairihi; Zubair Ali Zai: Daif
+OK  kahf_ten muslim:809 | at 809.01 | found in 809.01 | -
+OK  friday_best muslim:854 | at 854.01 | found in 854.01,854.02 | -
+OK  friday_hour bukhari:935 | at 935 | found in 935 | -
+OK  salawat_ten muslim:408 | at 408 | found in 408 | -
+done 28 of 28
