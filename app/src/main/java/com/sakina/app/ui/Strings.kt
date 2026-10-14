@@ -704,7 +704,6 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val readInText get() = t("اقرأها في العرض النصي", "Read it in the text view")
     val downloadWhole get() = t("تنزيل المصحف كاملًا…", "Download the whole Mushaf…")
     val offline get() = t("لا يوجد اتصال بالإنترنت.", "No internet connection.")
-    val retry get() = t("إعادة المحاولة", "Try again")
     fun fetchFailure(f: com.sakina.app.core.mushaf.FetchFailure) = when (f) {
         com.sakina.app.core.mushaf.FetchFailure.NETWORK -> t("تعذّر الوصول إلى المصدر. تحقّق من الاتصال وحاول مرة أخرى.", "Could not reach the source. Check the connection and try again.")
         com.sakina.app.core.mushaf.FetchFailure.NO_RANGE, com.sakina.app.core.mushaf.FetchFailure.BAD_REPLY -> t("ردّ المصدر بشكل غير متوقع؛ لم يُحفظ شيء.", "The source replied unexpectedly; nothing was saved.")
@@ -720,7 +719,6 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val mushafIndex get() = t("الفهرس", "Index")
     val tabHizb get() = t("الأحزاب", "Hizbs")
     val tabPages get() = t("الصفحات", "Pages")
-    fun hizbN(n: String) = t("الحزب $n", "Hizb $n")
     fun focusHere(name: String, aya: String) = t("$name · الآية $aya في هذه الصفحة", "$name · ayah $aya is on this page")
     val showInText get() = t("عرضها نصًا", "Show as text")
     val bookmarkPage get() = t("علامة على الصفحة", "Bookmark the page")
