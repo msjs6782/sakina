@@ -32,6 +32,10 @@ object AlertScheduler {
     private const val REQ_FIRE = 1001
     private const val REQ_CARD = 1002
     private const val REQ_TEST = 1003
+    private const val REQ_FIRE_BACKUP = 1004
+
+    /** Without exact-alarm access Android stretches windows to at least ten minutes. */
+    private val INEXACT_WINDOW: Duration = Duration.ofMinutes(10)
     private val mutex = Mutex()
 
     enum class Run {
@@ -122,9 +126,11 @@ object AlertScheduler {
         val am = context.getSystemService(AlarmManager::class.java)
         val next = AlertPlanner.next(plan, now, fired)
         val pi = pending(context, REQ_FIRE, AlarmReceiver.ACTION_FIRE)
+        val backup = pending(context, REQ_FIRE_BACKUP, AlarmReceiver.ACTION_FIRE)
         val state = (context.applicationContext as SakinaApp).alertState
         if (next == null) {
             am.cancel(pi)
+            am.cancel(backup)
             state.saveScheduled(null)
             return
         }
@@ -137,17 +143,31 @@ object AlertScheduler {
                 alarmClock -> {
                     val show = PendingIntent.getActivity(context, 0, Intent(context, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE)
                     am.setAlarmClock(AlarmManager.AlarmClockInfo(at, show), pi)
+                    am.cancel(backup)
                 }
-                exact -> am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, pi)
-                else -> am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, pi)
+                exact -> {
+                    am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, pi)
+                    am.cancel(backup)
+                }
+                else -> setInexact(am, at, pi, backup)
             }
             state.saveScheduled(AlertState.Scheduled(ids, next.at, exact, alarmClock, now))
             Log.i(TAG, "Scheduled ${ids.joinToString()} at ${next.at} exact=$exact alarmClock=$alarmClock epochMs=$at")
         } catch (e: SecurityException) {
-            am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, pi)
+            setInexact(am, at, pi, backup)
             state.saveScheduled(AlertState.Scheduled(ids, next.at, false, false, now))
-            Log.w(TAG, "Exact alarm refused; using an inexact alarm", e)
+            Log.w(TAG, "Exact alarm refused; using inexact alarms", e)
         }
+    }
+
+    /**
+     * Without exact-alarm access: a ten-minute window that is honoured while the device is awake, plus an
+     * allow-while-idle alarm that still fires in Doze (Android may delay it up to about an hour). Whichever comes
+     * first handles the events; the other finds them already handled.
+     */
+    private fun setInexact(am: AlarmManager, at: Long, pi: PendingIntent, backup: PendingIntent) {
+        am.setWindow(AlarmManager.RTC_WAKEUP, at, INEXACT_WINDOW.toMillis(), pi)
+        am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, backup)
     }
 
     /** Refreshes the optional next-prayer card and sets a non-waking alarm for its next update. */

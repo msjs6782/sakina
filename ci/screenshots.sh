@@ -38,6 +38,25 @@ shot() {
   cap "$name"
 }
 
+# Like tap, but scrolls the screen up between attempts to reach elements below the fold.
+tap_scroll() {
+  local mode="$1"; local needle="$2"; local xy=""
+  for _ in 1 2 3 4 5 6 7; do
+    adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1
+    adb shell cat /sdcard/ui.xml > "$OUT/.ui.xml" 2>/dev/null
+    xy=$(python3 "$HERE/find_node.py" "$OUT/.ui.xml" "$needle" "$mode") && break
+    adb shell input swipe 540 1700 540 900 400
+    sleep 1.2
+  done
+  if [ -z "$xy" ]; then
+    echo "::warning::Could not find '$needle' ($mode) after scrolling"
+    FAILS=$((FAILS + 1))
+    return 1
+  fi
+  adb shell input tap $xy
+  sleep 1.2
+}
+
 # Finds a node by text (exact), text (contains) or test tag (id) in a UI dump and taps its centre.
 tap() {
   local mode="$1"; local needle="$2"; local xy=""
@@ -181,6 +200,14 @@ REAL=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh,jedd
 if [ "$SDK" -ge 33 ]; then adb shell pm revoke "$PKG" android.permission.POST_NOTIFICATIONS >/dev/null 2>&1 || true; fi
 if [ "$SDK" -ge 31 ]; then adb shell appops set "$PKG" SCHEDULE_EXACT_ALARM default >/dev/null 2>&1 || true; fi
 shot 60_alerts_permissions_missing 7 "${REAL[@]}" --es demo_route alerts
+if [ "$SDK" -ge 31 ]; then
+  start "${REAL[@]}" --es demo_alerts DHUHR=NOTIFY,ASR=NOTIFY,MAGHRIB=NOTIFY,ISHA=NOTIFY,FAJR=NOTIFY
+  sleep 6
+  alarm_dump > "$OUT/alarm_dump_inexact.txt"
+  W=$(grep -A3 "ALERT_FIRE" "$OUT/alarm_dump_inexact.txt" | grep -c "window=+10m0s0ms")
+  T=$(grep -c "ALERT_FIRE" "$OUT/alarm_dump_inexact.txt")
+  [ "$W" -ge 1 ] && [ "$T" -ge 2 ] && check inexact_fallback PASS "10-minute window plus idle backup" || check inexact_fallback FAIL "window10=$W alarms=$T"
+fi
 if [ "$SDK" -ge 33 ]; then adb shell pm grant "$PKG" android.permission.POST_NOTIFICATIONS; fi
 if [ "$SDK" -ge 31 ]; then adb shell appops set "$PKG" SCHEDULE_EXACT_ALARM allow; fi
 shot 61_alerts_permissions_granted 7 "${REAL[@]}" --es demo_route alerts --es demo_alerts FAJR=ADHAN,DHUHR=NOTIFY,ASR=EXCERPT,MAGHRIB=VIBRATE,ISHA=SILENT --ei demo_pre 10 --ei demo_iqama 15
@@ -188,7 +215,7 @@ shot 61_alerts_permissions_granted 7 "${REAL[@]}" --es demo_route alerts --es de
 # Turning on an alert by tapping: Settings > Adhan and alerts > Maghrib > Notification with sound.
 start "${REAL[@]}" --es demo_tab settings
 sleep 4
-tap id nav_alerts && tap id prayer_alert_maghrib && cap 62_prayer_page_before
+tap id nav_alerts && tap_scroll id prayer_alert_maghrib && cap 62_prayer_page_before
 tap exact "إشعار بصوت" && sleep 1 && cap 63_prayer_page_selected
 adb shell input keyevent 4; sleep 2; cap 64_alerts_after_tap
 
@@ -201,7 +228,8 @@ alarm_dump > "$OUT/alarm_dump.txt"
 if [ -n "$EPOCH" ] && grep -q "$EPOCH" "$OUT/alarm_dump.txt"; then check alarm_set PASS "$LOGGED" critical
 elif [ -n "$EPOCH" ] && grep -q "ALERT_FIRE" "$OUT/alarm_dump.txt"; then check alarm_set PASS "fire alarm present; logged $LOGGED" critical
 else check alarm_set FAIL "logged='$LOGGED'" critical; fi
-grep -q "exactAllowReason=permission\|exactAllowReason=policy\|EXACT\|setExact" "$OUT/alarm_dump.txt" && check alarm_exact PASS "exact" || check alarm_exact FAIL "no exact marker in dump (see alarm_dump.txt)"
+if grep -A4 "ALERT_FIRE" "$OUT/alarm_dump.txt" | grep -q "window=0"; then check alarm_exact PASS "window=0 $(grep -o "exactAllowReason=[a-z_]*" "$OUT/alarm_dump.txt" | head -1)"
+else check alarm_exact FAIL "not exact (see alarm_dump.txt)"; fi
 
 # A test notification through the real alarm path.
 save_log
@@ -246,9 +274,9 @@ DONE=$(adb logcat -d -s SakinaAdhan:I | grep -c "finished EXCERPT_DONE")
 save_log
 start "${REAL[@]}" --ei demo_quiet 30 --es demo_test NOTIFY:4
 sleep 9
-Q=$(adb logcat -d -s SakinaAlerts:I | grep -c "SKIP_QUIET")
-N=$(notif_posted 900)
-[ "$Q" -ge 1 ] && [ "$N" -eq 0 ] && check quiet PASS "test alert skipped" || check quiet FAIL "skip=$Q posted=$N"
+Q=$(adb logcat -d -s SakinaAlerts:I | grep -c "delivered .*SKIP_QUIET")
+F=$(adb logcat -d -s SakinaAlerts:I | grep -c "delivered .*: FIRE")
+[ "$Q" -ge 1 ] && [ "$F" -eq 0 ] && check quiet PASS "test alert skipped during quiet" || check quiet FAIL "skipped=$Q fired=$F"
 cap 73_quiet_home
 start "${REAL[@]}" --ei demo_quiet 0
 sleep 2
@@ -291,7 +319,9 @@ if [ "$SUITE" = "full" ]; then
   sleep 5
   adb shell input keyevent 3
   adb logcat -d > "$OUT/logcat_part3.txt"
-  adb reboot
+  # A normal shutdown (like holding the power button), so Android saves its state, including exact-alarm access.
+  adb shell svc power reboot >/dev/null 2>&1 || adb reboot
+  sleep 10
   adb wait-for-device
   for _ in $(seq 1 90); do [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ] && break; sleep 2; done
   sleep 25
@@ -302,6 +332,11 @@ if [ "$SUITE" = "full" ]; then
     check reboot PASS "alarm rescheduled after BOOT_COMPLETED" critical
   else
     check reboot FAIL "see alarm_dump_after_reboot.txt" critical
+  fi
+  if grep "Scheduled" "$OUT/alerts_after_reboot.txt" | tail -1 | grep -q "exact=true"; then
+    check reboot_exact PASS "still exact after reboot" critical
+  else
+    check reboot_exact FAIL "$(grep Scheduled "$OUT/alerts_after_reboot.txt" | tail -1)" critical
   fi
   cat "$OUT/logcat_part3.txt" >> "$OUT/logcat_part2.txt"; rm -f "$OUT/logcat_part3.txt"
 fi
