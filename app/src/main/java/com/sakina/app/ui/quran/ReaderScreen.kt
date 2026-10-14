@@ -34,16 +34,21 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -67,10 +72,13 @@ import com.sakina.app.ui.components.DirectionalIcon
 import com.sakina.app.ui.components.NoteText
 import com.sakina.app.ui.components.SakinaIcons
 import com.sakina.app.ui.components.SwitchRow
+import com.sakina.app.ui.components.exposeTestTags
 import com.sakina.app.ui.location.FullScreen
 import com.sakina.app.ui.settings.Segmented
 import com.sakina.app.ui.theme.AmiriQuran
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
@@ -112,7 +120,7 @@ private fun Reader(vm: MainViewModel, d: QuranData, startGlobal: Int, highlight:
         Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = { vm.pop() }) { DirectionalIcon(SakinaIcons.ArrowStart, str.back) }
             Column(Modifier.weight(1f).padding(horizontal = 4.dp)) {
-                Text("سورة " + d.meta.surah(r.sura).nameAr, style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(d.meta.surah(r.sura).let { str.surahTitle(it.nameAr, it.nameTranslit) }, style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(
                     str.pageN(fmt.num(d.meta.pageOf(current))) + " · " + str.juzN(fmt.num(d.meta.juzOf(current))),
                     style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -138,15 +146,29 @@ private fun Reader(vm: MainViewModel, d: QuranData, startGlobal: Int, highlight:
 private fun PagesView(d: QuranData, prefs: ReaderPrefs, start: Int, selected: Int?, marked: Int, onAyah: (Int) -> Unit, onVisible: (Int) -> Unit) {
     val state = rememberLazyListState(initialFirstVisibleItemIndex = d.meta.pageOf(start) - 1)
     LaunchedEffect(state) {
-        snapshotFlow { state.firstVisibleItemIndex }.collect { idx -> onVisible(d.meta.pageRange(idx + 1).first) }
+        // The first value is the page that was opened: keep the ayah it was opened at (say Ya-Sin 1,
+        // not the end of Fatir on the same page) until the reader moves to another page.
+        snapshotFlow { state.firstVisibleItemIndex }.drop(1).collect { idx -> onVisible(d.meta.pageRange(idx + 1).first) }
+    }
+    // A marked ayah (from search or a reference) may sit low on its page: once its line is measured,
+    // scroll so it starts near the top instead of leaving it at the bottom of the screen.
+    val scope = rememberCoroutineScope()
+    var aligned by remember { mutableStateOf(marked < 0) }
+    val margin = with(LocalDensity.current) { 24.dp.toPx() }
+    val onMarkedY: (Float) -> Unit = { y ->
+        if (!aligned) {
+            aligned = true
+            val offset = (y - margin).roundToInt()
+            if (offset > 0) scope.launch { state.scrollToItem(d.meta.pageOf(marked) - 1, offset) }
+        }
     }
     LazyColumn(state = state, modifier = Modifier.fillMaxSize().testTag("quran_pages")) {
-        items(d.meta.pageCount, key = { it }) { i -> PageBlock(d, i + 1, prefs, selected, marked, onAyah) }
+        items(d.meta.pageCount, key = { it }) { i -> PageBlock(d, i + 1, prefs, selected, marked, onAyah, if (aligned) null else onMarkedY) }
     }
 }
 
 @Composable
-private fun PageBlock(d: QuranData, page: Int, prefs: ReaderPrefs, selected: Int?, marked: Int, onAyah: (Int) -> Unit) {
+private fun PageBlock(d: QuranData, page: Int, prefs: ReaderPrefs, selected: Int?, marked: Int, onAyah: (Int) -> Unit, onMarkedY: ((Float) -> Unit)? = null) {
     val str = LocalStrings.current
     val fmt = LocalFmt.current
     val range = d.meta.pageRange(page)
@@ -170,9 +192,11 @@ private fun PageBlock(d: QuranData, page: Int, prefs: ReaderPrefs, selected: Int
                 SurahBanner(d.meta.surah(sura))
                 d.text.basmala[sura]?.let { BasmalaLine(it, prefs.fontSize) }
             }
-            val text = remember(ayahs.first(), selected, marked, ink, hl, mk) {
-                buildAnnotatedString {
+            val (text, markStart) = remember(ayahs.first(), selected, marked, ink, hl, mk) {
+                var at = -1
+                val t = buildAnnotatedString {
                     for (g in ayahs) {
+                        if (g == marked) at = length
                         val bg = when (g) {
                             selected -> SpanStyle(background = hl)
                             marked -> SpanStyle(background = mk)
@@ -186,8 +210,20 @@ private fun PageBlock(d: QuranData, page: Int, prefs: ReaderPrefs, selected: Int
                         append(" ")
                     }
                 }
+                t to at
             }
-            Text(text, style = style, modifier = Modifier.fillMaxWidth())
+            // A plain holder, not state: the layout is only read when the text is placed.
+            val layout = remember { arrayOfNulls<TextLayoutResult>(1) }
+            Text(
+                text, style = style,
+                onTextLayout = { layout[0] = it },
+                modifier = Modifier.fillMaxWidth().onPlaced { coords ->
+                    val l = layout[0]
+                    if (markStart >= 0 && onMarkedY != null && l != null) {
+                        onMarkedY(coords.positionInParent().y + l.getLineTop(l.getLineForOffset(markStart.coerceAtMost(text.length))))
+                    }
+                },
+            )
         }
         Spacer(Modifier.height(8.dp))
         Text(
@@ -278,7 +314,7 @@ private fun ReaderSettingsSheet(vm: MainViewModel, prefs: ReaderPrefs, onDismiss
     val fmt = LocalFmt.current
     var size by remember(prefs.fontSize) { mutableFloatStateOf(prefs.fontSize.toFloat()) }
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
-        Column(Modifier.fillMaxWidth().padding(horizontal = 20.dp).navigationBarsPadding(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(Modifier.fillMaxWidth().exposeTestTags().padding(horizontal = 20.dp).navigationBarsPadding(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(str.readerSettings, style = MaterialTheme.typography.titleLarge)
             Text(str.viewMode, style = MaterialTheme.typography.labelLarge)
             Segmented(listOf(str.viewPages, str.viewAyahs), if (prefs.mode == ReaderMode.PAGES) 0 else 1) { i ->

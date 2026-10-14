@@ -130,9 +130,10 @@ private fun SearchBody(vm: MainViewModel, d: QuranData, initial: String) {
                         }
                     }
                 }
-                item {
+                // A reference such as "2:255" usually matches no text; the card above is the answer then.
+                if (r.total > 0 || r.reference == null) item {
                     Text(
-                        if (r.total == 0) str.searchNone else str.searchCount(fmt.num(r.total)) + if (r.hits.size < r.total) " · " + str.searchShown(fmt.num(r.hits.size), fmt.num(r.total)) else "",
+                        if (r.total == 0) str.searchNone else str.searchCount(fmt.num(r.total), r.total) + if (r.hits.size < r.total) " · " + str.searchShown(fmt.num(r.hits.size), fmt.num(r.total)) else "",
                         style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }

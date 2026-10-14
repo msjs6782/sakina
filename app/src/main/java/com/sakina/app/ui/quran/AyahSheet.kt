@@ -49,6 +49,7 @@ import com.sakina.app.ui.LocalFmt
 import com.sakina.app.ui.LocalStrings
 import com.sakina.app.ui.MainViewModel
 import com.sakina.app.ui.components.SakinaIcons
+import com.sakina.app.ui.components.exposeTestTags
 import com.sakina.app.ui.theme.AmiriQuran
 import java.time.LocalDate
 
@@ -65,7 +66,7 @@ fun AyahSheet(vm: MainViewModel, d: QuranData, qs: QuranState, global: Int, onDi
     var showTranslation by remember { mutableStateOf(qs.reader.showTranslation) }
     var showTafsir by remember { mutableStateOf(qs.reader.showTafsir) }
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
-        Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp).navigationBarsPadding()) {
+        Column(Modifier.fillMaxWidth().exposeTestTags().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp).navigationBarsPadding()) {
             Text(
                 str.surahAyah(surah.nameAr, fmt.num(ref.aya)),
                 style = MaterialTheme.typography.titleLarge,

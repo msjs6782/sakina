@@ -57,6 +57,21 @@ tap_scroll() {
   sleep 1.2
 }
 
+# Scrolls up until a node is on screen, without tapping it.
+scroll_to() {
+  local mode="$1"; local needle="$2"
+  for _ in 1 2 3 4 5 6; do
+    adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1
+    adb shell cat /sdcard/ui.xml > "$OUT/.ui.xml" 2>/dev/null
+    python3 "$HERE/find_node.py" "$OUT/.ui.xml" "$needle" "$mode" >/dev/null && return 0
+    adb shell input swipe 540 1700 540 1000 600
+    sleep 1.2
+  done
+  echo "::warning::Could not scroll to '$needle' ($mode)"
+  FAILS=$((FAILS + 1))
+  return 1
+}
+
 # Finds a node by text (exact), text (contains) or test tag (id) in a UI dump and taps its centre.
 tap() {
   local mode="$1"; local needle="$2"; local xy=""
@@ -206,6 +221,12 @@ adb shell input tap 540 1000; sleep 2; cap 82_ayah_sheet
 tap id ayah_bookmark && sleep 1 && cap 82b_ayah_bookmarked
 adb shell input keyevent 4; sleep 1; adb shell input keyevent 4; sleep 2
 cap 82c_quran_home_continue
+# The bookmark and the reading position are written to the app's own storage.
+QJ=$(adb shell run-as "$PKG" cat files/datastore/quran.json 2>/dev/null | tr -d '\r')
+echo "$QJ" > "$OUT/quran_state.json"
+echo "$QJ" | grep -q '"bookmarks":\[{"sura":1,' && check bookmark_saved PASS "$(echo "$QJ" | grep -o '"bookmarks":\[[^]]*\]')" || check bookmark_saved FAIL "see quran_state.json"
+echo "$QJ" | grep -q '"lastRead":{"sura":1,' && check last_read_saved PASS "$(echo "$QJ" | grep -o '"lastRead":{[^}]*}')" || check last_read_saved FAIL "see quran_state.json"
+tap exact "العلامات" && sleep 2 && cap 82d_bookmarks_tab
 shot 83_reader_baqara_255 9 "${Q[@]}" --es demo_route quran_reader:2:255 --ez demo_highlight true
 shot 84_reader_ayahs_translation 9 "${Q[@]}" --es demo_quran mode=AYAHS,translation=1,tafsir=1 --es demo_route quran_reader:2:255 --ez demo_highlight true
 # Searching by typing: English words and a reference.
@@ -241,9 +262,11 @@ if [ "$SUITE" = "full" ]; then
   [ -n "$ls_share" ] && check share_png PASS "$ls_share" || check share_png FAIL "no image written"
   adb exec-out run-as "$PKG" cat "cache/share/$ls_share" > "$OUT/99b_shared_ayah.png" 2>/dev/null || true
   adb shell input keyevent 4; sleep 1
-  # The home screen with the verse of the day.
-  shot 79_home_verse 8 "${Q[@]}" --es demo_layout FOCUS
-  adb shell input swipe 540 1700 540 600 400; sleep 2; cap 79b_home_verse_scrolled
+  # The home screen with the verse of the day (the balanced layout shows the cards; focus hides them by design).
+  start "${Q[@]}"
+  sleep 8
+  scroll_to id verse_card && adb shell input swipe 540 1500 540 1100 600 && sleep 1.5 && cap 79_home_verse
+  tap id verse_text && sleep 3 && cap 79b_verse_opened
   save_log
 fi
 

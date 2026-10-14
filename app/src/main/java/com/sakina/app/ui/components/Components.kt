@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
@@ -277,3 +278,10 @@ fun Badge(text: String, color: Color = MaterialTheme.colorScheme.tertiaryContain
         Text(text, style = MaterialTheme.typography.labelSmall, color = onColor, maxLines = 1)
     }
 }
+
+/**
+ * Sheets and dialogs live in their own windows, so the root's test-tag setting does not reach them.
+ * Applied inside them, it lets the CI scripts find their controls by tag.
+ */
+@OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
+fun Modifier.exposeTestTags(): Modifier = this.then(Modifier.semantics { testTagsAsResourceId = true })

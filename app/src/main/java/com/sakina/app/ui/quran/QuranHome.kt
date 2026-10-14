@@ -57,6 +57,7 @@ import com.sakina.app.ui.LocalFmt
 import com.sakina.app.ui.LocalStrings
 import com.sakina.app.ui.MainViewModel
 import com.sakina.app.ui.Route
+import com.sakina.app.ui.components.exposeTestTags
 import com.sakina.app.ui.components.Divider
 import com.sakina.app.ui.components.SakinaIcons
 import com.sakina.app.ui.settings.Segmented
@@ -220,9 +221,9 @@ private fun KhatmaCard(vm: MainViewModel, qs: QuranState) {
 
 fun khatmaLine(str: com.sakina.app.ui.Strings, fmt: com.sakina.app.core.format.Fmt, st: com.sakina.app.core.quran.KhatmaStatus): String = when {
     st.completed -> str.khatmaDone
-    st.overdue -> str.khatmaOverdue(fmt.num(st.behind))
+    st.overdue -> str.khatmaOverdue(fmt.num(st.behind), st.behind)
     st.today != null && !st.today.isEmpty() -> str.khatmaToday(fmt.num(st.today.first), fmt.num(st.today.last)) +
-        " · " + if (st.behind > 0) str.khatmaBehind(fmt.num(st.behind)) else if (st.ahead > 0) str.khatmaAhead(fmt.num(st.ahead)) else str.khatmaOnTrack
+        " · " + if (st.behind > 0) str.khatmaBehind(fmt.num(st.behind), st.behind) else if (st.ahead > 0) str.khatmaAhead(fmt.num(st.ahead), st.ahead) else str.khatmaOnTrack
     else -> str.khatmaTodayEmpty
 }
 
@@ -273,7 +274,7 @@ fun PageDialog(d: QuranData, onDismiss: () -> Unit, onGo: (Int) -> Unit) {
         title = { Text(str.goToPage) },
         text = {
             OutlinedTextField(text, { text = it }, singleLine = true, label = { Text(str.pageNumberHint) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.testTag("page_input"))
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.exposeTestTags().testTag("page_input"))
         },
         confirmButton = { Button(onClick = { p?.let(onGo) }, enabled = p != null) { Text(str.go) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(str.cancel) } },

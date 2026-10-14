@@ -488,7 +488,7 @@ fun VerseCard(today: LocalDate) {
                 d.text.ayahs[g] + " " + ayahEnd(ref.aya),
                 style = MaterialTheme.typography.bodyLarge.copy(fontFamily = AmiriQuran, fontSize = 24.sp, lineHeight = 48.sp),
                 textAlign = TextAlign.Justify,
-                modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).clickable { vm.push(Route.QuranReader(g, highlight = true)) },
+                modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).clickable { vm.push(Route.QuranReader(g, highlight = true)) }.testTag("verse_text"),
             )
             Text(str.surahAyah(d.meta.surah(ref.sura).nameAr, fmt.num(ref.aya)), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
             Spacer(Modifier.height(4.dp))

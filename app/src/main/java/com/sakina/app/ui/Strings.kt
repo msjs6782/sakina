@@ -110,6 +110,23 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
             else -> "$n يومًا"
         }
     } else if (raw == 1L) "1 day" else "$n days"
+    /** Arabic counted noun for pages: صفحة واحدة، صفحتان، ٣–١٠ صفحات، ثم صفحة. */
+    fun pagesCount(n: String, raw: Int) = if (isAr) {
+        when (raw) {
+            1 -> "صفحة واحدة"
+            2 -> "صفحتان"
+            in 3..10 -> "$n صفحات"
+            else -> "$n صفحة"
+        }
+    } else if (raw == 1) "1 page" else "$n pages"
+    fun ayahsCount(n: String, raw: Int) = if (isAr) {
+        when (raw) {
+            1 -> "آية واحدة"
+            2 -> "آيتان"
+            in 3..10 -> "$n آيات"
+            else -> "$n آية"
+        }
+    } else if (raw == 1) "1 ayah" else "$n ayahs"
     val occasionNote get() = t("محسوبة بتقويم أم القرى، وقد تختلف بداية الشهر محليًا بحسب الرؤية.", "Calculated with the Umm al-Qura calendar; the start of a month may differ locally with moon sighting.")
     val todayIs get() = t("اليوم", "Today")
     fun occasion(o: Occasion) = when (o) {
@@ -619,8 +636,9 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val showTafsir get() = t("إظهار تفسير الجلالين", "Show Tafsir al-Jalalayn")
     val ayahModeNote get() = t("الترجمة والتفسير يظهران تحت كل آية في عرض «آية آية».", "The translation and tafsir appear under each ayah in the “Ayah by ayah” view.")
     val sajdaRecommended get() = t("سجدة تلاوة", "Prostration of recitation")
+    fun surahTitle(nameAr: String, translit: String) = t("سورة $nameAr", "Surah $translit")
     val searchTitle get() = t("البحث في القرآن", "Search the Quran")
-    fun searchCount(n: String) = t("$n آية", "$n ayahs")
+    fun searchCount(n: String, raw: Int) = ayahsCount(n, raw)
     fun searchShown(shown: String, total: String) = t("يُعرض أول $shown من $total", "Showing the first $shown of $total")
     val searchNone get() = t("لا نتائج.", "No results.")
     val searchNote get() = t("البحث العربي في النص الإملائي من تنزيل، دون تشكيل ولا اعتبار للهمزات؛ والبحث بالإنجليزية في ترجمة المعاني.", "Arabic search uses Tanzil's plain text, ignoring diacritics and hamza forms; English search uses the translation.")
@@ -644,12 +662,14 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     fun khatmaToday(from: String, to: String) = t("ورد اليوم: من صفحة $from إلى $to", "Today: pages $from to $to")
     val khatmaTodayEmpty get() = t("لا صفحات مقررة اليوم.", "No pages are due today.")
     fun khatmaProgress(p: String, pct: String) = t("وصلت إلى صفحة $p ($pct٪)", "Reached page $p ($pct%)")
-    fun khatmaBehind(n: String) = t("متأخر $n صفحة عن الخطة", "$n pages behind the plan")
-    fun khatmaAhead(n: String) = t("متقدم $n صفحة", "$n pages ahead")
+    fun khatmaNoProgress(pct: String) = t("لم يُسجَّل تقدم بعد ($pct٪)", "No progress recorded yet ($pct%)")
+    fun khatmaSpan(from: String, to: String, days: String) = t("من $from إلى $to · $days", "$from to $to · $days")
+    fun khatmaBehind(n: String, raw: Int) = t("متأخر ${pagesCount(n, raw)} عن الخطة", "${pagesCount(n, raw)} behind the plan")
+    fun khatmaAhead(n: String, raw: Int) = t("متقدم ${pagesCount(n, raw)}", "${pagesCount(n, raw)} ahead")
     val khatmaOnTrack get() = t("على الخطة", "On track")
-    fun khatmaRemainingToday(n: String) = t("بقي من ورد اليوم $n صفحة", "$n pages left today")
+    fun khatmaRemainingToday(n: String, raw: Int) = t("بقي من ورد اليوم ${pagesCount(n, raw)}", "${pagesCount(n, raw)} left today")
     val khatmaDone get() = t("اكتملت الختمة", "Khatma completed")
-    fun khatmaOverdue(n: String) = t("انتهت المدة وبقي $n صفحة", "The period ended with $n pages left")
+    fun khatmaOverdue(n: String, raw: Int) = t("انتهت المدة وبقي ${pagesCount(n, raw)}", "The period ended with ${pagesCount(n, raw)} left")
     fun khatmaNotStarted(date: String) = t("تبدأ في $date", "Starts on $date")
     val khatmaFinishToday get() = t("أنهيت ورد اليوم", "I finished today’s portion")
     val khatmaRecord get() = t("سجّل التقدم حتى صفحة…", "Record progress up to page…")

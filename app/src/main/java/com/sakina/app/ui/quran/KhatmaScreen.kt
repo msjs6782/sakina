@@ -54,6 +54,7 @@ import com.sakina.app.ui.components.NoteText
 import com.sakina.app.ui.components.SakinaIcons
 import com.sakina.app.ui.components.ScreenBar
 import com.sakina.app.ui.components.SectionCard
+import com.sakina.app.ui.components.exposeTestTags
 import com.sakina.app.ui.location.FullScreen
 import java.time.LocalDate
 
@@ -114,25 +115,28 @@ private fun ActivePlan(vm: MainViewModel, d: QuranData, plan: KhatmaPlan) {
     var resetDialog by remember { mutableStateOf(false) }
     SectionCard(title = str.khatmaTitle, icon = SakinaIcons.Book) {
         Text(
-            fmt.gregorian(plan.start, withYear = false) + " → " + fmt.gregorian(plan.end, withYear = true) + " · " + fmt.num(plan.days) + " " + str.khatmaDays,
+            str.khatmaSpan(fmt.gregorian(plan.start, withYear = false), fmt.gregorian(plan.end, withYear = true), str.daysCount(fmt.num(plan.days), plan.days.toLong())),
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         LinearProgressIndicator(progress = { st.percent / 100f }, modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp))
-        Text(str.khatmaProgress(fmt.num(plan.progressPage), fmt.num(st.percent)), style = MaterialTheme.typography.titleMedium)
+        Text(
+            if (plan.progressPage > 0) str.khatmaProgress(fmt.num(plan.progressPage), fmt.num(st.percent)) else str.khatmaNoProgress(fmt.num(st.percent)),
+            style = MaterialTheme.typography.titleMedium,
+        )
         Spacer(Modifier.height(6.dp))
         when {
             st.completed -> Banner(str.khatmaDone, SakinaIcons.Check)
             st.dayIndex < 0 -> Banner(str.khatmaNotStarted(fmt.gregorian(plan.start, withYear = true, withWeekday = true)))
-            st.overdue -> Banner(str.khatmaOverdue(fmt.num(st.behind)), SakinaIcons.Warning, warning = true)
+            st.overdue -> Banner(str.khatmaOverdue(fmt.num(st.behind), st.behind), SakinaIcons.Warning, warning = true)
             else -> {
                 st.today?.takeIf { !it.isEmpty() }?.let { r ->
                     Text(str.khatmaToday(fmt.num(r.first), fmt.num(r.last)), style = MaterialTheme.typography.bodyLarge)
-                    if (st.remainingToday > 0) Text(str.khatmaRemainingToday(fmt.num(st.remainingToday)), style = MaterialTheme.typography.bodyMedium)
+                    if (st.remainingToday > 0) Text(str.khatmaRemainingToday(fmt.num(st.remainingToday), st.remainingToday), style = MaterialTheme.typography.bodyMedium)
                 } ?: Text(str.khatmaTodayEmpty, style = MaterialTheme.typography.bodyMedium)
                 Spacer(Modifier.height(4.dp))
                 when {
-                    st.behind > 0 -> Banner(str.khatmaBehind(fmt.num(st.behind)), SakinaIcons.Warning, warning = true)
-                    st.ahead > 0 -> Text(str.khatmaAhead(fmt.num(st.ahead)), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
+                    st.behind > 0 -> Banner(str.khatmaBehind(fmt.num(st.behind), st.behind), SakinaIcons.Warning, warning = true)
+                    st.ahead > 0 -> Text(str.khatmaAhead(fmt.num(st.ahead), st.ahead), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
                     else -> Text(str.khatmaOnTrack, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
                 }
             }
@@ -177,7 +181,7 @@ private fun ActivePlan(vm: MainViewModel, d: QuranData, plan: KhatmaPlan) {
             title = { Text(str.khatmaRecord) },
             text = {
                 OutlinedTextField(text, { text = it }, singleLine = true, label = { Text(str.pageNumberHint) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.testTag("khatma_page_input"))
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.exposeTestTags().testTag("khatma_page_input"))
             },
             confirmButton = {
                 Button(onClick = {
