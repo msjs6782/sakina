@@ -11,11 +11,6 @@ TITLES = [
     "File:Beautiful adhan.ogg",
     "File:33937 ejaz215 call-to-prayer-from-the-prophet-s-mo.ogg",
     "File:The Adhan - Muslim Call to Prayer - Aaqib Azeez.mp3",
-    "File:Adhan.ogg",
-    "File:Call to prayer.ogg",
-    "File:Maghrib Adhan at the Masjid al Haram, Mecca - 25 Feb, 2012.webm",
-    "File:Adhan, Great Mosque of Mecca - Jan 21, 2013.webm",
-    "File:Adhan wiki.oga",
 ]
 
 def get(url, binary=False):
@@ -30,18 +25,21 @@ def get(url, binary=False):
 
 params = {"action": "query", "titles": "|".join(TITLES), "prop": "imageinfo", "iiprop": "url|size|mime|sha1|extmetadata", "format": "json", "formatversion": "2"}
 info = json.loads(get(API + "?" + urllib.parse.urlencode(params)))
-subprocess.run([sys.executable, "-m", "pip", "install", "-q", "faster-whisper"], check=False)
+pip = subprocess.run([sys.executable, "-m", "pip", "install", "-q", "faster-whisper"], capture_output=True, text=True)
+model_error = pip.stderr[-2000:]
 try:
     from faster_whisper import WhisperModel
     model = WhisperModel("medium", device="cpu", compute_type="int8")
 except Exception as e:
+    import traceback
+    model_error += "\n" + traceback.format_exc()
     print("whisper unavailable", e); model = None
 
 report = []
 for i, p in enumerate(info["query"]["pages"]):
     ii = p["imageinfo"][0]
     em = ii.get("extmetadata", {})
-    ext = ii["url"].rsplit(".", 1)[-1].lower()
+    ext = ii["url"].split("?")[0].rsplit(".", 1)[-1].lower()
     raw = get(ii["url"], True)
     sha1 = hashlib.sha1(raw).hexdigest()
     name = f"c{i:02d}.{ext}"
@@ -57,8 +55,12 @@ for i, p in enumerate(info["query"]["pages"]):
     segments = []
     if model is not None and wav.exists():
         try:
-            segs, _ = model.transcribe(str(wav), language="ar", vad_filter=False, beam_size=5)
+            segs, _ = model.transcribe(str(wav), language="ar", vad_filter=False, beam_size=5, condition_on_previous_text=False,
+                                       initial_prompt="الله أكبر الله أكبر، أشهد أن لا إله إلا الله، أشهد أن محمدا رسول الله، حي على الصلاة، حي على الفلاح")
             segments = [f"{s.start:6.1f}-{s.end:6.1f}  {s.text.strip()}" for s in segs]
+            # Second pass without the prompt, so the prompt cannot put words in the transcript.
+            segs2, _ = model.transcribe(str(wav), language="ar", vad_filter=False, beam_size=5, condition_on_previous_text=False)
+            segments += ["--- without prompt ---"] + [f"{s.start:6.1f}-{s.end:6.1f}  {s.text.strip()}" for s in segs2]
         except Exception as e:
             segments = [f"transcription failed: {e}"]
     wav.unlink(missing_ok=True)
@@ -80,3 +82,4 @@ for i, p in enumerate(info["query"]["pages"]):
     print(p["title"], "sha1 ok" if rec["sha1_ok"] else "SHA1 MISMATCH")
 
 (OUT / "report.json").write_text(json.dumps(report, ensure_ascii=False, indent=1))
+(OUT / "model_error.txt").write_text(model_error)
