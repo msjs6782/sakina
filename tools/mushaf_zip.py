@@ -28,7 +28,20 @@ ITEMS = ["1441-ai-hafs_202109", "MushafMadinaHafsGreen1441"]
 ZIP_NAME = "1441-AI-hafs.zip"
 
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pypdf"], check=False)
-subprocess.run(["sudo", "apt-get", "install", "-y", "-qq", "poppler-utils"], check=False, stdout=subprocess.DEVNULL)
+subprocess.run("sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils", shell=True, check=False, stdout=subprocess.DEVNULL)
+import shutil  # noqa: E402
+import traceback  # noqa: E402
+
+HAVE_POPPLER = shutil.which("pdftoppm") is not None
+
+
+def run_tool(args, stdout=None):
+    if not HAVE_POPPLER:
+        return
+    try:
+        subprocess.run(args, check=False, stdout=stdout, timeout=120)
+    except Exception:  # noqa: BLE001
+        log("errors.txt", traceback.format_exc())
 
 
 def get(url, timeout=120):
@@ -68,6 +81,7 @@ with get(src, timeout=600) as r, open(zpath, "wb") as f:
             break
         f.write(b)
         h_md5.update(b); h_sha1.update(b); h_sha256.update(b)
+log("zip_check.txt", f"poppler available: {HAVE_POPPLER}")
 log("zip_check.txt", f"downloaded {os.path.getsize(zpath)} bytes in {time.time() - t0:.0f} s from {src}")
 log("zip_check.txt", f"md5 {h_md5.hexdigest()}\nsha1 {h_sha1.hexdigest()}\nsha256 {h_sha256.hexdigest()}")
 for item, e in expected.items():
@@ -154,9 +168,9 @@ for n in (1, 2, 3, 50, 187, 300, 582, 603, 604):
     if n in (1, 2):
         with open(os.path.join(OUT, "pages", f"{n:03d}{ext}"), "wb") as f:
             f.write(data)
-    subprocess.run(["pdftoppm", "-r", "60", "-png", "-singlefile", raw, os.path.join(OUT, "render", f"p{n:03d}")], check=False)
-    subprocess.run(["pdfinfo", raw], check=False, stdout=open(os.path.join(OUT, "render", f"p{n:03d}_pdfinfo.txt"), "w"))
-    subprocess.run(["pdffonts", raw], check=False, stdout=open(os.path.join(OUT, "render", f"p{n:03d}_pdffonts.txt"), "w"))
+    run_tool(["pdftoppm", "-r", "60", "-png", "-singlefile", raw, os.path.join(OUT, "render", f"p{n:03d}")])
+    run_tool(["pdfinfo", raw], stdout=open(os.path.join(OUT, "render", f"p{n:03d}_pdfinfo.txt"), "w"))
+    run_tool(["pdffonts", raw], stdout=open(os.path.join(OUT, "render", f"p{n:03d}_pdffonts.txt"), "w"))
 
 # 6b. Local header offsets, for fetching single entries with HTTP Range requests.
 import struct  # noqa: E402
@@ -214,7 +228,7 @@ for n in (3, 50, 187, 300):
         raw = os.path.join("/tmp", f"p{n:03d}.ai")
         with open(raw, "wb") as f:
             f.write(z.read(pages[n][0]))
-        subprocess.run(["pdftotext", "-layout", raw, os.path.join(OUT, "render", f"p{n:03d}.txt")], check=False)
+        run_tool(["pdftotext", "-layout", raw, os.path.join(OUT, "render", f"p{n:03d}.txt")])
 
 # 7. Can one entry be fetched directly from inside the zip on archive.org (no full download)?
 if 3 in pages:
