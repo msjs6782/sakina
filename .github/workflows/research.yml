@@ -1,0 +1,29 @@
+name: Asset research
+
+on:
+  push:
+    branches: [asset-research]
+
+permissions:
+  contents: write
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run research scripts
+        run: |
+          mkdir -p out
+          sudo apt-get install -y -qq ffmpeg >/dev/null 2>&1 || true
+          for s in tools/*.py; do echo "== $s"; python3 "$s" out || echo "::warning::$s failed"; done
+      - name: Publish to asset-results
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd out
+          git init -q
+          git checkout -q -b asset-results
+          git add -A
+          git -c user.name=sakina-ci -c user.email=ci@users.noreply.github.com commit -q -m "Asset research run ${GITHUB_RUN_NUMBER}"
+          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" asset-results
