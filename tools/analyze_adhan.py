@@ -25,8 +25,7 @@ def get(url, binary=False):
 
 params = {"action": "query", "titles": "|".join(TITLES), "prop": "imageinfo", "iiprop": "url|size|mime|sha1|extmetadata", "format": "json", "formatversion": "2"}
 info = json.loads(get(API + "?" + urllib.parse.urlencode(params)))
-pip = subprocess.run([sys.executable, "-m", "pip", "install", "-q", "faster-whisper"], capture_output=True, text=True)
-model_error = pip.stderr[-2000:]
+model_error = ""
 try:
     from faster_whisper import WhisperModel
     model = WhisperModel("medium", device="cpu", compute_type="int8")
