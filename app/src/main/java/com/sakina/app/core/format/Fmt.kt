@@ -24,6 +24,24 @@ class Fmt(val lang: Lang, val clock24: Boolean, val arabicDigits: Boolean) {
 
     fun num(n: Int): String = digits(n.toString())
 
+    /** A decimal with the Arabic separator "٫" when Arabic digits are used. */
+    fun decimal(v: Double, places: Int): String {
+        val s = String.format(Locale.US, "%.${places}f", v)
+        return digits(if (arabicDigits) s.replace('.', '٫') else s)
+    }
+
+    /** File sizes in binary units, as Android's file managers show them: "1.2 MB" / "١٫٢ ميغابايت". */
+    fun bytes(n: Long, places: Int = 1): String {
+        val kib = n / 1024.0
+        val mib = kib / 1024.0
+        val gib = mib / 1024.0
+        return when {
+            gib >= 1 -> decimal(gib, places) + if (ar) " غيغابايت" else " GB"
+            mib >= 1 -> decimal(mib, places) + if (ar) " ميغابايت" else " MB"
+            else -> decimal(kib, 0) + if (ar) " كيلوبايت" else " KB"
+        }
+    }
+
     fun signed(n: Int): String = when {
         n > 0 -> "+" + num(n)
         n < 0 -> "−" + num(-n)

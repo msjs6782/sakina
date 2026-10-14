@@ -686,6 +686,93 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     // Verse of the day
     val verseOfDay get() = t("آية اليوم", "Verse of the day")
     val verseNote get() = t("من قائمة آيات مختارة في سكينة؛ النص من مشروع تنزيل.", "From a list of verses chosen for Sakina; text from the Tanzil Project.")
+
+    // Printed Mushaf
+    private fun iso(s: String) = "⁦$s⁩"
+    val mushafTitle get() = t("المصحف المطبوع", "Printed Mushaf")
+    val printedView get() = t("صفحات المصحف", "Mushaf pages")
+    val textView get() = t("العرض النصي", "Text view")
+    val defaultView get() = t("ما يُفتح من الفهرس والبحث والعلامات", "What opens from the index, search and bookmarks")
+    val defaultViewNote get() = t("صفحات المصحف هي صفحات طبعة مجمع الملك فهد الأصلية؛ والعرض النصي من تنزيل بخط أميري قرآن.", "Mushaf pages are the original King Fahd Complex pages; the text view is Tanzil's text in the Amiri Quran font.")
+    fun pageOfTotal(n: String, total: String) = t("صفحة $n من $total", "Page $n of $total")
+    val pageNotHere get() = t("هذه الصفحة غير منزّلة على الجهاز", "This page is not on the device yet")
+    fun pageSize(size: String) = t("حجمها $size", "Size $size")
+    val downloadThisPage get() = t("تنزيل هذه الصفحة", "Download this page")
+    fun downloadingPage(pct: String) = t("جارٍ تنزيل الصفحة… $pct٪", "Downloading the page… $pct%")
+    val autoDownload get() = t("تنزيل الصفحة تلقائيًا عند فتحها", "Download a page automatically when opened")
+    val autoDownloadNote get() = t("يستعمل الإنترنت فقط عند فتح صفحة غير منزّلة.", "Uses the internet only when you open a page that is not on the device.")
+    val readInText get() = t("اقرأها في العرض النصي", "Read it in the text view")
+    val downloadWhole get() = t("تنزيل المصحف كاملًا…", "Download the whole Mushaf…")
+    val offline get() = t("لا يوجد اتصال بالإنترنت.", "No internet connection.")
+    val retry get() = t("إعادة المحاولة", "Try again")
+    fun fetchFailure(f: com.sakina.app.core.mushaf.FetchFailure) = when (f) {
+        com.sakina.app.core.mushaf.FetchFailure.NETWORK -> t("تعذّر الوصول إلى المصدر. تحقّق من الاتصال وحاول مرة أخرى.", "Could not reach the source. Check the connection and try again.")
+        com.sakina.app.core.mushaf.FetchFailure.NO_RANGE, com.sakina.app.core.mushaf.FetchFailure.BAD_REPLY -> t("ردّ المصدر بشكل غير متوقع؛ لم يُحفظ شيء.", "The source replied unexpectedly; nothing was saved.")
+        com.sakina.app.core.mushaf.FetchFailure.SIZE, com.sakina.app.core.mushaf.FetchFailure.CRC, com.sakina.app.core.mushaf.FetchFailure.SHA256 -> t("الملف المنزّل لا يطابق بصمة الصفحة، فلم يُحفظ.", "The downloaded file does not match the page's fingerprint, so it was not saved.")
+        com.sakina.app.core.mushaf.FetchFailure.STORAGE -> t("تعذّرت الكتابة على الجهاز؛ تحقّق من المساحة المتاحة.", "Could not write to the device; check the free space.")
+        com.sakina.app.core.mushaf.FetchFailure.CANCELLED -> t("أُلغي التنزيل.", "Download cancelled.")
+    }
+    val nightFilter get() = t("المرشح الليلي", "Night filter")
+    val nightOff get() = t("الألوان الأصلية", "Original colors")
+    val nightDark get() = t("داكن", "Dark")
+    val nightWarm get() = t("دافئ", "Warm")
+    val nightNote get() = t("يغيّر طريقة العرض فقط، ولا يمسّ ملفات الصفحات.", "Changes the display only; the page files stay untouched.")
+    val mushafIndex get() = t("الفهرس", "Index")
+    val tabHizb get() = t("الأحزاب", "Hizbs")
+    val tabPages get() = t("الصفحات", "Pages")
+    fun hizbN(n: String) = t("الحزب $n", "Hizb $n")
+    fun focusHere(name: String, aya: String) = t("$name · الآية $aya في هذه الصفحة", "$name · ayah $aya is on this page")
+    val showInText get() = t("عرضها نصًا", "Show as text")
+    val bookmarkPage get() = t("علامة على الصفحة", "Bookmark the page")
+    val unbookmarkPage get() = t("إزالة علامة الصفحة", "Remove the page bookmark")
+    val pageBookmarked get() = t("أُضيفت علامة على أول آية في الصفحة", "Bookmarked the first ayah of the page")
+    val zoomHint get() = t("قرّب بإصبعين أو بالنقر المزدوج، وانقر لإظهار الأدوات أو إخفائها.", "Pinch or double-tap to zoom; tap to show or hide the controls.")
+    val downloadedMark get() = t("منزّلة", "On device")
+
+    val dlTitle get() = t("صفحات المصحف على الجهاز", "Mushaf pages on this device")
+    fun dlCount(n: String, total: String) = t("$n من $total صفحة على الجهاز", "$n of $total pages on the device")
+    fun dlStored(size: String) = t("المساحة المستخدمة: $size", "Space used: $size")
+    fun dlTotal(size: String) = t("حجم المصدر كاملًا ${iso(size)} (٦٠٤ ملفات PDF)", "Whole source ${iso(size)} (604 PDF files)")
+    fun dlRemaining(pages: String, rawPages: Int, size: String, transfer: String) =
+        t("المتبقي ${pagesCount(pages, rawPages)}: $size على الجهاز، ونحو $transfer تنزيلًا", "Remaining ${pagesCount(pages, rawPages)}: $size on the device, about $transfer to download")
+    fun dlFree(size: String) = t("المساحة المتاحة على الجهاز: $size", "Free space on the device: $size")
+    val dlStart get() = t("تنزيل الصفحات المتبقية", "Download the remaining pages")
+    val dlResume get() = t("استكمال التنزيل", "Resume the download")
+    val dlStop get() = t("إيقاف", "Stop")
+    fun dlProgress(done: String, total: String) = t("نُزّلت $done من $total صفحة", "$done of $total pages downloaded")
+    fun dlBytes(a: String, b: String) = t("$a من $b", "$a of $b")
+    val dlStaysNote get() = t("يتوقف التنزيل عند مغادرة هذه الشاشة أو انتقال التطبيق إلى الخلفية، وتبقى الصفحات المكتملة المتحقَّقة، ويمكن استكماله لاحقًا.", "The download stops when you leave this screen or the app goes to the background. Finished, verified pages stay, and you can resume later.")
+    fun dlMetered(size: String) = t("أنت متصل عبر شبكة محسوبة التكلفة (مثل بيانات الجوال). حجم التنزيل نحو $size. هل تتابع؟", "You are on a metered network (such as mobile data). The download is about $size. Continue?")
+    val dlContinue get() = t("متابعة", "Continue")
+    fun dlStopped(r: com.sakina.app.data.StopReason, need: String) = when (r) {
+        com.sakina.app.data.StopReason.USER -> t("أوقفت التنزيل.", "You stopped the download.")
+        com.sakina.app.data.StopReason.LEFT_SCREEN -> t("توقف التنزيل لأنك غادرت الشاشة.", "The download stopped because you left the screen.")
+        com.sakina.app.data.StopReason.BACKGROUND -> t("توقف التنزيل لأن التطبيق انتقل إلى الخلفية.", "The download stopped because the app went to the background.")
+        com.sakina.app.data.StopReason.NETWORK -> t("توقف التنزيل بسبب مشكلة في الاتصال.", "The download stopped because of a connection problem.")
+        com.sakina.app.data.StopReason.STORAGE -> t("توقف التنزيل: تعذّرت الكتابة على الجهاز.", "The download stopped: could not write to the device.")
+        com.sakina.app.data.StopReason.NO_SPACE -> t("المساحة المتاحة لا تكفي؛ يلزم نحو $need.", "Not enough free space; about $need is needed.")
+        com.sakina.app.data.StopReason.VERIFY -> t("توقف التنزيل: صفحة لم تطابق بصمتها فلم تُحفظ.", "The download stopped: a page did not match its fingerprint and was not saved.")
+    }
+    fun dlFetchedNow(n: String, raw: Int) = t("نُزّل في هذه المرة ${pagesCount(n, raw)}.", "${pagesCount(n, raw)} downloaded this time.")
+    val dlComplete get() = t("المصحف كاملًا على الجهاز.", "The whole Mushaf is on the device.")
+    val dlManage get() = t("إدارة الصفحات", "Manage pages")
+    fun dlJuzLine(have: String, total: String) = t("$have من $total", "$have of $total")
+    val dlDeleteAll get() = t("حذف كل الصفحات المنزّلة", "Delete all downloaded pages")
+    fun dlDeleteAllQ(n: String, raw: Int, size: String) = t("حذف ${pagesCount(n, raw)} ($size)؟ تبقى الصفحتان ١ و٢ المضمّنتان في التطبيق.", "Delete ${pagesCount(n, raw)} ($size)? Pages 1 and 2, which come with the app, stay.")
+    fun dlDeleteJuzQ(j: String) = t("حذف صفحات الجزء $j المنزّلة؟", "Delete the downloaded pages of juz $j?")
+    val dlVerify get() = t("التحقق من سلامة الصفحات", "Check the stored pages")
+    fun dlVerifying(i: String, n: String) = t("جارٍ التحقق… $i من $n", "Checking… $i of $n")
+    fun dlVerified(n: String, raw: Int) = t("فُحصت ${pagesCount(n, raw)}، وكلها مطابقة لبصماتها.", "Checked ${pagesCount(n, raw)}; all match their fingerprints.")
+    fun dlVerifyRemoved(n: String, raw: Int) = t("حُذفت ${pagesCount(n, raw)} لا تطابق بصمتها؛ يمكن تنزيلها من جديد.", "Removed ${pagesCount(n, raw)} that did not match; they can be downloaded again.")
+    val dlBusy get() = t("أوقف التنزيل أولًا.", "Stop the download first.")
+    val dlSource get() = t(
+        "المصدر: النسخة الرقمية لمصحف المدينة النبوية برواية حفص، طبعة ١٤٤١هـ، من مجمع الملك فهد لطباعة المصحف الشريف: ٦٠٤ ملفات PDF في الملف ${iso("1441-AI-hafs.zip")}. تُجلب كل صفحة على حدة من نسخة مطابقة لهذا الملف على ${iso("archive.org")}، ولا تُعرض إلا بعد مطابقة حجمها وبصمتي ${iso("CRC-32")} و${iso("SHA-256")}.",
+        "Source: the digital Madinah Mushaf, Hafs, 1441H edition, by the King Fahd Glorious Quran Printing Complex: 604 PDF files in 1441-AI-hafs.zip. Each page is fetched on its own from an identical copy of that file on archive.org, and is shown only after its size, CRC-32 and SHA-256 match.",
+    )
+    val mushafSourcesBody get() = t(
+        "صفحات المصحف المطبوع هي ملفات PDF الأصلية للنسخة الرقمية من مصحف المدينة النبوية (حفص، ١٤٤١هـ) التي يتيحها مجمع الملك فهد لطباعة المصحف الشريف، تُعرض كما هي دون إعادة رسم. موقع المجمع لا يسمح بالوصول الآلي، فالتطبيق يجلب الصفحات من نسختين متطابقتين للملف ${iso("1441-AI-hafs.zip")} على ${iso("archive.org")}, وبصمته ${iso("MD5 f21863db…")}. شروط الاستخدام المنقولة مع النسخة: الاستخدام المجاني في المجالات الشخصية والأعمال الفردية، دون طباعة المصاحف أو استيرادها للبيع. ترقيم الصفحات مطابق لبيانات تنزيل، وجرى التحقق من بدايات صفحات منها بمقارنتها بصريًا.",
+        "The printed pages are the original PDF files of the digital Madinah Mushaf (Hafs, 1441H) made available by the King Fahd Glorious Quran Printing Complex, shown as they are without redrawing. The Complex's site does not allow automated access, so the app fetches pages from two identical copies of 1441-AI-hafs.zip on archive.org (MD5 f21863db…). Terms of use carried with the copy: free use for personal and individual purposes, without printing or importing mushafs for sale. Page numbers match Tanzil's data; the first ayahs of sample pages were checked by eye.",
+    )
 }
 
 val LocalStrings = staticCompositionLocalOf { Strings(Lang.AR) }

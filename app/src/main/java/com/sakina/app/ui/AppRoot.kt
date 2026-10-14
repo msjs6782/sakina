@@ -41,6 +41,8 @@ import com.sakina.app.ui.alerts.PrayerAlertScreen
 import com.sakina.app.ui.alerts.RecordingsScreen
 import com.sakina.app.ui.alerts.RemindersScreen
 import com.sakina.app.ui.components.SakinaIcons
+import com.sakina.app.ui.mushaf.MushafDownloadsScreen
+import com.sakina.app.ui.mushaf.MushafScreen
 import com.sakina.app.ui.quran.KhatmaScreen
 import com.sakina.app.ui.quran.QuranHome
 import com.sakina.app.ui.quran.QuranReaderScreen
@@ -144,6 +146,8 @@ private fun RouteScreen(route: Route, vm: MainViewModel, s: AppSettings) {
         is Route.QuranSearch -> QuranSearchScreen(vm, route.query)
         Route.Khatma -> KhatmaScreen(vm)
         Route.QuranSources -> QuranSourcesScreen(vm)
+        is Route.Mushaf -> MushafScreen(vm, route.page, route.focus)
+        Route.MushafDownloads -> MushafDownloadsScreen(vm)
     }
 }
 

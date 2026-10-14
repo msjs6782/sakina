@@ -7,6 +7,7 @@ import com.sakina.app.alerts.Channels
 import com.sakina.app.alerts.SoundLibrary
 import com.sakina.app.data.CityRepository
 import com.sakina.app.data.LocationFetcher
+import com.sakina.app.data.MushafRepository
 import com.sakina.app.data.QuranRepository
 import com.sakina.app.data.QuranStateRepository
 import com.sakina.app.data.SettingsRepository
@@ -31,6 +32,8 @@ class SakinaApp : Application() {
         private set
     lateinit var quranState: QuranStateRepository
         private set
+    lateinit var mushaf: MushafRepository
+        private set
 
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
@@ -42,6 +45,7 @@ class SakinaApp : Application() {
         alertState = AlertState(this)
         quran = QuranRepository(this)
         quranState = QuranStateRepository(this)
+        mushaf = MushafRepository(this, appScope)
         // Whenever anything that affects alerts changes (and once at start), rebuild the alarm chain.
         appScope.launch {
             settings.settings

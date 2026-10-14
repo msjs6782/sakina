@@ -62,12 +62,22 @@ class QuranRepository(private val context: Context) {
 
 enum class ReaderMode { PAGES, AYAHS }
 
+/** Which view opens from the index, search and bookmarks: the printed pages (the default) or the text. */
+enum class QuranView { PRINTED, TEXT }
+
+/** A display-only filter for the printed pages; the files themselves are never changed. */
+enum class MushafNight { OFF, DARK, WARM }
+
 @Serializable
 data class ReaderPrefs(
     val fontSize: Int = 26,
     val mode: ReaderMode = ReaderMode.PAGES,
     val showTranslation: Boolean = false,
     val showTafsir: Boolean = false,
+    val view: QuranView = QuranView.PRINTED,
+    val mushafNight: MushafNight = MushafNight.OFF,
+    /** Fetch a printed page when it is opened, without asking each time. Off unless the user turns it on. */
+    val autoDownload: Boolean = false,
 ) {
     companion object {
         const val MIN_FONT = 18

@@ -117,7 +117,7 @@ private fun SearchBody(vm: MainViewModel, d: QuranData, initial: String) {
                             else -> str.surahAyah(d.meta.surah(ref.sura).nameAr, fmt.num(ref.aya))
                         }
                         Surface(
-                            onClick = { vm.push(Route.QuranReader(g, highlight = t is RefTarget.Ayah)) },
+                            onClick = { if (t is RefTarget.Page) vm.openPage(t.page) else vm.openQuran(g, highlight = t is RefTarget.Ayah) },
                             shape = RoundedCornerShape(16.dp),
                             color = MaterialTheme.colorScheme.primaryContainer,
                             modifier = Modifier.fillMaxWidth().testTag("search_reference"),
@@ -163,7 +163,7 @@ private fun HitRow(vm: MainViewModel, d: QuranData, h: SearchHit) {
     val ref = d.meta.ref(h.global)
     val hl = SpanStyle(background = MaterialTheme.colorScheme.tertiaryContainer, fontWeight = FontWeight.SemiBold)
     Column(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable { vm.push(Route.QuranReader(h.global, highlight = true)) }
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable { vm.openQuran(h.global, highlight = true) }
             .padding(horizontal = 6.dp, vertical = 8.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {

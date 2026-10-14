@@ -113,6 +113,9 @@ object Demo {
                             "translation" -> r.copy(showTranslation = v == "1")
                             "tafsir" -> r.copy(showTafsir = v == "1")
                             "font" -> r.copy(fontSize = v.toInt())
+                            "view" -> r.copy(view = com.sakina.app.data.QuranView.valueOf(v.uppercase()))
+                            "night" -> r.copy(mushafNight = com.sakina.app.data.MushafNight.valueOf(v.uppercase()))
+                            "auto" -> r.copy(autoDownload = v == "1")
                             else -> r
                         }
                     }
@@ -138,6 +141,11 @@ object Demo {
                 .copy(progressPage = f.getOrElse(1) { 0 })
             runBlocking { quranState.update { it.copy(khatma = plan) } }
         }
+        com.sakina.app.ui.mushaf.MushafDebug.initialZoom = e.getFloat("demo_zoom", 1f)
+        if (e.getBoolean("demo_mushaf_clear")) runBlocking {
+            app.mushaf.init()
+            app.mushaf.delete((1..com.sakina.app.core.mushaf.MushafManifest.PAGES).toList())
+        }
         e.getString("demo_test")?.split(':')?.let { f ->
             AlertsCenter.test(app, AlertMode.valueOf(f[0].uppercase()), f.getOrNull(1)?.toLongOrNull() ?: 5)
         }
@@ -154,6 +162,11 @@ object Demo {
                     Route.QuranReader(d.meta.global(com.sakina.app.core.quran.AyahRef(su, ay)), highlight = e.getBoolean("demo_highlight"))
                 }
                 r.startsWith("quran_search:") -> Route.QuranSearch(r.removePrefix("quran_search:"))
+                r.startsWith("mushaf:") -> {
+                    val f = r.removePrefix("mushaf:").split(':').map { it.toInt() }
+                    val focus = if (f.size >= 3) runBlocking { app.quran.load() }.meta.global(com.sakina.app.core.quran.AyahRef(f[1], f[2])) else -1
+                    Route.Mushaf(f[0], focus)
+                }
                 else -> route(r)
             }
         } ?: emptyList()
@@ -181,6 +194,7 @@ object Demo {
         "quran_search" -> Route.QuranSearch()
         "khatma" -> Route.Khatma
         "quran_sources" -> Route.QuranSources
+        "mushaf_downloads" -> Route.MushafDownloads
         else -> null
     }
 

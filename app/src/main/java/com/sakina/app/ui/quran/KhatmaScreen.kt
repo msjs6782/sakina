@@ -144,7 +144,7 @@ private fun ActivePlan(vm: MainViewModel, d: QuranData, plan: KhatmaPlan) {
         Spacer(Modifier.height(10.dp))
         if (!st.completed) {
             val readFrom = (plan.progressPage + 1).coerceAtMost(Khatma.PAGES)
-            Button(onClick = { vm.push(Route.QuranReader(d.meta.pageRange(readFrom).first)) }, modifier = Modifier.fillMaxWidth()) { Text(str.khatmaReadToday) }
+            Button(onClick = { vm.openPage(readFrom) }, modifier = Modifier.fillMaxWidth()) { Text(str.khatmaReadToday) }
             if (st.today != null && !st.today.isEmpty() && st.remainingToday > 0) {
                 OutlinedButton(onClick = { vm.updateQuran { s -> s.copy(khatma = s.khatma?.let { Khatma.finishToday(it, LocalDate.now()) }) } },
                     modifier = Modifier.fillMaxWidth().testTag("khatma_finish_today")) { Text(str.khatmaFinishToday) }
@@ -164,7 +164,7 @@ private fun ActivePlan(vm: MainViewModel, d: QuranData, plan: KhatmaPlan) {
             Row(
                 Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp))
                     .background(if (isToday) MaterialTheme.colorScheme.primaryContainer else Color.Transparent)
-                    .clickable { vm.push(Route.QuranReader(d.meta.pageRange(r.first).first)) }
+                    .clickable { vm.openPage(r.first) }
                     .padding(horizontal = 10.dp, vertical = 8.dp),
             ) {
                 Text(fmt.gregorian(date, withYear = false, withWeekday = true), style = MaterialTheme.typography.bodyMedium.copy(fontWeight = if (isToday) FontWeight.Bold else FontWeight.Normal), modifier = Modifier.weight(1f))

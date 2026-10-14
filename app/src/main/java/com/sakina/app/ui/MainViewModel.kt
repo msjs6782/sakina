@@ -47,6 +47,9 @@ sealed interface Route {
     data class QuranSearch(val query: String = "") : Route
     data object Khatma : Route
     data object QuranSources : Route
+    /** The printed Mushaf at [page]; [focus] is an ayah (global index) to point out, or -1. */
+    data class Mushaf(val page: Int, val focus: Int = -1) : Route
+    data object MushafDownloads : Route
 }
 
 sealed interface GpsUi {
@@ -81,6 +84,35 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     init {
         viewModelScope.launch { _cities.value = sakina.cities.all() }
+    }
+
+    val mushaf get() = sakina.mushaf
+
+    /** Opens an ayah in the user's chosen view: the printed page (default) or the text. */
+    fun openQuran(global: Int, highlight: Boolean = false) {
+        val d = quran.value
+        if (quranState.value.reader.view == com.sakina.app.data.QuranView.PRINTED && d != null) {
+            push(Route.Mushaf(d.meta.pageOf(global), if (highlight) global else -1))
+        } else {
+            push(Route.QuranReader(global, highlight))
+        }
+    }
+
+    /** Opens a page in the user's chosen view. */
+    fun openPage(page: Int) {
+        val d = quran.value ?: return
+        if (quranState.value.reader.view == com.sakina.app.data.QuranView.PRINTED) push(Route.Mushaf(page))
+        else push(Route.QuranReader(d.meta.pageRange(page).first))
+    }
+
+    /** Switches between the printed and text views in place, and remembers the choice. */
+    fun switchView(to: com.sakina.app.data.QuranView, route: Route) {
+        updateQuran { it.copy(reader = it.reader.copy(view = to)) }
+        replaceTop(route)
+    }
+
+    fun replaceTop(route: Route) {
+        stack = stack.dropLast(1) + route
     }
 
     fun loadQuran() {

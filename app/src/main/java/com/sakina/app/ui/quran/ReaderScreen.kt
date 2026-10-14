@@ -126,6 +126,9 @@ private fun Reader(vm: MainViewModel, d: QuranData, startGlobal: Int, highlight:
                     style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
+            IconButton(onClick = { vm.switchView(com.sakina.app.data.QuranView.PRINTED, Route.Mushaf(d.meta.pageOf(current))) }, modifier = Modifier.testTag("reader_to_printed")) {
+                Icon(SakinaIcons.Page, str.printedView)
+            }
             IconButton(onClick = { vm.push(Route.QuranSearch()) }) { Icon(SakinaIcons.Search, str.search) }
             IconButton(onClick = { showSettings = true }, modifier = Modifier.testTag("reader_settings")) { Icon(SakinaIcons.Sliders, str.readerSettings) }
         }

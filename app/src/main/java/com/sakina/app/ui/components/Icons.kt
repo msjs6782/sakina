@@ -65,4 +65,11 @@ object SakinaIcons {
     val Battery: ImageVector by lazy { icon("Battery", "M4 8 H18 V16 H4 Z M18 10.5 H20 V13.5 H18 M7 11 V13 M10 11 V13") }
     val Flask: ImageVector by lazy { icon("Flask", "M9.5 3.5 H14.5 M10.5 3.5 V9 L5.5 18.5 A1.5 1.5 0 0 0 6.8 20.5 H17.2 A1.5 1.5 0 0 0 18.5 18.5 L13.5 9 V3.5 M7.8 15 H16.2") }
     val Repeat: ImageVector by lazy { icon("Repeat", "M17 3.5 L20 6.5 L17 9.5 M4 11.5 V9.5 A3 3 0 0 1 7 6.5 H20 M7 20.5 L4 17.5 L7 14.5 M20 12.5 V14.5 A3 3 0 0 1 17 17.5 H4") }
+    val Download: ImageVector by lazy { icon("Download", "M12 4 V15 M7 10.5 L12 15.5 L17 10.5 M5 19.5 H19") }
+    val Page: ImageVector by lazy { icon("Page", "M6 3.5 H14.5 L19 8 V20.5 H6 Z M14.5 3.5 V8 H19 M9 12.5 H16 M9 16 H16") }
+    val Lines: ImageVector by lazy { icon("Lines", "M5 6.5 H19 M5 10.5 H19 M5 14.5 H19 M5 18.5 H13") }
+    val Bookmark: ImageVector by lazy { icon("Bookmark", "M7 4 H17 V20 L12 16.2 L7 20 Z") }
+    val ListIndex: ImageVector by lazy { icon("ListIndex", "M9.5 6 H20 M9.5 12 H20 M9.5 18 H20 M4.5 6 V6.1 M4.5 12 V12.1 M4.5 18 V18.1") }
+    val More: ImageVector by lazy { icon("More", "M12.9 5.5 A0.9 0.9 0 1 1 11.1 5.5 A0.9 0.9 0 1 1 12.9 5.5 Z M12.9 12 A0.9 0.9 0 1 1 11.1 12 A0.9 0.9 0 1 1 12.9 12 Z M12.9 18.5 A0.9 0.9 0 1 1 11.1 18.5 A0.9 0.9 0 1 1 12.9 18.5 Z") }
+    val Storage: ImageVector by lazy { icon("Storage", "M4 6.5 C4 4.5 20 4.5 20 6.5 V17.5 C20 19.5 4 19.5 4 17.5 Z M4 6.5 C4 8.5 20 8.5 20 6.5 M4 12 C4 14 20 14 20 12") }
 }

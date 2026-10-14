@@ -72,6 +72,7 @@ fun QuranHome(vm: MainViewModel, contentPadding: PaddingValues) {
     Column(Modifier.fillMaxSize().padding(contentPadding)) {
         Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(str.quranTitle, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.weight(1f))
+            IconButton(onClick = { vm.push(Route.MushafDownloads) }, modifier = Modifier.testTag("quran_downloads")) { Icon(SakinaIcons.Download, str.dlTitle) }
             IconButton(onClick = { vm.push(Route.QuranSources) }) { Icon(SakinaIcons.Info, str.sourcesTitle) }
         }
         WithQuran(vm) { d -> QuranHomeContent(vm, d) }
@@ -103,6 +104,14 @@ private fun QuranHomeContent(vm: MainViewModel, d: QuranData) {
                     }
                 }
             }
+            item {
+                Column {
+                    Text(str.defaultView, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 4.dp, bottom = 4.dp))
+                    Segmented(listOf(str.printedView, str.textView), if (qs.reader.view == com.sakina.app.data.QuranView.PRINTED) 0 else 1) { i ->
+                        vm.updateQuran { it.copy(reader = it.reader.copy(view = if (i == 0) com.sakina.app.data.QuranView.PRINTED else com.sakina.app.data.QuranView.TEXT)) }
+                    }
+                }
+            }
             qs.lastRead?.let { lr ->
                 item { ContinueCard(vm, d, lr.sura, lr.aya, lr.page) }
             }
@@ -119,7 +128,7 @@ private fun QuranHomeContent(vm: MainViewModel, d: QuranData) {
                     }
                     items(d.meta.suras, key = { "s${it.index}" }) { s ->
                         Row(
-                            Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable { vm.push(Route.QuranReader(s.start)) }
+                            Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable { vm.openQuran(s.start) }
                                 .padding(vertical = 8.dp, horizontal = 4.dp).testTag("surah_${s.index}"),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
@@ -144,7 +153,7 @@ private fun QuranHomeContent(vm: MainViewModel, d: QuranData) {
                         if (d.meta.isValid(ref)) {
                             val g = d.meta.global(ref)
                             Row(
-                                Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable { vm.push(Route.QuranReader(g, highlight = true)) }.padding(8.dp),
+                                Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable { vm.openQuran(g, highlight = true) }.padding(8.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Column(Modifier.weight(1f)) {
@@ -168,7 +177,7 @@ private fun QuranHomeContent(vm: MainViewModel, d: QuranData) {
         }
         SnackbarHost(snackbar)
     }
-    if (pageDialog) PageDialog(d, onDismiss = { pageDialog = false }) { p -> pageDialog = false; vm.push(Route.QuranReader(d.meta.pageRange(p).first)) }
+    if (pageDialog) PageDialog(d, onDismiss = { pageDialog = false }) { p -> pageDialog = false; vm.openPage(p) }
 }
 
 @Composable
@@ -178,7 +187,7 @@ private fun ContinueCard(vm: MainViewModel, d: QuranData, sura: Int, aya: Int, p
     val ref = AyahRef(sura, aya)
     if (!d.meta.isValid(ref)) return
     Surface(
-        onClick = { vm.push(Route.QuranReader(d.meta.global(ref))) },
+        onClick = { vm.openQuran(d.meta.global(ref)) },
         shape = RoundedCornerShape(22.dp),
         color = MaterialTheme.colorScheme.primaryContainer,
         modifier = Modifier.fillMaxWidth().testTag("quran_continue"),
@@ -236,7 +245,7 @@ private fun JuzRow(vm: MainViewModel, d: QuranData, j: Int) {
     val r = d.meta.ref(g)
     Column(Modifier.fillMaxWidth()) {
         Row(
-            Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable { vm.push(Route.QuranReader(g)) }.padding(vertical = 8.dp, horizontal = 4.dp),
+            Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable { vm.openQuran(g) }.padding(vertical = 8.dp, horizontal = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             NumberStar(j)
@@ -253,7 +262,7 @@ private fun JuzRow(vm: MainViewModel, d: QuranData, j: Int) {
                 val qg = d.meta.quarterStartGlobal(q)
                 val qr = d.meta.ref(qg)
                 Row(
-                    Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).clickable { vm.push(Route.QuranReader(qg)) }.padding(start = 56.dp, end = 8.dp, top = 6.dp, bottom = 6.dp),
+                    Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).clickable { vm.openQuran(qg) }.padding(start = 56.dp, end = 8.dp, top = 6.dp, bottom = 6.dp),
                 ) {
                     Text("۞ " + str.quarterName(q) { fmt.num(it) }, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
                     Text(str.surahAyah(d.meta.surah(qr.sura).nameAr, fmt.num(qr.aya)), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

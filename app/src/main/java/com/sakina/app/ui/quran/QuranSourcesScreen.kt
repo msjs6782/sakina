@@ -44,6 +44,10 @@ fun QuranSourcesScreen(vm: MainViewModel) {
                             runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://tanzil.net/")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
                         }) { Text(str.openTanzil) }
                     }
+                    SectionCard(title = str.mushafTitle, icon = SakinaIcons.Page) {
+                        Text(str.mushafSourcesBody, style = MaterialTheme.typography.bodyMedium)
+                        TextButton(onClick = { vm.push(Route.MushafDownloads) }) { Text(str.dlTitle) }
+                    }
                     Block(str.copyrightBlock, d.textHeader)
                     Block(str.translationTitle, d.translation.header)
                     Block(str.tafsirTitle, d.tafsir.header)

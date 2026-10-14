@@ -72,6 +72,22 @@ scroll_to() {
   return 1
 }
 
+# True if a node is on screen now (no tap).
+ui_has() {
+  adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1
+  adb shell cat /sdcard/ui.xml > "$OUT/.ui.xml" 2>/dev/null
+  python3 "$HERE/find_node.py" "$OUT/.ui.xml" "$2" "$1" >/dev/null
+}
+mlog() { adb logcat -d -s SakinaMushaf:* 2>/dev/null; }
+# wait_log <regex> <seconds>: waits for a Mushaf log line.
+wait_log() {
+  for _ in $(seq 1 "$2"); do mlog | grep -qE "$1" && return 0; sleep 1; done
+  return 1
+}
+stored_size() { adb shell run-as "$PKG" stat -c %s "files/mushaf/pages/$1.pdf" 2>/dev/null | tr -d '\r'; }
+stored_count() { adb shell run-as "$PKG" ls files/mushaf/pages 2>/dev/null | tr -d '\r' | grep -c '\.pdf$'; }
+part_count() { adb shell run-as "$PKG" ls files/mushaf/pages 2>/dev/null | tr -d '\r' | grep -c '\.part$'; }
+
 # Finds a node by text (exact), text (contains) or test tag (id) in a UI dump and taps its centre.
 tap() {
   local mode="$1"; local needle="$2"; local xy=""
@@ -210,7 +226,8 @@ if [ "$SUITE" = "full" ]; then
 fi
 
 # ---------- Phase 3: Quran ----------
-Q=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh --es demo_now "$T_AFTERNOON" "${FREEZE[@]}")
+# The text view here; the printed pages (the default view) are tested in phase 4.
+Q=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh --es demo_now "$T_AFTERNOON" "${FREEZE[@]}" --es demo_quran view=TEXT)
 adb logcat -d > "$OUT/logcat_part2.txt"; adb logcat -c
 shot 80_quran_home 9 "${Q[@]}" --es demo_tab quran
 adb logcat -d -s SakinaQuran:I | grep "Loaded" | tail -1 | tee "$OUT/quran_load.txt"
@@ -228,7 +245,7 @@ echo "$QJ" | grep -q '"bookmarks":\[{"sura":1,' && check bookmark_saved PASS "$(
 echo "$QJ" | grep -q '"lastRead":{"sura":1,' && check last_read_saved PASS "$(echo "$QJ" | grep -o '"lastRead":{[^}]*}')" || check last_read_saved FAIL "see quran_state.json"
 tap exact "العلامات" && sleep 2 && cap 82d_bookmarks_tab
 shot 83_reader_baqara_255 9 "${Q[@]}" --es demo_route quran_reader:2:255 --ez demo_highlight true
-shot 84_reader_ayahs_translation 9 "${Q[@]}" --es demo_quran mode=AYAHS,translation=1,tafsir=1 --es demo_route quran_reader:2:255 --ez demo_highlight true
+shot 84_reader_ayahs_translation 9 "${Q[@]}" --es demo_quran view=TEXT,mode=AYAHS,translation=1,tafsir=1 --es demo_route quran_reader:2:255 --ez demo_highlight true
 # Searching by typing: English words and a reference.
 start "${Q[@]}" --es demo_route quran_search
 sleep 6
@@ -249,8 +266,8 @@ if [ "$SUITE" = "full" ]; then
   tap exact "العلامات" && sleep 2 && cap 93_quran_bookmarks
   tap exact "الأجزاء" && sleep 2 && cap 94_quran_juz
   shot 95_quran_sources 8 "${Q[@]}" --es demo_route quran_sources
-  shot 96_reader_dark_large 9 "${Q[@]}" --es demo_theme DARK --es demo_quran font=34 --es demo_route quran_reader:36:1
-  shot 97_reader_english 9 "${Q[@]}" --es demo_lang en --es demo_quran mode=AYAHS,translation=1 --es demo_route quran_reader:1:1
+  shot 96_reader_dark_large 9 "${Q[@]}" --es demo_theme DARK --es demo_quran view=TEXT,font=34 --es demo_route quran_reader:36:1
+  shot 97_reader_english 9 "${Q[@]}" --es demo_lang en --es demo_quran view=TEXT,mode=AYAHS,translation=1 --es demo_route quran_reader:1:1
   start "${Q[@]}" --es demo_route quran_reader:112:1
   sleep 7
   tap id reader_settings && sleep 2 && cap 98_reader_settings
@@ -269,6 +286,115 @@ if [ "$SUITE" = "full" ]; then
   tap id verse_text && sleep 3 && cap 79b_verse_opened
   save_log
 fi
+
+# ---------- Phase 4: printed Mushaf (original KFGQPC 1441H page PDFs) ----------
+save_log
+M=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh --es demo_now "$T_AFTERNOON" "${FREEZE[@]}")
+adb shell am force-stop "$PKG"
+adb shell run-as "$PKG" rm -rf files/mushaf
+adb logcat -c
+# The printed pages are the default view: tapping Al-Fatiha opens the bundled page 1, with no network needed.
+shot 100_quran_home_printed 8 "${M[@]}" --es demo_tab quran
+tap id surah_1 && sleep 4 && cap 101_mushaf_page1
+S1=$(stored_size 001); S2=$(stored_size 002)
+if [ "$S1" = "393966" ] && [ "$S2" = "469559" ] && mlog | grep -q "rendered 001.pdf"; then
+  check mushaf_bundled PASS "pages 1-2 in place ($S1, $S2 bytes); $(mlog | grep -o 'rendered 001.pdf [0-9x]* in [0-9]* ms' | head -1)" critical
+else
+  check mushaf_bundled FAIL "sizes '$S1' '$S2'; $(mlog | grep -E 'cannot render|bundled' | head -3)" critical
+fi
+# Swiping right turns to the next page (the Mushaf reads right to left).
+adb shell input swipe 150 1300 950 1300 250; sleep 3; cap 102_mushaf_page2
+ui_has contains "صفحة ٢ من ٦٠٤" && check mushaf_swipe PASS "page 2 after a right swipe" || check mushaf_swipe FAIL "page 2 not shown"
+adb shell input swipe 150 1300 950 1300 250; sleep 3; cap 103_mushaf_page3_missing
+ui_has contains "صفحة ٣ من ٦٠٤" && ui_has id mushaf_missing_3 && check mushaf_missing PASS "page 3 offers a download" || check mushaf_missing FAIL "no download card on page 3"
+# A real download of page 3: one byte range of the zip on archive.org, inflated and checked.
+tap id mushaf_download_page_3
+if wait_log "page 3 verified" 45; then
+  sleep 3; cap 104_mushaf_page3_downloaded
+  check mushaf_download PASS "$(mlog | grep -o 'page 3 verified.*' | head -1); stored $(stored_size 003) bytes" critical
+else
+  cap 104_mushaf_page3_downloaded
+  check mushaf_download FAIL "$(mlog | grep -E 'page 3' | tail -2)" critical
+fi
+mlog | grep -q "rendered 003.pdf" && check mushaf_render_downloaded PASS "$(mlog | grep -o 'rendered 003.pdf [0-9x]* in [0-9]* ms' | head -1)" critical || check mushaf_render_downloaded FAIL "page 3 not rendered" critical
+# A tap hides the reading controls and the system bars; another brings them back.
+adb shell input tap 540 1300; sleep 2; cap 105_mushaf_controls_hidden
+ui_has id mushaf_page_label && check mushaf_tap_hide FAIL "controls still shown" || check mushaf_tap_hide PASS "controls hidden"
+adb shell input tap 540 1300; sleep 2
+# Zoomed: the visible part is drawn again from the PDF at full sharpness.
+adb logcat -c
+shot 106_mushaf_zoomed 9 "${M[@]}" --es demo_route mushaf:3 --ef demo_zoom 2.5
+mlog | grep -q "rendered 003.pdf .* region" && check mushaf_zoom_render PASS "$(mlog | grep -o 'rendered 003.pdf [0-9x]* region in [0-9]* ms' | head -1)" || check mushaf_zoom_render FAIL "no region render"
+shot 107_mushaf_dark 8 "${M[@]}" --es demo_quran night=DARK --es demo_route mushaf:3
+# Index: jump to page 50 by typing, then the automatic-download option fetches it on opening.
+start "${M[@]}" --es demo_route mushaf:3
+sleep 6
+tap id mushaf_index && sleep 2 && cap 108_mushaf_index
+tap id mushaf_page_input && adb shell input text 50 && sleep 1 && tap id mushaf_page_go && sleep 3
+ui_has contains "صفحة ٥٠ من ٦٠٤" && check mushaf_goto PASS "page 50 opened from the index" || check mushaf_goto FAIL "page 50 not shown"
+tap id mushaf_auto_switch_50
+if wait_log "page 50 verified" 45; then sleep 3; check mushaf_auto PASS "page 50 fetched on opening with the option on"; else check mushaf_auto FAIL "$(mlog | grep 'page 50' | tail -1)"; fi
+cap 109_mushaf_page50_auto
+# From a search result the printed page opens with the ayah pointed out; the text view is one tap away.
+shot 110_mushaf_focus 8 "${M[@]}" --es demo_route mushaf:3:2:10
+tap id mushaf_to_text && sleep 3 && cap 111_text_from_printed
+tap id reader_to_printed && sleep 3
+ui_has id mushaf_viewer && check view_switch PASS "printed -> text -> printed" || check view_switch FAIL "did not return to the printed view"
+
+# The whole-Mushaf download: progress, then it stops when the app goes to the background, keeping verified pages.
+adb logcat -c
+shot 112_downloads 8 "${M[@]}" --es demo_route mushaf_downloads
+BEFORE=$(stored_count)
+tap id dl_start
+sleep 2
+ui_has id dl_metered_ok && tap id dl_metered_ok
+if wait_log "full download started" 20; then
+  sleep 25
+  cap 113_downloads_running
+  N1=$(mlog | grep -c "verified:")
+  adb shell input keyevent 3
+  if wait_log "full download stopped: BACKGROUND" 40; then
+    sleep 1
+    AFTER=$(stored_count); PARTS=$(part_count)
+    [ "$PARTS" -eq 0 ] && [ "$AFTER" -gt "$BEFORE" ] && check full_bg_stop PASS "stopped in the background; pages $BEFORE -> $AFTER, $N1 verified while running, no partial files" critical \
+      || check full_bg_stop FAIL "pages $BEFORE -> $AFTER, partial files $PARTS" critical
+  else
+    check full_bg_stop FAIL "no background stop: $(mlog | grep 'full download' | tail -2)" critical
+  fi
+  adb shell am start -n "$PKG/$ACT" >/dev/null; sleep 4; cap 114_downloads_stopped_background
+  # Resume, then leave the screen: it stops again.
+  adb logcat -c
+  tap id dl_start; sleep 2; ui_has id dl_metered_ok && tap id dl_metered_ok
+  sleep 10
+  adb shell input keyevent 4
+  wait_log "full download stopped: LEFT_SCREEN" 40 && check full_leave_stop PASS "stopped on leaving the screen" || check full_leave_stop FAIL "$(mlog | grep 'full download' | tail -2)"
+else
+  check full_bg_stop FAIL "did not start: $(mlog | tail -3)" critical
+fi
+# A changed page is found and removed by the check; a juz can be deleted.
+adb shell "run-as $PKG sh -c 'printf X | dd of=files/mushaf/pages/003.pdf bs=1 seek=5000 conv=notrunc 2>/dev/null'"
+adb logcat -c
+shot 115_downloads_before_verify 8 "${M[@]}" --es demo_route mushaf_downloads
+tap id dl_verify
+wait_log "verify: checked" 60 && sleep 2
+cap 116_downloads_verified
+mlog | grep -q "verify: checked .* removed 1 \[3\]" && check verify_corrupt PASS "$(mlog | grep -o 'verify: .*' | tail -1)" critical || check verify_corrupt FAIL "$(mlog | grep -o 'verify: .*' | tail -1)" critical
+scroll_to id dl_delete_juz_1 && tap id dl_delete_juz_1 && sleep 1 && tap id dl_delete_ok && sleep 2
+mlog | grep -q "deleted [1-9][0-9]* pages" && check delete_juz PASS "$(mlog | grep -o 'deleted .*' | tail -1)" || check delete_juz FAIL "no delete logged"
+cap 117_downloads_after_delete
+if [ "$SUITE" = "full" ]; then
+  shot 118_mushaf_warm 8 "${M[@]}" --es demo_quran night=WARM --es demo_route mushaf:50
+  shot 119_mushaf_english 8 "${M[@]}" --es demo_lang en --es demo_route mushaf:4
+  # Offline: the page says so instead of failing silently.
+  adb shell svc wifi disable; adb shell svc data disable; sleep 3
+  start "${M[@]}" --es demo_route mushaf:5
+  sleep 6
+  tap id mushaf_download_page_5 && sleep 2 && cap 120_mushaf_offline
+  ui_has contains "لا يوجد اتصال" && check offline_message PASS "offline shown" || check offline_message FAIL "no offline message"
+  adb shell svc wifi enable; adb shell svc data enable; sleep 5
+  shot 121_mushaf_page1_dark 8 "${M[@]}" --es demo_quran night=DARK --es demo_route mushaf:1
+fi
+save_log
 
 # ---------- Phase 2: alerts (real AlarmManager, notifications, playback) ----------
 save_log
