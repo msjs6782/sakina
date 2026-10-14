@@ -43,6 +43,10 @@ sealed interface Route {
     data class PrayerAlert(val key: com.sakina.app.core.prayer.PrayerKey) : Route
     data object Reminders : Route
     data object Recordings : Route
+    data class QuranReader(val global: Int, val highlight: Boolean = false) : Route
+    data class QuranSearch(val query: String = "") : Route
+    data object Khatma : Route
+    data object QuranSources : Route
 }
 
 sealed interface GpsUi {
@@ -71,8 +75,20 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     val gps: StateFlow<GpsUi> = _gps.asStateFlow()
     private var gpsJob: Job? = null
 
+    val quran: StateFlow<com.sakina.app.data.QuranData?> = sakina.quran.data
+    val quranState: StateFlow<com.sakina.app.data.QuranState> = sakina.quranState.state
+        .stateIn(viewModelScope, SharingStarted.Eagerly, com.sakina.app.data.QuranState())
+
     init {
         viewModelScope.launch { _cities.value = sakina.cities.all() }
+    }
+
+    fun loadQuran() {
+        viewModelScope.launch { sakina.quran.load() }
+    }
+
+    fun updateQuran(transform: (com.sakina.app.data.QuranState) -> com.sakina.app.data.QuranState) {
+        viewModelScope.launch { sakina.quranState.update(transform) }
     }
 
     fun update(transform: (AppSettings) -> AppSettings) {

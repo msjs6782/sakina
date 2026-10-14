@@ -335,7 +335,7 @@ fun AboutScreen(vm: MainViewModel) {
             Text(str.aboutPrivacyBody, style = MaterialTheme.typography.bodyMedium)
         }
         SectionCard(title = str.aboutSources, icon = SakinaIcons.Book) {
-            listOf(str.srcAlgorithm, str.srcCalendar, str.srcCities, str.srcFonts).forEach {
+            listOf(str.srcAlgorithm, str.srcCalendar, str.srcCities, str.srcFonts, str.srcQuran).forEach {
                 Row(Modifier.padding(vertical = 4.dp)) {
                     Box(Modifier.padding(top = 8.dp).size(6.dp).clip(CircleShape).background(MaterialTheme.colorScheme.primary))
                     Spacer(Modifier.width(10.dp))
@@ -351,6 +351,7 @@ fun AboutScreen(vm: MainViewModel) {
             ).forEach { (asset, title) ->
                 TextButton(onClick = { vm.push(Route.License(asset, title)) }) { Text(title) }
             }
+            TextButton(onClick = { vm.push(Route.QuranSources) }) { Text(str.sourcesTitle + " · " + str.quranTitle) }
         }
     }
 }

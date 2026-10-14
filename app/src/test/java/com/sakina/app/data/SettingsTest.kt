@@ -59,11 +59,15 @@ class SettingsTest {
     @Test
     fun cardsReorderAndHide() {
         var s = AppSettings()
-        assertEquals(listOf(HomeCard.SUN, HomeCard.DATE), s.orderedCards.map { it.card })
+        assertEquals(listOf(HomeCard.VERSE, HomeCard.SUN, HomeCard.DATE), s.orderedCards.map { it.card })
         s = SettingsOps.moveCard(s, HomeCard.DATE, -1)
-        assertEquals(listOf(HomeCard.DATE, HomeCard.SUN), s.orderedCards.map { it.card })
+        assertEquals(listOf(HomeCard.VERSE, HomeCard.DATE, HomeCard.SUN), s.orderedCards.map { it.card })
+        // Settings saved before the verse card existed get it appended.
+        val old = AppSettings(homeCards = listOf(CardPref(HomeCard.SUN), CardPref(HomeCard.DATE, visible = false)))
+        assertEquals(listOf(HomeCard.SUN, HomeCard.DATE, HomeCard.VERSE), old.orderedCards.map { it.card })
         s = SettingsOps.setCardVisible(s, HomeCard.SUN, false)
         assertTrue(s.orderedCards.first { it.card == HomeCard.SUN }.visible.not())
+        s = SettingsOps.moveCard(s, HomeCard.DATE, -1)
         assertEquals(s, SettingsOps.moveCard(s, HomeCard.DATE, -1))
     }
 }

@@ -281,10 +281,11 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     fun cardName(c: HomeCard) = when (c) {
         HomeCard.DATE -> t("التاريخ والمناسبات المحسوبة", "Date and calculated occasions")
         HomeCard.SUN -> t("الشروق والغروب القادمان", "Next sunrise and sunset")
+        HomeCard.VERSE -> t("آية اليوم", "Verse of the day")
     }
     val moveUp get() = t("تحريك للأعلى", "Move up")
     val moveDown get() = t("تحريك للأسفل", "Move down")
-    val laterCards get() = t("بطاقات آية اليوم وحديث اليوم ومساحة الجمعة تُضاف مع محتواها الموثّق في المراحل القادمة.", "Verse, hadith and Friday cards arrive with their verified content in later phases.")
+    val laterCards get() = t("بطاقتا حديث اليوم ومساحة الجمعة تُضافان مع محتواهما الموثّق في المراحل القادمة.", "Hadith and Friday cards arrive with their verified content in later phases.")
 
     val hijriOffsetTitle get() = t("إزاحة عرض التاريخ الهجري", "Hijri display offset")
     val hijriOffsetNote get() = t("تغيّر التاريخ المعروض والمناسبات فقط، ولا تغيّر حساب الصلاة ولا قاعدة عشاء رمضان.", "Changes only the shown date and occasions, never prayer calculation or the Ramadan Isha rule.")
@@ -297,7 +298,8 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val srcAlgorithm get() = t("معادلات موضع الشمس من كتاب \u2066Astronomical Algorithms\u2069 لـ\u2066Jean Meeus\u2069. واختُبرت النتائج مقابل مكتبة \u2066Adhan (MIT)\u2069 وجداول أم القرى الرسمية لمكة.", "Solar equations: Jean Meeus, “Astronomical Algorithms”. Results are tested against the Adhan library (MIT License) and official Umm al-Qura tables for Makkah.")
     val srcCalendar get() = t("التقويم: أم القرى كما في مكتبة \u2066Java (HijrahChronology)\u2069، ومطابق لتقويم أندرويد.", "Calendar: Umm al-Qura as published in Java's time library (HijrahChronology).")
     val srcCities get() = t("إحداثيات المدن: \u2066GeoNames (CC BY 4.0)\u2069. الأسماء العربية والمناطق الزمنية: مراجعة سكينة.", "City coordinates: GeoNames (CC BY 4.0). Arabic names and time zones: curated by Sakina.")
-    val srcFonts get() = t("الخطوط: \u2066IBM Plex Sans Arabic\u2069 و\u2066Amiri\u2069 و\u2066Noto Kufi Arabic\u2069 للأرقام، برخصة \u2066SIL OFL 1.1\u2069.", "Fonts: IBM Plex Sans Arabic, Amiri and Noto Kufi Arabic for digits (SIL Open Font License 1.1).")
+    val srcQuran get() = t("نص المصحف (عثماني وإملائي) وبيانات السور والصفحات وترجمة عيتاني وتفسير الجلالين: مشروع تنزيل (\u2066tanzil.net\u2069)، منسوخة دون تغيير.", "Quran text (Uthmani and plain), surah and page data, the Itani translation and Tafsir al-Jalalayn: the Tanzil Project (tanzil.net), copied unchanged.")
+    val srcFonts get() = t("الخطوط: \u2066IBM Plex Sans Arabic\u2069 و\u2066Amiri\u2069 و\u2066Amiri Quran\u2069 و\u2066Noto Kufi Arabic\u2069 للأرقام، برخصة \u2066SIL OFL 1.1\u2069.", "Fonts: IBM Plex Sans Arabic, Amiri, Amiri Quran and Noto Kufi Arabic for digits (SIL Open Font License 1.1).")
     val showLicense get() = t("عرض نص الرخصة", "Show license text")
 
     // Onboarding
@@ -320,7 +322,6 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val discoverSoonBody get() = t("ستجمع هنا الأدوات القادمة. ما يعمل الآن: المواقيت، المواقع والسفر، المظهر، والأذان والتنبيهات والتذكيرات.", "Upcoming tools will gather here. Working now: prayer times, places and travel, appearance, and adhan, alerts and reminders.")
     val plannedTitle get() = t("قادم", "Coming")
     val planned get() = (if (isAr) listOf(
-        "القرآن النصي والترجمة والتفسير" to "المرحلة ٣",
         "المصحف المطبوع" to "المرحلة ٤",
         "الاستماع للتلاوة" to "المرحلة ٥",
         "الأذكار والتسبيح والقبلة" to "المرحلة ٦",
@@ -328,7 +329,6 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
         "الويدجت والاختصارات" to "المرحلة ٨",
         "السجل والتصدير ومساجدي والنسخ الاحتياطي" to "المرحلة ٩",
     ) else listOf(
-        "Quran text, translation and tafsir" to "Phase 3",
         "Printed Mushaf" to "Phase 4",
         "Recitation audio" to "Phase 5",
         "Adhkar, tasbih and Qibla" to "Phase 6",
@@ -568,6 +568,104 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val noteRinger get() = t("لم يُشغّل الأذان لأن الجوال صامت", "not played because the phone is silent")
     val noteFocusLost get() = t("توقف الأذان لصوت آخر", "the adhan stopped for other audio")
     val noteMuted get() = t("مستوى الصوت صفر", "volume is zero")
+
+    // ---------- Quran (phase 3) ----------
+    val quranTitle get() = t("القرآن الكريم", "The Holy Quran")
+    val quranLoading get() = t("جارٍ تحميل نص المصحف…", "Loading the Quran text…")
+    val quranSearchHint get() = t("ابحث بكلمة، أو اكتب مرجعًا مثل البقرة ٢٥٥", "Search a word, or a reference like 2:255")
+    val continueReading get() = t("تابع القراءة", "Continue reading")
+    fun surahAyah(name: String, aya: String) = t("$name · الآية $aya", "$name · ayah $aya")
+    fun pageN(n: String) = t("صفحة $n", "Page $n")
+    fun juzN(n: String) = t("الجزء $n", "Juz $n")
+    fun hizbN(n: String) = t("الحزب $n", "Hizb $n")
+    fun quarterName(q: Int, fmtNum: (Int) -> String): String {
+        val hizb = (q - 1) / 4 + 1
+        return when ((q - 1) % 4) {
+            0 -> hizbN(fmtNum(hizb))
+            1 -> t("ربع الحزب ", "¼ Hizb ") + fmtNum(hizb)
+            2 -> t("نصف الحزب ", "½ Hizb ") + fmtNum(hizb)
+            else -> t("ثلاثة أرباع الحزب ", "¾ Hizb ") + fmtNum(hizb)
+        }
+    }
+    val tabSurahs get() = t("السور", "Surahs")
+    val tabJuz get() = t("الأجزاء", "Juz")
+    val tabBookmarks get() = t("العلامات", "Bookmarks")
+    val meccan get() = t("مكية", "Meccan")
+    val medinan get() = t("مدنية", "Medinan")
+    fun ayahCount(n: String) = t("$n آية", "$n ayahs")
+    val goToPage get() = t("انتقال إلى صفحة", "Go to page")
+    val pageNumberHint get() = t("رقم الصفحة (١–٦٠٤)", "Page number (1–604)")
+    val go get() = t("انتقال", "Go")
+    val noBookmarks get() = t("لا علامات بعد. اضغط على أي آية ثم «علامة».", "No bookmarks yet. Tap any ayah, then “Bookmark”.")
+    val bookmark get() = t("علامة", "Bookmark")
+    val removeBookmark get() = t("إزالة العلامة", "Remove bookmark")
+    val bookmarkRemoved get() = t("أُزيلت العلامة", "Bookmark removed")
+    val undo get() = t("تراجع", "Undo")
+    val copy get() = t("نسخ", "Copy")
+    val copied get() = t("نُسخ النص", "Text copied")
+    val shareText get() = t("مشاركة نص", "Share text")
+    val shareImage get() = t("مشاركة صورة", "Share image")
+    val translationTitle get() = t("ترجمة المعاني (الإنجليزية)", "English translation of meanings")
+    val tafsirTitle get() = t("تفسير الجلالين", "Tafsir al-Jalalayn")
+    val translationSource get() = t("ترجمة طلال عيتاني (ClearQuran)، عن مشروع تنزيل", "Talal Itani (ClearQuran), via Tanzil")
+    val tafsirSource get() = t("جلال الدين المحلي وجلال الدين السيوطي، عن مشروع تنزيل", "Jalal ad-Din al-Mahalli and Jalal ad-Din as-Suyuti, via Tanzil")
+    val textSource get() = t("نص المصحف العثماني من مشروع تنزيل (tanzil.net)", "Uthmani Quran text from the Tanzil Project (tanzil.net)")
+    val readerSettings get() = t("إعدادات القراءة", "Reading settings")
+    val textSize get() = t("حجم النص", "Text size")
+    val viewMode get() = t("طريقة العرض", "View")
+    val viewPages get() = t("صفحات متصلة", "Flowing pages")
+    val viewAyahs get() = t("آية آية", "Ayah by ayah")
+    val showTranslation get() = t("إظهار ترجمة المعاني", "Show the translation")
+    val showTafsir get() = t("إظهار تفسير الجلالين", "Show Tafsir al-Jalalayn")
+    val ayahModeNote get() = t("الترجمة والتفسير يظهران تحت كل آية في عرض «آية آية».", "The translation and tafsir appear under each ayah in the “Ayah by ayah” view.")
+    val sajdaRecommended get() = t("سجدة تلاوة", "Prostration of recitation")
+    val searchTitle get() = t("البحث في القرآن", "Search the Quran")
+    fun searchCount(n: String) = t("$n آية", "$n ayahs")
+    fun searchShown(shown: String, total: String) = t("يُعرض أول $shown من $total", "Showing the first $shown of $total")
+    val searchNone get() = t("لا نتائج.", "No results.")
+    val searchNote get() = t("البحث العربي في النص الإملائي من تنزيل، دون تشكيل ولا اعتبار للهمزات؛ والبحث بالإنجليزية في ترجمة المعاني.", "Arabic search uses Tanzil's plain text, ignoring diacritics and hamza forms; English search uses the translation.")
+    val openReference get() = t("انتقال إلى", "Go to")
+    fun inTranslation(n: String) = t("في الترجمة · $n", "in translation · $n")
+    val sourcesTitle get() = t("المصادر والتراخيص", "Sources and licenses")
+    val quranSourcesBody get() = t(
+        "النص العثماني والنص الإملائي وبيانات السور والأجزاء والصفحات من مشروع تنزيل، منسوخة كما هي دون تغيير، بترخيص المشاع الإبداعي (نسب المصنف 3.0)، ويُرجى متابعة التحديثات في tanzil.net. ترقيم الصفحات وفق ترتيب مصحف المدينة في بيانات تنزيل. الترجمة والتفسير من صفحة الترجمات في تنزيل، وشروطها للاستخدام غير التجاري؛ وسكينة تطبيق شخصي غير تجاري. ذكر طلال عيتاني أنه أتاح ترجمته برخصة المشاع الإبداعي.",
+        "The Uthmani and plain texts and the surah, juz and page data come from the Tanzil Project, copied verbatim, under Creative Commons Attribution 3.0; check tanzil.net for updates. Page numbers follow the Madinah mushaf layout in Tanzil's data. The translation and tafsir come from Tanzil's translations page, whose terms are non-commercial use; Sakina is a personal, non-commercial app. Talal Itani states that he released his translation under a Creative Commons license.",
+    )
+    val openTanzil get() = t("فتح tanzil.net", "Open tanzil.net")
+    val copyrightBlock get() = t("نص حقوق النسخ كما ورد في ملف تنزيل", "Copyright block as published in the Tanzil file")
+
+    // Khatma
+    val khatmaTitle get() = t("خطة الختمة", "Khatma plan")
+    val khatmaNone get() = t("لا خطة حالية. اختر المدة لتوزيع ٦٠٤ صفحات على الأيام.", "No plan yet. Choose a duration to spread the 604 pages over the days.")
+    val khatmaStart get() = t("بدء الخطة", "Start plan")
+    val khatmaDays get() = t("المدة بالأيام", "Duration in days")
+    fun khatmaPerDay(n: String) = t("نحو $n صفحة يوميًا", "about $n pages a day")
+    val khatmaFrom get() = t("تبدأ اليوم", "Starts today")
+    fun khatmaToday(from: String, to: String) = t("ورد اليوم: من صفحة $from إلى $to", "Today: pages $from to $to")
+    val khatmaTodayEmpty get() = t("لا صفحات مقررة اليوم.", "No pages are due today.")
+    fun khatmaProgress(p: String, pct: String) = t("وصلت إلى صفحة $p ($pct٪)", "Reached page $p ($pct%)")
+    fun khatmaBehind(n: String) = t("متأخر $n صفحة عن الخطة", "$n pages behind the plan")
+    fun khatmaAhead(n: String) = t("متقدم $n صفحة", "$n pages ahead")
+    val khatmaOnTrack get() = t("على الخطة", "On track")
+    fun khatmaRemainingToday(n: String) = t("بقي من ورد اليوم $n صفحة", "$n pages left today")
+    val khatmaDone get() = t("اكتملت الختمة", "Khatma completed")
+    fun khatmaOverdue(n: String) = t("انتهت المدة وبقي $n صفحة", "The period ended with $n pages left")
+    fun khatmaNotStarted(date: String) = t("تبدأ في $date", "Starts on $date")
+    val khatmaFinishToday get() = t("أنهيت ورد اليوم", "I finished today’s portion")
+    val khatmaRecord get() = t("سجّل التقدم حتى صفحة…", "Record progress up to page…")
+    fun khatmaRecordHere(p: String) = t("سجّل الختمة حتى صفحة $p", "Record khatma up to page $p")
+    val khatmaReadToday get() = t("اقرأ ورد اليوم", "Read today’s portion")
+    val khatmaSchedule get() = t("الجدول", "Schedule")
+    val khatmaReset get() = t("إعادة ضبط الخطة", "Reset the plan")
+    val khatmaResetQ get() = t("حذف الخطة الحالية وسجل تقدمها؟ لا يمكن التراجع.", "Delete the current plan and its progress? This cannot be undone.")
+    val khatmaManual get() = t("التقدم يُسجَّل يدويًا فقط؛ فتح الصفحات لا يسجّل شيئًا.", "Progress is recorded by hand only; opening pages records nothing.")
+    fun khatmaRange(from: String, to: String) = t("صفحة $from–$to", "Pages $from–$to")
+    fun khatmaEnds(date: String) = t("تنتهي في $date", "Ends on $date")
+    val khatmaRecorded get() = t("سُجّل التقدم", "Progress recorded")
+
+    // Verse of the day
+    val verseOfDay get() = t("آية اليوم", "Verse of the day")
+    val verseNote get() = t("من قائمة آيات مختارة في سكينة؛ النص من مشروع تنزيل.", "From a list of verses chosen for Sakina; text from the Tanzil Project.")
 }
 
 val LocalStrings = staticCompositionLocalOf { Strings(Lang.AR) }

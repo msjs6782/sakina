@@ -41,6 +41,11 @@ import com.sakina.app.ui.alerts.PrayerAlertScreen
 import com.sakina.app.ui.alerts.RecordingsScreen
 import com.sakina.app.ui.alerts.RemindersScreen
 import com.sakina.app.ui.components.SakinaIcons
+import com.sakina.app.ui.quran.KhatmaScreen
+import com.sakina.app.ui.quran.QuranHome
+import com.sakina.app.ui.quran.QuranReaderScreen
+import com.sakina.app.ui.quran.QuranSearchScreen
+import com.sakina.app.ui.quran.QuranSourcesScreen
 import com.sakina.app.ui.home.HomeScreen
 import com.sakina.app.ui.location.CityPickerScreen
 import com.sakina.app.ui.location.GpsPlaceScreen
@@ -61,6 +66,9 @@ import com.sakina.app.ui.times.TimesView
 import java.time.Instant
 
 val LocalFmt = staticCompositionLocalOf { Fmt(Lang.AR, clock24 = false, arabicDigits = true) }
+
+/** The app's view model, for small shared pieces (such as home cards) that need navigation or Quran data. */
+val LocalMainVm = staticCompositionLocalOf<MainViewModel?> { null }
 
 /** Light between sunrise and Maghrib at the chosen place; null when that cannot be calculated. */
 fun sunIsUp(s: AppSettings, now: Instant): Boolean? {
@@ -99,6 +107,7 @@ fun SakinaRoot(vm: MainViewModel, startTimesView: TimesView = TimesView.DAY) {
         LocalLayoutDirection provides if (s.language == Lang.AR) LayoutDirection.Rtl else LayoutDirection.Ltr,
         LocalStrings provides strings,
         LocalFmt provides s.fmt,
+        LocalMainVm provides vm,
     ) {
         SakinaTheme(style = s.style, dark = dark, dynamic = s.dynamicColor) {
             Surface(color = MaterialTheme.colorScheme.background, modifier = Modifier.fillMaxSize().semantics { testTagsAsResourceId = true }) {
@@ -131,6 +140,10 @@ private fun RouteScreen(route: Route, vm: MainViewModel, s: AppSettings) {
         is Route.PrayerAlert -> PrayerAlertScreen(vm, s, route.key)
         Route.Reminders -> RemindersScreen(vm, s)
         Route.Recordings -> RecordingsScreen(vm)
+        is Route.QuranReader -> QuranReaderScreen(vm, route.global, route.highlight)
+        is Route.QuranSearch -> QuranSearchScreen(vm, route.query)
+        Route.Khatma -> KhatmaScreen(vm)
+        Route.QuranSources -> QuranSourcesScreen(vm)
     }
 }
 
@@ -164,7 +177,7 @@ private fun MainTabs(vm: MainViewModel, s: AppSettings, startTimesView: TimesVie
             when (vm.tab) {
                 Tab.HOME -> HomeScreen(vm, s, padding)
                 Tab.TIMES -> TimesScreen(vm, s, padding, startTimesView)
-                Tab.QURAN -> PlannedScreen(str.quranSoon, str.quranSoonBody, SakinaIcons.Book, padding)
+                Tab.QURAN -> QuranHome(vm, padding)
                 Tab.DISCOVER -> PlannedScreen(str.discoverSoon, str.discoverSoonBody, SakinaIcons.Compass, padding)
                 Tab.SETTINGS -> SettingsScreen(vm, s, padding)
             }

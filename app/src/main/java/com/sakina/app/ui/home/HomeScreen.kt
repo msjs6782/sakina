@@ -40,6 +40,14 @@ import androidx.compose.ui.platform.testTag
 import com.sakina.app.SakinaApp
 import com.sakina.app.alerts.AlertsCenter
 import com.sakina.app.ui.alerts.QuietDialog
+import com.sakina.app.ui.LocalMainVm
+import com.sakina.app.core.quran.DailyVerse
+import com.sakina.app.ui.quran.ayahEnd
+import com.sakina.app.ui.theme.AmiriQuran
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.clickable
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -132,6 +140,7 @@ fun HomeScreen(vm: MainViewModel, s: AppSettings, contentPadding: PaddingValues)
         if (showQuiet) QuietDialog(onDismiss = { showQuiet = false })
         if (loc == null || zone == null || !loc.isUsable) {
             NoLocationCard(vm)
+            if (s.orderedCards.any { it.card == HomeCard.VERSE && it.visible }) VerseCard(now.atZone(ZoneId.systemDefault()).toLocalDate())
         } else {
             val schedule = remember(loc, s.calcConfig) { PrayerSchedule(loc.point, zone, s.calcConfig) }
             val today = schedule.localDate(now)
@@ -455,6 +464,35 @@ private fun Cards(m: HomeModel, s: AppSettings) {
         when (pref.card) {
             HomeCard.DATE -> DateCard(m, s)
             HomeCard.SUN -> SunCard(m)
+            HomeCard.VERSE -> VerseCard(m.today)
+        }
+    }
+}
+
+/** Verse of the day from a fixed list of references; the text is the Tanzil Uthmani text. */
+@Composable
+fun VerseCard(today: LocalDate) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    val vm = LocalMainVm.current ?: return
+    val data by vm.quran.collectAsStateWithLifecycle()
+    LaunchedEffect(Unit) { vm.loadQuran() }
+    val d = data
+    SectionCard(title = str.verseOfDay, icon = SakinaIcons.Book, modifier = Modifier.testTag("verse_card")) {
+        if (d == null) {
+            NoteText(str.quranLoading)
+        } else {
+            val ref = DailyVerse.forDate(today)
+            val g = d.meta.global(ref)
+            Text(
+                d.text.ayahs[g] + " " + ayahEnd(ref.aya),
+                style = MaterialTheme.typography.bodyLarge.copy(fontFamily = AmiriQuran, fontSize = 24.sp, lineHeight = 48.sp),
+                textAlign = TextAlign.Justify,
+                modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).clickable { vm.push(Route.QuranReader(g, highlight = true)) },
+            )
+            Text(str.surahAyah(d.meta.surah(ref.sura).nameAr, fmt.num(ref.aya)), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+            Spacer(Modifier.height(4.dp))
+            NoteText(str.verseNote)
         }
     }
 }

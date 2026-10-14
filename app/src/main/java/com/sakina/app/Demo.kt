@@ -101,6 +101,43 @@ object Demo {
             val m = e.getInt("demo_quiet")
             if (m > 0) AlertsCenter.startQuiet(app, java.time.Duration.ofMinutes(m.toLong())) else AlertsCenter.endQuiet(app)
         }
+        val quranState = app.quranState
+        if (e.getBoolean("demo_reset")) runBlocking { quranState.update { com.sakina.app.data.QuranState() } }
+        e.getString("demo_quran")?.let { spec ->
+            runBlocking {
+                quranState.update { st ->
+                    var r = st.reader
+                    spec.split(',').mapNotNull { p -> p.split('=').takeIf { it.size == 2 } }.forEach { (k, v) ->
+                        r = when (k) {
+                            "mode" -> r.copy(mode = com.sakina.app.data.ReaderMode.valueOf(v.uppercase()))
+                            "translation" -> r.copy(showTranslation = v == "1")
+                            "tafsir" -> r.copy(showTafsir = v == "1")
+                            "font" -> r.copy(fontSize = v.toInt())
+                            else -> r
+                        }
+                    }
+                    st.copy(reader = r)
+                }
+            }
+        }
+        e.getString("demo_bookmarks")?.let { spec ->
+            runBlocking {
+                quranState.update { st ->
+                    st.copy(bookmarks = spec.split(',').mapIndexed { i, x -> x.split(':').let { com.sakina.app.data.Bookmark(it[0].toInt(), it[1].toInt(), 1_700_000_000_000L + i) } })
+                }
+            }
+        }
+        e.getString("demo_lastread")?.let { spec ->
+            val (su, ay, pg) = spec.split(':').map { it.toInt() }
+            runBlocking { quranState.update { it.copy(lastRead = com.sakina.app.data.LastRead(su, ay, pg, 1_700_000_000_000L)) } }
+        }
+        e.getString("demo_khatma")?.let { spec ->
+            // days:progress:startedDaysAgo
+            val f = spec.split(':').map { it.toInt() }
+            val plan = com.sakina.app.core.quran.Khatma.create(java.time.LocalDate.now().minusDays(f.getOrElse(2) { 0 }.toLong()), f[0])
+                .copy(progressPage = f.getOrElse(1) { 0 })
+            runBlocking { quranState.update { it.copy(khatma = plan) } }
+        }
         e.getString("demo_test")?.split(':')?.let { f ->
             AlertsCenter.test(app, AlertMode.valueOf(f[0].uppercase()), f.getOrNull(1)?.toLongOrNull() ?: 5)
         }
@@ -109,7 +146,17 @@ object Demo {
             Log.i(TAG, "AlarmState scheduled=${sc?.ids} at=${sc?.at} epochMs=${sc?.at?.toEpochMilli()} exact=${sc?.exact}")
         }
         val tab = e.getString("demo_tab")?.let { Tab.valueOf(it.uppercase()) }
-        val routes = e.getString("demo_route")?.split(',')?.mapNotNull { route(it) } ?: emptyList()
+        val routes = e.getString("demo_route")?.split(',')?.mapNotNull { r ->
+            when {
+                r.startsWith("quran_reader:") -> {
+                    val (su, ay) = r.removePrefix("quran_reader:").split(':').map { it.toInt() }
+                    val d = runBlocking { app.quran.load() }
+                    Route.QuranReader(d.meta.global(com.sakina.app.core.quran.AyahRef(su, ay)), highlight = e.getBoolean("demo_highlight"))
+                }
+                r.startsWith("quran_search:") -> Route.QuranSearch(r.removePrefix("quran_search:"))
+                else -> route(r)
+            }
+        } ?: emptyList()
         val view = e.getString("demo_view")?.let { TimesView.valueOf(it.uppercase()) }
         Log.i(TAG, "applied tab=$tab routes=$routes view=$view")
         return DemoStart(tab, routes, view)
@@ -131,6 +178,9 @@ object Demo {
         "recordings" -> Route.Recordings
         "prayer_asr" -> Route.PrayerAlert(PrayerKey.ASR)
         "prayer_fajr" -> Route.PrayerAlert(PrayerKey.FAJR)
+        "quran_search" -> Route.QuranSearch()
+        "khatma" -> Route.Khatma
+        "quran_sources" -> Route.QuranSources
         else -> null
     }
 

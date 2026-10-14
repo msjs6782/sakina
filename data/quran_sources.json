@@ -1,0 +1,36 @@
+{
+ "fetched": "2026-10-14",
+ "note": "Files are verbatim copies from tanzil.net; the app parses them without changing them.",
+ "files": [
+  {
+   "file": "quran-uthmani.xml",
+   "url": "https://tanzil.net/pub/download/index.php?marks=true&sajdah=true&rub=true&alef=true&quranType=uthmani&outType=xml&agree=true",
+   "bytes": 1529912,
+   "sha256": "33f4113df84c1bab0ee2eb69616139fda619bdd56fc163a72532daaf0431bf57"
+  },
+  {
+   "file": "quran-simple-clean.txt",
+   "url": "https://tanzil.net/pub/download/index.php?quranType=simple-clean&outType=txt-2&agree=true",
+   "bytes": 781176,
+   "sha256": "228df2a717671aeb9d2ff573002bd28d6b3f973f4bc7153554e3a81663d67610"
+  },
+  {
+   "file": "quran-data.xml",
+   "url": "https://tanzil.net/res/text/metadata/quran-data.xml",
+   "bytes": 77234,
+   "sha256": "8867c1d88191472adec9db694b3cd9f135b1a2ef580574d32cf888dcb22c5c7a"
+  },
+  {
+   "file": "en.itani.txt",
+   "url": "https://tanzil.net/trans/?transID=en.itani&type=txt-2",
+   "bytes": 797574,
+   "sha256": "6814804b4615286faabd9a2b0fee21e0a6a3624fa561e2333e6236d54bf8fe7b"
+  },
+  {
+   "file": "ar.jalalayn.txt",
+   "url": "https://tanzil.net/trans/?transID=ar.jalalayn&type=txt-2",
+   "bytes": 1944449,
+   "sha256": "06a3084bbe72d787e6da3bd3825ad20c6b8bdff033c7560091a5c21915a96684"
+  }
+ ]
+}

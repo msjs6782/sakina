@@ -21,7 +21,7 @@ enum class ThemeMode { SYSTEM, LIGHT, DARK, SUN }
 enum class HomeLayout { BALANCED, FOCUS, DASHBOARD }
 
 /** Home cards. Only cards whose content exists in this version are shown in the editor. */
-enum class HomeCard { DATE, SUN }
+enum class HomeCard { VERSE, DATE, SUN }
 
 enum class LocationSource { CITY, MANUAL, GPS }
 
@@ -120,7 +120,7 @@ data class AppSettings(
         }
 
     companion object {
-        val DEFAULT_CARDS = listOf(CardPref(HomeCard.SUN), CardPref(HomeCard.DATE))
+        val DEFAULT_CARDS = listOf(CardPref(HomeCard.VERSE), CardPref(HomeCard.SUN), CardPref(HomeCard.DATE))
         const val MAX_LOCATIONS = 20
     }
 }

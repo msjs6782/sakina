@@ -36,6 +36,9 @@ val Plex = FontFamily(
 /** Tabular Arabic-Indic and Latin digits (Noto Kufi Arabic, subset) for countdowns. */
 val KufiDigits = FontFamily(Font(R.font.kufi_digits, FontWeight.Medium))
 
+/** Amiri Quran: Naskh designed for typesetting the Quran (Uthmani marks, ayah-end numbers). */
+val AmiriQuran = FontFamily(Font(R.font.amiri_quran, FontWeight.Normal))
+
 val Amiri = FontFamily(
     Font(R.font.amiri_regular, FontWeight.Normal),
     Font(R.font.amiri_bold, FontWeight.Bold),

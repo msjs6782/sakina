@@ -194,8 +194,61 @@ if [ "$SUITE" = "full" ]; then
   sleep 2
 fi
 
-# ---------- Phase 2: alerts (real AlarmManager, notifications, playback) ----------
+# ---------- Phase 3: Quran ----------
+Q=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh --es demo_now "$T_AFTERNOON" "${FREEZE[@]}")
 adb logcat -d > "$OUT/logcat_part2.txt"; adb logcat -c
+shot 80_quran_home 9 "${Q[@]}" --es demo_tab quran
+adb logcat -d -s SakinaQuran:I | grep "Loaded" | tail -1 | tee "$OUT/quran_load.txt"
+grep -q "114 surahs, 6236 ayahs" "$OUT/quran_load.txt" && check quran_load PASS "$(cat "$OUT/quran_load.txt" | grep -o 'in [0-9]* ms')" critical || check quran_load FAIL "not loaded" critical
+# Real taps: open Al-Fatiha from the index, tap an ayah, bookmark it.
+tap id surah_1 && sleep 3 && cap 81_reader_fatiha
+adb shell input tap 540 1000; sleep 2; cap 82_ayah_sheet
+tap id ayah_bookmark && sleep 1 && cap 82b_ayah_bookmarked
+adb shell input keyevent 4; sleep 1; adb shell input keyevent 4; sleep 2
+cap 82c_quran_home_continue
+shot 83_reader_baqara_255 9 "${Q[@]}" --es demo_route quran_reader:2:255 --ez demo_highlight true
+shot 84_reader_ayahs_translation 9 "${Q[@]}" --es demo_quran mode=AYAHS,translation=1,tafsir=1 --es demo_route quran_reader:2:255 --ez demo_highlight true
+# Searching by typing: English words and a reference.
+start "${Q[@]}" --es demo_route quran_search
+sleep 6
+adb shell input text "throne"; sleep 3; cap 86_search_english
+adb shell input keyevent 123; for _ in $(seq 1 8); do adb shell input keyevent 67; done
+adb shell input text "2:255"; sleep 3; cap 87_search_reference
+tap id search_reference && sleep 3 && cap 88_reference_opened
+shot 85_search_arabic 9 "${Q[@]}" --es demo_route "quran_search:الرحمن الرحيم"
+shot 89_khatma_new 8 "${Q[@]}" --es demo_route khatma
+tap id khatma_start && sleep 2 && cap 90_khatma_started
+shot 91_khatma_behind 8 "${Q[@]}" --es demo_khatma 30:40:5 --es demo_route khatma
+save_log
+
+if [ "$SUITE" = "full" ]; then
+  start "${Q[@]}" --es demo_tab quran --es demo_bookmarks 2:255,18:10,36:1 --es demo_lastread 18:1:293 --es demo_khatma 30:120:5
+  sleep 7
+  cap 92_quran_home_state
+  tap exact "العلامات" && sleep 2 && cap 93_quran_bookmarks
+  tap exact "الأجزاء" && sleep 2 && cap 94_quran_juz
+  shot 95_quran_sources 8 "${Q[@]}" --es demo_route quran_sources
+  shot 96_reader_dark_large 9 "${Q[@]}" --es demo_theme DARK --es demo_quran font=34 --es demo_route quran_reader:36:1
+  shot 97_reader_english 9 "${Q[@]}" --es demo_lang en --es demo_quran mode=AYAHS,translation=1 --es demo_route quran_reader:1:1
+  start "${Q[@]}" --es demo_route quran_reader:112:1
+  sleep 7
+  tap id reader_settings && sleep 2 && cap 98_reader_settings
+  adb shell input keyevent 4; sleep 1
+  adb shell input tap 540 1100; sleep 2
+  tap id ayah_share_image && sleep 4 && cap 99_share_image_chooser
+  adb shell input keyevent 4; sleep 1
+  ls_share=$(adb shell run-as "$PKG" ls cache/share 2>/dev/null | tr -d '\r')
+  [ -n "$ls_share" ] && check share_png PASS "$ls_share" || check share_png FAIL "no image written"
+  adb exec-out run-as "$PKG" cat "cache/share/$ls_share" > "$OUT/99b_shared_ayah.png" 2>/dev/null || true
+  adb shell input keyevent 4; sleep 1
+  # The home screen with the verse of the day.
+  shot 79_home_verse 8 "${Q[@]}" --es demo_layout FOCUS
+  adb shell input swipe 540 1700 540 600 400; sleep 2; cap 79b_home_verse_scrolled
+  save_log
+fi
+
+# ---------- Phase 2: alerts (real AlarmManager, notifications, playback) ----------
+save_log
 REAL=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh,jeddah --es demo_active riyadh)
 if [ "$SDK" -ge 33 ]; then adb shell pm revoke "$PKG" android.permission.POST_NOTIFICATIONS >/dev/null 2>&1 || true; fi
 if [ "$SDK" -ge 31 ]; then adb shell appops set "$PKG" SCHEDULE_EXACT_ALARM default >/dev/null 2>&1 || true; fi
