@@ -315,17 +315,16 @@ private fun CompassDial(trueHeading: Double?, bearing: Double, aligned: Boolean,
                 moveTo(c.x, c.y - r * 0.78f); lineTo(c.x - r * 0.06f, c.y - r * 0.62f); lineTo(c.x + r * 0.06f, c.y - r * 0.62f); close()
             }
             drawPath(n, north)
-            // Cardinal letters, turning with the dial like a compass card.
-            labels.forEachIndexed { i, text ->
-                val layout = measurer.measure(text, labelStyle.copy(color = if (i == 0) north else muted))
-                rotate(i * 90f, c) {
-                    drawText(layout, topLeft = Offset(c.x - layout.size.width / 2f, c.y - r * 0.60f))
-                }
-            }
             // Qibla: a line from the centre to the Kaaba mark at the bearing.
             val a = Math.toRadians(bearing)
             drawLine(kaaba, c, pt(c, r * 0.70f, a), strokeWidth = 4.dp.toPx(), cap = StrokeCap.Round)
             kaabaMark(pt(c, r * 0.70f, a), r * 0.09f, kaaba)
+        }
+        // Cardinal letters move with the dial but stay upright, so Arabic letters remain readable.
+        labels.forEachIndexed { i, text ->
+            val layout = measurer.measure(text, labelStyle.copy(color = if (i == 0) north else muted))
+            val at = pt(c, r * 0.52f, Math.toRadians(i * 90.0 + rot))
+            drawText(layout, topLeft = Offset(at.x - layout.size.width / 2f, at.y - layout.size.height / 2f))
         }
         // Fixed pointer: the direction the top of the phone faces.
         if (trueHeading != null) {

@@ -8,7 +8,11 @@ import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.calculateCentroid
+import androidx.compose.foundation.gestures.calculatePan
+import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.FlowRow
@@ -51,6 +55,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
@@ -272,13 +277,27 @@ private fun QiblaMap(vm: MainViewModel, lat: Double, lon: Double, mode: QiblaMap
             .background(MaterialTheme.colorScheme.surfaceContainerHigh)
             .onSizeChanged { size = it }
             .pointerInput(mode, lat, lon) {
-                detectTransformGestures { centroid, p, z, _ ->
-                    val newZoom = (zoom * z).coerceIn(1f, 12f)
-                    // Keep the point under the fingers in place while zooming.
-                    val c = Offset(this.size.width / 2f, this.size.height / 2f)
-                    val next = (pan + (centroid - c - pan) * (1 - newZoom / zoom)) + p
-                    zoom = newZoom
-                    pan = clampPan(next, newZoom, this.size)
+                // Two fingers zoom and pan; one finger pans only when zoomed in, so the page scrolls over the map.
+                awaitEachGesture {
+                    awaitFirstDown(requireUnconsumed = false)
+                    do {
+                        val event = awaitPointerEvent()
+                        if (event.changes.any { it.isConsumed }) break
+                        val fingers = event.changes.count { it.pressed }
+                        if (fingers >= 2 || zoom > 1f) {
+                            val z = event.calculateZoom()
+                            val p = event.calculatePan()
+                            if (z != 1f || p != Offset.Zero) {
+                                val centroid = event.calculateCentroid(useCurrent = false)
+                                val newZoom = (zoom * z).coerceIn(1f, 12f)
+                                val c = Offset(size.width / 2f, size.height / 2f)
+                                val next = (pan + (centroid - c - pan) * (1 - newZoom / zoom)) + p
+                                zoom = newZoom
+                                pan = clampPan(next, newZoom, size)
+                                event.changes.forEach { if (it.positionChanged()) it.consume() }
+                            }
+                        }
+                    } while (event.changes.any { it.pressed })
                 }
             }
             .pointerInput(mode, lat, lon) { detectTapGestures(onDoubleTap = { zoom = 1f; pan = Offset.Zero }) }

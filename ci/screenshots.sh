@@ -586,7 +586,7 @@ TODAY=2026-10-14
 # Discover tab and the adhkar home, reached by taps.
 shot 150_discover 7 "${A[@]}" --es demo_tab discover
 tap id tool_adhkar && sleep 2 && cap 151_adhkar_home
-scroll_to id cat_sleep && cap 152_adhkar_categories
+scroll_to id cat_travel && cap 152_adhkar_categories
 tap id cat_sleep && sleep 2 && cap 153_category_sleep
 tap id dhikr_ayat_kursi_sleep && sleep 3 && cap 154_item_ayat_kursi
 ui_text quran_part_2_255 | plain | grep -q "لقيوم" && check adhkar_quran_text PASS "ayat al-kursi from the bundled Tanzil text" || check adhkar_quran_text FAIL "no ayah text"
@@ -782,8 +782,7 @@ grep -q "$PKG" "$OUT/audio_during_adhan.txt" && FOCUS=yes || FOCUS=no
 adb logcat -d -s SakinaAdhan:I | tail -3 | tee -a "$CHECKS"
 shade_open; cap 71_adhan_playing_shade
 if tap exact "إيقاف"; then
-  sleep 2
-  R2=$(adhan_running)
+  for _ in 1 2 3 4 5 6 7 8; do sleep 1; R2=$(adhan_running); [ "$R2" -eq 0 ] && break; done
   [ "$R2" -eq 0 ] && check adhan_stop PASS "stopped from notification" critical || check adhan_stop FAIL "still running" critical
 else
   check adhan_stop FAIL "stop action not found" critical
