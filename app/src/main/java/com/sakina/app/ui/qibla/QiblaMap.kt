@@ -7,6 +7,7 @@ import android.graphics.DashPathEffect
 import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -216,7 +217,7 @@ fun QiblaMapCard(vm: MainViewModel, lat: Double, lon: Double, mode: QiblaMapMode
         Spacer(Modifier.height(8.dp))
         FlowRow(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
             Legend(MaterialTheme.colorScheme.primary, str.mapYou)
-            Legend(Color(0xFF2B2B2B), str.mapMecca, square = true)
+            Legend(Color(0xFF2B2B2B), str.mapMecca, square = true, rim = MaterialTheme.colorScheme.surface.luminance() < 0.5f)
             Legend(MaterialTheme.colorScheme.tertiary, str.mapPath, line = true)
         }
         Spacer(Modifier.height(6.dp))
@@ -229,10 +230,13 @@ fun QiblaMapCard(vm: MainViewModel, lat: Double, lon: Double, mode: QiblaMapMode
 }
 
 @Composable
-private fun Legend(color: Color, text: String, square: Boolean = false, line: Boolean = false) {
+private fun Legend(color: Color, text: String, square: Boolean = false, line: Boolean = false, rim: Boolean = false) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         val shape = if (square) RoundedCornerShape(2.dp) else CircleShape
-        Box(Modifier.size(width = if (line) 18.dp else 10.dp, height = if (line) 3.dp else 10.dp).clip(shape).background(color))
+        Box(
+            Modifier.size(width = if (line) 18.dp else 10.dp, height = if (line) 3.dp else 10.dp).clip(shape).background(color)
+                .then(if (rim) Modifier.border(1.5.dp, Color(0xFFE8E2D0), shape) else Modifier),
+        )
         Spacer(Modifier.width(6.dp))
         Text(text, style = MaterialTheme.typography.labelMedium)
     }
@@ -316,6 +320,9 @@ private fun QiblaMap(vm: MainViewModel, lat: Double, lon: Double, mode: QiblaMap
         fun screen(o: Offset) = mid + (o - mid) * zoom + pan
         val m = screen(sc.mecca)
         val half = 6.dp.toPx()
+        // A light rim keeps the dark Kaaba mark visible on the dark map.
+        val rim = 1.5.dp.toPx()
+        drawRect(if (dark) Color(0xFFE8E2D0) else Color.White, Offset(m.x - half - rim, m.y - half - rim), Size((half + rim) * 2, (half + rim) * 2))
         drawRect(Color(0xFF2B2B2B), Offset(m.x - half, m.y - half), Size(half * 2, half * 2))
         drawLine(Color(0xFFE8C35A), Offset(m.x - half, m.y - half * 0.35f), Offset(m.x + half, m.y - half * 0.35f), strokeWidth = half * 0.35f)
         val y = screen(sc.you)

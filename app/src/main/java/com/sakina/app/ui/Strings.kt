@@ -980,11 +980,11 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
         com.sakina.app.core.qibla.CompassIssue.STALE -> t("توقفت قراءات المستشعر؛ ما يظهر قراءة قديمة.", "The sensor stopped reporting; what you see is an old reading.")
         com.sakina.app.core.qibla.CompassIssue.POLE_CAUTION -> t("أنت قرب قطب مغناطيسي: البوصلة أقل موثوقية هنا.", "You are near a magnetic pole: compasses are less reliable here.")
         com.sakina.app.core.qibla.CompassIssue.POLE_BLACKOUT -> t("أنت في منطقة انقطاع قرب القطب المغناطيسي: لا يُعتمد على البوصلة هنا.", "You are in a blackout zone near the magnetic pole: do not rely on a compass here.")
-        com.sakina.app.core.qibla.CompassIssue.MODEL_EXPIRED -> t("انتهت مدة نموذج WMM2025 (صالح حتى بداية ٢٠٣٠)، فتصحيح الشمال الحقيقي تقريبي.", "The WMM2025 model has expired (valid until early 2030); the true-north correction is approximate.")
+        com.sakina.app.core.qibla.CompassIssue.MODEL_EXPIRED -> t("انتهت مدة نموذج \u2066WMM2025\u2069 (صالح حتى بداية ٢٠٣٠)، فتصحيح الشمال الحقيقي تقريبي.", "The \u2066WMM2025\u2069 model has expired (valid until early 2030); the true-north correction is approximate.")
     }
     fun declination(deg: String, east: Boolean) = if (east) t("الانحراف المغناطيسي هنا: $deg شرقًا", "Magnetic declination here: $deg east")
     else t("الانحراف المغناطيسي هنا: $deg غربًا", "Magnetic declination here: $deg west")
-    val trueNorthNote get() = t("تقيس البوصلة الشمال المغناطيسي؛ يحوّله التطبيق إلى الشمال الحقيقي بإضافة الانحراف المحسوب على الجهاز من نموذج WMM2025.", "The compass measures magnetic north; the app converts it to true north by adding the declination computed on the device from WMM2025.")
+    val trueNorthNote get() = t("تقيس البوصلة الشمال المغناطيسي؛ يحوّله التطبيق إلى الشمال الحقيقي بإضافة الانحراف المحسوب على الجهاز من نموذج \u2066WMM2025\u2069.", "The compass measures magnetic north; the app converts it to true north by adding the declination computed on the device from \u2066WMM2025\u2069.")
     val qiblaAccuracyTitle get() = t("حدود الدقة", "Accuracy and limits")
     val qiblaCalcNote get() = t("الاتجاه محسوب على الجهاز كدائرة عظمى على كرة الأرض، من إحداثيات الموقع المختار والكعبة.", "The direction is computed on the device as a great circle on the globe, from the chosen place's coordinates and the Kaaba's.")
     fun qiblaSensitivity(km: String, deg: String) = t("إذا كان مكانك الفعلي يبعد $km كم عن الموقع المختار فقد يختلف الاتجاه حتى $deg.", "If you are $km km from the chosen place, the direction may differ by up to $deg.")
@@ -1004,12 +1004,12 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
         "Equirectangular projection: longitude and latitude form a regular grid; it keeps neither directions nor distances, so the shortest path to Mecca looks curved. Do not measure the qibla angle on this map.",
     )
     val mapDataNote get() = t(
-        "بيانات Natural Earth (ملكية عامة) بمقياسي 1:50m و1:110m، مخزّنة بدقة نحو ٠٫٦ كم؛ السواحل مبسّطة والحدود تقريبية ولا تمثل موقفًا سياسيًا. الخريطة توضيحية، والرقم أعلاه هو المرجع.",
-        "Natural Earth data (public domain) at 1:50m and 1:110m, stored to about 0.6 km; coastlines are simplified and borders approximate, not a political statement. The map is illustrative; the number above is the reference.",
+        "بيانات Natural Earth (ملكية عامة) بمقياسي \u20661:50m\u2069 و\u20661:110m\u2069، مخزّنة بدقة نحو ٠٫٦ كم؛ السواحل مبسّطة والحدود تقريبية ولا تمثل موقفًا سياسيًا. الخريطة توضيحية، والرقم أعلاه هو المرجع.",
+        "Natural Earth data (public domain) at \u20661:50m\u2069 and \u20661:110m\u2069, stored to about 0.6 km; coastlines are simplified and borders approximate, not a political statement. The map is illustrative; the number above is the reference.",
     )
     val mapZoomHint get() = t("قرّب أو حرّك بإصبعين، واضغط مرتين للعودة.", "Pinch or drag to zoom and pan; double-tap to reset.")
     val srcAdhkar get() = t("الأذكار: نصوص الأحاديث من بيانات hadith-api المفتوحة بترقيم sunnah.com، مع أحكام المحققين؛ ونصوص الآيات من نسخة Tanzil المضمنة.", "Adhkar: hadith texts from the open hadith-api data with sunnah.com numbering, with the graders' rulings; ayah texts from the bundled Tanzil copy.")
-    val srcQibla get() = t("القبلة: نموذج WMM2025 من NOAA وبيانات Natural Earth للخريطة (ملكية عامة).", "Qibla: NOAA's WMM2025 model and Natural Earth map data (public domain).")
+    val srcQibla get() = t("القبلة: نموذج \u2066WMM2025\u2069 من NOAA وبيانات Natural Earth للخريطة (ملكية عامة).", "Qibla: NOAA's \u2066WMM2025\u2069 model and Natural Earth map data (public domain).")
     fun compassPoint(i: Int) = (if (isAr) listOf(
         "شمال", "شمال شمال شرق", "شمال شرق", "شرق شمال شرق", "شرق", "شرق جنوب شرق", "جنوب شرق", "جنوب جنوب شرق",
         "جنوب", "جنوب جنوب غرب", "جنوب غرب", "غرب جنوب غرب", "غرب", "غرب شمال غرب", "شمال غرب", "شمال شمال غرب",

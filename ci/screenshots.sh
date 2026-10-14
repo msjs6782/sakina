@@ -72,6 +72,15 @@ scroll_to() {
   return 1
 }
 
+# After scroll_to: moves a node found low on the screen up to the middle, clear of the gesture bar.
+bring_up() {
+  adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1
+  adb shell cat /sdcard/ui.xml > "$OUT/.ui.xml" 2>/dev/null
+  local xy; xy=$(python3 "$HERE/find_node.py" "$OUT/.ui.xml" "$1" id) || return 0
+  local y=${xy#* }
+  if [ "$y" -gt 1300 ]; then adb shell input swipe 540 1700 540 $((1700 - (y - 900))) 800; sleep 1.5; fi
+}
+
 # True if a node is on screen now (no tap).
 ui_has() {
   adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1
@@ -611,6 +620,7 @@ tools_json | grep -q "\"$TODAY|item|-\":{\"tasbih_33\":3}" && check item_counter
 # Morning set: tap to count, completion, and no mixing with the evening set.
 shot 160_wird_morning 8 "${A[@]}" --es demo_route wird:morning
 scroll_to id wird_count_bismillah_la_yadurr 16
+bring_up wird_count_bismillah_la_yadurr
 for _ in 1 2 3 4; do tap id wird_item_bismillah_la_yadurr; done
 sleep 1; cap 161_wird_morning_counted
 ui_has id wird_done_bismillah_la_yadurr && check wird_complete PASS "done after 3 taps (4th ignored)" || check wird_complete FAIL "not done"
