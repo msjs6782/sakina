@@ -18,8 +18,7 @@ jobs:
       - name: Install tools
         run: |
           python -m pip install --upgrade pip
-          python -m pip install faster-whisper
-          python -c "import faster_whisper; print('faster-whisper', faster_whisper.__version__)"
+          echo "no extra tools"
       - name: Run research scripts
         run: |
           mkdir -p out
