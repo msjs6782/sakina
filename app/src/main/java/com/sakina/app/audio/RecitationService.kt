@@ -195,6 +195,10 @@ class RecitationService : MediaSessionService() {
         exo.stop()
         exo.clearMediaItems()
         abandonFocus()
+        // Media3 removes the notification once the player is empty; make sure it is gone on every Android version.
+        handler.postDelayed({
+            if (exo.mediaItemCount == 0) androidx.core.app.NotificationManagerCompat.from(this).cancel(NOTIFICATION_ID)
+        }, 600)
         stopSelf()
     }
 

@@ -409,7 +409,7 @@ if [ "$SDK" -ge 33 ]; then adb shell pm grant "$PKG" android.permission.POST_NOT
 if [ "$SDK" -ge 31 ]; then adb shell appops set "$PKG" SCHEDULE_EXACT_ALARM allow; fi
 L0=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh --es demo_now "$T_AFTERNOON" "${FREEZE[@]}" --ez demo_diagnostics true --el demo_idle_ms 25000 --el demo_dl_slow_ms 40)
 L=("${L0[@]}" --ez demo_recitations_clear true)
-adb logcat -c
+save_log
 start "${L[@]}" --es demo_tab quran
 sleep 8
 tap id quran_listen && sleep 3 && cap 130_listen
@@ -438,7 +438,7 @@ session_dump > "$OUT/media_session_speed.txt"
 grep -q "speed=1.25" "$OUT/media_session_speed.txt" && check speed PASS "speed 1.25 in the session" || check speed FAIL "see media_session_speed.txt"
 tap id listen_forward && sleep 2 && cap 133_listen_speed_seek
 # The adhan takes audio focus: the recitation pauses and does not resume by itself afterwards.
-adb logcat -c
+save_log
 adb shell am start -n "$PKG/$ACT" --es demo_test ADHAN:3 >/dev/null
 if wait_rlog "audio focus lost" 25; then
   sleep 6
@@ -455,7 +455,7 @@ fi
 cap 134_listen_after_adhan
 # Quiet mode stops the recitation and blocks playing until it ends.
 tap id listen_toggle; sleep 3
-adb logcat -c
+save_log
 adb shell am start -n "$PKG/$ACT" --ei demo_quiet 30 >/dev/null
 wait_rlog "session ended: quiet mode" 15 && check quiet_stops PASS "quiet mode ended the session" critical || check quiet_stops FAIL "$(rlog | tail -2 | tr '\n' ' ')" critical
 sleep 2
@@ -465,7 +465,7 @@ cap 135_listen_quiet
 adb shell am start -n "$PKG/$ACT" --ei demo_quiet 0 >/dev/null; sleep 2
 
 # Download Al-Ikhlas (with its timing map), play it from the device, and repeat ayahs 1-2 three times.
-adb logcat -c
+save_log
 start "${L0[@]}" --es demo_route listen:112
 sleep 7
 tap id listen_download_112
@@ -482,7 +482,7 @@ sleep 4
 scroll_to id repeat_start
 tap id repeat_to_plus; sleep 1
 cap 136_listen_repeat_setup
-adb logcat -c
+save_log
 tap id repeat_start
 if wait_rlog "repeat finished after 3 passes" 120; then
   P=$(rlog | grep -c "repeat pass [12] done; again")
@@ -492,7 +492,7 @@ else
 fi
 cap 137_listen_repeat_done
 # A timing map that does not match its surah keeps repeat off (Husary, Al-Fatiha: 6 ayahs instead of 7).
-adb logcat -c
+save_log
 adb shell input swipe 540 700 540 1900 300; sleep 1
 tap id reciter_husary && sleep 1
 scroll_to id listen_play_1 && tap id listen_play_1
@@ -508,7 +508,7 @@ else
 fi
 cap 138_listen_timing_invalid
 # Cancel a large download: no partial file stays.
-adb logcat -c
+save_log
 adb shell input swipe 540 700 540 1900 300; sleep 1
 tap id reciter_alafasy && sleep 1
 scroll_to id listen_download_2 && tap id listen_download_2 && sleep 4
@@ -519,7 +519,7 @@ rlog | grep -q "download cancelled alafasy:2" && [ "$PARTS" -eq 0 ] && check dow
 # Playback goes on after leaving the screen.
 scroll_to id listen_play_1 && tap id listen_play_1
 wait_rlog "playing alafasy:1" 40
-adb logcat -c
+save_log
 adb shell input keyevent 4; sleep 4
 session_dump > "$OUT/media_session_left.txt"
 grep -qE "state=(3|PLAYING\(3\))" "$OUT/media_session_left.txt" && check leave_screen PASS "still playing after leaving the screen" || check leave_screen FAIL "not playing after leaving"
@@ -529,7 +529,7 @@ tap id tab_quran && sleep 2
 tap id quran_listen && sleep 3
 tap id listen_toggle
 if wait_rlog "session ended: paused for 25 s" 45; then
-  sleep 2; N=$(notif_posted 4001)
+  for _ in 1 2 3 4 5 6; do sleep 1; N=$(notif_posted 4001); [ "$N" -eq 0 ] && break; done
   [ "$N" -eq 0 ] && check idle_end PASS "paused session ended; notification removed" critical || check idle_end FAIL "notification still shown" critical
 else
   check idle_end FAIL "$(rlog | tail -3 | tr '\n' ' ')" critical
@@ -548,7 +548,7 @@ if [ "$SUITE" = "full" ]; then
   shot 143_listen_dark 8 "${L0[@]}" --es demo_theme DARK --es demo_reciter minshawi --es demo_route listen:36
   # Playback continues with the screen off.
   tap id listen_play_36; wait_rlog "playing minshawi:36" 40
-  adb logcat -c
+  save_log
   adb shell input keyevent 26; sleep 10
   session_dump > "$OUT/media_session_screen_off.txt"
   grep -qE "state=(3|PLAYING\(3\))" "$OUT/media_session_screen_off.txt" && ! rlog | grep -q "paused at" && check screen_off_playing PASS "still playing with the screen off" || check screen_off_playing FAIL "see media_session_screen_off.txt"

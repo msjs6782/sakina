@@ -109,9 +109,18 @@ import java.time.Duration
 private fun rememberController(): MediaController? {
     val context = LocalContext.current
     var controller by remember { mutableStateOf<MediaController?>(null) }
-    DisposableEffect(Unit) {
+    var attempt by remember { mutableIntStateOf(0) }
+    DisposableEffect(attempt) {
         val token = SessionToken(context, ComponentName(context, RecitationService::class.java))
-        val future = MediaController.Builder(context, token).buildAsync()
+        val future = MediaController.Builder(context, token)
+            .setListener(object : MediaController.Listener {
+                // If the session goes away (the service ended), connect again so the screen stays live.
+                override fun onDisconnected(controller: MediaController) {
+                    PlaybackDiagnostics.log(context, "screen controller disconnected; reconnecting")
+                    attempt++
+                }
+            })
+            .buildAsync()
         future.addListener({ controller = runCatching { future.get() }.getOrNull() }, MoreExecutors.directExecutor())
         onDispose {
             MediaController.releaseFuture(future)
