@@ -28,8 +28,16 @@ cache = {}
 
 def edition(name):
     if name not in cache:
-        with urllib.request.urlopen(urllib.request.Request(f"{BASE}/editions/{name}.min.json", headers={"User-Agent": "sakina"}), timeout=120) as r:
-            d = json.loads(r.read())
+        import time
+        for attempt in range(5):
+            try:
+                with urllib.request.urlopen(urllib.request.Request(f"{BASE}/editions/{name}.min.json", headers={"User-Agent": "sakina"}), timeout=120) as r:
+                    d = json.loads(r.read())
+                break
+            except Exception:  # noqa: BLE001
+                if attempt == 4:
+                    raise
+                time.sleep(10 * (attempt + 1))
         cache[name] = (d, [norm(h.get("text", "")) for h in d["hadiths"]])
     return cache[name]
 
