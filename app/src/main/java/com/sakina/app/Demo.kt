@@ -150,6 +150,7 @@ object Demo {
         }
         com.sakina.app.ui.mushaf.MushafDebug.initialZoom = e.getFloat("demo_zoom", 1f)
         if (e.containsKey("demo_idle_ms")) com.sakina.app.audio.RecitationService.idleEndMs = e.getLong("demo_idle_ms")
+        com.sakina.app.data.RecitationRepository.debugSlowMs = e.getLong("demo_dl_slow_ms", 0)
         if (e.getBoolean("demo_mushaf_clear")) runBlocking {
             app.mushaf.init()
             app.mushaf.delete((1..com.sakina.app.core.mushaf.MushafManifest.PAGES).toList())
@@ -206,6 +207,7 @@ object Demo {
         e.getString("demo_test")?.split(':')?.let { f ->
             AlertsCenter.test(app, AlertMode.valueOf(f[0].uppercase()), f.getOrNull(1)?.toLongOrNull() ?: 5)
         }
+        if (e.getBoolean("demo_adhan_stop")) com.sakina.app.alerts.AdhanService.stop(app)
         Log.i(TAG, "applied on new intent: ${e.keySet().filter { it.startsWith("demo_") }}")
     }
 

@@ -407,7 +407,7 @@ save_log
 save_log
 if [ "$SDK" -ge 33 ]; then adb shell pm grant "$PKG" android.permission.POST_NOTIFICATIONS; fi
 if [ "$SDK" -ge 31 ]; then adb shell appops set "$PKG" SCHEDULE_EXACT_ALARM allow; fi
-L0=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh --es demo_now "$T_AFTERNOON" "${FREEZE[@]}" --ez demo_diagnostics true --el demo_idle_ms 25000)
+L0=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh --es demo_now "$T_AFTERNOON" "${FREEZE[@]}" --ez demo_diagnostics true --el demo_idle_ms 25000 --el demo_dl_slow_ms 40)
 L=("${L0[@]}" --ez demo_recitations_clear true)
 adb logcat -c
 start "${L[@]}" --es demo_tab quran
@@ -422,16 +422,14 @@ else
 fi
 sleep 3; cap 131_listen_playing
 session_dump > "$OUT/media_session.txt"
-grep -q "state=3" "$OUT/media_session.txt" && check media_session PASS "MediaSession is playing" critical || check media_session FAIL "see media_session.txt" critical
+grep -qE "state=(3|PLAYING\(3\))" "$OUT/media_session.txt" && check media_session PASS "MediaSession is playing" critical || check media_session FAIL "see media_session.txt" critical
 N=$(notif_posted 4001)
 [ "$N" -ge 1 ] && check media_notification PASS "notification posted" critical || check media_notification FAIL "no media notification" critical
 shade_open; cap 132_listen_notification
 # Pause from the notification.
-if tap exact "Pause"; then
-  wait_rlog "paused at" 10 && check notif_pause PASS "paused from the notification" || check notif_pause FAIL "no pause logged"
-else
-  check notif_pause FAIL "no Pause button in the notification"
-fi
+# Android 8 shows a "Pause" action in the notification; Android 13+ shows media controls in quick settings.
+if ui_has exact "Pause"; then tap exact "Pause"; else tap id actionPlayPause; fi
+wait_rlog "paused at" 10 && check notif_pause PASS "paused from the system media controls" || check notif_pause FAIL "no pause logged"
 shade_close
 # Speed and seeking from the app.
 tap id listen_toggle && sleep 2
@@ -444,11 +442,13 @@ adb logcat -c
 adb shell am start -n "$PKG/$ACT" --es demo_test ADHAN:3 >/dev/null
 if wait_rlog "audio focus lost" 25; then
   sleep 6
-  shade_open; tap exact "إيقاف" >/dev/null 2>&1 || true; shade_close
-  sleep 8
+  adb shell am start -n "$PKG/$ACT" --ez demo_adhan_stop true >/dev/null
+  wait_rlog "audio focus regained" 15
+  sleep 4
   RESUMED=$(rlog | grep -c "playing alafasy")
   REGAINED=$(rlog | grep -c "audio focus regained")
-  [ "$RESUMED" -eq 0 ] && check focus_no_resume PASS "paused for the adhan; focus back ($REGAINED) without resuming" critical || check focus_no_resume FAIL "playback resumed by itself" critical
+  [ "$RESUMED" -eq 0 ] && [ "$REGAINED" -ge 1 ] && check focus_no_resume PASS "paused for the adhan; focus came back and playback stayed paused" critical \
+    || check focus_no_resume FAIL "resumed=$RESUMED regained=$REGAINED" critical
 else
   check focus_no_resume FAIL "focus loss not seen: $(rlog | tail -3 | tr '\n' ' ')" critical
 fi
@@ -522,9 +522,10 @@ wait_rlog "playing alafasy:1" 40
 adb logcat -c
 adb shell input keyevent 4; sleep 4
 session_dump > "$OUT/media_session_left.txt"
-grep -q "state=3" "$OUT/media_session_left.txt" && check leave_screen PASS "still playing after leaving the screen" || check leave_screen FAIL "not playing after leaving"
-cap 139_quran_home_playing
+grep -qE "state=(3|PLAYING\(3\))" "$OUT/media_session_left.txt" && check leave_screen PASS "still playing after leaving the screen" || check leave_screen FAIL "not playing after leaving"
+cap 139_home_playing
 # A pause longer than the limit (25 s here, ten minutes in the app) ends the session and removes the notification.
+tap id tab_quran && sleep 2
 tap id quran_listen && sleep 3
 tap id listen_toggle
 if wait_rlog "session ended: paused for 25 s" 45; then
@@ -545,12 +546,14 @@ adb shell input keyevent 4; sleep 1
 if [ "$SUITE" = "full" ]; then
   shot 142_listen_english 8 "${L0[@]}" --es demo_lang en --es demo_route listen
   shot 143_listen_dark 8 "${L0[@]}" --es demo_theme DARK --es demo_reciter minshawi --es demo_route listen:36
-  # Lock-screen controls while playing.
+  # Playback continues with the screen off.
   tap id listen_play_36; wait_rlog "playing minshawi:36" 40
-  adb shell input keyevent 26; sleep 2; adb shell input keyevent 26; sleep 3
-  cap 144_lockscreen_media
-  adb shell input keyevent 82; sleep 1; adb shell input swipe 540 1800 540 600 300; sleep 2
-  adb shell am start -n "$PKG/$ACT" >/dev/null; sleep 2
+  adb logcat -c
+  adb shell input keyevent 26; sleep 10
+  session_dump > "$OUT/media_session_screen_off.txt"
+  grep -qE "state=(3|PLAYING\(3\))" "$OUT/media_session_screen_off.txt" && ! rlog | grep -q "paused at" && check screen_off_playing PASS "still playing with the screen off" || check screen_off_playing FAIL "see media_session_screen_off.txt"
+  adb shell input keyevent 26; sleep 2; adb shell input keyevent 82; sleep 2
+  cap 144_after_screen_off
   tap id listen_stop; sleep 2
 fi
 save_log

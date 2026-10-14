@@ -276,6 +276,8 @@ class RecitationService : MediaSessionService() {
             RepeatRun.Action.FINISH -> {
                 diag("repeat finished after ${r.played} passes; paused at the end of ayah ${r.to}")
                 exo.pause()
+                // Rest just inside the last ayah of the range, so "current ayah" shows that ayah.
+                exo.seekTo((r.endMs - 50).coerceAtLeast(r.startMs))
                 clearRepeat(finished = true)
             }
         }
