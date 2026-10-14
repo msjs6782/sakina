@@ -139,7 +139,7 @@ private fun DownloadsBody(vm: MainViewModel, d: QuranData) {
                     if (missing.isNotEmpty()) {
                         Button(onClick = { start() }, modifier = Modifier.fillMaxWidth().testTag("dl_start")) {
                             Icon(SakinaIcons.Download, null, Modifier.size(18.dp)); Spacer(Modifier.size(8.dp))
-                            Text(if (available.size > MushafManifest.BUNDLED.size) str.dlResume else str.dlStart)
+                            Text(if (f is FullDownload.Stopped) str.dlResume else str.dlStart)
                         }
                     } else if (f !is FullDownload.Completed) {
                         Banner(str.dlComplete, SakinaIcons.Check)

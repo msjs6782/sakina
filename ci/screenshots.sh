@@ -372,9 +372,8 @@ else
   check full_bg_stop FAIL "did not start: $(mlog | tail -3)" critical
 fi
 # A changed page is found and removed by the check; a juz can be deleted.
-adb shell "run-as $PKG sh -c 'printf X | dd of=files/mushaf/pages/003.pdf bs=1 seek=5000 conv=notrunc 2>/dev/null'"
 adb logcat -c
-shot 115_downloads_before_verify 8 "${M[@]}" --es demo_route mushaf_downloads
+shot 115_downloads_before_verify 8 "${M[@]}" --es demo_route mushaf_downloads --ei demo_mushaf_corrupt 3
 tap id dl_verify
 wait_log "verify: checked" 60 && sleep 2
 cap 116_downloads_verified

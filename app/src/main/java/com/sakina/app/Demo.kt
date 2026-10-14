@@ -146,6 +146,14 @@ object Demo {
             app.mushaf.init()
             app.mushaf.delete((1..com.sakina.app.core.mushaf.MushafManifest.PAGES).toList())
         }
+        e.getInt("demo_mushaf_corrupt", 0).takeIf { it > 0 }?.let { p ->
+            // Flips one byte of a stored page (same size), to test that the integrity check finds it.
+            val f = app.mushaf.file(p)
+            if (f.isFile) java.io.RandomAccessFile(f, "rw").use { raf ->
+                raf.seek(5000); val b = raf.read(); raf.seek(5000); raf.write(b xor 0x5a)
+            }
+            Log.i(TAG, "corrupted stored page $p: ${f.isFile}")
+        }
         e.getString("demo_test")?.split(':')?.let { f ->
             AlertsCenter.test(app, AlertMode.valueOf(f[0].uppercase()), f.getOrNull(1)?.toLongOrNull() ?: 5)
         }

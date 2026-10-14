@@ -26,6 +26,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -266,7 +268,7 @@ private fun TopBar(vm: MainViewModel, d: QuranData, page: Int, a: MenuActions, o
     val qs by vm.quranState.collectAsStateWithLifecycle()
     Surface(color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f), tonalElevation = 2.dp, modifier = Modifier.fillMaxWidth()) {
         Row(
-            Modifier.windowInsetsPadding(WindowInsets.systemBars).fillMaxWidth().heightIn(min = 56.dp).padding(horizontal = 4.dp),
+            Modifier.windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)).fillMaxWidth().heightIn(min = 56.dp).padding(horizontal = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             IconButton(onClick = { vm.pop() }) { DirectionalIcon(SakinaIcons.ArrowStart, str.back) }
@@ -315,7 +317,7 @@ private fun BottomBar(vm: MainViewModel, page: Int, here: Boolean) {
     val fmt = LocalFmt.current
     Surface(color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f), tonalElevation = 2.dp, modifier = Modifier.fillMaxWidth()) {
         Row(
-            Modifier.windowInsetsPadding(WindowInsets.systemBars).fillMaxWidth().heightIn(min = 48.dp).padding(horizontal = 16.dp),
+            Modifier.windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal)).fillMaxWidth().heightIn(min = 48.dp).padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(str.pageOfTotal(fmt.num(page), fmt.num(MushafManifest.PAGES)), style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f).testTag("mushaf_page_label"))
