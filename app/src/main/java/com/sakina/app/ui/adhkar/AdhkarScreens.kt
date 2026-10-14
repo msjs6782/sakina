@@ -54,6 +54,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -118,7 +119,9 @@ private fun AdhkarFrame(title: String, vm: MainViewModel, actions: @Composable (
 fun DhikrText(text: String, modifier: Modifier = Modifier, size: Int = 22) {
     Text(
         text,
-        style = MaterialTheme.typography.bodyLarge.copy(fontFamily = Amiri, fontSize = size.sp, lineHeight = (size * 1.85).sp, textAlign = TextAlign.Start),
+        // Always a right-to-left paragraph, also inside the English layout.
+        style = MaterialTheme.typography.bodyLarge.copy(fontFamily = Amiri, fontSize = size.sp, lineHeight = (size * 1.85).sp,
+            textAlign = TextAlign.Start, textDirection = TextDirection.Rtl),
         color = MaterialTheme.colorScheme.onSurface,
         modifier = modifier.fillMaxWidth(),
     )
@@ -140,7 +143,8 @@ private fun QuranPartText(part: DhikrPart, quran: QuranData?, size: Int = 22) {
         val g = quran.meta.global(AyahRef(q.sura, a))
         quran.text.ayahs[g] + " " + ayahEnd(a)
     }
-    Text(text, style = MaterialTheme.typography.bodyLarge.copy(fontFamily = AmiriQuran, fontSize = size.sp, lineHeight = (size * 2.05).sp),
+    Text(text, style = MaterialTheme.typography.bodyLarge.copy(fontFamily = AmiriQuran, fontSize = size.sp, lineHeight = (size * 2.05).sp,
+        textAlign = TextAlign.Start, textDirection = TextDirection.Rtl),
         color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.fillMaxWidth().testTag("quran_part_${q.sura}_${q.from}"))
 }
 
@@ -211,7 +215,8 @@ fun AdhkarHomeScreen(vm: MainViewModel, initialQuery: String = "") {
                 val session = if (p.id == Practice.AFTER_PRAYER) latestPrayer(s)?.first ?: Practice.PRAYER_SESSIONS.first() else Practice.MAIN_SESSION
                 val date = if (p.id == Practice.AFTER_PRAYER) latestPrayer(s)?.second?.toString() ?: today else today
                 val (done, total) = Wird.summary(tools.progress, Wird.key(date, p.id, session), items)
-                PracticeCard(p, done, total, str, fmt.num(done), fmt.num(total)) { vm.push(Route.Wird(p.id)) }
+                val sessionName = if (p.id == Practice.AFTER_PRAYER) str.prayer(PrayerKey.valueOf(session.uppercase())) else null
+                PracticeCard(p, done, total, str, fmt.num(done), fmt.num(total), sessionName) { vm.push(Route.Wird(p.id)) }
             }
             val favs = tools.favorites.mapNotNull { lib.item(it) }
             item { SectionTitle(str.adhkarFavorites) }
@@ -248,7 +253,7 @@ private fun SectionTitle(text: String) {
 }
 
 @Composable
-private fun PracticeCard(p: Practice, done: Int, total: Int, str: Strings, doneText: String, totalText: String, onClick: () -> Unit) {
+private fun PracticeCard(p: Practice, done: Int, total: Int, str: Strings, doneText: String, totalText: String, session: String?, onClick: () -> Unit) {
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(22.dp),
@@ -268,7 +273,8 @@ private fun PracticeCard(p: Practice, done: Int, total: Int, str: Strings, doneT
             Spacer(Modifier.height(10.dp))
             LinearProgressIndicator(progress = { if (total == 0) 0f else done.toFloat() / total }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(CircleShape))
             Spacer(Modifier.height(4.dp))
-            Text(str.progressOf(doneText, totalText), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(str.progressOf(doneText, totalText) + (session?.let { "، " + str.wirdSession + " " + it } ?: ""),
+                style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
@@ -295,7 +301,8 @@ private fun DhikrRow(d: Dhikr, lib: AdhkarLibrary, tag: String, onClick: () -> U
         Column(Modifier.padding(14.dp)) {
             Text(str.title(d), style = MaterialTheme.typography.titleSmall)
             if (preview.isNotEmpty()) {
-                Text(preview, style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Amiri, lineHeight = 26.sp), maxLines = 2, overflow = TextOverflow.Ellipsis,
+                Text(preview, style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Amiri, lineHeight = 26.sp, textDirection = TextDirection.Rtl),
+                    maxLines = 2, overflow = TextOverflow.Ellipsis,
                     color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 2.dp))
             }
             if (cat != null) Text(if (str.isAr) cat.titleAr else cat.titleEn, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary,
@@ -631,7 +638,7 @@ private fun WirdCard(d: Dhikr, taps: Int, practice: String, quran: QuranData?, o
     ) {
         Column(Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(str.title(d), style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f).clickable(onClick = onOpen))
+                Text(str.title(d), style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
                 if (pos.done) {
                     Icon(SakinaIcons.Check, str.wirdDone, Modifier.size(22.dp).testTag("wird_done_${d.id}"), tint = doneColor)
                 } else {
@@ -651,6 +658,10 @@ private fun WirdCard(d: Dhikr, taps: Int, practice: String, quran: QuranData?, o
                     color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f))
                 if (taps > 0) OutlinedButton(onClick = onUntap, contentPadding = PaddingValues(horizontal = 10.dp), modifier = Modifier.height(32.dp).testTag("wird_minus_${d.id}")) {
                     Text("−1", style = MaterialTheme.typography.labelLarge)
+                }
+                // The whole card counts; the source and context open from this button.
+                IconButton(onClick = onOpen, modifier = Modifier.size(36.dp).testTag("wird_open_${d.id}")) {
+                    Icon(SakinaIcons.Info, str.sourceTitle, Modifier.size(20.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }

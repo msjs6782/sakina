@@ -59,8 +59,8 @@ tap_scroll() {
 
 # Scrolls up until a node is on screen, without tapping it.
 scroll_to() {
-  local mode="$1"; local needle="$2"
-  for _ in 1 2 3 4 5 6; do
+  local mode="$1"; local needle="$2"; local tries="${3:-6}"
+  for _ in $(seq 1 "$tries"); do
     adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1
     adb shell cat /sdcard/ui.xml > "$OUT/.ui.xml" 2>/dev/null
     python3 "$HERE/find_node.py" "$OUT/.ui.xml" "$needle" "$mode" >/dev/null && return 0
@@ -610,7 +610,7 @@ tools_json | grep -q "\"$TODAY|item|-\":{\"tasbih_33\":3}" && check item_counter
 
 # Morning set: tap to count, completion, and no mixing with the evening set.
 shot 160_wird_morning 8 "${A[@]}" --es demo_route wird:morning
-scroll_to id wird_item_bismillah_la_yadurr
+scroll_to id wird_count_bismillah_la_yadurr 16
 for _ in 1 2 3 4; do tap id wird_item_bismillah_la_yadurr; done
 sleep 1; cap 161_wird_morning_counted
 ui_has id wird_done_bismillah_la_yadurr && check wird_complete PASS "done after 3 taps (4th ignored)" || check wird_complete FAIL "not done"
@@ -619,7 +619,7 @@ echo "$J" | grep -q "\"$TODAY|morning|main\":{\"bismillah_la_yadurr\":3}" && che
 echo "$J" | grep -q "|evening|" && check wird_no_mixing FAIL "evening counter touched" || check wird_no_mixing PASS "evening set untouched"
 shot 162_wird_evening 8 "${A[@]}" --es demo_wird morning:main:bismillah_la_yadurr=3,sayyid_istighfar=1 --es demo_route wird:evening
 T=$(ui_text wird_progress); echo "$T" | grep -q "٠ من" && check wird_evening_separate PASS "$T" || check wird_evening_separate FAIL "$T"
-scroll_to id wird_text_bika_asbahna_0
+scroll_to id wird_text_bika_asbahna_0 12
 ui_text wird_text_bika_asbahna_0 | plain | grep -q "النشور" && check wird_evening_wording PASS "evening wording shown" || check wird_evening_wording FAIL "$(ui_text wird_text_bika_asbahna_0)"
 # After-prayer set opens on the latest prayer (Asr at 16:20 in Riyadh); each prayer has its own session.
 shot 163_wird_after_prayer 8 "${A[@]}" --es demo_route wird:after_prayer
@@ -633,12 +633,12 @@ cap 165_wird_reminder_on
 T=$(ui_text wird_reminder_state); echo "$T" | grep -q "٦:٣٠" && check wird_reminder PASS "$T" || check wird_reminder FAIL "$T"
 tap id wird_reminder && sleep 2 && cap 166_reminders_with_link
 scroll_to id reminder_open_morning && tap id reminder_open_morning && sleep 2
-scroll_to id wird_item_sayyid_istighfar && check reminder_to_wird PASS "reminders link back to the set" || check reminder_to_wird FAIL "not opened"
+scroll_to id wird_item_sayyid_istighfar 12 && check reminder_to_wird PASS "reminders link back to the set" || check reminder_to_wird FAIL "not opened"
 # Progress survives a restart (no reset).
 adb shell am force-stop "$PKG"; sleep 1
 adb shell am start -W -n "$PKG/$ACT" --es demo_now "$T_AFTERNOON" "${FREEZE[@]}" --es demo_route wird:morning >/dev/null; sleep 7
 cap 167_wird_after_restart
-scroll_to id wird_done_bismillah_la_yadurr && check wird_persisted PASS "still done after restart" || check wird_persisted FAIL "lost"
+scroll_to id wird_done_bismillah_la_yadurr 16 && check wird_persisted PASS "still done after restart" || check wird_persisted FAIL "lost"
 
 # Tasbih: target, taps, reset and undo of the last real change, custom target.
 shot 170_tasbih 7 "${A[@]}" --es demo_route tasbih
@@ -653,7 +653,7 @@ C=$(ui_text tasbih_count); [ "$C" = "٥" ] && check tasbih_undo PASS "reset undo
 shot 172_tasbih_target 7 "${A[@]}" --es demo_tasbih 32:33:سبحان_الله --es demo_route tasbih
 tap id tasbih_tap && sleep 1 && cap 173_tasbih_reached
 T=$(ui_text tasbih_rounds); echo "$T" | grep -q "بلغت الهدف" && check tasbih_target PASS "$T" || check tasbih_target FAIL "$T"
-tap id tasbih_target_custom && sleep 1 && tap id tasbih_target_input && adb shell input text "500" && tap id tasbih_target_save && sleep 1
+scroll_to id tasbih_target_custom && tap id tasbih_target_custom && sleep 1 && tap id tasbih_target_input && adb shell input text "500" && tap id tasbih_target_save && sleep 1
 cap 174_tasbih_custom
 tools_json | grep -q '"target":500' && check tasbih_custom PASS "custom target saved" || check tasbih_custom FAIL "$(tools_json | head -c 300)"
 
@@ -670,10 +670,14 @@ for _ in 1 2 3 4 5 6; do point_to 241.0; sleep 1; done
 cap 181_qibla_aligned
 S=$(ui_text compass_state); H=$(ui_text compass_heading)
 echo "$S" | grep -q "متجه نحو القبلة" && check compass_aligned PASS "$S ($H)" || check compass_aligned FAIL "$S ($H)"
-for _ in 1 2 3 4 5 6; do point_to 211.0; sleep 1; done
+# The system's fused rotation vector follows a turn through the gyroscope, which the emulator keeps still;
+# so for each new orientation the screen is reopened and the fusion starts again from the new readings.
+point_to 211.0; sleep 1
+start "${A[@]}" --es demo_route qibla; sleep 8
 cap 182_qibla_turn_right
 S=$(ui_text compass_state); echo "$S" | grep -qE "يمينًا (٢٩|٣٠|٣١)°" && check compass_turn PASS "$S" || check compass_turn FAIL "$S ($(ui_text compass_heading))"
-sensor acceleration 0:6.94:6.94; sleep 4
+sensor acceleration 0:6.94:6.94; sleep 1
+start "${A[@]}" --es demo_route qibla; sleep 8
 cap 183_qibla_tilt
 ui_has id compass_issue_tilt && check compass_tilt PASS "tilt warning at 45°" || check compass_tilt FAIL "no tilt warning"
 point_to 211.0; sensor magnetic-field 0:80:-40; sleep 4
@@ -688,13 +692,14 @@ start "${A[@]}" --es demo_route qibla; sleep 6
 save_log
 adb shell input keyevent 3; sleep 2
 qlog | grep -q "sensors stop" && check qibla_stop_home PASS "stopped in the background" || check qibla_stop_home FAIL "$(qlog | tail -3)"
-# Vibration on reliable alignment (option on).
+# Turning into alignment with the option on: the app's accelerometer + magnetometer path follows live changes.
 point_to 211.0
-start "${A[@]}" --es demo_route qibla; sleep 6
+start "${A[@]}" --es demo_compass accelmag --es demo_route qibla; sleep 6
 scroll_to contains "اهتزاز عند المحاذاة" && tap contains "اهتزاز عند المحاذاة" && sleep 1
 save_log
 for _ in 1 2 3 4 5 6; do point_to 241.0; sleep 1; done
 wait_qlog "aligned offset=" 5 && check compass_align_event PASS "$(qlog | grep aligned | tail -1)" || check compass_align_event FAIL "no alignment event"
+tools_json | grep -q '"vibrateOnAlign":true' && check compass_vibrate_option PASS "option saved" || check compass_vibrate_option FAIL "$(tools_json | head -c 300)"
 # The app's own accelerometer + magnetometer path gives the same answer.
 point_to 241.0
 shot 185_qibla_accelmag 9 "${A[@]}" --es demo_compass accelmag --es demo_route qibla
@@ -703,17 +708,18 @@ S=$(ui_text compass_state); echo "$S" | grep -q "متجه نحو القبلة" &
 # Without a compass: the bearing and the map still work.
 shot 186_qibla_no_sensor 8 "${A[@]}" --es demo_compass none --es demo_route qibla
 ui_has id compass_issue_no_sensor && check compass_none PASS "no-sensor warning" || check compass_none FAIL "missing"
-scroll_to id qibla_map && sleep 2 && cap 187_qibla_map_centered
-tap id map_mode_world && sleep 3 && scroll_to id qibla_map && cap 188_qibla_map_world
+scroll_to id map_note && sleep 3 && cap 187_qibla_map_centered
+qlog | grep -q "map drawn mode=CENTERED" && check qibla_map PASS "centred map drawn" || check qibla_map FAIL "no map drawn"
+tap id map_mode_world && sleep 3 && scroll_to id map_note && cap 188_qibla_map_world
 shot 189_qibla_newyork 9 --ez demo_reset true --ez demo_onboarded true --es demo_manual New_York,40.7128,-74.0060,America/New_York --es demo_now "$T_AFTERNOON" "${FREEZE[@]}" --es demo_compass none --es demo_route qibla
 B=$(ui_text qibla_bearing); echo "$B" | grep -q "٥٨" && check qibla_newyork PASS "$B" || check qibla_newyork FAIL "$B"
-scroll_to id qibla_map && sleep 2 && cap 190_qibla_map_newyork
+scroll_to id map_note && sleep 3 && cap 190_qibla_map_newyork
 if [ "$SUITE" = "full" ]; then
   shot 191_adhkar_english 8 "${A[@]}" --es demo_lang en --es demo_route adhkar
   shot 192_wird_dark 8 "${A[@]}" --es demo_theme DARK --es demo_route wird:sleep
   shot 193_item_english 8 "${A[@]}" --es demo_lang en --es demo_route adhkar_item:asbahna_mulk
   shot 194_qibla_dark_world 9 "${A[@]}" --es demo_theme DARK --es demo_qibla_map world --es demo_compass none --es demo_route qibla
-  scroll_to id qibla_map && sleep 2 && cap 195_qibla_dark_map
+  scroll_to id map_note && sleep 3 && cap 195_qibla_dark_map
   shot 196_qibla_english 9 "${A[@]}" --es demo_lang en --es demo_compass none --es demo_route qibla
   shot 197_tasbih_dark 7 "${A[@]}" --es demo_theme DARK --es demo_tasbih 12:99:الحمد_لله --es demo_route tasbih
 fi

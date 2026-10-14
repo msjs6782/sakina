@@ -52,6 +52,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -273,7 +276,9 @@ private fun CompassCard(vm: MainViewModel, bearing: Double, field: MagneticField
         }
         if (source != CompassSource.NONE) NoteText(str.compassHowTo, Modifier.padding(top = 4.dp))
         NoteText(str.compassSource(source), Modifier.padding(top = 4.dp).testTag("compass_source"))
-        SwitchRow(vibrateOnAlign, str.vibrateAlign) { on -> vm.updateTools { t -> t.copy(qibla = t.qibla.copy(vibrateOnAlign = on)) } }
+        if (source != CompassSource.NONE) {
+            SwitchRow(vibrateOnAlign, str.vibrateAlign) { on -> vm.updateTools { t -> t.copy(qibla = t.qibla.copy(vibrateOnAlign = on)) } }
+        }
     }
 }
 
@@ -288,6 +293,9 @@ private fun CompassDial(trueHeading: Double?, bearing: Double, aligned: Boolean,
     val face = MaterialTheme.colorScheme.surfaceContainerHigh
     val north = MaterialTheme.colorScheme.error
     val desc = str.compassTitle
+    val measurer = rememberTextMeasurer()
+    val labels = if (str.isAr) listOf("ش", "ق", "ج", "غ") else listOf("N", "E", "S", "W")
+    val labelStyle = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
     Canvas(modifier.semantics { contentDescription = desc }) {
         val c = Offset(size.width / 2, size.height / 2)
         val r = size.minDimension / 2 * 0.92f
@@ -307,6 +315,13 @@ private fun CompassDial(trueHeading: Double?, bearing: Double, aligned: Boolean,
                 moveTo(c.x, c.y - r * 0.78f); lineTo(c.x - r * 0.06f, c.y - r * 0.62f); lineTo(c.x + r * 0.06f, c.y - r * 0.62f); close()
             }
             drawPath(n, north)
+            // Cardinal letters, turning with the dial like a compass card.
+            labels.forEachIndexed { i, text ->
+                val layout = measurer.measure(text, labelStyle.copy(color = if (i == 0) north else muted))
+                rotate(i * 90f, c) {
+                    drawText(layout, topLeft = Offset(c.x - layout.size.width / 2f, c.y - r * 0.60f))
+                }
+            }
             // Qibla: a line from the centre to the Kaaba mark at the bearing.
             val a = Math.toRadians(bearing)
             drawLine(kaaba, c, pt(c, r * 0.70f, a), strokeWidth = 4.dp.toPx(), cap = StrokeCap.Round)

@@ -942,6 +942,7 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val tasbihUndo get() = t("تراجع", "Undo")
     val tasbihUndoNote get() = t("يتراجع عن آخر تعديل فعلي: ضغطة أو تصفير أو تغيير الهدف أو العبارة.", "Undoes the last real change: a tap, a reset, or a new target or phrase.")
     fun tasbihRounds(n: String) = t("الدورات المكتملة: $n", "Completed rounds: $n")
+    fun tasbihTotal(n: String) = t("المجموع $n", "total $n")
     val tasbihLabel get() = t("ما تسبّح به (اختياري)", "What you are saying (optional)")
     val tasbihLabelHint get() = t("مثل: سبحان الله", "e.g. Subhan Allah")
     val tasbihReached get() = t("بلغت الهدف", "Target reached")

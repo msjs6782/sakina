@@ -112,7 +112,7 @@ fun TasbihScreen(vm: MainViewModel) {
                 }
                 if (t.target > 0) {
                     Text(
-                        (if (t.rounds > 0 && t.inRound == 0) str.tasbihReached + " · " else "") + str.tasbihRounds(fmt.num(t.rounds)) + " · " + fmt.num(t.count),
+                        (if (t.rounds > 0 && t.inRound == 0) str.tasbihReached + "، " else "") + str.tasbihRounds(fmt.num(t.rounds)) + "، " + str.tasbihTotal(fmt.num(t.count)),
                         style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, modifier = Modifier.testTag("tasbih_rounds"),
                     )
                 }
@@ -146,7 +146,8 @@ fun TasbihScreen(vm: MainViewModel) {
         }
     }
     if (customOpen) {
-        var text by remember { mutableStateOf(if (t.target > 0) t.target.toString() else "") }
+        // Starts empty unless the current target is already a custom one, so typing does not append to "33".
+        var text by remember { mutableStateOf(if (t.target > 0 && t.target !in TasbihState.PRESET_TARGETS) t.target.toString() else "") }
         val n = text.filter { it.isDigit() }.take(5).toIntOrNull()
         val valid = n != null && n in 1..TasbihState.MAX_TARGET
         AlertDialog(
