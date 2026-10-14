@@ -303,6 +303,8 @@ private fun TopBar(vm: MainViewModel, d: QuranData, page: Int, a: MenuActions, o
                     a.khatma?.let { k ->
                         DropdownMenuItem(text = { Text(str.khatmaRecordHere(fmt.num(page))) }, leadingIcon = { Icon(SakinaIcons.Check, null) }, onClick = { k(); onMenuClose() })
                     }
+                    DropdownMenuItem(text = { Text(str.listenThisSurah) }, leadingIcon = { Icon(SakinaIcons.Headphones, null) },
+                        onClick = { onMenuClose(); vm.push(Route.Listen(suras.first())) }, modifier = Modifier.testTag("mushaf_listen"))
                     DropdownMenuItem(text = { Text(str.dlTitle) }, leadingIcon = { Icon(SakinaIcons.Download, null) },
                         onClick = { onMenuClose(); vm.push(Route.MushafDownloads) }, modifier = Modifier.testTag("mushaf_downloads"))
                 }

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">سكينة</string>
+    <string name="recitation_channel">تلاوة القرآن</string>
+    <string name="seek_back">رجوع ١٠ ثوانٍ</string>
+    <string name="seek_forward">تقديم ١٠ ثوانٍ</string>
 </resources>

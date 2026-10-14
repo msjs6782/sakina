@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Sakina</string>
+    <string name="recitation_channel">Quran recitation</string>
+    <string name="seek_back">Back 10 seconds</string>
+    <string name="seek_forward">Forward 10 seconds</string>
 </resources>

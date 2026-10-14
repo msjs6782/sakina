@@ -115,6 +115,23 @@ private fun QuranHomeContent(vm: MainViewModel, d: QuranData) {
             qs.lastRead?.let { lr ->
                 item { ContinueCard(vm, d, lr.sura, lr.aya, lr.page) }
             }
+            item {
+                Surface(
+                    onClick = { vm.push(Route.Listen()) },
+                    shape = RoundedCornerShape(22.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                    modifier = Modifier.fillMaxWidth().testTag("quran_listen"),
+                ) {
+                    Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(SakinaIcons.Headphones, null, Modifier.size(28.dp), tint = MaterialTheme.colorScheme.primary)
+                        Spacer(Modifier.width(12.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(str.listenTitle, style = MaterialTheme.typography.titleMedium)
+                            Text(str.listenEntry, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                }
+            }
             item { KhatmaCard(vm, qs) }
             item {
                 Segmented(listOf(str.tabSurahs, str.tabJuz, str.tabBookmarks), tab) { tab = it }

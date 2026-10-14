@@ -70,6 +70,10 @@ object SakinaIcons {
     val Lines: ImageVector by lazy { icon("Lines", "M5 6.5 H19 M5 10.5 H19 M5 14.5 H19 M5 18.5 H13") }
     val Bookmark: ImageVector by lazy { icon("Bookmark", "M7 4 H17 V20 L12 16.2 L7 20 Z") }
     val ListIndex: ImageVector by lazy { icon("ListIndex", "M9.5 6 H20 M9.5 12 H20 M9.5 18 H20 M4.5 6 V6.1 M4.5 12 V12.1 M4.5 18 V18.1") }
+    val Pause: ImageVector by lazy { icon("Pause", "M8.5 5.5 V18.5 M15.5 5.5 V18.5") }
+    val Rewind: ImageVector by lazy { icon("Rewind", "M11 7 L5 12 L11 17 Z M19 7 L13 12 L19 17 Z") }
+    val FastForward: ImageVector by lazy { icon("FastForward", "M5 7 L11 12 L5 17 Z M13 7 L19 12 L13 17 Z") }
+    val Headphones: ImageVector by lazy { icon("Headphones", "M4.5 15.5 V12.5 A7.5 7.5 0 0 1 19.5 12.5 V15.5 M4.5 14.5 H7.5 V20 H4.5 Z M16.5 14.5 H19.5 V20 H16.5 Z") }
     val More: ImageVector by lazy { icon("More", "M12.9 5.5 A0.9 0.9 0 1 1 11.1 5.5 A0.9 0.9 0 1 1 12.9 5.5 Z M12.9 12 A0.9 0.9 0 1 1 11.1 12 A0.9 0.9 0 1 1 12.9 12 Z M12.9 18.5 A0.9 0.9 0 1 1 11.1 18.5 A0.9 0.9 0 1 1 12.9 18.5 Z") }
     val Storage: ImageVector by lazy { icon("Storage", "M4 6.5 C4 4.5 20 4.5 20 6.5 V17.5 C20 19.5 4 19.5 4 17.5 Z M4 6.5 C4 8.5 20 8.5 20 6.5 M4 12 C4 14 20 14 20 12") }
 }

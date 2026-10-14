@@ -88,6 +88,14 @@ stored_size() { adb shell run-as "$PKG" stat -c %s "files/mushaf/pages/$1.pdf" 2
 stored_count() { adb shell run-as "$PKG" ls files/mushaf/pages 2>/dev/null | tr -d '\r' | grep -c '\.pdf$'; }
 part_count() { adb shell run-as "$PKG" ls files/mushaf/pages 2>/dev/null | tr -d '\r' | grep -c '\.part$'; }
 
+rlog() { adb logcat -d -s SakinaRecitation:* 2>/dev/null; }
+# wait_rlog <regex> <seconds>: waits for a recitation log line.
+wait_rlog() {
+  for _ in $(seq 1 "$2"); do rlog | grep -qE "$1" && return 0; sleep 1; done
+  return 1
+}
+session_dump() { adb shell dumpsys media_session 2>/dev/null | tr -d '\r' | grep -A 14 "package=$PKG" | head -40; }
+
 # Finds a node by text (exact), text (contains) or test tag (id) in a UI dump and taps its centre.
 tap() {
   local mode="$1"; local needle="$2"; local xy=""
@@ -395,6 +403,158 @@ if [ "$SUITE" = "full" ]; then
 fi
 save_log
 
+# ---------- Phase 5: listening (MP3Quran recitations, Media3 session) ----------
+save_log
+if [ "$SDK" -ge 33 ]; then adb shell pm grant "$PKG" android.permission.POST_NOTIFICATIONS; fi
+if [ "$SDK" -ge 31 ]; then adb shell appops set "$PKG" SCHEDULE_EXACT_ALARM allow; fi
+L0=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh --es demo_now "$T_AFTERNOON" "${FREEZE[@]}" --ez demo_diagnostics true --el demo_idle_ms 25000)
+L=("${L0[@]}" --ez demo_recitations_clear true)
+adb logcat -c
+start "${L[@]}" --es demo_tab quran
+sleep 8
+tap id quran_listen && sleep 3 && cap 130_listen
+# Streaming Al-Fatiha by Alafasy, started by a tap.
+tap id listen_play_1
+if wait_rlog "playing alafasy:1" 40; then
+  check stream_play PASS "$(rlog | grep -o 'load alafasy:1 from .*' | head -1)" critical
+else
+  check stream_play FAIL "$(rlog | tail -4 | tr '\n' ' ')" critical
+fi
+sleep 3; cap 131_listen_playing
+session_dump > "$OUT/media_session.txt"
+grep -q "state=3" "$OUT/media_session.txt" && check media_session PASS "MediaSession is playing" critical || check media_session FAIL "see media_session.txt" critical
+N=$(notif_posted 4001)
+[ "$N" -ge 1 ] && check media_notification PASS "notification posted" critical || check media_notification FAIL "no media notification" critical
+shade_open; cap 132_listen_notification
+# Pause from the notification.
+if tap exact "Pause"; then
+  wait_rlog "paused at" 10 && check notif_pause PASS "paused from the notification" || check notif_pause FAIL "no pause logged"
+else
+  check notif_pause FAIL "no Pause button in the notification"
+fi
+shade_close
+# Speed and seeking from the app.
+tap id listen_toggle && sleep 2
+tap id speed_1.25 && sleep 2
+session_dump > "$OUT/media_session_speed.txt"
+grep -q "speed=1.25" "$OUT/media_session_speed.txt" && check speed PASS "speed 1.25 in the session" || check speed FAIL "see media_session_speed.txt"
+tap id listen_forward && sleep 2 && cap 133_listen_speed_seek
+# The adhan takes audio focus: the recitation pauses and does not resume by itself afterwards.
+adb logcat -c
+adb shell am start -n "$PKG/$ACT" --es demo_test ADHAN:3 >/dev/null
+if wait_rlog "audio focus lost" 25; then
+  sleep 6
+  shade_open; tap exact "إيقاف" >/dev/null 2>&1 || true; shade_close
+  sleep 8
+  RESUMED=$(rlog | grep -c "playing alafasy")
+  REGAINED=$(rlog | grep -c "audio focus regained")
+  [ "$RESUMED" -eq 0 ] && check focus_no_resume PASS "paused for the adhan; focus back ($REGAINED) without resuming" critical || check focus_no_resume FAIL "playback resumed by itself" critical
+else
+  check focus_no_resume FAIL "focus loss not seen: $(rlog | tail -3 | tr '\n' ' ')" critical
+fi
+cap 134_listen_after_adhan
+# Quiet mode stops the recitation and blocks playing until it ends.
+tap id listen_toggle; sleep 3
+adb logcat -c
+adb shell am start -n "$PKG/$ACT" --ei demo_quiet 30 >/dev/null
+wait_rlog "session ended: quiet mode" 15 && check quiet_stops PASS "quiet mode ended the session" critical || check quiet_stops FAIL "$(rlog | tail -2 | tr '\n' ' ')" critical
+sleep 2
+tap id listen_play_1; sleep 3
+rlog | grep -q "play refused: Sakina quiet mode is on" && check quiet_blocks PASS "play refused during quiet" || check quiet_blocks FAIL "play not refused"
+cap 135_listen_quiet
+adb shell am start -n "$PKG/$ACT" --ei demo_quiet 0 >/dev/null; sleep 2
+
+# Download Al-Ikhlas (with its timing map), play it from the device, and repeat ayahs 1-2 three times.
+adb logcat -c
+start "${L0[@]}" --es demo_route listen:112
+sleep 7
+tap id listen_download_112
+if wait_rlog "downloaded alafasy:112" 60; then
+  check download_recording PASS "$(rlog | grep -o 'downloaded alafasy:112.*' | head -1)" critical
+else
+  check download_recording FAIL "$(rlog | tail -3 | tr '\n' ' ')" critical
+fi
+wait_rlog "timing alafasy:112" 30
+rlog | grep -q "timing alafasy:112: valid, 4 ayahs" && check timing_valid PASS "Al-Ikhlas timing map checked: 4 ayahs" critical || check timing_valid FAIL "$(rlog | grep timing | tail -1)" critical
+tap id listen_play_112
+wait_rlog "load alafasy:112 from downloaded file" 15 && check play_downloaded PASS "played from the device" critical || check play_downloaded FAIL "$(rlog | grep 'load alafasy:112' | tail -1)" critical
+sleep 4
+scroll_to id repeat_start
+tap id repeat_to_plus; sleep 1
+cap 136_listen_repeat_setup
+adb logcat -c
+tap id repeat_start
+if wait_rlog "repeat finished after 3 passes" 120; then
+  P=$(rlog | grep -c "repeat pass [12] done; again")
+  [ "$P" -eq 2 ] && check repeat_range PASS "ayahs 1-2 played 3 times, then paused" critical || check repeat_range FAIL "passes logged: $P" critical
+else
+  check repeat_range FAIL "$(rlog | grep repeat | tail -3 | tr '\n' ' ')" critical
+fi
+cap 137_listen_repeat_done
+# A timing map that does not match its surah keeps repeat off (Husary, Al-Fatiha: 6 ayahs instead of 7).
+adb logcat -c
+adb shell input swipe 540 700 540 1900 300; sleep 1
+tap id reciter_husary && sleep 1
+scroll_to id listen_play_1 && tap id listen_play_1
+wait_rlog "playing husary:1" 40
+sleep 2
+scroll_to id timing_download && tap id timing_download
+wait_rlog "timing husary:1" 30
+sleep 1
+if rlog | grep -q "timing husary:1: invalid NUMBERING" && ui_has id timing_invalid; then
+  check timing_invalid PASS "Husary Al-Fatiha map rejected; repeat disabled" critical
+else
+  check timing_invalid FAIL "$(rlog | grep timing | tail -1)" critical
+fi
+cap 138_listen_timing_invalid
+# Cancel a large download: no partial file stays.
+adb logcat -c
+adb shell input swipe 540 700 540 1900 300; sleep 1
+tap id reciter_alafasy && sleep 1
+scroll_to id listen_download_2 && tap id listen_download_2 && sleep 4
+tap id listen_cancel_2
+wait_rlog "download cancelled alafasy:2" 20
+PARTS=$(adb shell run-as "$PKG" ls files/recitations/alafasy 2>/dev/null | tr -d '\r' | grep -c part)
+rlog | grep -q "download cancelled alafasy:2" && [ "$PARTS" -eq 0 ] && check download_cancel PASS "cancelled, no partial file" || check download_cancel FAIL "parts=$PARTS"
+# Playback goes on after leaving the screen.
+scroll_to id listen_play_1 && tap id listen_play_1
+wait_rlog "playing alafasy:1" 40
+adb logcat -c
+adb shell input keyevent 4; sleep 4
+session_dump > "$OUT/media_session_left.txt"
+grep -q "state=3" "$OUT/media_session_left.txt" && check leave_screen PASS "still playing after leaving the screen" || check leave_screen FAIL "not playing after leaving"
+cap 139_quran_home_playing
+# A pause longer than the limit (25 s here, ten minutes in the app) ends the session and removes the notification.
+tap id quran_listen && sleep 3
+tap id listen_toggle
+if wait_rlog "session ended: paused for 25 s" 45; then
+  sleep 2; N=$(notif_posted 4001)
+  [ "$N" -eq 0 ] && check idle_end PASS "paused session ended; notification removed" critical || check idle_end FAIL "notification still shown" critical
+else
+  check idle_end FAIL "$(rlog | tail -3 | tr '\n' ' ')" critical
+fi
+cap 140_listen_after_idle
+# Delete the download; the diagnostics report can be previewed on the device before any sharing.
+start "${L0[@]}" --es demo_route listen:112
+sleep 7
+tap id listen_delete_112 && sleep 1 && tap id listen_delete_ok && sleep 2
+rlog | grep -q "deleted alafasy:112" && check delete_recording PASS "deleted" || check delete_recording FAIL "no delete logged"
+scroll_to id diag_preview && tap id diag_preview && sleep 2 && cap 141_listen_diagnostics
+ui_has id diag_report && check diagnostics PASS "report shown on the device" || check diagnostics FAIL "no report"
+adb shell input keyevent 4; sleep 1
+if [ "$SUITE" = "full" ]; then
+  shot 142_listen_english 8 "${L0[@]}" --es demo_lang en --es demo_route listen
+  shot 143_listen_dark 8 "${L0[@]}" --es demo_theme DARK --es demo_reciter minshawi --es demo_route listen:36
+  # Lock-screen controls while playing.
+  tap id listen_play_36; wait_rlog "playing minshawi:36" 40
+  adb shell input keyevent 26; sleep 2; adb shell input keyevent 26; sleep 3
+  cap 144_lockscreen_media
+  adb shell input keyevent 82; sleep 1; adb shell input swipe 540 1800 540 600 300; sleep 2
+  adb shell am start -n "$PKG/$ACT" >/dev/null; sleep 2
+  tap id listen_stop; sleep 2
+fi
+save_log
+
 # ---------- Phase 2: alerts (real AlarmManager, notifications, playback) ----------
 save_log
 REAL=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh,jeddah --es demo_active riyadh)
@@ -539,6 +699,8 @@ if [ "$SUITE" = "full" ]; then
   else
     check reboot_exact FAIL "$(grep Scheduled "$OUT/alerts_after_reboot.txt" | tail -1)" critical
   fi
+  # No recitation comes back after a reboot.
+  rlog | grep -q "service created" && check recitation_no_resume FAIL "recitation service started after boot" critical || check recitation_no_resume PASS "nothing resumed after boot" critical
   cat "$OUT/logcat_part3.txt" >> "$OUT/logcat_part2.txt"; rm -f "$OUT/logcat_part3.txt"
 fi
 

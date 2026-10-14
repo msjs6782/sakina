@@ -123,6 +123,13 @@ object Demo {
                 }
             }
         }
+        e.getString("demo_reciter")?.let { key ->
+            runBlocking { quranState.update { it.copy(listen = it.listen.copy(reciter = key)) } }
+        }
+        if (e.getBoolean("demo_recitations_clear")) {
+            java.io.File(app.filesDir, "recitations").deleteRecursively()
+        }
+        if (e.containsKey("demo_diagnostics")) com.sakina.app.audio.PlaybackDiagnostics.setEnabled(app, e.getBoolean("demo_diagnostics"))
         e.getString("demo_bookmarks")?.let { spec ->
             runBlocking {
                 quranState.update { st ->
@@ -142,6 +149,7 @@ object Demo {
             runBlocking { quranState.update { it.copy(khatma = plan) } }
         }
         com.sakina.app.ui.mushaf.MushafDebug.initialZoom = e.getFloat("demo_zoom", 1f)
+        if (e.containsKey("demo_idle_ms")) com.sakina.app.audio.RecitationService.idleEndMs = e.getLong("demo_idle_ms")
         if (e.getBoolean("demo_mushaf_clear")) runBlocking {
             app.mushaf.init()
             app.mushaf.delete((1..com.sakina.app.core.mushaf.MushafManifest.PAGES).toList())
@@ -170,6 +178,7 @@ object Demo {
                     Route.QuranReader(d.meta.global(com.sakina.app.core.quran.AyahRef(su, ay)), highlight = e.getBoolean("demo_highlight"))
                 }
                 r.startsWith("quran_search:") -> Route.QuranSearch(r.removePrefix("quran_search:"))
+                r.startsWith("listen:") -> Route.Listen(r.removePrefix("listen:").toInt())
                 r.startsWith("mushaf:") -> {
                     val f = r.removePrefix("mushaf:").split(':').map { it.toInt() }
                     val focus = if (f.size >= 3) runBlocking { app.quran.load() }.meta.global(com.sakina.app.core.quran.AyahRef(f[1], f[2])) else -1
@@ -181,6 +190,23 @@ object Demo {
         val view = e.getString("demo_view")?.let { TimesView.valueOf(it.uppercase()) }
         Log.i(TAG, "applied tab=$tab routes=$routes view=$view")
         return DemoStart(tab, routes, view)
+    }
+
+    /**
+     * Extras applied to the running app without restarting it (CI only): a test alert or quiet mode
+     * while a recitation plays.
+     */
+    fun applyOnNew(app: SakinaApp, intent: Intent?) {
+        if (!BuildConfig.DEBUG) return
+        val e = intent?.extras ?: return
+        if (e.containsKey("demo_quiet")) {
+            val m = e.getInt("demo_quiet")
+            if (m > 0) AlertsCenter.startQuiet(app, java.time.Duration.ofMinutes(m.toLong())) else AlertsCenter.endQuiet(app)
+        }
+        e.getString("demo_test")?.split(':')?.let { f ->
+            AlertsCenter.test(app, AlertMode.valueOf(f[0].uppercase()), f.getOrNull(1)?.toLongOrNull() ?: 5)
+        }
+        Log.i(TAG, "applied on new intent: ${e.keySet().filter { it.startsWith("demo_") }}")
     }
 
     private fun route(name: String): Route? = when (name) {
@@ -203,6 +229,7 @@ object Demo {
         "khatma" -> Route.Khatma
         "quran_sources" -> Route.QuranSources
         "mushaf_downloads" -> Route.MushafDownloads
+        "listen" -> Route.Listen()
         else -> null
     }
 

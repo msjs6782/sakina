@@ -91,12 +91,21 @@ data class LastRead(val sura: Int, val aya: Int, val page: Int, val atEpochMs: L
 @Serializable
 data class Bookmark(val sura: Int, val aya: Int, val createdEpochMs: Long, val note: String = "")
 
+/** Listening choices, remembered between sessions (playback itself never restarts on its own). */
+@Serializable
+data class ListenPrefs(
+    val reciter: String = "alafasy",
+    val speed: Float = 1f,
+    val repeatTimes: Int = 3,
+)
+
 @Serializable
 data class QuranState(
     val reader: ReaderPrefs = ReaderPrefs(),
     val lastRead: LastRead? = null,
     val bookmarks: List<Bookmark> = emptyList(),
     val khatma: KhatmaPlan? = null,
+    val listen: ListenPrefs = ListenPrefs(),
 )
 
 private object QuranStateSerializer : Serializer<QuranState> {

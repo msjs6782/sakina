@@ -50,6 +50,8 @@ sealed interface Route {
     /** The printed Mushaf at [page]; [focus] is an ayah (global index) to point out, or -1. */
     data class Mushaf(val page: Int, val focus: Int = -1) : Route
     data object MushafDownloads : Route
+    /** Listening; [sura] scrolls the list to that surah (0 for none). */
+    data class Listen(val sura: Int = 0) : Route
 }
 
 sealed interface GpsUi {
@@ -87,6 +89,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     val mushaf get() = sakina.mushaf
+    val recitations get() = sakina.recitations
+
+    fun deleteRecording(r: com.sakina.app.core.recitation.Recording) {
+        viewModelScope.launch { sakina.recitations.delete(r) }
+    }
 
     /** Opens an ayah in the user's chosen view: the printed page (default) or the text. */
     fun openQuran(global: Int, highlight: Boolean = false) {

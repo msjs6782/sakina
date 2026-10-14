@@ -104,7 +104,14 @@ object AlertsCenter {
         app.alertState.quietUntil = Instant.now().plus(duration)
         app.alertState.log("QUIET", "start_${duration.toMinutes()}m")
         AdhanService.stop(app)
+        com.sakina.app.audio.RecitationService.stopForQuiet(app)
         refresh(app, "quiet")
+    }
+
+    /** True while Sakina's quiet mode is on. */
+    fun isQuiet(context: Context): Boolean {
+        val app = context.applicationContext as SakinaApp
+        return app.alertState.quietUntil?.isAfter(Instant.now()) == true
     }
 
     fun endQuiet(context: Context) {

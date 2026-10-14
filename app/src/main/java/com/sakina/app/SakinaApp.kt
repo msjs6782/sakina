@@ -8,6 +8,7 @@ import com.sakina.app.alerts.SoundLibrary
 import com.sakina.app.data.CityRepository
 import com.sakina.app.data.LocationFetcher
 import com.sakina.app.data.MushafRepository
+import com.sakina.app.data.RecitationRepository
 import com.sakina.app.data.QuranRepository
 import com.sakina.app.data.QuranStateRepository
 import com.sakina.app.data.SettingsRepository
@@ -34,6 +35,8 @@ class SakinaApp : Application() {
         private set
     lateinit var mushaf: MushafRepository
         private set
+    lateinit var recitations: RecitationRepository
+        private set
 
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
@@ -46,6 +49,7 @@ class SakinaApp : Application() {
         quran = QuranRepository(this)
         quranState = QuranStateRepository(this)
         mushaf = MushafRepository(this, appScope)
+        recitations = RecitationRepository(this, appScope)
         // Whenever anything that affects alerts changes (and once at start), rebuild the alarm chain.
         appScope.launch {
             settings.settings

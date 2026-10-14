@@ -48,6 +48,9 @@ fun QuranSourcesScreen(vm: MainViewModel) {
                         Text(str.mushafSourcesBody, style = MaterialTheme.typography.bodyMedium)
                         TextButton(onClick = { vm.push(Route.MushafDownloads) }) { Text(str.dlTitle) }
                     }
+                    SectionCard(title = str.listenTitle, icon = SakinaIcons.Headphones) {
+                        Text(str.listenSources, style = MaterialTheme.typography.bodyMedium)
+                    }
                     Block(str.copyrightBlock, d.textHeader)
                     Block(str.translationTitle, d.translation.header)
                     Block(str.tafsirTitle, d.tafsir.header)

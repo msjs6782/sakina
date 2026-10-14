@@ -767,6 +767,78 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
         "المصدر: النسخة الرقمية لمصحف المدينة النبوية برواية حفص، طبعة ١٤٤١هـ، من مجمع الملك فهد لطباعة المصحف الشريف: ٦٠٤ ملفات PDF في الملف ${iso("1441-AI-hafs.zip")}. تُجلب كل صفحة على حدة من نسخة مطابقة لهذا الملف على ${iso("archive.org")}، ولا تُعرض إلا بعد مطابقة حجمها وبصمتي ${iso("CRC-32")} و${iso("SHA-256")}.",
         "Source: the digital Madinah Mushaf, Hafs, 1441H edition, by the King Fahd Glorious Quran Printing Complex: 604 PDF files in 1441-AI-hafs.zip. Each page is fetched on its own from an identical copy of that file on archive.org, and is shown only after its size, CRC-32 and SHA-256 match.",
     )
+    // Listening
+    val listenTitle get() = t("الاستماع للقرآن", "Listen to the Quran")
+    val listenEntry get() = t("استمع إلى تلاوة مرتلة بصوت العفاسي أو المنشاوي أو الحصري، عبر الإنترنت أو من تنزيلاتك.", "Murattal recitation by Alafasy, al-Minshawi or al-Husary, streamed or from your downloads.")
+    val listenThisSurah get() = t("استمع لهذه السورة", "Listen to this surah")
+    val reciterLabel get() = t("القارئ", "Reciter")
+    fun reciterName(r: com.sakina.app.core.recitation.Reciter) = if (isAr) r.nameAr else r.nameEn
+    val recordingSet get() = t("حفص عن عاصم · مرتل · من ${iso("MP3Quran")}", "Hafs an Asim · murattal · from MP3Quran")
+    fun libraryUse(used: String, limit: String) = t("مكتبة التنزيلات: $used من $limit", "Downloads library: $used of $limit")
+    fun recordingInfo(duration: String, size: String) = t("$duration · $size", "$duration · $size")
+    val play get() = t("تشغيل", "Play")
+    val pause get() = t("إيقاف مؤقت", "Pause")
+    val stopPlayback get() = t("إيقاف", "Stop")
+    val back10 get() = t("رجوع ١٠ ثوانٍ", "Back 10 seconds")
+    val forward10 get() = t("تقديم ١٠ ثوانٍ", "Forward 10 seconds")
+    val speedLabel get() = t("السرعة", "Speed")
+    val downloadRecording get() = t("تنزيل", "Download")
+    val cancelDownload get() = t("إلغاء التنزيل", "Cancel download")
+    val deleteRecording get() = t("حذف التنزيل", "Delete download")
+    val downloadedLabel get() = t("منزّلة", "Downloaded")
+    val streaming get() = t("عبر الإنترنت", "Streaming")
+    val fromDevice get() = t("من الجهاز", "From the device")
+    val buffering get() = t("جارٍ التحميل…", "Loading…")
+    fun downloadingPct(p: String) = t("$p٪", "$p%")
+    fun recordingFailure(f: com.sakina.app.data.DownloadFailure) = when (f) {
+        com.sakina.app.data.DownloadFailure.OFFLINE -> t("لا يوجد اتصال بالإنترنت.", "No internet connection.")
+        com.sakina.app.data.DownloadFailure.NETWORK -> t("تعذّر التنزيل؛ حاول مرة أخرى.", "The download failed; try again.")
+        com.sakina.app.data.DownloadFailure.TOO_BIG -> t("التسجيل أكبر من حد ٢٥٦ ميغابايت للتسجيل الواحد.", "The recording is over the 256 MB limit for one recording.")
+        com.sakina.app.data.DownloadFailure.LIBRARY_FULL -> t("مكتبة التنزيلات ممتلئة (الحد ١ غيغابايت). احذف تسجيلات لتفريغ مساحة.", "The downloads library is full (1 GB limit). Delete recordings to make room.")
+        com.sakina.app.data.DownloadFailure.UNKNOWN_SIZE -> t("لم يذكر المصدر حجم الملف، فلم يُنزَّل.", "The source did not give the file size, so it was not downloaded.")
+        com.sakina.app.data.DownloadFailure.NOT_AUDIO -> t("الملف المستلم ليس تسجيلًا صوتيًا، فلم يُحفظ.", "The file received is not audio, so it was not kept.")
+        com.sakina.app.data.DownloadFailure.STORAGE -> t("تعذّرت الكتابة على الجهاز.", "Could not write to the device.")
+        com.sakina.app.data.DownloadFailure.NO_SPACE -> t("لا توجد مساحة كافية على الجهاز.", "Not enough free space on the device.")
+    }
+    val nothingPlaying get() = t("اختر سورة لتشغيلها.", "Choose a surah to play.")
+    val quietBlocksPlay get() = t("الهدوء المؤقت مفعّل، فلا تُشغَّل التلاوة حتى ينتهي أو تنهيه.", "Quiet mode is on; recitation will not play until it ends or you end it.")
+    val endQuiet get() = t("إنهاء الهدوء", "End quiet mode")
+
+    val repeatTitle get() = t("تكرار آية أو آيات", "Repeat an ayah or a range")
+    val repeatFrom get() = t("من الآية", "From ayah")
+    val repeatTo get() = t("إلى الآية", "To ayah")
+    val repeatTimes get() = t("عدد المرات", "Times")
+    fun repeatTimesLabel(n: Int) = when (n) { 1 -> t("مرة", "Once"); 3 -> t("٣ مرات", "3 times"); 5 -> t("٥ مرات", "5 times"); else -> t("باستمرار", "Continuously") }
+    val repeatStart get() = t("ابدأ التكرار", "Start repeating")
+    val repeatStop get() = t("إيقاف التكرار", "Stop repeating")
+    fun repeatProgress(from: String, to: String, played: String, total: String?) = if (total == null) t("يُكرَّر من الآية $from إلى $to · المرة $played", "Repeating ayahs $from–$to · pass $played")
+        else t("يُكرَّر من الآية $from إلى $to · المرة $played من $total", "Repeating ayahs $from–$to · pass $played of $total")
+    val repeatDone get() = t("انتهى التكرار وتوقف التشغيل عند آخر آية في النطاق.", "Repeat finished; playback paused at the end of the range.")
+    val timingNeeded get() = t("التكرار يحتاج خريطة توقيت الآيات لهذه السورة من MP3Quran (ملف صغير).", "Repeat needs this surah's ayah timing map from MP3Quran (a small file).")
+    val timingDownload get() = t("تنزيل خريطة التوقيت", "Download the timing map")
+    val timingLoading get() = t("جارٍ تنزيل خريطة التوقيت والتحقق منها…", "Downloading and checking the timing map…")
+    val timingWaitAudio get() = t("ستُطابَق الخريطة مع مدة التسجيل بعد بدء التشغيل.", "The map is matched with the recording's length once playback starts.")
+    fun currentAyah(n: String) = t("الآية الحالية: $n", "Current ayah: $n")
+    fun timingInvalid(p: com.sakina.app.core.recitation.TimingProblem) = t("التكرار غير متاح لهذه السورة: ", "Repeat is not available for this surah: ") + when (p) {
+        com.sakina.app.core.recitation.TimingProblem.NOT_A_LIST, com.sakina.app.core.recitation.TimingProblem.BAD_ENTRY -> t("خريطة التوقيت غير مقروءة.", "the timing map is unreadable.")
+        com.sakina.app.core.recitation.TimingProblem.PREAMBLE, com.sakina.app.core.recitation.TimingProblem.NUMBERING -> t("ترقيم الآيات في خريطة التوقيت لا يطابق السورة.", "the ayah numbering in the timing map does not match the surah.")
+        com.sakina.app.core.recitation.TimingProblem.ORDER, com.sakina.app.core.recitation.TimingProblem.END_BEFORE_START, com.sakina.app.core.recitation.TimingProblem.OVERLAP -> t("حدود الآيات في الخريطة متداخلة أو غير مرتبة.", "the ayah boundaries in the map overlap or are out of order.")
+        com.sakina.app.core.recitation.TimingProblem.PAST_AUDIO_END, com.sakina.app.core.recitation.TimingProblem.SHORT_OF_AUDIO -> t("الخريطة لا تطابق مدة هذا التسجيل.", "the map does not match this recording's length.")
+        com.sakina.app.core.recitation.TimingProblem.WRONG_SOURCE -> t("مصدر الخريطة لم يعد يخص هذا التسجيل.", "the map's source no longer belongs to this recording.")
+    } + t(" لن يُخمَّن مكان الآيات.", " Ayah positions are not guessed.")
+    val timingFailed get() = t("تعذّر تنزيل خريطة التوقيت.", "Could not download the timing map.")
+
+    val diagTitle get() = t("مساعدة تشخيص التشغيل", "Playback diagnostics")
+    val diagSwitch get() = t("تسجيل أحداث التشغيل على الجهاز", "Record playback events on the device")
+    val diagNote get() = t("متوقفة افتراضيًا. التقرير يبقى على جهازك، ويمكنك معاينته ثم مشاركته إن أردت.", "Off by default. The report stays on your device; you can preview it and share it if you choose.")
+    val diagPreview get() = t("معاينة التقرير", "Preview the report")
+    val diagShare get() = t("مشاركة التقرير…", "Share the report…")
+    val diagClear get() = t("مسح التقرير", "Clear the report")
+    val listenSources get() = t(
+        "التلاوات من موقع ${iso("MP3Quran")} (${iso("mp3quran.net")}): مشاري العفاسي ومحمد صديق المنشاوي ومحمود خليل الحصري، رواية حفص عن عاصم، مرتل. خرائط توقيت الآيات من واجهة MP3Quran نفسها، ولا تُستعمل إلا إذا طابقت السورة والتسجيل.",
+        "Recitations from MP3Quran (mp3quran.net): Mishary Alafasy, Mohamed Siddiq al-Minshawi and Mahmoud Khalil al-Husary, Hafs an Asim, murattal. Ayah timing maps come from the same MP3Quran service and are used only when they match the surah and the recording.",
+    )
+
     val mushafSourcesBody get() = t(
         "صفحات المصحف المطبوع هي ملفات PDF الأصلية للنسخة الرقمية من مصحف المدينة النبوية (حفص، ١٤٤١هـ) التي يتيحها مجمع الملك فهد لطباعة المصحف الشريف، تُعرض كما هي دون إعادة رسم. موقع المجمع لا يسمح بالوصول الآلي، فالتطبيق يجلب الصفحات من نسختين متطابقتين للملف ${iso("1441-AI-hafs.zip")} على ${iso("archive.org")}, وبصمته ${iso("MD5 f21863db…")}. شروط الاستخدام المنقولة مع النسخة: الاستخدام المجاني في المجالات الشخصية والأعمال الفردية، دون طباعة المصاحف أو استيرادها للبيع. ترقيم الصفحات مطابق لبيانات تنزيل، وجرى التحقق من بدايات صفحات منها بمقارنتها بصريًا.",
         "The printed pages are the original PDF files of the digital Madinah Mushaf (Hafs, 1441H) made available by the King Fahd Glorious Quran Printing Complex, shown as they are without redrawing. The Complex's site does not allow automated access, so the app fetches pages from two identical copies of 1441-AI-hafs.zip on archive.org (MD5 f21863db…). Terms of use carried with the copy: free use for personal and individual purposes, without printing or importing mushafs for sale. Page numbers match Tanzil's data; the first ayahs of sample pages were checked by eye.",
