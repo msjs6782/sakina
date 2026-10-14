@@ -97,7 +97,7 @@ for i in infos:
     if i.is_dir():
         continue
     base = os.path.basename(i.filename)
-    m = re.search(r"(\d{1,3})(?=\D*$)", base)
+    m = re.match(r"(\d{3})___", base)
     ext = os.path.splitext(base)[1].lower()
     if m and ext in (".pdf", ".ai"):
         n = int(m.group(1))
@@ -157,6 +157,64 @@ for n in (1, 2, 3, 50, 187, 300, 582, 603, 604):
     subprocess.run(["pdftoppm", "-r", "60", "-png", "-singlefile", raw, os.path.join(OUT, "render", f"p{n:03d}")], check=False)
     subprocess.run(["pdfinfo", raw], check=False, stdout=open(os.path.join(OUT, "render", f"p{n:03d}_pdfinfo.txt"), "w"))
     subprocess.run(["pdffonts", raw], check=False, stdout=open(os.path.join(OUT, "render", f"p{n:03d}_pdffonts.txt"), "w"))
+
+# 6b. Local header offsets, for fetching single entries with HTTP Range requests.
+import struct  # noqa: E402
+import zlib  # noqa: E402
+
+ranges = {}
+with open(zpath, "rb") as fz:
+    for n in sorted(pages):
+        i = pages[n][0]
+        fz.seek(i.header_offset)
+        hdr = fz.read(30)
+        sig, ver, flag, method, mt, md, crc, csz, usz, nlen, xlen = struct.unpack("<IHHHHHIIIHH", hdr)
+        assert sig == 0x04034B50, n
+        data_off = i.header_offset + 30 + nlen + xlen
+        ranges[n] = {"offset": i.header_offset, "dataOffset": data_off, "compressed": i.compress_size, "method": i.compress_type,
+                     "crc32": f"{i.CRC:08x}", "flag": flag}
+        manifest[n].update(ranges[n])
+with open(os.path.join(OUT, "manifest.json"), "w", encoding="utf-8") as f:
+    json.dump({"source": src, "zip_size": os.path.getsize(zpath), "zip_md5": h_md5.hexdigest(), "zip_sha256": h_sha256.hexdigest(), "pages": manifest}, f, ensure_ascii=False, indent=1)
+log("zip_check.txt", f"methods {sorted(set(r['method'] for r in ranges.values()))} flags {sorted(set(r['flag'] for r in ranges.values()))}")
+
+# Raw folder name bytes, decoded with a few code pages.
+raw_name = infos[0].filename.encode("cp437", "replace")
+for cp in ("utf-8", "cp720", "cp864", "cp1256"):
+    try:
+        log("zip_check.txt", f"folder name as {cp}: {raw_name.decode(cp)}")
+    except Exception as e:  # noqa: BLE001
+        log("zip_check.txt", f"folder name as {cp}: failed {e}")
+
+
+def range_fetch(base_url, n):
+    r_ = ranges[n]
+    end = r_["dataOffset"] + r_["compressed"] - 1
+    req = urllib.request.Request(base_url, headers={**UA, "Range": f"bytes={r_['dataOffset']}-{end}"})
+    t0_ = time.time()
+    with urllib.request.urlopen(req, timeout=120) as resp:
+        body_ = resp.read()
+        info_ = f"status {resp.status} final {resp.geturl()} content-range {resp.headers.get('Content-Range')} accept-ranges {resp.headers.get('Accept-Ranges')} len {len(body_)} in {time.time() - t0_:.2f} s"
+    data_ = zlib.decompress(body_, -15) if r_["method"] == 8 else body_
+    ok_ = hashlib.sha256(data_).hexdigest() == manifest[n]["sha256"] and len(data_) == manifest[n]["size"]
+    return info_, ok_
+
+
+for base in (f"https://archive.org/download/{ITEMS[0]}/{ZIP_NAME}", f"https://archive.org/download/{ITEMS[1]}/{ZIP_NAME}"):
+    for n in (3, 300, 604):
+        try:
+            info, ok = range_fetch(base, n)
+            log("range_fetch.txt", f"{base} page {n}: {info} verified={ok}")
+        except Exception as e:  # noqa: BLE001
+            log("range_fetch.txt", f"{base} page {n}: failed {e!r}")
+
+# Text layer: is the Quran text extractable from a page (to compare page boundaries with Tanzil)?
+for n in (3, 50, 187, 300):
+    if n in pages:
+        raw = os.path.join("/tmp", f"p{n:03d}.ai")
+        with open(raw, "wb") as f:
+            f.write(z.read(pages[n][0]))
+        subprocess.run(["pdftotext", "-layout", raw, os.path.join(OUT, "render", f"p{n:03d}.txt")], check=False)
 
 # 7. Can one entry be fetched directly from inside the zip on archive.org (no full download)?
 if 3 in pages:
