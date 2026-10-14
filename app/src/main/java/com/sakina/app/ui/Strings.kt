@@ -230,7 +230,7 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val offsetsTitle get() = t("إزاحة كل وقت (دقائق)", "Offset per time (minutes)")
     val offsetsNote get() = t("من −٦٠ إلى +٦٠ دقيقة، تُضاف إلى الوقت المحسوب.", "From −60 to +60 minutes, added to the calculated time.")
     val resetOffsets get() = t("تصفير الإزاحات", "Clear offsets")
-    val preview get() = t("معاينة اليوم", "Today's preview")
+    val todayPreview get() = t("معاينة اليوم", "Today's preview")
     val noLocationPreview get() = t("اختر موقعًا لرؤية المعاينة.", "Choose a place to see a preview.")
 
     val styleTitle get() = t("النمط", "Style")

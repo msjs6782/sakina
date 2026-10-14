@@ -131,7 +131,7 @@ fun CalcScreen(vm: MainViewModel, s: AppSettings) {
     val fmt = LocalFmt.current
     SubScreen(str.settingsCalc, vm) {
         // Live preview of today's times with the current choices.
-        SectionCard(title = str.preview, icon = SakinaIcons.Clock) {
+        SectionCard(title = str.todayPreview, icon = SakinaIcons.Clock) {
             val loc = s.activeLocation
             val zone = loc?.zoneId
             if (loc == null || zone == null) {
