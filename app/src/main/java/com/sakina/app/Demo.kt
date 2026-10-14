@@ -55,7 +55,9 @@ object Demo {
                 }
                 e.getString("demo_active")?.let { s = SettingsOps.activate(s, "city:$it") }
                 e.getString("demo_manual")?.split(',')?.takeIf { it.size == 4 }?.let { f ->
-                    s = SettingsOps.addAndActivate(s, SavedLocation(SettingsOps.newId("manual"), f[0], f[0], f[1].toDouble(), f[2].toDouble(), f[3], LocationSource.MANUAL))
+                    // "_" stands for a space: adb shell would split the argument at a real one.
+                    val name = f[0].replace('_', ' ')
+                    s = SettingsOps.addAndActivate(s, SavedLocation(SettingsOps.newId("manual"), name, name, f[1].toDouble(), f[2].toDouble(), f[3], LocationSource.MANUAL))
                 }
                 e.getString("demo_travel")?.let { id ->
                     cities.firstOrNull { it.id == id }?.let { s = SettingsOps.startTravel(s, SettingsOps.cityLocation(it).copy(id = "trip:demo"), AppClock.now().toEpochMilli()) }
@@ -83,8 +85,12 @@ object Demo {
                 if (e.containsKey("demo_card")) s = s.copy(alerts = s.alerts.copy(ongoingCard = e.getBoolean("demo_card")))
                 if (e.containsKey("demo_route_alarm")) s = s.copy(alerts = s.alerts.copy(audioRoute = if (e.getBoolean("demo_route_alarm")) AudioRoute.ALARM else AudioRoute.NOTIFICATION))
                 if (e.containsKey("demo_suhoor")) s = s.copy(alerts = s.alerts.copy(suhoor = s.alerts.suhoor.copy(enabled = true, ramadanOnly = false, minutesBeforeFajr = e.getInt("demo_suhoor"))))
-                e.getString("demo_reminders")?.split(',')?.filter { it.isNotBlank() }?.forEach { k ->
-                    s = s.copy(alerts = s.alerts.withReminder(ReminderKind.valueOf(k.uppercase())) { it.copy(enabled = true) })
+                // KIND or KIND:minuteOfDay, comma-separated.
+                e.getString("demo_reminders")?.split(',')?.filter { it.isNotBlank() }?.forEach { spec ->
+                    val f = spec.split(':')
+                    s = s.copy(alerts = s.alerts.withReminder(ReminderKind.valueOf(f[0].uppercase())) {
+                        it.copy(enabled = true, minuteOfDay = f.getOrNull(1)?.toIntOrNull() ?: it.minuteOfDay)
+                    })
                 }
                 e.getString("demo_offsets")?.let { spec ->
                     var o = OffsetPrefs().toCore()
@@ -148,6 +154,31 @@ object Demo {
                 .copy(progressPage = f.getOrElse(1) { 0 })
             runBlocking { quranState.update { it.copy(khatma = plan) } }
         }
+        // Phase 6: adhkar, tasbih and qibla state.
+        if (e.getBoolean("demo_reset") || e.getBoolean("demo_tools_reset")) runBlocking { app.tools.update { com.sakina.app.data.ToolsState() } }
+        e.getString("demo_favorites")?.let { spec -> runBlocking { app.tools.update { it.copy(favorites = spec.split(',').filter { x -> x.isNotBlank() }) } } }
+        e.getString("demo_tasbih")?.let { spec ->
+            // count:target[:label]
+            val f = spec.split(':')
+            runBlocking { app.tools.update { it.copy(tasbih = it.tasbih.copy(count = f[0].toInt(), target = f.getOrElse(1) { "0" }.toInt(), label = f.getOrElse(2) { "" }.replace('_', ' ')), tasbihUndo = null) } }
+        }
+        e.getString("demo_wird")?.let { spec ->
+            // practice:session:id=taps,id=taps — today's date in the active place.
+            val f = spec.split(':', limit = 3)
+            val zone = runBlocking { app.settings.current() }.activeLocation?.zoneId ?: java.time.ZoneId.systemDefault()
+            val date = AppClock.now().atZone(zone).toLocalDate().toString()
+            val key = com.sakina.app.core.adhkar.Wird.key(date, f[0], f[1])
+            val taps = f.getOrElse(2) { "" }.split(',').mapNotNull { kv -> kv.split('=').takeIf { it.size == 2 }?.let { it[0] to it[1].toInt() } }.toMap()
+            runBlocking { app.tools.update { it.copy(progress = it.progress + (key to taps)) } }
+        }
+        e.getString("demo_qibla_map")?.let { m -> runBlocking { app.tools.update { it.copy(qibla = it.qibla.copy(mapMode = com.sakina.app.data.QiblaMapMode.valueOf(m.uppercase()))) } } }
+        com.sakina.app.data.CompassEngine.forcedSource = when (e.getString("demo_compass")) {
+            "rv" -> com.sakina.app.core.qibla.CompassSource.ROTATION_VECTOR
+            "geomag" -> com.sakina.app.core.qibla.CompassSource.GEOMAGNETIC_ROTATION_VECTOR
+            "accelmag" -> com.sakina.app.core.qibla.CompassSource.ACCEL_MAGNETOMETER
+            "none" -> com.sakina.app.core.qibla.CompassSource.NONE
+            else -> null
+        }
         com.sakina.app.ui.mushaf.MushafDebug.initialZoom = e.getFloat("demo_zoom", 1f)
         if (e.containsKey("demo_idle_ms")) com.sakina.app.audio.RecitationService.idleEndMs = e.getLong("demo_idle_ms")
         com.sakina.app.data.RecitationRepository.debugSlowMs = e.getLong("demo_dl_slow_ms", 0)
@@ -180,6 +211,10 @@ object Demo {
                 }
                 r.startsWith("quran_search:") -> Route.QuranSearch(r.removePrefix("quran_search:"))
                 r.startsWith("listen:") -> Route.Listen(r.removePrefix("listen:").toInt())
+                r.startsWith("adhkar_cat:") -> Route.AdhkarCategory(r.removePrefix("adhkar_cat:"))
+                r.startsWith("adhkar_search:") -> Route.Adhkar(r.removePrefix("adhkar_search:"))
+                r.startsWith("adhkar_item:") -> Route.AdhkarItem(r.removePrefix("adhkar_item:"))
+                r.startsWith("wird:") -> r.removePrefix("wird:").split(':').let { Route.Wird(it[0], it.getOrElse(1) { "" }) }
                 r.startsWith("mushaf:") -> {
                     val f = r.removePrefix("mushaf:").split(':').map { it.toInt() }
                     val focus = if (f.size >= 3) runBlocking { app.quran.load() }.meta.global(com.sakina.app.core.quran.AyahRef(f[1], f[2])) else -1
@@ -232,6 +267,9 @@ object Demo {
         "quran_sources" -> Route.QuranSources
         "mushaf_downloads" -> Route.MushafDownloads
         "listen" -> Route.Listen()
+        "adhkar" -> Route.Adhkar()
+        "tasbih" -> Route.Tasbih
+        "qibla" -> Route.Qibla
         else -> null
     }
 

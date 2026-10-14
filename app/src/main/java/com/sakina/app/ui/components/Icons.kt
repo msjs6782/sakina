@@ -21,6 +21,10 @@ object SakinaIcons {
         strokeLineJoin = StrokeJoin.Round,
     ).build()
 
+    private fun filled(name: String, path: String): ImageVector = ImageVector.Builder(
+        name = name, defaultWidth = 24.dp, defaultHeight = 24.dp, viewportWidth = 24f, viewportHeight = 24f,
+    ).addPath(pathData = addPathNodes(path), fill = SolidColor(Color.Black)).build()
+
     val Home: ImageVector by lazy { icon("Home", "M4 10.5 L12 4 L20 10.5 V20 H14.5 V15.5 A2.5 2.5 0 0 0 9.5 15.5 V20 H4 Z") }
     val Clock: ImageVector by lazy { icon("Clock", "M21 12 A9 9 0 1 1 3 12 A9 9 0 1 1 21 12 Z M12 7 V12 L15.5 14") }
     val Book: ImageVector by lazy { icon("Book", "M12 6.5 C10 5 7 4.5 3.5 5 V18.5 C7 18 10 18.5 12 20 C14 18.5 17 18 20.5 18.5 V5 C17 4.5 14 5 12 6.5 Z M12 6.5 V20") }
@@ -76,4 +80,14 @@ object SakinaIcons {
     val Headphones: ImageVector by lazy { icon("Headphones", "M4.5 15.5 V12.5 A7.5 7.5 0 0 1 19.5 12.5 V15.5 M4.5 14.5 H7.5 V20 H4.5 Z M16.5 14.5 H19.5 V20 H16.5 Z") }
     val More: ImageVector by lazy { icon("More", "M12.9 5.5 A0.9 0.9 0 1 1 11.1 5.5 A0.9 0.9 0 1 1 12.9 5.5 Z M12.9 12 A0.9 0.9 0 1 1 11.1 12 A0.9 0.9 0 1 1 12.9 12 Z M12.9 18.5 A0.9 0.9 0 1 1 11.1 18.5 A0.9 0.9 0 1 1 12.9 18.5 Z") }
     val Storage: ImageVector by lazy { icon("Storage", "M4 6.5 C4 4.5 20 4.5 20 6.5 V17.5 C20 19.5 4 19.5 4 17.5 Z M4 6.5 C4 8.5 20 8.5 20 6.5 M4 12 C4 14 20 14 20 12") }
+    val Star: ImageVector by lazy { icon("Star", "M12 3.5 L14.6 9 L20.5 9.6 L16 13.6 L17.3 19.5 L12 16.5 L6.7 19.5 L8 13.6 L3.5 9.6 L9.4 9 Z") }
+    val Share: ImageVector by lazy { icon("Share", "M20.5 5.5 A2.5 2.5 0 1 1 15.5 5.5 A2.5 2.5 0 1 1 20.5 5.5 Z M8.5 12 A2.5 2.5 0 1 1 3.5 12 A2.5 2.5 0 1 1 8.5 12 Z M20.5 18.5 A2.5 2.5 0 1 1 15.5 18.5 A2.5 2.5 0 1 1 20.5 18.5 Z M8.2 10.8 L15.8 6.7 M8.2 13.2 L15.8 17.3") }
+    val Beads: ImageVector by lazy { icon("Beads", "M18 10 A6 6 0 1 1 6 10 A6 6 0 1 1 18 10 Z M12 16 V18.5 M12 18.5 L10 21 M12 18.5 L14 21") }
+    val Kaaba: ImageVector by lazy { icon("Kaaba", "M5 8 L12 4.5 L19 8 V17 L12 20.5 L5 17 Z M5 8 L12 11.5 L19 8 M12 11.5 V20.5 M5 11 L12 14.5 L19 11") }
+    val Undo: ImageVector by lazy { icon("Undo", "M9 14 L4 9 L9 4 M4 9 H14.5 A5.5 5.5 0 0 1 14.5 20 H10") }
+    val Map: ImageVector by lazy { icon("Map", "M3.5 6 L9 4 L15 6 L20.5 4 V18 L15 20 L9 18 L3.5 20 Z M9 4 V18 M15 6 V20") }
+    val Vibrate: ImageVector by lazy { icon("Vibrate", "M8.5 4 H15.5 V20 H8.5 Z M5 8.5 V15.5 M19 8.5 V15.5 M11 17 H13") }
+    val Reset: ImageVector by lazy { icon("Reset", "M4.5 12 A7.5 7.5 0 1 0 7 6.4 M4 4 V8.5 H8.5") }
+    val Sparkle: ImageVector by lazy { icon("Sparkle", "M12 3 Q12.8 10.2 20 11 Q12.8 11.8 12 19 Q11.2 11.8 4 11 Q11.2 10.2 12 3 Z") }
+    val StarFilled: ImageVector by lazy { filled("StarFilled", "M12 3.5 L14.6 9 L20.5 9.6 L16 13.6 L17.3 19.5 L12 16.5 L6.7 19.5 L8 13.6 L3.5 9.6 L9.4 9 Z") }
 }

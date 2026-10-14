@@ -52,6 +52,14 @@ sealed interface Route {
     data object MushafDownloads : Route
     /** Listening; [sura] scrolls the list to that surah (0 for none). */
     data class Listen(val sura: Int = 0) : Route
+    /** The adhkar library; [query] opens it with a search (debug screenshots of Arabic search). */
+    data class Adhkar(val query: String = "") : Route
+    data class AdhkarCategory(val id: String) : Route
+    data class AdhkarItem(val id: String) : Route
+    /** A daily set of adhkar; [session] picks the prayer for the after-prayer set ("" = the latest prayer). */
+    data class Wird(val practice: String, val session: String = "") : Route
+    data object Tasbih : Route
+    data object Qibla : Route
 }
 
 sealed interface GpsUi {
@@ -86,6 +94,19 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     init {
         viewModelScope.launch { _cities.value = sakina.cities.all() }
+    }
+
+    val tools: StateFlow<com.sakina.app.data.ToolsState> = sakina.tools.state
+        .stateIn(viewModelScope, SharingStarted.Eagerly, com.sakina.app.data.ToolsState())
+    val adhkar: StateFlow<com.sakina.app.core.adhkar.AdhkarLibrary?> get() = sakina.tools.library
+    val toolsRepo get() = sakina.tools
+
+    fun loadAdhkar() {
+        viewModelScope.launch { sakina.tools.loadLibrary() }
+    }
+
+    fun updateTools(transform: (com.sakina.app.data.ToolsState) -> com.sakina.app.data.ToolsState) {
+        viewModelScope.launch { sakina.tools.update(transform) }
     }
 
     val mushaf get() = sakina.mushaf

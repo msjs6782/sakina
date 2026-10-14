@@ -29,15 +29,21 @@ class MainActivity : ComponentActivity() {
         handleOpen(intent)
     }
 
-    /** The recitation notification opens the listening screen. */
+    /** The recitation notification opens the listening screen; an adhkar reminder opens its set. */
     private fun handleOpen(intent: Intent?) {
-        if (intent?.getStringExtra(EXTRA_OPEN) == OPEN_LISTEN && vm.stack.lastOrNull() !is com.sakina.app.ui.Route.Listen) {
+        val open = intent?.getStringExtra(EXTRA_OPEN) ?: return
+        if (open == OPEN_LISTEN && vm.stack.lastOrNull() !is com.sakina.app.ui.Route.Listen) {
             vm.push(com.sakina.app.ui.Route.Listen())
+        }
+        if (open.startsWith(OPEN_ADHKAR)) {
+            val route = com.sakina.app.ui.Route.Wird(open.removePrefix(OPEN_ADHKAR))
+            if (vm.stack.lastOrNull() != route) vm.push(route)
         }
     }
 
     companion object {
         const val EXTRA_OPEN = "sakina_open"
         const val OPEN_LISTEN = "listen"
+        const val OPEN_ADHKAR = "adhkar:"
     }
 }

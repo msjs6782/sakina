@@ -843,6 +843,177 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
         "صفحات المصحف المطبوع هي ملفات PDF الأصلية للنسخة الرقمية من مصحف المدينة النبوية (حفص، ١٤٤١هـ) التي يتيحها مجمع الملك فهد لطباعة المصحف الشريف، تُعرض كما هي دون إعادة رسم. موقع المجمع لا يسمح بالوصول الآلي، فالتطبيق يجلب الصفحات من نسختين متطابقتين للملف ${iso("1441-AI-hafs.zip")} على ${iso("archive.org")}, وبصمته ${iso("MD5 f21863db…")}. شروط الاستخدام المنقولة مع النسخة: الاستخدام المجاني في المجالات الشخصية والأعمال الفردية، دون طباعة المصاحف أو استيرادها للبيع. ترقيم الصفحات مطابق لبيانات تنزيل، وجرى التحقق من بدايات صفحات منها بمقارنتها بصريًا.",
         "The printed pages are the original PDF files of the digital Madinah Mushaf (Hafs, 1441H) made available by the King Fahd Glorious Quran Printing Complex, shown as they are without redrawing. The Complex's site does not allow automated access, so the app fetches pages from two identical copies of 1441-AI-hafs.zip on archive.org (MD5 f21863db…). Terms of use carried with the copy: free use for personal and individual purposes, without printing or importing mushafs for sale. Page numbers match Tanzil's data; the first ayahs of sample pages were checked by eye.",
     )
+    // ---------- Adhkar, tasbih and qibla (phase 6) ----------
+    val discoverTitle get() = t("اكتشف", "Discover")
+    val toolsAdhkar get() = t("الأذكار", "Adhkar")
+    val toolsAdhkarBody get() = t("٥٤ ذكرًا ودعاءً موثقًا، وأوراد الصباح والمساء والنوم والاستيقاظ وما بعد الصلاة", "54 authenticated adhkar and supplications, with the morning, evening, sleep, waking and after-prayer sets")
+    val toolsTasbih get() = t("المسبحة", "Tasbih")
+    val toolsTasbihBody get() = t("عدّاد حر بهدف اختياري واهتزاز اختياري وتراجع", "A free counter with an optional target, vibration and undo")
+    val toolsQibla get() = t("القبلة", "Qibla")
+    val toolsQiblaBody get() = t("الاتجاه والمسافة، وبوصلة، وخريطة تعمل دون إنترنت", "Direction and distance, a compass, and a map that works offline")
+    val plannedLater get() = (if (isAr) listOf(
+        "التقويم ورمضان والليل والجمعة" to "المرحلة ٧",
+        "الويدجت والاختصارات" to "المرحلة ٨",
+        "السجل والتصدير ومساجدي والنسخ الاحتياطي" to "المرحلة ٩",
+    ) else listOf(
+        "Calendar, Ramadan, night and Friday" to "Phase 7",
+        "Widgets and shortcuts" to "Phase 8",
+        "Log, export, my mosques and backup" to "Phase 9",
+    )).map { digits(it.first) to digits(it.second) }
+
+    val adhkarTitle get() = t("الأذكار", "Adhkar")
+    val adhkarSearchHint get() = t("ابحث في النصوص والعناوين والتصنيفات", "Search texts, titles and categories")
+    val adhkarPractices get() = t("الأوراد", "Daily sets")
+    val adhkarCategories get() = t("التصنيفات", "Categories")
+    val adhkarFavorites get() = t("المفضلة", "Favourites")
+    val adhkarNoFavorites get() = t("لم تضف ذكرًا إلى المفضلة بعد. افتح أي ذكر واضغط النجمة.", "No favourites yet. Open any dhikr and tap the star.")
+    val adhkarNoResults get() = t("لا نتائج. جرّب كلمة أخرى من النص أو العنوان.", "No results. Try another word from the text or title.")
+    val adhkarLibraryNote get() = t(
+        "مكتبة محلية تعمل دون إنترنت. كل نص منقول بلفظ الرواية المذكورة، ومعه مصدره ودرجته وروابط للتحقق منه.",
+        "A local library that works offline. Each text is quoted in the wording of the cited narration, with its source, grade and links to check it.",
+    )
+    fun adhkarCount(n: String, raw: Int) = if (isAr) {
+        when (raw) {
+            1 -> "ذكر واحد"
+            2 -> "ذكران"
+            in 3..10 -> "$n أذكار"
+            else -> "$n ذكرًا"
+        }
+    } else if (raw == 1) "1 dhikr" else "$n adhkar"
+    fun times(n: String, raw: Int) = if (isAr) {
+        when (raw) {
+            0 -> "بلا عدد محدد"
+            1 -> "مرة واحدة"
+            2 -> "مرتان"
+            in 3..10 -> "$n مرات"
+            else -> "$n مرة"
+        }
+    } else when (raw) {
+        0 -> "No set number"
+        1 -> "Once"
+        else -> "$n times"
+    }
+    fun progressOf(done: String, total: String) = t("أنجزت $done من $total", "$done of $total done")
+    fun roundOf(r: String, total: String) = t("الجولة $r من $total", "Round $r of $total")
+    fun wholeSetTimes(n: String) = t("تُقرأ المجموعة كاملة $n مرات", "Say the whole set $n times")
+    val wirdTapHint get() = t("اضغط على البطاقة للعدّ؛ يُحفظ التقدم لهذا اليوم وهذا الورد وحده.", "Tap a card to count; progress is kept for this day and this set only.")
+    val wirdDone get() = t("تمّ", "Done")
+    val wirdReset get() = t("تصفير هذا الورد", "Reset this set")
+    val wirdResetConfirm get() = t("تصفير عدّادات هذا الورد لهذا اليوم؟", "Reset this set's counters for today?")
+    val wirdAllDone get() = t("أتممت هذا الورد. تقبّل الله منك.", "You have completed this set. May Allah accept it.")
+    val untapOne get() = t("إنقاص واحد", "Count one less")
+    val resetItem get() = t("تصفير هذا الذكر", "Reset this dhikr")
+    val wirdSession get() = t("بعد صلاة", "After")
+    val morningWording get() = t("صيغة الصباح", "Morning wording")
+    val eveningWording get() = t("صيغة المساء", "Evening wording")
+    val reminderLink get() = t("التذكير", "Reminder")
+    fun reminderOn(time: String) = t("مفعّل يوميًا عند $time", "On, at $time")
+    val reminderOffNote get() = t("غير مفعّل. يمكنك تفعيل تذكير بوقت تختاره.", "Off. You can turn on a reminder at a time you choose.")
+    val reminderSetup get() = t("إعداد التذكير", "Set up reminder")
+    val contextTitle get() = t("السياق والفضل", "Context and virtue")
+    val sourceTitle get() = t("المصدر والدرجة", "Source and grade")
+    fun gradeLine(grade: String, by: String) = t("الدرجة: $grade — $by", "Grade: $grade — $by")
+    val sahihayn get() = t("حديث في الصحيحين أو أحدهما", "In al-Bukhari or Muslim")
+    val gradersTitle get() = t("أحكام المحققين", "Graders")
+    val linksTitle get() = t("روابط المراجع", "References")
+    val noteTitle get() = t("ملاحظة", "Note")
+    val noBrowser get() = t("لا يوجد تطبيق يفتح الرابط.", "No app can open the link.")
+    val favoriteAdd get() = t("إضافة إلى المفضلة", "Add to favourites")
+    val favoriteRemove get() = t("إزالة من المفضلة", "Remove from favourites")
+    val shareDhikr get() = t("مشاركة", "Share")
+    val itemCounterTitle get() = t("عدّاد هذا الذكر", "Counter for this dhikr")
+    val itemCounterNote get() = t("مستقل عن عدّادات الأوراد، ويُحفظ لهذا اليوم.", "Separate from the daily sets, kept for today.")
+    val countLabel get() = t("العدد المروي", "Narrated count")
+    fun quranPassage(sura: String, from: String, to: String, whole: Boolean, single: Boolean) = when {
+        whole -> t("سورة $sura", "Surah $sura")
+        single -> t("سورة $sura، الآية $from", "Surah $sura, ayah $from")
+        else -> t("سورة $sura، الآيات $from–$to", "Surah $sura, ayahs $from–$to")
+    }
+
+    val tasbihTitle get() = t("المسبحة", "Tasbih")
+    val tasbihTap get() = t("اضغط للعدّ", "Tap to count")
+    val tasbihTarget get() = t("الهدف", "Target")
+    val tasbihNoTarget get() = t("بلا هدف", "No target")
+    val tasbihCustom get() = t("هدف آخر", "Other")
+    val tasbihCustomTitle get() = t("هدف مخصص", "Custom target")
+    val tasbihCustomHint get() = t("عدد بين ١ و١٠٠٠٠", "A number from 1 to 10000")
+    val tasbihVibrate get() = t("اهتزاز خفيف مع كل ضغطة، وأطول عند بلوغ الهدف", "A light buzz on each tap, a longer one at the target")
+    val tasbihReset get() = t("تصفير", "Reset")
+    val tasbihUndo get() = t("تراجع", "Undo")
+    val tasbihUndoNote get() = t("يتراجع عن آخر تعديل فعلي: ضغطة أو تصفير أو تغيير الهدف أو العبارة.", "Undoes the last real change: a tap, a reset, or a new target or phrase.")
+    fun tasbihRounds(n: String) = t("الدورات المكتملة: $n", "Completed rounds: $n")
+    val tasbihLabel get() = t("ما تسبّح به (اختياري)", "What you are saying (optional)")
+    val tasbihLabelHint get() = t("مثل: سبحان الله", "e.g. Subhan Allah")
+    val tasbihReached get() = t("بلغت الهدف", "Target reached")
+    val openAdhkarSet get() = t("فتح الأذكار", "Open the adhkar")
+
+    val qiblaTitle get() = t("القبلة", "Qibla")
+    val qiblaNoPlace get() = t("لم تختر موقعًا بعد. اختر موقعًا لحساب اتجاه القبلة.", "No place chosen yet. Choose a place to compute the qibla.")
+    val qiblaChoosePlace get() = t("اختيار موقع", "Choose a place")
+    fun qiblaFrom(place: String) = t("من: $place", "From: $place")
+    val qiblaChangePlace get() = t("تغيير", "Change")
+    val qiblaBearing get() = t("اتجاه القبلة", "Qibla direction")
+    fun qiblaBearingValue(deg: String) = t("$deg من الشمال الحقيقي", "$deg from true north")
+    val qiblaDistance get() = t("المسافة إلى الكعبة", "Distance to the Kaaba")
+    fun distanceKm(km: String) = t("نحو $km كم", "about $km km")
+    val qiblaNear get() = t("أنت عند الكعبة أو قريب جدًا منها، فلا معنى للاتجاه هنا.", "You are at or very near the Kaaba; a direction has no meaning here.")
+    val compassTitle get() = t("البوصلة", "Compass")
+    fun phoneHeading(deg: String) = t("اتجاه أعلى الهاتف: $deg", "Top of phone: $deg")
+    val compassAligned get() = t("الهاتف متجه نحو القبلة", "The phone faces the qibla")
+    fun turnRight(deg: String) = t("استدر يمينًا $deg", "Turn right $deg")
+    fun turnLeft(deg: String) = t("استدر يسارًا $deg", "Turn left $deg")
+    val compassWaiting get() = t("بانتظار قراءة المستشعر…", "Waiting for the sensor…")
+    val compassHowTo get() = t("ضع الهاتف أفقيًا والشاشة للأعلى، وأدره حتى تصل علامة الكعبة إلى أعلى القرص.", "Hold the phone flat, screen up, and turn until the Kaaba mark reaches the top of the dial.")
+    val vibrateAlign get() = t("اهتزاز عند المحاذاة الموثوقة", "Vibrate on reliable alignment")
+    fun compassSource(s: com.sakina.app.core.qibla.CompassSource) = when (s) {
+        com.sakina.app.core.qibla.CompassSource.ROTATION_VECTOR -> t("المستشعرات: متجه الدوران المدمج (تسارع وجيروسكوب ومغناطيسية)", "Sensors: fused rotation vector (accelerometer, gyroscope, magnetometer)")
+        com.sakina.app.core.qibla.CompassSource.GEOMAGNETIC_ROTATION_VECTOR -> t("المستشعرات: متجه الدوران المغناطيسي (دون جيروسكوب)", "Sensors: geomagnetic rotation vector (no gyroscope)")
+        com.sakina.app.core.qibla.CompassSource.ACCEL_MAGNETOMETER -> t("المستشعرات: مقياس التسارع والمغناطيسية، يدمجهما التطبيق", "Sensors: accelerometer and magnetometer, combined by the app")
+        com.sakina.app.core.qibla.CompassSource.NONE -> t("لا توجد بوصلة في هذا الجهاز", "This device has no compass")
+    }
+    fun compassIssue(i: com.sakina.app.core.qibla.CompassIssue) = when (i) {
+        com.sakina.app.core.qibla.CompassIssue.NO_SENSOR -> t("لا يوجد مستشعر مغناطيسي يعمل في هذا الجهاز. استعمل الدرجة أعلاه مع معلم معروف، أو الخريطة.", "No working magnetic sensor on this device. Use the degree above with a known landmark, or the map.")
+        com.sakina.app.core.qibla.CompassIssue.LOW_ACCURACY -> t("دقة البوصلة ضعيفة: حرّك الهاتف في الهواء على شكل الرقم 8 عدة مرات لمعايرتها.", "Low compass accuracy: move the phone in a figure-8 a few times to calibrate it.")
+        com.sakina.app.core.qibla.CompassIssue.TILT -> t("الهاتف مائل: ضعه أفقيًا والشاشة للأعلى.", "The phone is tilted: hold it flat, screen up.")
+        com.sakina.app.core.qibla.CompassIssue.INTERFERENCE -> t("تداخل مغناطيسي محتمل: قوة المجال المقيسة بعيدة عن المتوقع هنا. ابتعد عن المعادن والمغناطيس والأجهزة والسيارة.", "Possible magnetic interference: the measured field is far from what is expected here. Move away from metal, magnets, devices and cars.")
+        com.sakina.app.core.qibla.CompassIssue.STALE -> t("توقفت قراءات المستشعر؛ ما يظهر قراءة قديمة.", "The sensor stopped reporting; what you see is an old reading.")
+        com.sakina.app.core.qibla.CompassIssue.POLE_CAUTION -> t("أنت قرب قطب مغناطيسي: البوصلة أقل موثوقية هنا.", "You are near a magnetic pole: compasses are less reliable here.")
+        com.sakina.app.core.qibla.CompassIssue.POLE_BLACKOUT -> t("أنت في منطقة انقطاع قرب القطب المغناطيسي: لا يُعتمد على البوصلة هنا.", "You are in a blackout zone near the magnetic pole: do not rely on a compass here.")
+        com.sakina.app.core.qibla.CompassIssue.MODEL_EXPIRED -> t("انتهت مدة نموذج WMM2025 (صالح حتى بداية ٢٠٣٠)، فتصحيح الشمال الحقيقي تقريبي.", "The WMM2025 model has expired (valid until early 2030); the true-north correction is approximate.")
+    }
+    fun declination(deg: String, east: Boolean) = if (east) t("الانحراف المغناطيسي هنا: $deg شرقًا", "Magnetic declination here: $deg east")
+    else t("الانحراف المغناطيسي هنا: $deg غربًا", "Magnetic declination here: $deg west")
+    val trueNorthNote get() = t("تقيس البوصلة الشمال المغناطيسي؛ يحوّله التطبيق إلى الشمال الحقيقي بإضافة الانحراف المحسوب على الجهاز من نموذج WMM2025.", "The compass measures magnetic north; the app converts it to true north by adding the declination computed on the device from WMM2025.")
+    val qiblaAccuracyTitle get() = t("حدود الدقة", "Accuracy and limits")
+    val qiblaCalcNote get() = t("الاتجاه محسوب على الجهاز كدائرة عظمى على كرة الأرض، من إحداثيات الموقع المختار والكعبة.", "The direction is computed on the device as a great circle on the globe, from the chosen place's coordinates and the Kaaba's.")
+    fun qiblaSensitivity(km: String, deg: String) = t("إذا كان مكانك الفعلي يبعد $km كم عن الموقع المختار فقد يختلف الاتجاه حتى $deg.", "If you are $km km from the chosen place, the direction may differ by up to $deg.")
+    val qiblaCompassNote get() = t("دقة بوصلة الهاتف عادة بين ٥° و١٥°، وتتأثر بالمعادن القريبة. تحقّق بمعلم معروف عند الشك.", "A phone compass is usually accurate to 5–15° and is affected by nearby metal. Check against a known landmark when in doubt.")
+    val mapTitle get() = t("الخريطة (دون إنترنت)", "Map (offline)")
+    val mapCentered get() = t("مركّزة عليك", "Centred on you")
+    val mapWorld get() = t("العالم", "World")
+    val mapYou get() = t("موقعك", "You")
+    val mapMecca get() = t("مكة", "Mecca")
+    val mapPath get() = t("أقصر طريق (دائرة عظمى)", "Shortest path (great circle)")
+    val mapCenteredNote get() = t(
+        "إسقاط سمتي متساوي الأبعاد مركزه موقعك: الاتجاهات والمسافات منك صحيحة، فيظهر طريق القبلة خطًا مستقيمًا بزاوية القبلة نفسها والشمال إلى الأعلى. الأشكال البعيدة عن المركز مشوهة، والجانب المقابل من الأرض ممطوط عند الحافة.",
+        "Azimuthal equidistant projection centred on you: directions and distances from you are true, so the qibla path is a straight line at the qibla angle, north up. Shapes far from the centre are distorted, and the far side of the Earth is stretched around the rim.",
+    )
+    val mapWorldNote get() = t(
+        "إسقاط متساوي المستطيلات: خطوط الطول والعرض شبكة منتظمة، ولا تُحفظ فيه الاتجاهات ولا المسافات، فيظهر أقصر طريق إلى مكة منحنيًا. لا تقس زاوية القبلة على هذه الخريطة.",
+        "Equirectangular projection: longitude and latitude form a regular grid; it keeps neither directions nor distances, so the shortest path to Mecca looks curved. Do not measure the qibla angle on this map.",
+    )
+    val mapDataNote get() = t(
+        "بيانات Natural Earth (ملكية عامة) بمقياسي 1:50m و1:110m، مخزّنة بدقة نحو ٠٫٦ كم؛ السواحل مبسّطة والحدود تقريبية ولا تمثل موقفًا سياسيًا. الخريطة توضيحية، والرقم أعلاه هو المرجع.",
+        "Natural Earth data (public domain) at 1:50m and 1:110m, stored to about 0.6 km; coastlines are simplified and borders approximate, not a political statement. The map is illustrative; the number above is the reference.",
+    )
+    val mapZoomHint get() = t("قرّب أو حرّك بإصبعين، واضغط مرتين للعودة.", "Pinch or drag to zoom and pan; double-tap to reset.")
+    val srcAdhkar get() = t("الأذكار: نصوص الأحاديث من بيانات hadith-api المفتوحة بترقيم sunnah.com، مع أحكام المحققين؛ ونصوص الآيات من نسخة Tanzil المضمنة.", "Adhkar: hadith texts from the open hadith-api data with sunnah.com numbering, with the graders' rulings; ayah texts from the bundled Tanzil copy.")
+    val srcQibla get() = t("القبلة: نموذج WMM2025 من NOAA وبيانات Natural Earth للخريطة (ملكية عامة).", "Qibla: NOAA's WMM2025 model and Natural Earth map data (public domain).")
+    fun compassPoint(i: Int) = (if (isAr) listOf(
+        "شمال", "شمال شمال شرق", "شمال شرق", "شرق شمال شرق", "شرق", "شرق جنوب شرق", "جنوب شرق", "جنوب جنوب شرق",
+        "جنوب", "جنوب جنوب غرب", "جنوب غرب", "غرب جنوب غرب", "غرب", "غرب شمال غرب", "شمال غرب", "شمال شمال غرب",
+    ) else listOf("N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"))[i]
+
 }
 
 val LocalStrings = staticCompositionLocalOf { Strings(Lang.AR) }

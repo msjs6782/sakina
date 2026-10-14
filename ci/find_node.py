@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Prints the centre "x y" of the first UI node whose text, content-desc or resource-id matches.
-Usage: find_node.py <ui.xml> <text> [exact|contains|id]"""
+Usage: find_node.py <ui.xml> <text> [exact|contains|id|idtext]
+idtext prints the text (or content-desc) of the node with that test tag instead of its centre."""
 import re, sys
 import xml.etree.ElementTree as ET
 
@@ -12,7 +13,10 @@ except Exception:
     sys.exit(1)
 for n in root.iter("node"):
     t, d, rid = n.get("text", ""), n.get("content-desc", ""), n.get("resource-id", "")
-    hit = (mode == "exact" and needle in (t, d)) or (mode == "contains" and (needle in t or needle in d)) or (mode == "id" and rid.endswith(needle))
+    hit = (mode == "exact" and needle in (t, d)) or (mode == "contains" and (needle in t or needle in d)) or (mode in ("id", "idtext") and rid.endswith(needle))
+    if hit and mode == "idtext":
+        print(t or d)
+        sys.exit(0)
     if hit:
         m = re.findall(r"\d+", n.get("bounds", ""))
         if len(m) == 4:

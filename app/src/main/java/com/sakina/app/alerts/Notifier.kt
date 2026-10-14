@@ -51,6 +51,24 @@ class Notifier(private val context: Context, private val s: AppSettings) {
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
 
+    /** Adhkar reminders open their set of adhkar directly. */
+    private fun openPractice(kind: com.sakina.app.core.alerts.ReminderKind): PendingIntent? {
+        val practice = when (kind) {
+            com.sakina.app.core.alerts.ReminderKind.ADHKAR_MORNING -> "morning"
+            com.sakina.app.core.alerts.ReminderKind.ADHKAR_EVENING -> "evening"
+            com.sakina.app.core.alerts.ReminderKind.ADHKAR_SLEEP -> "sleep"
+            com.sakina.app.core.alerts.ReminderKind.ADHKAR_WAKING -> "waking"
+            else -> return null
+        }
+        return PendingIntent.getActivity(
+            context, 100 + kind.ordinal,
+            Intent(context, MainActivity::class.java)
+                .putExtra(MainActivity.EXTRA_OPEN, MainActivity.OPEN_ADHKAR + practice)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+    }
+
     private fun base(channel: String) = NotificationCompat.Builder(context, channel)
         .setSmallIcon(R.drawable.ic_stat_sakina)
         .setColor(0xFF0E6B5E.toInt())
@@ -109,6 +127,7 @@ class Notifier(private val context: Context, private val s: AppSettings) {
                     .setContentText(str.reminderText(fmt.time(e.at, zone)) + lateNote)
                     .setCategory(NotificationCompat.CATEGORY_REMINDER)
                     .setTimeoutAfter(Duration.ofHours(3).toMillis())
+                openPractice(kind)?.let { b.setContentIntent(it) }
                 id = ID_REMINDER + kind.ordinal
             }
             EventKind.TEST -> {

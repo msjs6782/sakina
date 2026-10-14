@@ -335,7 +335,7 @@ fun AboutScreen(vm: MainViewModel) {
             Text(str.aboutPrivacyBody, style = MaterialTheme.typography.bodyMedium)
         }
         SectionCard(title = str.aboutSources, icon = SakinaIcons.Book) {
-            listOf(str.srcAlgorithm, str.srcCalendar, str.srcCities, str.srcFonts, str.srcQuran).forEach {
+            listOf(str.srcAlgorithm, str.srcCalendar, str.srcCities, str.srcFonts, str.srcQuran, str.srcAdhkar, str.srcQibla).forEach {
                 Row(Modifier.padding(vertical = 4.dp)) {
                     Box(Modifier.padding(top = 8.dp).size(6.dp).clip(CircleShape).background(MaterialTheme.colorScheme.primary))
                     Spacer(Modifier.width(10.dp))
@@ -348,6 +348,8 @@ fun AboutScreen(vm: MainViewModel) {
                 "licenses/OFL-Amiri.txt" to "Amiri — OFL 1.1",
                 "licenses/OFL-NotoKufiArabic.txt" to "Noto Kufi Arabic — OFL 1.1",
                 "licenses/MIT-Adhan.txt" to "Adhan — MIT",
+                "licenses/PD-NaturalEarth-WMM.txt" to "Natural Earth · WMM2025 — public domain",
+                "licenses/Unlicense-hadith-api.txt" to "hadith-api — Unlicense",
             ).forEach { (asset, title) ->
                 TextButton(onClick = { vm.push(Route.License(asset, title)) }) { Text(title) }
             }

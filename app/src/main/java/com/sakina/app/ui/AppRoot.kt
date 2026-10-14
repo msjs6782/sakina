@@ -150,6 +150,12 @@ private fun RouteScreen(route: Route, vm: MainViewModel, s: AppSettings) {
         is Route.Mushaf -> MushafScreen(vm, route.page, route.focus)
         Route.MushafDownloads -> MushafDownloadsScreen(vm)
         is Route.Listen -> ListenScreen(vm, route.sura)
+        is Route.Adhkar -> com.sakina.app.ui.adhkar.AdhkarHomeScreen(vm, route.query)
+        is Route.AdhkarCategory -> com.sakina.app.ui.adhkar.AdhkarCategoryScreen(vm, route.id)
+        is Route.AdhkarItem -> com.sakina.app.ui.adhkar.AdhkarItemScreen(vm, s, route.id)
+        is Route.Wird -> com.sakina.app.ui.adhkar.WirdScreen(vm, s, route.practice, route.session)
+        Route.Tasbih -> com.sakina.app.ui.adhkar.TasbihScreen(vm)
+        Route.Qibla -> com.sakina.app.ui.qibla.QiblaScreen(vm, s)
     }
 }
 
@@ -184,7 +190,7 @@ private fun MainTabs(vm: MainViewModel, s: AppSettings, startTimesView: TimesVie
                 Tab.HOME -> HomeScreen(vm, s, padding)
                 Tab.TIMES -> TimesScreen(vm, s, padding, startTimesView)
                 Tab.QURAN -> QuranHome(vm, padding)
-                Tab.DISCOVER -> PlannedScreen(str.discoverSoon, str.discoverSoonBody, SakinaIcons.Compass, padding)
+                Tab.DISCOVER -> com.sakina.app.ui.more.DiscoverScreen(vm, padding)
                 Tab.SETTINGS -> SettingsScreen(vm, s, padding)
             }
         }

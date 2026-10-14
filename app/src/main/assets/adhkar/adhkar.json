@@ -1,0 +1,2708 @@
+{
+ "version": 1,
+ "source": "hadith-api (fawazahmed0), sunnah.com numbering; Quran text from the app's Tanzil copy",
+ "categories": [
+  {
+   "id": "morning_evening",
+   "titleAr": "أذكار الصباح والمساء",
+   "titleEn": "Morning and evening"
+  },
+  {
+   "id": "sleep",
+   "titleAr": "أذكار النوم",
+   "titleEn": "Before sleep"
+  },
+  {
+   "id": "waking",
+   "titleAr": "أذكار الاستيقاظ",
+   "titleEn": "On waking"
+  },
+  {
+   "id": "after_prayer",
+   "titleAr": "الأذكار بعد السلام من الصلاة",
+   "titleEn": "After the prayer"
+  },
+  {
+   "id": "in_prayer",
+   "titleAr": "أذكار الصلاة",
+   "titleEn": "In the prayer"
+  },
+  {
+   "id": "adhan_wudu_masjid",
+   "titleAr": "الأذان والوضوء والمسجد",
+   "titleEn": "Adhan, wudu and the mosque"
+  },
+  {
+   "id": "home",
+   "titleAr": "المنزل والخلاء واللباس",
+   "titleEn": "Home, restroom and clothing"
+  },
+  {
+   "id": "food",
+   "titleAr": "الطعام والشراب",
+   "titleEn": "Food and drink"
+  },
+  {
+   "id": "travel",
+   "titleAr": "السفر",
+   "titleEn": "Travel"
+  },
+  {
+   "id": "distress",
+   "titleAr": "الكرب والهم",
+   "titleEn": "Distress and worry"
+  },
+  {
+   "id": "dhikr",
+   "titleAr": "الذكر والاستغفار والدعاء",
+   "titleEn": "Remembrance, forgiveness and supplication"
+  }
+ ],
+ "practices": [
+  {
+   "id": "morning",
+   "titleAr": "أذكار الصباح",
+   "titleEn": "Morning adhkar",
+   "reminder": "ADHKAR_MORNING",
+   "ctxAr": "بعد صلاة الفجر إلى طلوع الشمس، ويمتد إلى الضحى.",
+   "ctxEn": "From the Fajr prayer until sunrise, extending into the forenoon.",
+   "items": [
+    "muawwidhat_3",
+    "asbahna_mulk",
+    "bika_asbahna",
+    "sayyid_istighfar",
+    "alim_ghayb",
+    "afiya",
+    "bismillah_la_yadurr",
+    "subhanallah_wabihamdih_100",
+    "tahlil_100"
+   ]
+  },
+  {
+   "id": "evening",
+   "titleAr": "أذكار المساء",
+   "titleEn": "Evening adhkar",
+   "reminder": "ADHKAR_EVENING",
+   "ctxAr": "بعد صلاة العصر إلى غروب الشمس، ويمتد أول الليل.",
+   "ctxEn": "From the Asr prayer until sunset, extending into the early night.",
+   "items": [
+    "muawwidhat_3",
+    "asbahna_mulk",
+    "bika_asbahna",
+    "sayyid_istighfar",
+    "alim_ghayb",
+    "afiya",
+    "bismillah_la_yadurr",
+    "subhanallah_wabihamdih_100"
+   ]
+  },
+  {
+   "id": "sleep",
+   "titleAr": "أذكار النوم",
+   "titleEn": "Adhkar before sleep",
+   "reminder": "ADHKAR_SLEEP",
+   "ctxAr": "عند الاضطجاع على الفراش للنوم.",
+   "ctxEn": "When lying down in bed to sleep.",
+   "items": [
+    "nafth_muawwidhat",
+    "ayat_kursi_sleep",
+    "last_baqarah",
+    "bismika_rabbi_wadatu",
+    "qini_adhabak",
+    "bismika_amut",
+    "alim_ghayb",
+    "atamana_wasaqana",
+    "tasbih_sleep",
+    "aslamtu_nafsi"
+   ]
+  },
+  {
+   "id": "waking",
+   "titleAr": "أذكار الاستيقاظ",
+   "titleEn": "Adhkar on waking",
+   "reminder": "ADHKAR_WAKING",
+   "ctxAr": "عند الاستيقاظ من النوم، ومن تعارّ من الليل.",
+   "ctxEn": "On waking from sleep, or waking in the night.",
+   "items": [
+    "ahyana",
+    "taarra_minal_layl"
+   ]
+  },
+  {
+   "id": "after_prayer",
+   "titleAr": "أذكار ما بعد الصلاة",
+   "titleEn": "Adhkar after the prayer",
+   "reminder": null,
+   "ctxAr": "بعد السلام من كل صلاة مفروضة.",
+   "ctxEn": "After the closing salam of each obligatory prayer.",
+   "items": [
+    "astaghfirullah_salam",
+    "la_mania",
+    "lahu_nimah",
+    "tasbih_33",
+    "ainni_ala_dhikrik"
+   ]
+  }
+ ],
+ "items": [
+  {
+   "id": "sayyid_istighfar",
+   "cat": "morning_evening",
+   "titleAr": "سيد الاستغفار",
+   "titleEn": "The master supplication for forgiveness",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ أَنْتَ رَبِّي، لاَ إِلَهَ إِلاَّ أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَىَّ وَأَبُوءُ لَكَ بِذَنْبِي، فَاغْفِرْ لِي، فَإِنَّهُ لاَ يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "من قالها من النهار موقنًا بها فمات من يومه قبل أن يمسي فهو من أهل الجنة، ومن قالها من الليل موقنًا بها فمات قبل أن يصبح فهو من أهل الجنة.",
+   "ctxEn": "Whoever says it in the day with conviction and dies that day before evening is among the people of Paradise; likewise at night.",
+   "source": {
+    "book": "bukhari",
+    "number": "6306",
+    "ar": "صحيح البخاري 6306",
+    "en": "Sahih al-Bukhari 6306",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:6306"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%A3%D9%86%D8%AA%20%D8%B1%D8%A8%D9%8A%D8%8C%20%D9%84%D8%A7%20%D8%A5%D9%84%D9%87%20%D8%A5%D9%84%D8%A7%20%D8%A3%D9%86%D8%AA%D8%8C%20%D8%AE%D9%84%D9%82%D8%AA%D9%86%D9%8A"
+    }
+   ]
+  },
+  {
+   "id": "asbahna_mulk",
+   "cat": "morning_evening",
+   "titleAr": "أصبحنا وأصبح الملك لله",
+   "titleEn": "We have entered the morning and the dominion is Allah's",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَىْءٍ قَدِيرٌ رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ",
+     "count": 1,
+     "morning": "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَىْءٍ قَدِيرٌ رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ",
+     "evening": "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَىْءٍ قَدِيرٌ رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ"
+    }
+   ],
+   "ctxAr": "كان النبي ﷺ يقوله إذا أمسى، وإذا أصبح قال: «أصبحنا وأصبح الملك لله».",
+   "ctxEn": "The Prophet ﷺ said it in the evening, and in the morning he said “We have entered the morning…”.",
+   "source": {
+    "book": "muslim",
+    "number": "2723b",
+    "ar": "صحيح مسلم 2723",
+    "en": "Sahih Muslim 2723b",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح مسلم",
+     "byEn": "Sahih Muslim"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/muslim:2723b"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A3%D9%85%D8%B3%D9%8A%D9%86%D8%A7%20%D9%88%D8%A3%D9%85%D8%B3%D9%89%20%D8%A7%D9%84%D9%85%D9%84%D9%83%20%D9%84%D9%84%D9%87%20%D9%88%D8%A7%D9%84%D8%AD%D9%85%D8%AF%20%D9%84%D9%84%D9%87%20%D9%84%D8%A7%20%D8%A5%D9%84%D9%87"
+    }
+   ],
+   "noteAr": "في الحديث: «وإذا أصبح قال ذلك أيضًا: أصبحنا وأصبح الملك لله»، ويُقال في الصباح: «هذا اليوم… ما بعده» مكان «هذه الليلة… ما بعدها».",
+   "noteEn": "The hadith: “In the morning he said the same: We have entered the morning…”; in the morning “this day… after it” replaces “this night… after it”."
+  },
+  {
+   "id": "bika_asbahna",
+   "cat": "morning_evening",
+   "titleAr": "اللهم بك أصبحنا وبك أمسينا",
+   "titleEn": "O Allah, by You we enter the morning",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ بِكَ أَصْبَحْنَا وَبِكَ أَمْسَيْنَا وَبِكَ نَحْيَا وَبِكَ نَمُوتُ وَإِلَيْكَ الْمَصِيرُ",
+     "count": 1,
+     "evening": "اللَّهُمَّ بِكَ أَمْسَيْنَا وَبِكَ أَصْبَحْنَا وَبِكَ نَحْيَا وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ"
+    }
+   ],
+   "ctxAr": "كان النبي ﷺ يعلّم أصحابه أن يقولوه إذا أصبحوا، وإذا أمسوا: «اللهم بك أمسينا وبك أصبحنا وبك نحيا وبك نموت وإليك النشور».",
+   "ctxEn": "The Prophet ﷺ taught his companions to say it in the morning, with the evening wording at night.",
+   "source": {
+    "book": "tirmidhi",
+    "number": "3391",
+    "ar": "جامع الترمذي 3391",
+    "en": "Jami at-Tirmidhi 3391",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "الألباني",
+     "byEn": "Al-Albani"
+    },
+    "graders": [
+     {
+      "by": "Ahmad Muhammad Shakir",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Al-Albani",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Bashar Awad Maarouf",
+      "grade": "Hasan"
+     },
+     {
+      "by": "Zubair Ali Zai",
+      "grade": "Hasan"
+     }
+    ]
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/tirmidhi:3391"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%A8%D9%83%20%D8%A3%D8%B5%D8%A8%D8%AD%D9%86%D8%A7%20%D9%88%D8%A8%D9%83%20%D8%A3%D9%85%D8%B3%D9%8A%D9%86%D8%A7%20%D9%88%D8%A8%D9%83%20%D9%86%D8%AD%D9%8A%D8%A7%20%D9%88%D8%A8%D9%83"
+    }
+   ]
+  },
+  {
+   "id": "alim_ghayb",
+   "cat": "morning_evening",
+   "titleAr": "اللهم عالم الغيب والشهادة",
+   "titleEn": "O Allah, Knower of the unseen and the seen",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ عَالِمَ الْغَيْبِ وَالشَّهَادَةِ فَاطِرَ السَّمَوَاتِ وَالأَرْضِ رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ أَنْتَ أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي وَمِنْ شَرِّ الشَّيْطَانِ وَشِرْكِهِ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "علّمه النبي ﷺ أبا بكر رضي الله عنه وقال: «قله إذا أصبحت وإذا أمسيت وإذا أخذت مضجعك».",
+   "ctxEn": "Taught to Abu Bakr: “Say it in the morning, in the evening and when you lie down to sleep.”",
+   "source": {
+    "book": "tirmidhi",
+    "number": "3392",
+    "ar": "جامع الترمذي 3392",
+    "en": "Jami at-Tirmidhi 3392",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "الألباني",
+     "byEn": "Al-Albani"
+    },
+    "graders": [
+     {
+      "by": "Ahmad Muhammad Shakir",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Al-Albani",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Bashar Awad Maarouf",
+      "grade": "Hasan Sahih"
+     },
+     {
+      "by": "Zubair Ali Zai",
+      "grade": "Isnaad Sahih"
+     }
+    ]
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/tirmidhi:3392"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%B9%D8%A7%D9%84%D9%85%20%D8%A7%D9%84%D8%BA%D9%8A%D8%A8%20%D9%88%D8%A7%D9%84%D8%B4%D9%87%D8%A7%D8%AF%D8%A9%20%D9%81%D8%A7%D8%B7%D8%B1%20%D8%A7%D9%84%D8%B3%D9%85%D9%88%D8%A7%D8%AA%20%D9%88%D8%A7%D9%84%D8%A3%D8%B1%D8%B6%20%D8%B1%D8%A8"
+    }
+   ]
+  },
+  {
+   "id": "bismillah_la_yadurr",
+   "cat": "morning_evening",
+   "titleAr": "بسم الله الذي لا يضر مع اسمه شيء",
+   "titleEn": "In the name of Allah, with whose name nothing harms",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "بِسْمِ اللَّهِ الَّذِي لاَ يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الأَرْضِ وَلاَ فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",
+     "count": 3
+    }
+   ],
+   "ctxAr": "من قالها ثلاث مرات حين يصبح وحين يمسي لم يضره شيء.",
+   "ctxEn": "Said three times in the morning and evening; nothing will harm the one who says it.",
+   "source": {
+    "book": "tirmidhi",
+    "number": "3388",
+    "ar": "جامع الترمذي 3388",
+    "en": "Jami at-Tirmidhi 3388",
+    "grade": {
+     "ar": "حسن صحيح",
+     "en": "Hasan Sahih",
+     "byAr": "الألباني",
+     "byEn": "Al-Albani"
+    },
+    "graders": [
+     {
+      "by": "Ahmad Muhammad Shakir",
+      "grade": "Hasan Sahih"
+     },
+     {
+      "by": "Al-Albani",
+      "grade": "Hasan Sahih"
+     },
+     {
+      "by": "Bashar Awad Maarouf",
+      "grade": "Hasan Sahih"
+     },
+     {
+      "by": "Zubair Ali Zai",
+      "grade": "Isnaad Hasan"
+     }
+    ]
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/tirmidhi:3388"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A8%D8%B3%D9%85%20%D8%A7%D9%84%D9%84%D9%87%20%D8%A7%D9%84%D8%B0%D9%8A%20%D9%84%D8%A7%20%D9%8A%D8%B6%D8%B1%20%D9%85%D8%B9%20%D8%A7%D8%B3%D9%85%D9%87%20%D8%B4%D9%8A%D8%A1"
+    }
+   ]
+  },
+  {
+   "id": "afiya",
+   "cat": "morning_evening",
+   "titleAr": "اللهم إني أسألك العافية في الدنيا والآخرة",
+   "titleEn": "O Allah, I ask You for well-being",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَاىَ وَأَهْلِي وَمَالِي اللَّهُمَّ اسْتُرْ عَوْرَاتِي وَآمِنْ رَوْعَاتِي اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَىَّ وَمِنْ خَلْفِي وَعَنْ يَمِينِي وَعَنْ شِمَالِي وَمِنْ فَوْقِي وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي",
+     "count": 1
+    }
+   ],
+   "ctxAr": "لم يكن رسول الله ﷺ يدع هؤلاء الدعوات حين يمسي وحين يصبح.",
+   "ctxEn": "The Messenger of Allah ﷺ never left these supplications in the evening and morning.",
+   "source": {
+    "book": "abudawud",
+    "number": "5074",
+    "ar": "سنن أبي داود 5074",
+    "en": "Sunan Abi Dawud 5074",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "الألباني",
+     "byEn": "Al-Albani"
+    },
+    "graders": [
+     {
+      "by": "Al-Albani",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Muhammad Muhyi Al-Din Abdul Hamid",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Shuaib Al Arnaut",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Zubair Ali Zai",
+      "grade": "Isnaad Sahih"
+     }
+    ]
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/abudawud:5074"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%A5%D9%86%D9%8A%20%D8%A3%D8%B3%D8%A3%D9%84%D9%83%20%D8%A7%D9%84%D8%B9%D8%A7%D9%81%D9%8A%D8%A9%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%AF%D9%86%D9%8A%D8%A7%20%D9%88%D8%A7%D9%84%D8%A2%D8%AE%D8%B1%D8%A9%20%D8%A7%D9%84%D9%84%D9%87%D9%85"
+    }
+   ],
+   "noteAr": "بلفظ رواية عثمان بن أبي شيبة عند أبي داود: «اللهم استر عوراتي»."
+  },
+  {
+   "id": "muawwidhat_3",
+   "cat": "morning_evening",
+   "titleAr": "المعوذات ثلاث مرات",
+   "titleEn": "The three protective surahs, three times",
+   "rounds": 3,
+   "parts": [
+    {
+     "quran": {
+      "sura": 112,
+      "from": 1,
+      "to": 4
+     },
+     "count": 1,
+     "labelAr": "سورة الإخلاص",
+     "labelEn": "Al-Ikhlas"
+    },
+    {
+     "quran": {
+      "sura": 113,
+      "from": 1,
+      "to": 5
+     },
+     "count": 1,
+     "labelAr": "سورة الفلق",
+     "labelEn": "Al-Falaq"
+    },
+    {
+     "quran": {
+      "sura": 114,
+      "from": 1,
+      "to": 6
+     },
+     "count": 1,
+     "labelAr": "سورة الناس",
+     "labelEn": "An-Nas"
+    }
+   ],
+   "ctxAr": "قراءة سورة الإخلاص والفلق والناس ثلاث مرات صباحًا ومساءً تكفي من كل شيء.",
+   "ctxEn": "Reciting al-Ikhlas, al-Falaq and an-Nas three times morning and evening suffices against everything.",
+   "source": {
+    "book": "tirmidhi",
+    "number": "3575",
+    "ar": "جامع الترمذي 3575",
+    "en": "Jami at-Tirmidhi 3575",
+    "grade": {
+     "ar": "حسن",
+     "en": "Hasan",
+     "byAr": "الألباني",
+     "byEn": "Al-Albani"
+    },
+    "graders": [
+     {
+      "by": "Ahmad Muhammad Shakir",
+      "grade": "Hasan"
+     },
+     {
+      "by": "Al-Albani",
+      "grade": "Hasan"
+     },
+     {
+      "by": "Bashar Awad Maarouf",
+      "grade": "Hasan Sahih"
+     },
+     {
+      "by": "Zubair Ali Zai",
+      "grade": "Isnaad Hasan"
+     }
+    ]
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/tirmidhi:3575"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D9%82%D9%84%20%3A%20%D9%87%D9%88%20%D8%A7%D9%84%D9%84%D9%87%20%D8%A3%D8%AD%D8%AF%20%D9%88%D8%A7%D9%84%D9%85%D8%B9%D9%88%D8%B0%D8%AA%D9%8A%D9%86%20%D8%AD%D9%8A%D9%86%20%D8%AA%D9%85%D8%B3%D9%8A"
+    },
+    {
+     "titleAr": "quran.com: سورة الإخلاص",
+     "titleEn": "quran.com: Al-Ikhlas",
+     "url": "https://quran.com/112"
+    },
+    {
+     "titleAr": "quran.com: سورة الفلق",
+     "titleEn": "quran.com: Al-Falaq",
+     "url": "https://quran.com/113"
+    },
+    {
+     "titleAr": "quran.com: سورة الناس",
+     "titleEn": "quran.com: An-Nas",
+     "url": "https://quran.com/114"
+    }
+   ]
+  },
+  {
+   "id": "subhanallah_wabihamdih_100",
+   "cat": "morning_evening",
+   "titleAr": "سبحان الله وبحمده مائة مرة",
+   "titleEn": "Glory be to Allah and praise be to Him, one hundred times",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+     "count": 100
+    }
+   ],
+   "ctxAr": "من قال حين يصبح وحين يمسي «سبحان الله وبحمده» مائة مرة لم يأت أحد يوم القيامة بأفضل مما جاء به إلا أحد قال مثل ما قال أو زاد عليه.",
+   "ctxEn": "Whoever says it a hundred times morning and evening, no one brings anything better on the Day of Resurrection except one who said as much or more.",
+   "source": {
+    "book": "muslim",
+    "number": "2692",
+    "ar": "صحيح مسلم 2692",
+    "en": "Sahih Muslim 2692",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح مسلم",
+     "byEn": "Sahih Muslim"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/muslim:2692"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%B3%D8%A8%D8%AD%D8%A7%D9%86%20%D8%A7%D9%84%D9%84%D9%87%20%D9%88%D8%A8%D8%AD%D9%85%D8%AF%D9%87"
+    }
+   ]
+  },
+  {
+   "id": "tahlil_100",
+   "cat": "morning_evening",
+   "titleAr": "لا إله إلا الله وحده لا شريك له مائة مرة",
+   "titleEn": "There is no god but Allah alone, one hundred times",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "لاَ إِلَهَ إِلاَّ اللَّهُ، وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهْوَ عَلَى كُلِّ شَىْءٍ قَدِيرٌ",
+     "count": 100
+    }
+   ],
+   "ctxAr": "من قالها في يوم مائة مرة كانت له عدل عشر رقاب، وكتبت له مائة حسنة، ومحيت عنه مائة سيئة، وكانت له حرزًا من الشيطان يومه ذلك حتى يمسي.",
+   "ctxEn": "Said a hundred times in a day: like freeing ten slaves, a hundred good deeds, a hundred sins erased, and protection from Satan until evening.",
+   "source": {
+    "book": "bukhari",
+    "number": "6403",
+    "ar": "صحيح البخاري 6403",
+    "en": "Sahih al-Bukhari 6403",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:6403"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D9%84%D8%A7%20%D8%A5%D9%84%D9%87%20%D8%A5%D9%84%D8%A7%20%D8%A7%D9%84%D9%84%D9%87%D8%8C%20%D9%88%D8%AD%D8%AF%D9%87%20%D9%84%D8%A7%20%D8%B4%D8%B1%D9%8A%D9%83%20%D9%84%D9%87%D8%8C"
+    }
+   ]
+  },
+  {
+   "id": "bismika_amut",
+   "cat": "sleep",
+   "titleAr": "باسمك اللهم أموت وأحيا",
+   "titleEn": "In Your name, O Allah, I die and I live",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كان النبي ﷺ إذا أراد أن ينام قال ذلك، وإذا استيقظ من منامه قال: «الحمد لله الذي أحيانا بعد ما أماتنا وإليه النشور».",
+   "ctxEn": "The Prophet ﷺ said it when he wanted to sleep, and on waking: “Praise be to Allah who gave us life after He caused us to die, and to Him is the return.”",
+   "source": {
+    "book": "bukhari",
+    "number": "6324",
+    "ar": "صحيح البخاري 6324",
+    "en": "Sahih al-Bukhari 6324",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:6324"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A8%D8%A7%D8%B3%D9%85%D9%83%20%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%A3%D9%85%D9%88%D8%AA%20%D9%88%D8%A3%D8%AD%D9%8A%D8%A7"
+    }
+   ]
+  },
+  {
+   "id": "aslamtu_nafsi",
+   "cat": "sleep",
+   "titleAr": "اللهم أسلمت وجهي إليك",
+   "titleEn": "O Allah, I submit my face to You",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ أَسْلَمْتُ وَجْهِي إِلَيْكَ، وَفَوَّضْتُ أَمْرِي إِلَيْكَ، وَأَلْجَأْتُ ظَهْرِي إِلَيْكَ، رَغْبَةً وَرَهْبَةً إِلَيْكَ، لاَ مَلْجَأَ وَلاَ مَنْجَا مِنْكَ إِلاَّ إِلَيْكَ، آمَنْتُ بِكِتَابِكَ الَّذِي أَنْزَلْتَ، وَبِنَبِيِّكَ الَّذِي أَرْسَلْتَ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "إذا أتيت مضجعك فتوضأ وضوءك للصلاة، ثم اضطجع على شقك الأيمن وقل ذلك، واجعلهن آخر ما تقول؛ فإن مت مت على الفطرة.",
+   "ctxEn": "Make wudu, lie on your right side, say it and let it be your last words; if you die, you die upon the fitrah.",
+   "source": {
+    "book": "bukhari",
+    "number": "6311",
+    "ar": "صحيح البخاري 6311",
+    "en": "Sahih al-Bukhari 6311",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:6311"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%A3%D8%B3%D9%84%D9%85%D8%AA%20%D9%88%D8%AC%D9%87%D9%8A%20%D8%A5%D9%84%D9%8A%D9%83%D8%8C%20%D9%88%D9%81%D9%88%D8%B6%D8%AA%20%D8%A3%D9%85%D8%B1%D9%8A%20%D8%A5%D9%84%D9%8A%D9%83%D8%8C%20%D9%88%D8%A3%D9%84%D8%AC%D8%A3%D8%AA"
+    }
+   ]
+  },
+  {
+   "id": "ayat_kursi_sleep",
+   "cat": "sleep",
+   "titleAr": "آية الكرسي عند النوم",
+   "titleEn": "Ayat al-Kursi before sleep",
+   "rounds": 1,
+   "parts": [
+    {
+     "quran": {
+      "sura": 2,
+      "from": 255,
+      "to": 255
+     },
+     "count": 1,
+     "labelAr": "سورة البقرة، الآية 255",
+     "labelEn": "Al-Baqarah 2:255"
+    }
+   ],
+   "ctxAr": "لن يزال عليك من الله حافظ، ولا يقربك شيطان حتى تصبح. (سورة البقرة، الآية ٢٥٥)",
+   "ctxEn": "A guardian from Allah stays with you and no devil comes near you until morning. (al-Baqarah 2:255)",
+   "source": {
+    "book": "bukhari",
+    "number": "2311",
+    "ar": "صحيح البخاري 2311",
+    "en": "Sahih al-Bukhari 2311",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:2311"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A5%D8%B0%D8%A7%20%D8%A3%D9%88%D9%8A%D8%AA%20%D8%A5%D9%84%D9%89%20%D9%81%D8%B1%D8%A7%D8%B4%D9%83%20%D9%81%D8%A7%D9%82%D8%B1%D8%A3%20%D8%A2%D9%8A%D8%A9%20%D8%A7%D9%84%D9%83%D8%B1%D8%B3%D9%8A"
+    },
+    {
+     "titleAr": "quran.com: سورة البقرة، الآية 255",
+     "titleEn": "quran.com: Al-Baqarah 2:255",
+     "url": "https://quran.com/2/255"
+    }
+   ]
+  },
+  {
+   "id": "tasbih_sleep",
+   "cat": "sleep",
+   "titleAr": "التسبيح والتحميد والتكبير عند النوم",
+   "titleEn": "Tasbih, tahmid and takbir before sleep",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُ أَكْبَرُ",
+     "count": 34
+    },
+    {
+     "text": "الْحَمْدُ لِلَّهِ",
+     "count": 33
+    },
+    {
+     "text": "سُبْحَانَ اللَّهِ",
+     "count": 33
+    }
+   ],
+   "ctxAr": "قال النبي ﷺ لعلي وفاطمة لما سألته خادمًا: «إذا أخذتما مضاجعكما فكبّرا الله أربعًا وثلاثين، واحمدا ثلاثًا وثلاثين، وسبّحا ثلاثًا وثلاثين، فإن ذلك خير لكما مما سألتماه».",
+   "ctxEn": "To Ali and Fatimah, who had asked for a servant: “When you go to bed, say Allahu akbar 34 times, al-hamdu lillah 33 and subhan Allah 33; that is better for you than what you asked for.”",
+   "source": {
+    "book": "bukhari",
+    "number": "3113",
+    "ar": "صحيح البخاري 3113",
+    "en": "Sahih al-Bukhari 3113",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:3113"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D9%81%D9%83%D8%A8%D8%B1%D8%A7%20%D8%A7%D9%84%D9%84%D9%87%20%D8%A3%D8%B1%D8%A8%D8%B9%D8%A7%20%D9%88%D8%AB%D9%84%D8%A7%D8%AB%D9%8A%D9%86"
+    }
+   ]
+  },
+  {
+   "id": "bismika_rabbi_wadatu",
+   "cat": "sleep",
+   "titleAr": "باسمك رب وضعت جنبي",
+   "titleEn": "In Your name, my Lord, I lay down my side",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "بِاسْمِكَ رَبِّ وَضَعْتُ جَنْبِي، وَبِكَ أَرْفَعُهُ، إِنْ أَمْسَكْتَ نَفْسِي فَارْحَمْهَا، وَإِنْ أَرْسَلْتَهَا فَاحْفَظْهَا بِمَا تَحْفَظُ بِهِ عِبَادَكَ الصَّالِحِينَ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "إذا أوى أحدكم إلى فراشه فلينفض فراشه بداخلة إزاره، ثم ليقل ذلك.",
+   "ctxEn": "When one of you goes to bed, let him dust off his bed, then say it.",
+   "source": {
+    "book": "bukhari",
+    "number": "6320",
+    "ar": "صحيح البخاري 6320",
+    "en": "Sahih al-Bukhari 6320",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:6320"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A8%D8%A7%D8%B3%D9%85%D9%83%20%D8%B1%D8%A8%20%D9%88%D8%B6%D8%B9%D8%AA%20%D8%AC%D9%86%D8%A8%D9%8A%D8%8C%20%D9%88%D8%A8%D9%83%20%D8%A3%D8%B1%D9%81%D8%B9%D9%87%D8%8C%20%D8%A5%D9%86%20%D8%A3%D9%85%D8%B3%D9%83%D8%AA"
+    }
+   ]
+  },
+  {
+   "id": "qini_adhabak",
+   "cat": "sleep",
+   "titleAr": "اللهم قني عذابك يوم تبعث عبادك",
+   "titleEn": "O Allah, protect me from Your punishment",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ",
+     "count": 3
+    }
+   ],
+   "ctxAr": "كان رسول الله ﷺ إذا أراد أن يرقد وضع يده اليمنى تحت خده ثم يقولها ثلاث مرار.",
+   "ctxEn": "He ﷺ placed his right hand under his cheek before sleeping and said it three times.",
+   "source": {
+    "book": "abudawud",
+    "number": "5045",
+    "ar": "سنن أبي داود 5045",
+    "en": "Sunan Abi Dawud 5045",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "الألباني",
+     "byEn": "Al-Albani"
+    },
+    "graders": [
+     {
+      "by": "Al-Albani",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Muhammad Muhyi Al-Din Abdul Hamid",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Shuaib Al Arnaut",
+      "grade": "Sahih Lighairihi"
+     },
+     {
+      "by": "Zubair Ali Zai",
+      "grade": "Isnaad Hasan"
+     }
+    ]
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/abudawud:5045"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D9%82%D9%86%D9%8A%20%D8%B9%D8%B0%D8%A7%D8%A8%D9%83%20%D9%8A%D9%88%D9%85%20%D8%AA%D8%A8%D8%B9%D8%AB%20%D8%B9%D8%A8%D8%A7%D8%AF%D9%83"
+    }
+   ]
+  },
+  {
+   "id": "last_baqarah",
+   "cat": "sleep",
+   "titleAr": "خواتيم سورة البقرة",
+   "titleEn": "The last two verses of al-Baqarah",
+   "rounds": 1,
+   "parts": [
+    {
+     "quran": {
+      "sura": 2,
+      "from": 285,
+      "to": 286
+     },
+     "count": 1,
+     "labelAr": "سورة البقرة، الآيتان 285–286",
+     "labelEn": "Al-Baqarah 2:285–286"
+    }
+   ],
+   "ctxAr": "من قرأ الآيتين من آخر سورة البقرة في ليلة كفتاه. (البقرة ٢٨٥–٢٨٦)",
+   "ctxEn": "Whoever recites the last two verses of al-Baqarah at night, they suffice him. (2:285–286)",
+   "source": {
+    "book": "bukhari",
+    "number": "5009",
+    "ar": "صحيح البخاري 5009",
+    "en": "Sahih al-Bukhari 5009",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:5009"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D9%85%D9%86%20%D9%82%D8%B1%D8%A3%20%D8%A8%D8%A7%D9%84%D8%A2%D9%8A%D8%AA%D9%8A%D9%86%20%D9%85%D9%86%20%D8%A2%D8%AE%D8%B1%20%D8%B3%D9%88%D8%B1%D8%A9%20%D8%A7%D9%84%D8%A8%D9%82%D8%B1%D8%A9%20%D9%81%D9%8A%20%D9%84%D9%8A%D9%84%D8%A9%20%D9%83%D9%81%D8%AA%D8%A7%D9%87"
+    },
+    {
+     "titleAr": "quran.com: سورة البقرة، الآيتان 285–286",
+     "titleEn": "quran.com: Al-Baqarah 2:285–286",
+     "url": "https://quran.com/2/285-286"
+    }
+   ]
+  },
+  {
+   "id": "nafth_muawwidhat",
+   "cat": "sleep",
+   "titleAr": "جمع الكفين والنفث فيهما بالمعوذات",
+   "titleEn": "Reciting the protective surahs into the palms",
+   "rounds": 3,
+   "parts": [
+    {
+     "quran": {
+      "sura": 112,
+      "from": 1,
+      "to": 4
+     },
+     "count": 1,
+     "labelAr": "سورة الإخلاص",
+     "labelEn": "Al-Ikhlas"
+    },
+    {
+     "quran": {
+      "sura": 113,
+      "from": 1,
+      "to": 5
+     },
+     "count": 1,
+     "labelAr": "سورة الفلق",
+     "labelEn": "Al-Falaq"
+    },
+    {
+     "quran": {
+      "sura": 114,
+      "from": 1,
+      "to": 6
+     },
+     "count": 1,
+     "labelAr": "سورة الناس",
+     "labelEn": "An-Nas"
+    }
+   ],
+   "ctxAr": "كان ﷺ يقرأ فيهما الإخلاص والفلق والناس، ثم يمسح بهما ما استطاع من جسده، يبدأ برأسه ووجهه، يفعل ذلك ثلاث مرات.",
+   "ctxEn": "He ﷺ recited al-Ikhlas, al-Falaq and an-Nas into his palms and wiped over his body, three times.",
+   "source": {
+    "book": "bukhari",
+    "number": "5017",
+    "ar": "صحيح البخاري 5017",
+    "en": "Sahih al-Bukhari 5017",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:5017"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%AC%D9%85%D8%B9%20%D9%83%D9%81%D9%8A%D9%87%20%D8%AB%D9%85%20%D9%86%D9%81%D8%AB%20%D9%81%D9%8A%D9%87%D9%85%D8%A7"
+    },
+    {
+     "titleAr": "quran.com: سورة الإخلاص",
+     "titleEn": "quran.com: Al-Ikhlas",
+     "url": "https://quran.com/112"
+    },
+    {
+     "titleAr": "quran.com: سورة الفلق",
+     "titleEn": "quran.com: Al-Falaq",
+     "url": "https://quran.com/113"
+    },
+    {
+     "titleAr": "quran.com: سورة الناس",
+     "titleEn": "quran.com: An-Nas",
+     "url": "https://quran.com/114"
+    }
+   ]
+  },
+  {
+   "id": "atamana_wasaqana",
+   "cat": "sleep",
+   "titleAr": "الحمد لله الذي أطعمنا وسقانا",
+   "titleEn": "Praise be to Allah who fed us and gave us drink",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَكَفَانَا وَآوَانَا فَكَمْ مِمَّنْ لاَ كَافِيَ لَهُ وَلاَ مُئْوِيَ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كان رسول الله ﷺ إذا أوى إلى فراشه قال ذلك.",
+   "ctxEn": "The Messenger of Allah ﷺ said it when he went to bed.",
+   "source": {
+    "book": "muslim",
+    "number": "2715",
+    "ar": "صحيح مسلم 2715",
+    "en": "Sahih Muslim 2715",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح مسلم",
+     "byEn": "Sahih Muslim"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/muslim:2715"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D8%AD%D9%85%D8%AF%20%D9%84%D9%84%D9%87%20%D8%A7%D9%84%D8%B0%D9%8A%20%D8%A3%D8%B7%D8%B9%D9%85%D9%86%D8%A7%20%D9%88%D8%B3%D9%82%D8%A7%D9%86%D8%A7%20%D9%88%D9%83%D9%81%D8%A7%D9%86%D8%A7%20%D9%88%D8%A2%D9%88%D8%A7%D9%86%D8%A7%20%D9%81%D9%83%D9%85"
+    }
+   ]
+  },
+  {
+   "id": "ahyana",
+   "cat": "waking",
+   "titleAr": "الحمد لله الذي أحيانا بعد ما أماتنا",
+   "titleEn": "Praise be to Allah who gave us life after death",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كان النبي ﷺ إذا أوى إلى فراشه قال: «باسمك أموت وأحيا»، وإذا قام قال ذلك.",
+   "ctxEn": "The Prophet ﷺ said “In Your name I die and live” when going to bed, and this when he got up.",
+   "source": {
+    "book": "bukhari",
+    "number": "6312",
+    "ar": "صحيح البخاري 6312",
+    "en": "Sahih al-Bukhari 6312",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:6312"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D8%AD%D9%85%D8%AF%20%D9%84%D9%84%D9%87%20%D8%A7%D9%84%D8%B0%D9%8A%20%D8%A3%D8%AD%D9%8A%D8%A7%D9%86%D8%A7%20%D8%A8%D8%B9%D8%AF%20%D9%85%D8%A7%20%D8%A3%D9%85%D8%A7%D8%AA%D9%86%D8%A7%20%D9%88%D8%A5%D9%84%D9%8A%D9%87%20%D8%A7%D9%84%D9%86%D8%B4%D9%88%D8%B1"
+    }
+   ]
+  },
+  {
+   "id": "taarra_minal_layl",
+   "cat": "waking",
+   "titleAr": "من تعارّ من الليل",
+   "titleEn": "Waking in the night",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَىْءٍ قَدِيرٌ، الْحَمْدُ لِلَّهِ، وَسُبْحَانَ اللَّهِ، وَلاَ إِلَهَ إِلاَّ اللَّهُ، وَاللَّهُ أَكْبَرُ، وَلاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "من تعارّ من الليل فقال ذلك، ثم قال: «اللهم اغفر لي» أو دعا استجيب له، فإن توضأ وصلى قبلت صلاته.",
+   "ctxEn": "Whoever wakes at night and says it, then asks forgiveness or supplicates, is answered; if he makes wudu and prays, his prayer is accepted.",
+   "source": {
+    "book": "bukhari",
+    "number": "1154",
+    "ar": "صحيح البخاري 1154",
+    "en": "Sahih al-Bukhari 1154",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:1154"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D9%84%D8%A7%20%D8%A5%D9%84%D9%87%20%D8%A5%D9%84%D8%A7%20%D8%A7%D9%84%D9%84%D9%87%20%D9%88%D8%AD%D8%AF%D9%87%20%D9%84%D8%A7%20%D8%B4%D8%B1%D9%8A%D9%83%20%D9%84%D9%87%D8%8C"
+    }
+   ]
+  },
+  {
+   "id": "astaghfirullah_salam",
+   "cat": "after_prayer",
+   "titleAr": "الاستغفار ثلاثًا واللهم أنت السلام",
+   "titleEn": "Seeking forgiveness three times, then “O Allah, You are Peace”",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "أَسْتَغْفِرُ اللَّهَ",
+     "count": 3
+    },
+    {
+     "text": "اللَّهُمَّ أَنْتَ السَّلاَمُ وَمِنْكَ السَّلاَمُ تَبَارَكْتَ ذَا الْجَلاَلِ وَالإِكْرَامِ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كان رسول الله ﷺ إذا انصرف من صلاته استغفر ثلاثًا وقال: «اللهم أنت السلام…». قال الوليد: فقلت للأوزاعي: كيف الاستغفار؟ قال: تقول: أستغفر الله، أستغفر الله.",
+   "ctxEn": "On finishing his prayer he ﷺ asked forgiveness three times, then said “O Allah, You are Peace…”. Al-Awza'i explained the forgiveness: “Say: Astaghfirullah, astaghfirullah.”",
+   "source": {
+    "book": "muslim",
+    "number": "591a",
+    "ar": "صحيح مسلم 591",
+    "en": "Sahih Muslim 591a",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح مسلم",
+     "byEn": "Sahih Muslim"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/muslim:591a"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%A3%D9%86%D8%AA%20%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D9%88%D9%85%D9%86%D9%83%20%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%AA%D8%A8%D8%A7%D8%B1%D9%83%D8%AA%20%D8%B0%D8%A7%20%D8%A7%D9%84%D8%AC%D9%84%D8%A7%D9%84%20%D9%88%D8%A7%D9%84%D8%A5%D9%83%D8%B1%D8%A7%D9%85"
+    }
+   ]
+  },
+  {
+   "id": "la_mania",
+   "cat": "after_prayer",
+   "titleAr": "اللهم لا مانع لما أعطيت",
+   "titleEn": "O Allah, none can withhold what You give",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، وَهْوَ عَلَى كُلِّ شَىْءٍ قَدِيرٌ، اللَّهُمَّ لاَ مَانِعَ لِمَا أَعْطَيْتَ، وَلاَ مُعْطِيَ لِمَا مَنَعْتَ، وَلاَ يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كان النبي ﷺ يقوله في دبر كل صلاة مكتوبة.",
+   "ctxEn": "The Prophet ﷺ said it after every obligatory prayer.",
+   "source": {
+    "book": "bukhari",
+    "number": "844",
+    "ar": "صحيح البخاري 844",
+    "en": "Sahih al-Bukhari 844",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:844"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D9%84%D8%A7%20%D8%A5%D9%84%D9%87%20%D8%A5%D9%84%D8%A7%20%D8%A7%D9%84%D9%84%D9%87%20%D9%88%D8%AD%D8%AF%D9%87%20%D9%84%D8%A7%20%D8%B4%D8%B1%D9%8A%D9%83%20%D9%84%D9%87%D8%8C"
+    }
+   ]
+  },
+  {
+   "id": "lahu_nimah",
+   "cat": "after_prayer",
+   "titleAr": "لا إله إلا الله ولا نعبد إلا إياه",
+   "titleEn": "There is no god but Allah, and we worship none but Him",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَىْءٍ قَدِيرٌ لاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ وَلاَ نَعْبُدُ إِلاَّ إِيَّاهُ لَهُ النِّعْمَةُ وَلَهُ الْفَضْلُ وَلَهُ الثَّنَاءُ الْحَسَنُ لاَ إِلَهَ إِلاَّ اللَّهُ مُخْلِصِينَ لَهُ الدِّينَ وَلَوْ كَرِهَ الْكَافِرُونَ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كان ابن الزبير يقولهن في دبر كل صلاة حين يسلم، وقال: كان رسول الله ﷺ يهلل بهن دبر كل صلاة.",
+   "ctxEn": "Ibn az-Zubayr said them after each prayer, saying the Messenger of Allah ﷺ did so.",
+   "source": {
+    "book": "muslim",
+    "number": "594a",
+    "ar": "صحيح مسلم 594",
+    "en": "Sahih Muslim 594a",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح مسلم",
+     "byEn": "Sahih Muslim"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/muslim:594a"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D9%84%D8%A7%20%D8%A5%D9%84%D9%87%20%D8%A5%D9%84%D8%A7%20%D8%A7%D9%84%D9%84%D9%87%20%D9%88%D8%AD%D8%AF%D9%87%20%D9%84%D8%A7%20%D8%B4%D8%B1%D9%8A%D9%83%20%D9%84%D9%87"
+    }
+   ]
+  },
+  {
+   "id": "tasbih_33",
+   "cat": "after_prayer",
+   "titleAr": "التسبيح والتحميد والتكبير ثلاثًا وثلاثين",
+   "titleEn": "Tasbih, tahmid and takbir thirty-three times each",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "سُبْحَانَ اللَّهِ",
+     "count": 33
+    },
+    {
+     "text": "الْحَمْدُ لِلَّهِ",
+     "count": 33
+    },
+    {
+     "text": "اللَّهُ أَكْبَرُ",
+     "count": 33
+    },
+    {
+     "text": "لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَىْءٍ قَدِيرٌ",
+     "count": 1,
+     "labelAr": "تمام المائة",
+     "labelEn": "Completing the hundred"
+    }
+   ],
+   "ctxAr": "سبحان الله ٣٣، والحمد لله ٣٣، والله أكبر ٣٣، وتمام المائة: «لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير»؛ غفرت خطاياه وإن كانت مثل زبد البحر.",
+   "ctxEn": "33 each, completing a hundred with the tahlil; sins are forgiven even if like the foam of the sea.",
+   "source": {
+    "book": "muslim",
+    "number": "597a",
+    "ar": "صحيح مسلم 597",
+    "en": "Sahih Muslim 597a",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح مسلم",
+     "byEn": "Sahih Muslim"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/muslim:597a"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D9%85%D9%86%20%D8%B3%D8%A8%D8%AD%20%D8%A7%D9%84%D9%84%D9%87%20%D9%81%D9%8A%20%D8%AF%D8%A8%D8%B1%20%D9%83%D9%84%20%D8%B5%D9%84%D8%A7%D8%A9%20%D8%AB%D9%84%D8%A7%D8%AB%D8%A7%20%D9%88%D8%AB%D9%84%D8%A7%D8%AB%D9%8A%D9%86"
+    }
+   ]
+  },
+  {
+   "id": "ainni_ala_dhikrik",
+   "cat": "after_prayer",
+   "titleAr": "اللهم أعني على ذكرك وشكرك وحسن عبادتك",
+   "titleEn": "O Allah, help me to remember You",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "أوصى النبي ﷺ معاذًا ألا يدع أن يقول ذلك في دبر كل صلاة.",
+   "ctxEn": "The Prophet ﷺ advised Muadh never to leave saying it after every prayer.",
+   "source": {
+    "book": "abudawud",
+    "number": "1522",
+    "ar": "سنن أبي داود 1522",
+    "en": "Sunan Abi Dawud 1522",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "الألباني",
+     "byEn": "Al-Albani"
+    },
+    "graders": [
+     {
+      "by": "Al-Albani",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Muhammad Muhyi Al-Din Abdul Hamid",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Shuaib Al Arnaut",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Zubair Ali Zai",
+      "grade": "Isnaad Sahih"
+     }
+    ]
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/abudawud:1522"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%A3%D8%B9%D9%86%D9%8A%20%D8%B9%D9%84%D9%89%20%D8%B0%D9%83%D8%B1%D9%83%20%D9%88%D8%B4%D9%83%D8%B1%D9%83%20%D9%88%D8%AD%D8%B3%D9%86%20%D8%B9%D8%A8%D8%A7%D8%AF%D8%AA%D9%83"
+    }
+   ]
+  },
+  {
+   "id": "istiftah_subhanaka",
+   "cat": "in_prayer",
+   "titleAr": "دعاء الاستفتاح: سبحانك اللهم وبحمدك",
+   "titleEn": "Opening supplication: Glory be to You, O Allah",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ وَتَبَارَكَ اسْمُكَ وَتَعَالَى جَدُّكَ وَلاَ إِلَهَ غَيْرُكَ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كان النبي ﷺ إذا افتتح الصلاة قال ذلك.",
+   "ctxEn": "The Prophet ﷺ said it when he began the prayer.",
+   "source": {
+    "book": "tirmidhi",
+    "number": "243",
+    "ar": "جامع الترمذي 243",
+    "en": "Jami at-Tirmidhi 243",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "الألباني",
+     "byEn": "Al-Albani"
+    },
+    "graders": [
+     {
+      "by": "Ahmad Muhammad Shakir",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Al-Albani",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Bashar Awad Maarouf",
+      "grade": "Hasan"
+     },
+     {
+      "by": "Zubair Ali Zai",
+      "grade": "Hasan"
+     }
+    ]
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/tirmidhi:243"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%B3%D8%A8%D8%AD%D8%A7%D9%86%D9%83%20%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D9%88%D8%A8%D8%AD%D9%85%D8%AF%D9%83%20%D9%88%D8%AA%D8%A8%D8%A7%D8%B1%D9%83%20%D8%A7%D8%B3%D9%85%D9%83%20%D9%88%D8%AA%D8%B9%D8%A7%D9%84%D9%89%20%D8%AC%D8%AF%D9%83%20%D9%88%D9%84%D8%A7"
+    }
+   ]
+  },
+  {
+   "id": "istiftah_baid",
+   "cat": "in_prayer",
+   "titleAr": "دعاء الاستفتاح: اللهم باعد بيني وبين خطاياي",
+   "titleEn": "Opening supplication: O Allah, distance me from my sins",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ بَاعِدْ بَيْنِي وَبَيْنَ خَطَايَاىَ كَمَا بَاعَدْتَ بَيْنَ الْمَشْرِقِ وَالْمَغْرِبِ، اللَّهُمَّ نَقِّنِي مِنَ الْخَطَايَا كَمَا يُنَقَّى الثَّوْبُ الأَبْيَضُ مِنَ الدَّنَسِ، اللَّهُمَّ اغْسِلْ خَطَايَاىَ بِالْمَاءِ وَالثَّلْجِ وَالْبَرَدِ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كان رسول الله ﷺ يسكت بين التكبير وبين القراءة إسكاتة يقول فيها ذلك.",
+   "ctxEn": "He ﷺ paused between the takbir and the recitation and said it.",
+   "source": {
+    "book": "bukhari",
+    "number": "744",
+    "ar": "صحيح البخاري 744",
+    "en": "Sahih al-Bukhari 744",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:744"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%A8%D8%A7%D8%B9%D8%AF%20%D8%A8%D9%8A%D9%86%D9%8A%20%D9%88%D8%A8%D9%8A%D9%86%20%D8%AE%D8%B7%D8%A7%D9%8A%D8%A7%D9%89%20%D9%83%D9%85%D8%A7%20%D8%A8%D8%A7%D8%B9%D8%AF%D8%AA%20%D8%A8%D9%8A%D9%86"
+    }
+   ]
+  },
+  {
+   "id": "ruku_sujud",
+   "cat": "in_prayer",
+   "titleAr": "سبحان ربي العظيم وسبحان ربي الأعلى",
+   "titleEn": "Glory be to my Lord the Almighty, the Most High",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "سُبْحَانَ رَبِّيَ الْعَظِيمِ",
+     "count": 0,
+     "labelAr": "في الركوع",
+     "labelEn": "In bowing"
+    },
+    {
+     "text": "سُبْحَانَ رَبِّيَ الأَعْلَى",
+     "count": 0,
+     "labelAr": "في السجود",
+     "labelEn": "In prostration"
+    }
+   ],
+   "ctxAr": "في الركوع: «سبحان ربي العظيم»، وفي السجود: «سبحان ربي الأعلى».",
+   "ctxEn": "In bowing: “Subhana rabbiya al-azim”; in prostration: “Subhana rabbiya al-a'la”.",
+   "source": {
+    "book": "muslim",
+    "number": "772",
+    "ar": "صحيح مسلم 772",
+    "en": "Sahih Muslim 772",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح مسلم",
+     "byEn": "Sahih Muslim"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/muslim:772"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%B3%D8%A8%D8%AD%D8%A7%D9%86%20%D8%B1%D8%A8%D9%8A%20%D8%A7%D9%84%D8%B9%D8%B8%D9%8A%D9%85"
+    }
+   ],
+   "countNoteAr": "لم يُذكر في هذه الرواية عدد، وكان ركوعه وسجوده ﷺ طويلين قريبًا من قيامه."
+  },
+  {
+   "id": "subhanaka_rabbana",
+   "cat": "in_prayer",
+   "titleAr": "سبحانك اللهم ربنا وبحمدك اللهم اغفر لي",
+   "titleEn": "Glory be to You, O Allah our Lord, forgive me",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "سُبْحَانَكَ اللَّهُمَّ رَبَّنَا وَبِحَمْدِكَ، اللَّهُمَّ اغْفِرْ لِي",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كان النبي ﷺ يقول في ركوعه وسجوده ذلك.",
+   "ctxEn": "The Prophet ﷺ said it in his bowing and prostration.",
+   "source": {
+    "book": "bukhari",
+    "number": "794",
+    "ar": "صحيح البخاري 794",
+    "en": "Sahih al-Bukhari 794",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:794"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%B3%D8%A8%D8%AD%D8%A7%D9%86%D9%83%20%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%B1%D8%A8%D9%86%D8%A7%20%D9%88%D8%A8%D8%AD%D9%85%D8%AF%D9%83%D8%8C%20%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%A7%D8%BA%D9%81%D8%B1%20%D9%84%D9%8A"
+    }
+   ]
+  },
+  {
+   "id": "tashahhud",
+   "cat": "in_prayer",
+   "titleAr": "التشهد",
+   "titleEn": "The tashahhud",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "التَّحِيَّاتُ لِلَّهِ، وَالصَّلَوَاتُ وَالطَّيِّبَاتُ، السَّلاَمُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ، السَّلاَمُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ، أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "قال النبي ﷺ: «فإذا صلى أحدكم فليقل…»، وقال عن «السلام علينا وعلى عباد الله الصالحين»: «فإنكم إذا قلتموها أصابت كل عبد لله صالح في السماء والأرض».",
+   "ctxEn": "“When one of you prays, let him say…”; of the greeting upon the righteous he said it reaches every righteous servant in heaven and earth.",
+   "source": {
+    "book": "bukhari",
+    "number": "831",
+    "ar": "صحيح البخاري 831",
+    "en": "Sahih al-Bukhari 831",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:831"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D8%AA%D8%AD%D9%8A%D8%A7%D8%AA%20%D9%84%D9%84%D9%87%D8%8C%20%D9%88%D8%A7%D9%84%D8%B5%D9%84%D9%88%D8%A7%D8%AA%20%D9%88%D8%A7%D9%84%D8%B7%D9%8A%D8%A8%D8%A7%D8%AA%D8%8C%20%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%20%D8%A3%D9%8A%D9%87%D8%A7%20%D8%A7%D9%84%D9%86%D8%A8%D9%8A"
+    }
+   ]
+  },
+  {
+   "id": "salat_ibrahimiyya",
+   "cat": "in_prayer",
+   "titleAr": "الصلاة الإبراهيمية",
+   "titleEn": "Blessings upon the Prophet in the prayer",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ، وَعَلَى آلِ مُحَمَّدٍ، كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ، وَعَلَى آلِ مُحَمَّدٍ، كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ، وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "لما سئل النبي ﷺ: كيف الصلاة عليكم أهل البيت؟ علّمهم ذلك.",
+   "ctxEn": "When asked how to send blessings upon his household, he ﷺ taught them this.",
+   "source": {
+    "book": "bukhari",
+    "number": "3370",
+    "ar": "صحيح البخاري 3370",
+    "en": "Sahih al-Bukhari 3370",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:3370"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%B5%D9%84%20%D8%B9%D9%84%D9%89%20%D9%85%D8%AD%D9%85%D8%AF%D8%8C%20%D9%88%D8%B9%D9%84%D9%89%20%D8%A2%D9%84%20%D9%85%D8%AD%D9%85%D8%AF%D8%8C%20%D9%83%D9%85%D8%A7"
+    }
+   ]
+  },
+  {
+   "id": "before_salam_four",
+   "cat": "in_prayer",
+   "titleAr": "الاستعاذة من أربع قبل السلام",
+   "titleEn": "Seeking refuge from four things before the salam",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ جَهَنَّمَ وَمِنْ عَذَابِ الْقَبْرِ وَمِنْ فِتْنَةِ الْمَحْيَا وَالْمَمَاتِ وَمِنْ شَرِّ فِتْنَةِ الْمَسِيحِ الدَّجَّالِ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "قال رسول الله ﷺ: «إذا تشهد أحدكم فليستعذ بالله من أربع».",
+   "ctxEn": "“When one of you says the tashahhud, let him seek refuge in Allah from four things.”",
+   "source": {
+    "book": "muslim",
+    "number": "588a",
+    "ar": "صحيح مسلم 588",
+    "en": "Sahih Muslim 588a",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح مسلم",
+     "byEn": "Sahih Muslim"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/muslim:588a"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%A5%D9%86%D9%8A%20%D8%A3%D8%B9%D9%88%D8%B0%20%D8%A8%D9%83%20%D9%85%D9%86%20%D8%B9%D8%B0%D8%A7%D8%A8%20%D8%AC%D9%87%D9%86%D9%85%20%D9%88%D9%85%D9%86"
+    }
+   ]
+  },
+  {
+   "id": "zalamtu_nafsi",
+   "cat": "in_prayer",
+   "titleAr": "اللهم إني ظلمت نفسي ظلمًا كثيرًا",
+   "titleEn": "O Allah, I have wronged myself greatly",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ إِنِّي ظَلَمْتُ نَفْسِي ظُلْمًا كَثِيرًا وَلاَ يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ، فَاغْفِرْ لِي مَغْفِرَةً مِنْ عِنْدِكَ، وَارْحَمْنِي إِنَّكَ أَنْتَ الْغَفُورُ الرَّحِيمُ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "علّمه النبي ﷺ أبا بكر رضي الله عنه ليدعو به في صلاته.",
+   "ctxEn": "Taught to Abu Bakr to supplicate with in his prayer.",
+   "source": {
+    "book": "bukhari",
+    "number": "834",
+    "ar": "صحيح البخاري 834",
+    "en": "Sahih al-Bukhari 834",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:834"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%A5%D9%86%D9%8A%20%D8%B8%D9%84%D9%85%D8%AA%20%D9%86%D9%81%D8%B3%D9%8A%20%D8%B8%D9%84%D9%85%D8%A7%20%D9%83%D8%AB%D9%8A%D8%B1%D8%A7%20%D9%88%D9%84%D8%A7%20%D9%8A%D8%BA%D9%81%D8%B1"
+    }
+   ]
+  },
+  {
+   "id": "after_wudu",
+   "cat": "adhan_wudu_masjid",
+   "titleAr": "الشهادتان بعد الوضوء",
+   "titleEn": "The testimony after wudu",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "من توضأ فأحسن الوضوء ثم قال ذلك فتحت له أبواب الجنة الثمانية يدخل من أيها شاء.",
+   "ctxEn": "Whoever makes wudu well then says it, the eight gates of Paradise are opened for him.",
+   "source": {
+    "book": "muslim",
+    "number": "234b",
+    "ar": "صحيح مسلم 234",
+    "en": "Sahih Muslim 234b",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح مسلم",
+     "byEn": "Sahih Muslim"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/muslim:234b"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A3%D8%B4%D9%87%D8%AF%20%D8%A3%D9%86%20%D9%84%D8%A7%20%D8%A5%D9%84%D9%87%20%D8%A5%D9%84%D8%A7%20%D8%A7%D9%84%D9%84%D9%87%20%D9%88%D8%AD%D8%AF%D9%87%20%D9%84%D8%A7"
+    }
+   ]
+  },
+  {
+   "id": "dua_after_adhan",
+   "cat": "adhan_wudu_masjid",
+   "titleAr": "الدعاء بعد الأذان",
+   "titleEn": "Supplication after the adhan",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ وَالصَّلاَةِ الْقَائِمَةِ آتِ مُحَمَّدًا الْوَسِيلَةَ وَالْفَضِيلَةَ وَابْعَثْهُ مَقَامًا مَحْمُودًا الَّذِي وَعَدْتَهُ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "من قال حين يسمع النداء ذلك حلت له شفاعتي يوم القيامة.",
+   "ctxEn": "Whoever says it on hearing the call, intercession becomes due for him on the Day of Resurrection.",
+   "source": {
+    "book": "bukhari",
+    "number": "614",
+    "ar": "صحيح البخاري 614",
+    "en": "Sahih al-Bukhari 614",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:614"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%B1%D8%A8%20%D9%87%D8%B0%D9%87%20%D8%A7%D9%84%D8%AF%D8%B9%D9%88%D8%A9%20%D8%A7%D9%84%D8%AA%D8%A7%D9%85%D8%A9%20%D9%88%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9%20%D8%A7%D9%84%D9%82%D8%A7%D8%A6%D9%85%D8%A9%20%D8%A2%D8%AA"
+    }
+   ]
+  },
+  {
+   "id": "masjid_enter_exit",
+   "cat": "adhan_wudu_masjid",
+   "titleAr": "دعاء دخول المسجد والخروج منه",
+   "titleEn": "Entering and leaving the mosque",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",
+     "count": 1,
+     "labelAr": "عند الدخول",
+     "labelEn": "On entering"
+    },
+    {
+     "text": "اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ",
+     "count": 1,
+     "labelAr": "عند الخروج",
+     "labelEn": "On leaving"
+    }
+   ],
+   "ctxAr": "إذا دخل أحدكم المسجد فليقل: «اللهم افتح لي أبواب رحمتك»، وإذا خرج فليقل: «اللهم إني أسألك من فضلك».",
+   "ctxEn": "On entering: “O Allah, open for me the gates of Your mercy”; on leaving: “O Allah, I ask You of Your bounty”.",
+   "source": {
+    "book": "muslim",
+    "number": "713a",
+    "ar": "صحيح مسلم 713",
+    "en": "Sahih Muslim 713a",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح مسلم",
+     "byEn": "Sahih Muslim"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/muslim:713a"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%A7%D9%81%D8%AA%D8%AD%20%D9%84%D9%8A%20%D8%A3%D8%A8%D9%88%D8%A7%D8%A8%20%D8%B1%D8%AD%D9%85%D8%AA%D9%83"
+    }
+   ]
+  },
+  {
+   "id": "enter_khala",
+   "cat": "home",
+   "titleAr": "دعاء دخول الخلاء",
+   "titleEn": "Entering the restroom",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْخُبُثِ وَالْخَبَائِثِ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كان النبي ﷺ إذا دخل الخلاء قال ذلك.",
+   "ctxEn": "The Prophet ﷺ said it when entering the restroom.",
+   "source": {
+    "book": "bukhari",
+    "number": "142",
+    "ar": "صحيح البخاري 142",
+    "en": "Sahih al-Bukhari 142",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:142"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%A5%D9%86%D9%8A%20%D8%A3%D8%B9%D9%88%D8%B0%20%D8%A8%D9%83%20%D9%85%D9%86%20%D8%A7%D9%84%D8%AE%D8%A8%D8%AB%20%D9%88%D8%A7%D9%84%D8%AE%D8%A8%D8%A7%D8%A6%D8%AB"
+    }
+   ]
+  },
+  {
+   "id": "exit_khala",
+   "cat": "home",
+   "titleAr": "دعاء الخروج من الخلاء: غفرانك",
+   "titleEn": "Leaving the restroom",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "غُفْرَانَكَ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كان النبي ﷺ إذا خرج من الغائط قال: «غفرانك».",
+   "ctxEn": "The Prophet ﷺ said “I ask Your forgiveness” on leaving the restroom.",
+   "source": {
+    "book": "abudawud",
+    "number": "30",
+    "ar": "سنن أبي داود 30",
+    "en": "Sunan Abi Dawud 30",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "الألباني",
+     "byEn": "Al-Albani"
+    },
+    "graders": [
+     {
+      "by": "Al-Albani",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Muhammad Muhyi Al-Din Abdul Hamid",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Zubair Ali Zai",
+      "grade": "Isnaad Sahih"
+     }
+    ]
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/abudawud:30"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%BA%D9%81%D8%B1%D8%A7%D9%86%D9%83"
+    }
+   ]
+  },
+  {
+   "id": "leave_home",
+   "cat": "home",
+   "titleAr": "دعاء الخروج من المنزل",
+   "titleEn": "Leaving home",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ لاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "إذا خرج الرجل من بيته فقال ذلك، يقال حينئذ: هديت وكفيت ووقيت، فتتنحى له الشياطين.",
+   "ctxEn": "Whoever says it on leaving home is told: you are guided, sufficed and protected.",
+   "source": {
+    "book": "abudawud",
+    "number": "5095",
+    "ar": "سنن أبي داود 5095",
+    "en": "Sunan Abi Dawud 5095",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "الألباني",
+     "byEn": "Al-Albani"
+    },
+    "graders": [
+     {
+      "by": "Al-Albani",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Muhammad Muhyi Al-Din Abdul Hamid",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Zubair Ali Zai",
+      "grade": "Hasan"
+     }
+    ]
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/abudawud:5095"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A8%D8%B3%D9%85%20%D8%A7%D9%84%D9%84%D9%87%20%D8%AA%D9%88%D9%83%D9%84%D8%AA%20%D8%B9%D9%84%D9%89%20%D8%A7%D9%84%D9%84%D9%87%20%D9%84%D8%A7%20%D8%AD%D9%88%D9%84%20%D9%88%D9%84%D8%A7%20%D9%82%D9%88%D8%A9%20%D8%A5%D9%84%D8%A7%20%D8%A8%D8%A7%D9%84%D9%84%D9%87"
+    }
+   ]
+  },
+  {
+   "id": "new_garment",
+   "cat": "home",
+   "titleAr": "دعاء لبس الثوب الجديد",
+   "titleEn": "Wearing a new garment",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ لَكَ الْحَمْدُ أَنْتَ كَسَوْتَنِيهِ أَسْأَلُكَ مِنْ خَيْرِهِ وَخَيْرِ مَا صُنِعَ لَهُ وَأَعُوذُ بِكَ مِنْ شَرِّهِ وَشَرِّ مَا صُنِعَ لَهُ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كان رسول الله ﷺ إذا استجد ثوبًا سماه باسمه ثم يقول ذلك.",
+   "ctxEn": "When he ﷺ wore a new garment, he named it and said this.",
+   "source": {
+    "book": "abudawud",
+    "number": "4020",
+    "ar": "سنن أبي داود 4020",
+    "en": "Sunan Abi Dawud 4020",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "الألباني",
+     "byEn": "Al-Albani"
+    },
+    "graders": [
+     {
+      "by": "Al-Albani",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Zubair Ali Zai",
+      "grade": "Isnaad Hasan"
+     }
+    ]
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/abudawud:4020"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D9%84%D9%83%20%D8%A7%D9%84%D8%AD%D9%85%D8%AF%20%D8%A3%D9%86%D8%AA%20%D9%83%D8%B3%D9%88%D8%AA%D9%86%D9%8A%D9%87%20%D8%A3%D8%B3%D8%A3%D9%84%D9%83%20%D9%85%D9%86%20%D8%AE%D9%8A%D8%B1%D9%87"
+    }
+   ]
+  },
+  {
+   "id": "bismillah_food",
+   "cat": "food",
+   "titleAr": "التسمية على الطعام",
+   "titleEn": "Saying bismillah before eating",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "بِسْمِ اللَّهِ أَوَّلَهُ وَآخِرَهُ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "إذا أكل أحدكم فليذكر اسم الله تعالى، فإن نسي أن يذكر اسم الله في أوله فليقل: «بسم الله أوله وآخره».",
+   "ctxEn": "Mention Allah's name when eating; if you forget at the start, say “In the name of Allah at its beginning and end”.",
+   "source": {
+    "book": "abudawud",
+    "number": "3767",
+    "ar": "سنن أبي داود 3767",
+    "en": "Sunan Abi Dawud 3767",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "الألباني",
+     "byEn": "Al-Albani"
+    },
+    "graders": [
+     {
+      "by": "Al-Albani",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Muhammad Muhyi Al-Din Abdul Hamid",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Shuaib Al Arnaut",
+      "grade": "Sahih Lighairihi"
+     },
+     {
+      "by": "Zubair Ali Zai",
+      "grade": "Isnaad Sahih"
+     }
+    ]
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/abudawud:3767"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A8%D8%B3%D9%85%20%D8%A7%D9%84%D9%84%D9%87%20%D8%A3%D9%88%D9%84%D9%87%20%D9%88%D8%A2%D8%AE%D8%B1%D9%87"
+    }
+   ]
+  },
+  {
+   "id": "after_food",
+   "cat": "food",
+   "titleAr": "الحمد بعد الطعام",
+   "titleEn": "Praise after eating",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلاَ قُوَّةٍ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "من أكل طعامًا ثم قال ذلك غفر له ما تقدم من ذنبه.",
+   "ctxEn": "Whoever eats and then says it, his previous sins are forgiven.",
+   "source": {
+    "book": "tirmidhi",
+    "number": "3458",
+    "ar": "جامع الترمذي 3458",
+    "en": "Jami at-Tirmidhi 3458",
+    "grade": {
+     "ar": "حسن",
+     "en": "Hasan",
+     "byAr": "الألباني",
+     "byEn": "Al-Albani"
+    },
+    "graders": [
+     {
+      "by": "Ahmad Muhammad Shakir",
+      "grade": "Hasan"
+     },
+     {
+      "by": "Al-Albani",
+      "grade": "Hasan"
+     },
+     {
+      "by": "Bashar Awad Maarouf",
+      "grade": "Hasan"
+     },
+     {
+      "by": "Zubair Ali Zai",
+      "grade": "Isnaad Hasan"
+     }
+    ]
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/tirmidhi:3458"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D8%AD%D9%85%D8%AF%20%D9%84%D9%84%D9%87%20%D8%A7%D9%84%D8%B0%D9%8A%20%D8%A3%D8%B7%D8%B9%D9%85%D9%86%D9%8A%20%D9%87%D8%B0%D8%A7%20%D9%88%D8%B1%D8%B2%D9%82%D9%86%D9%8A%D9%87%20%D9%85%D9%86%20%D8%BA%D9%8A%D8%B1"
+    }
+   ]
+  },
+  {
+   "id": "travel",
+   "cat": "travel",
+   "titleAr": "دعاء السفر",
+   "titleEn": "Supplication for travel",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُ أَكْبَرُ",
+     "count": 3
+    },
+    {
+     "text": "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى وَمِنَ الْعَمَلِ مَا تَرْضَى اللَّهُمَّ هَوِّنْ عَلَيْنَا سَفَرَنَا هَذَا وَاطْوِ عَنَّا بُعْدَهُ اللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ وَالْخَلِيفَةُ فِي الأَهْلِ اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ وَعْثَاءِ السَّفَرِ وَكَآبَةِ الْمَنْظَرِ وَسُوءِ الْمُنْقَلَبِ فِي الْمَالِ وَالأَهْلِ",
+     "count": 1
+    },
+    {
+     "text": "آيِبُونَ تَائِبُونَ عَابِدُونَ لِرَبِّنَا حَامِدُونَ",
+     "count": 1,
+     "labelAr": "ويزيد عند الرجوع",
+     "labelEn": "Added on return"
+    }
+   ],
+   "ctxAr": "كان رسول الله ﷺ إذا استوى على بعيره خارجًا إلى سفر كبّر ثلاثًا ثم قال ذلك، وإذا رجع قالهن وزاد: «آيبون تائبون عابدون لربنا حامدون».",
+   "ctxEn": "On mounting for a journey he ﷺ said Allahu akbar three times, then this; on return he added “Returning, repenting, worshipping, praising our Lord.”",
+   "source": {
+    "book": "muslim",
+    "number": "1342",
+    "ar": "صحيح مسلم 1342",
+    "en": "Sahih Muslim 1342",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح مسلم",
+     "byEn": "Sahih Muslim"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/muslim:1342"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%B3%D8%A8%D8%AD%D8%A7%D9%86%20%D8%A7%D9%84%D8%B0%D9%8A%20%D8%B3%D8%AE%D8%B1%20%D9%84%D9%86%D8%A7%20%D9%87%D8%B0%D8%A7%20%D9%88%D9%85%D8%A7%20%D9%83%D9%86%D8%A7%20%D9%84%D9%87"
+    }
+   ]
+  },
+  {
+   "id": "stopping_place",
+   "cat": "travel",
+   "titleAr": "دعاء النزول في منزل",
+   "titleEn": "Stopping at a place",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "من نزل منزلًا ثم قال ذلك لم يضره شيء حتى يرتحل من منزله ذلك.",
+   "ctxEn": "Whoever stops at a place and says it, nothing harms him until he leaves it.",
+   "source": {
+    "book": "muslim",
+    "number": "2708a",
+    "ar": "صحيح مسلم 2708",
+    "en": "Sahih Muslim 2708a",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح مسلم",
+     "byEn": "Sahih Muslim"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/muslim:2708a"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A3%D8%B9%D9%88%D8%B0%20%D8%A8%D9%83%D9%84%D9%85%D8%A7%D8%AA%20%D8%A7%D9%84%D9%84%D9%87%20%D8%A7%D9%84%D8%AA%D8%A7%D9%85%D8%A7%D8%AA%20%D9%85%D9%86%20%D8%B4%D8%B1%20%D9%85%D8%A7%20%D8%AE%D9%84%D9%82"
+    }
+   ]
+  },
+  {
+   "id": "dua_karb",
+   "cat": "distress",
+   "titleAr": "دعاء الكرب",
+   "titleEn": "Supplication in distress",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "لاَ إِلَهَ إِلاَّ اللَّهُ الْعَظِيمُ الْحَلِيمُ، لاَ إِلَهَ إِلاَّ اللَّهُ رَبُّ الْعَرْشِ الْعَظِيمِ، لاَ إِلَهَ إِلاَّ اللَّهُ رَبُّ السَّمَوَاتِ، وَرَبُّ الأَرْضِ، وَرَبُّ الْعَرْشِ الْكَرِيمِ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كان النبي ﷺ يدعو به عند الكرب.",
+   "ctxEn": "The Prophet ﷺ supplicated with it in times of distress.",
+   "source": {
+    "book": "bukhari",
+    "number": "6346",
+    "ar": "صحيح البخاري 6346",
+    "en": "Sahih al-Bukhari 6346",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:6346"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D9%84%D8%A7%20%D8%A5%D9%84%D9%87%20%D8%A5%D9%84%D8%A7%20%D8%A7%D9%84%D9%84%D9%87%20%D8%A7%D9%84%D8%B9%D8%B8%D9%8A%D9%85%20%D8%A7%D9%84%D8%AD%D9%84%D9%8A%D9%85%D8%8C%20%D9%84%D8%A7%20%D8%A5%D9%84%D9%87"
+    }
+   ]
+  },
+  {
+   "id": "hamm_hazan",
+   "cat": "distress",
+   "titleAr": "الاستعاذة من الهم والحزن",
+   "titleEn": "Seeking refuge from worry and grief",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ، وَالْجُبْنِ وَالْبُخْلِ، وَضَلَعِ الدَّيْنِ، وَغَلَبَةِ الرِّجَالِ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كان النبي ﷺ يقول ذلك.",
+   "ctxEn": "The Prophet ﷺ used to say it.",
+   "source": {
+    "book": "bukhari",
+    "number": "6369",
+    "ar": "صحيح البخاري 6369",
+    "en": "Sahih al-Bukhari 6369",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:6369"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%A5%D9%86%D9%8A%20%D8%A3%D8%B9%D9%88%D8%B0%20%D8%A8%D9%83%20%D9%85%D9%86%20%D8%A7%D9%84%D9%87%D9%85%20%D9%88%D8%A7%D9%84%D8%AD%D8%B2%D9%86%D8%8C%20%D9%88%D8%A7%D9%84%D8%B9%D8%AC%D8%B2"
+    }
+   ]
+  },
+  {
+   "id": "dhun_nun",
+   "cat": "distress",
+   "titleAr": "دعوة ذي النون",
+   "titleEn": "The supplication of Yunus",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "لاَ إِلَهَ إِلاَّ أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "دعوة ذي النون إذ دعا وهو في بطن الحوت؛ لم يدع بها رجل مسلم في شيء قط إلا استجاب الله له.",
+   "ctxEn": "The supplication of Dhun-Nun in the whale; no Muslim supplicates with it for anything but Allah answers him.",
+   "source": {
+    "book": "tirmidhi",
+    "number": "3505",
+    "ar": "جامع الترمذي 3505",
+    "en": "Jami at-Tirmidhi 3505",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "الألباني",
+     "byEn": "Al-Albani"
+    },
+    "graders": [
+     {
+      "by": "Ahmad Muhammad Shakir",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Al-Albani",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Zubair Ali Zai",
+      "grade": "Isnaad Sahih"
+     }
+    ]
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/tirmidhi:3505"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D9%84%D8%A7%20%D8%A5%D9%84%D9%87%20%D8%A5%D9%84%D8%A7%20%D8%A3%D9%86%D8%AA%20%D8%B3%D8%A8%D8%AD%D8%A7%D9%86%D9%83%20%D8%A5%D9%86%D9%8A%20%D9%83%D9%86%D8%AA%20%D9%85%D9%86%20%D8%A7%D9%84%D8%B8%D8%A7%D9%84%D9%85%D9%8A%D9%86"
+    }
+   ]
+  },
+  {
+   "id": "hasbunallah",
+   "cat": "distress",
+   "titleAr": "حسبنا الله ونعم الوكيل",
+   "titleEn": "Allah is sufficient for us",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "قالها إبراهيم عليه السلام حين ألقي في النار، وقالها محمد ﷺ حين قالوا: إن الناس قد جمعوا لكم.",
+   "ctxEn": "Said by Ibrahim when thrown into the fire, and by Muhammad ﷺ when told the people had gathered against them.",
+   "source": {
+    "book": "bukhari",
+    "number": "4563",
+    "ar": "صحيح البخاري 4563",
+    "en": "Sahih al-Bukhari 4563",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:4563"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%AD%D8%B3%D8%A8%D9%86%D8%A7%20%D8%A7%D9%84%D9%84%D9%87%20%D9%88%D9%86%D8%B9%D9%85%20%D8%A7%D9%84%D9%88%D9%83%D9%8A%D9%84"
+    }
+   ]
+  },
+  {
+   "id": "kalimatan",
+   "cat": "dhikr",
+   "titleAr": "سبحان الله العظيم، سبحان الله وبحمده",
+   "titleEn": "Two words light on the tongue",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "سُبْحَانَ اللَّهِ الْعَظِيمِ، سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كلمتان خفيفتان على اللسان، ثقيلتان في الميزان، حبيبتان إلى الرحمن.",
+   "ctxEn": "Two words light on the tongue, heavy on the scale, beloved to the Most Merciful.",
+   "source": {
+    "book": "bukhari",
+    "number": "6406",
+    "ar": "صحيح البخاري 6406",
+    "en": "Sahih al-Bukhari 6406",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:6406"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%B3%D8%A8%D8%AD%D8%A7%D9%86%20%D8%A7%D9%84%D9%84%D9%87%20%D8%A7%D9%84%D8%B9%D8%B8%D9%8A%D9%85%D8%8C%20%D8%B3%D8%A8%D8%AD%D8%A7%D9%86%20%D8%A7%D9%84%D9%84%D9%87%20%D9%88%D8%A8%D8%AD%D9%85%D8%AF%D9%87"
+    }
+   ]
+  },
+  {
+   "id": "hawqala",
+   "cat": "dhikr",
+   "titleAr": "لا حول ولا قوة إلا بالله",
+   "titleEn": "There is no might nor power except with Allah",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "لاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كنز من كنوز الجنة.",
+   "ctxEn": "A treasure among the treasures of Paradise.",
+   "source": {
+    "book": "bukhari",
+    "number": "6384",
+    "ar": "صحيح البخاري 6384",
+    "en": "Sahih al-Bukhari 6384",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:6384"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D9%84%D8%A7%20%D8%AD%D9%88%D9%84%20%D9%88%D9%84%D8%A7%20%D9%82%D9%88%D8%A9%20%D8%A5%D9%84%D8%A7%20%D8%A8%D8%A7%D9%84%D9%84%D9%87"
+    }
+   ]
+  },
+  {
+   "id": "istighfar_70",
+   "cat": "dhikr",
+   "titleAr": "أستغفر الله وأتوب إليه",
+   "titleEn": "I seek Allah's forgiveness and repent to Him",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ",
+     "count": 0
+    }
+   ],
+   "ctxAr": "قال رسول الله ﷺ: «والله إني لأستغفر الله وأتوب إليه في اليوم أكثر من سبعين مرة».",
+   "ctxEn": "“By Allah, I seek forgiveness and repent to Him more than seventy times a day.”",
+   "source": {
+    "book": "bukhari",
+    "number": "6307",
+    "ar": "صحيح البخاري 6307",
+    "en": "Sahih al-Bukhari 6307",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:6307"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A3%D8%B3%D8%AA%D8%BA%D9%81%D8%B1%20%D8%A7%D9%84%D9%84%D9%87%20%D9%88%D8%A3%D8%AA%D9%88%D8%A8%20%D8%A5%D9%84%D9%8A%D9%87"
+    }
+   ],
+   "countNoteAr": "أكثر من سبعين مرة في اليوم."
+  },
+  {
+   "id": "baqiyat",
+   "cat": "dhikr",
+   "titleAr": "سبحان الله والحمد لله ولا إله إلا الله والله أكبر",
+   "titleEn": "The four most beloved words",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "سُبْحَانَ اللَّهِ وَالْحَمْدُ لِلَّهِ وَلاَ إِلَهَ إِلاَّ اللَّهُ وَاللَّهُ أَكْبَرُ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "أحب الكلام إلى الله أربع، لا يضرك بأيهن بدأت.",
+   "ctxEn": "The most beloved words to Allah are four; it does not matter which you begin with.",
+   "source": {
+    "book": "muslim",
+    "number": "2137a",
+    "ar": "صحيح مسلم 2137",
+    "en": "Sahih Muslim 2137a",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح مسلم",
+     "byEn": "Sahih Muslim"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/muslim:2137a"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%B3%D8%A8%D8%AD%D8%A7%D9%86%20%D8%A7%D9%84%D9%84%D9%87%20%D9%88%D8%A7%D9%84%D8%AD%D9%85%D8%AF%20%D9%84%D9%84%D9%87%20%D9%88%D9%84%D8%A7%20%D8%A5%D9%84%D9%87%20%D8%A5%D9%84%D8%A7%20%D8%A7%D9%84%D9%84%D9%87%20%D9%88%D8%A7%D9%84%D9%84%D9%87%20%D8%A3%D9%83%D8%A8%D8%B1"
+    }
+   ]
+  },
+  {
+   "id": "rabbighfir_100",
+   "cat": "dhikr",
+   "titleAr": "رب اغفر لي وتب علي",
+   "titleEn": "My Lord, forgive me and accept my repentance",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "رَبِّ اغْفِرْ لِي وَتُبْ عَلَىَّ إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ",
+     "count": 100
+    }
+   ],
+   "ctxAr": "كنا نعد لرسول الله ﷺ في المجلس الواحد مائة مرة.",
+   "ctxEn": "It was counted for the Messenger of Allah ﷺ a hundred times in one sitting.",
+   "source": {
+    "book": "abudawud",
+    "number": "1516",
+    "ar": "سنن أبي داود 1516",
+    "en": "Sunan Abi Dawud 1516",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "الألباني",
+     "byEn": "Al-Albani"
+    },
+    "graders": [
+     {
+      "by": "Al-Albani",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Muhammad Muhyi Al-Din Abdul Hamid",
+      "grade": "Sahih"
+     },
+     {
+      "by": "Shuaib Al Arnaut",
+      "grade": "Hasan Sahih"
+     },
+     {
+      "by": "Zubair Ali Zai",
+      "grade": "Sahih"
+     }
+    ]
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/abudawud:1516"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%B1%D8%A8%20%D8%A7%D8%BA%D9%81%D8%B1%20%D9%84%D9%8A%20%D9%88%D8%AA%D8%A8%20%D8%B9%D9%84%D9%89%20%D8%A5%D9%86%D9%83%20%D8%A3%D9%86%D8%AA%20%D8%A7%D9%84%D8%AA%D9%88%D8%A7%D8%A8%20%D8%A7%D9%84%D8%B1%D8%AD%D9%8A%D9%85"
+    }
+   ]
+  },
+  {
+   "id": "rabbana_atina",
+   "cat": "dhikr",
+   "titleAr": "ربنا آتنا في الدنيا حسنة",
+   "titleEn": "Our Lord, give us good in this world",
+   "rounds": 1,
+   "parts": [
+    {
+     "text": "اللَّهُمَّ رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً، وَفِي الآخِرَةِ حَسَنَةً، وَقِنَا عَذَابَ النَّارِ",
+     "count": 1
+    }
+   ],
+   "ctxAr": "كان أكثر دعاء النبي ﷺ.",
+   "ctxEn": "It was the Prophet's ﷺ most frequent supplication.",
+   "source": {
+    "book": "bukhari",
+    "number": "6389",
+    "ar": "صحيح البخاري 6389",
+    "en": "Sahih al-Bukhari 6389",
+    "grade": {
+     "ar": "صحيح",
+     "en": "Sahih",
+     "byAr": "صحيح البخاري",
+     "byEn": "Sahih al-Bukhari"
+    },
+    "graders": []
+   },
+   "links": [
+    {
+     "titleAr": "sunnah.com",
+     "titleEn": "sunnah.com",
+     "url": "https://sunnah.com/bukhari:6389"
+    },
+    {
+     "titleAr": "بحث في الدرر السنية",
+     "titleEn": "Search on Dorar",
+     "url": "https://dorar.net/hadith/search?q=%D8%A7%D9%84%D9%84%D9%87%D9%85%20%D8%B1%D8%A8%D9%86%D8%A7%20%D8%A2%D8%AA%D9%86%D8%A7%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%AF%D9%86%D9%8A%D8%A7%20%D8%AD%D8%B3%D9%86%D8%A9%D8%8C%20%D9%88%D9%81%D9%8A%20%D8%A7%D9%84%D8%A2%D8%AE%D8%B1%D8%A9"
+    }
+   ]
+  }
+ ]
+}

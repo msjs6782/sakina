@@ -1,0 +1,26 @@
+Natural Earth (map data for the offline qibla map)
+==================================================
+Natural Earth Vector v5.1.2 — 1:110m land and lakes, 1:50m land and land boundary lines.
+https://www.naturalearthdata.com — https://github.com/nvkelso/natural-earth-vector
+
+"All versions of Natural Earth raster + vector map data found on this website are in the public
+domain. You may use the maps in any manner, including modifying the content and design, electronic
+dissemination, and offset printing. The primary authors, Tom Patterson and Nathaniel Vaughn Kelso,
+and all other contributors renounce all financial claim to the maps and invites you to use them for
+personal, educational, and commercial purposes. No permission is needed to use Natural Earth.
+Crediting the authors is unnecessary."
+
+Sakina stores the coordinates rounded to about 0.6 km. Boundaries are shown as Natural Earth draws
+them; they are not a statement about any territory.
+
+
+World Magnetic Model WMM2025 (true-north correction of the compass)
+===================================================================
+WMM2025 coefficients (WMM.COF, epoch 2025.0, released 13 November 2024), valid from 2025.0 to 2030.0.
+Produced by the U.S. National Centers for Environmental Information (NOAA NCEI) and the British
+Geological Survey for the U.S. National Geospatial-Intelligence Agency and the UK Defence Geographic
+Centre. https://www.ncei.noaa.gov/products/world-magnetic-model
+
+The WMM is a product of the U.S. federal government and is not subject to copyright protection in
+the United States. Sakina evaluates the model on the device; its tests check the results against
+NOAA's 100 official WMM2025 test values.

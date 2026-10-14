@@ -37,6 +37,8 @@ class SakinaApp : Application() {
         private set
     lateinit var recitations: RecitationRepository
         private set
+    lateinit var tools: com.sakina.app.data.ToolsRepository
+        private set
 
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
@@ -50,6 +52,8 @@ class SakinaApp : Application() {
         quranState = QuranStateRepository(this)
         mushaf = MushafRepository(this, appScope)
         recitations = RecitationRepository(this, appScope)
+        tools = com.sakina.app.data.ToolsRepository(this)
+        appScope.launch { tools.prune(java.time.LocalDate.now()) }
         // Whenever anything that affects alerts changes (and once at start), rebuild the alarm chain.
         appScope.launch {
             settings.settings

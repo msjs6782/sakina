@@ -382,6 +382,11 @@ fun RemindersScreen(vm: MainViewModel, s: AppSettings) {
                 SwitchRow(r.enabled, str.reminderName(r.kind), fmt.clock(r.minuteOfDay / 60, r.minuteOfDay % 60) + " · " + daysSummary(r.days, str, fmt)) { v ->
                     updateAlerts(vm) { it.withReminder(r.kind) { x -> x.copy(enabled = v) } }
                 }
+                adhkarPractice(r.kind)?.let { practice ->
+                    TextButton(onClick = { vm.push(com.sakina.app.ui.Route.Wird(practice)) }, modifier = Modifier.testTag("reminder_open_" + practice)) {
+                        Text(str.openAdhkarSet)
+                    }
+                }
                 if (r.enabled) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(str.reminderTime, style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f))
@@ -422,6 +427,15 @@ fun RemindersScreen(vm: MainViewModel, s: AppSettings) {
             dismissButton = { TextButton(onClick = { editing = null }) { Text(str.cancel) } },
         )
     }
+}
+
+/** The adhkar set a reminder belongs to, so the two can be reached from each other. */
+private fun adhkarPractice(k: ReminderKind): String? = when (k) {
+    ReminderKind.ADHKAR_MORNING -> "morning"
+    ReminderKind.ADHKAR_EVENING -> "evening"
+    ReminderKind.ADHKAR_SLEEP -> "sleep"
+    ReminderKind.ADHKAR_WAKING -> "waking"
+    else -> null
 }
 
 private fun weekOrder(arabic: Boolean): List<Int> = if (arabic) listOf(6, 7, 1, 2, 3, 4, 5) else listOf(1, 2, 3, 4, 5, 6, 7)
