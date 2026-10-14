@@ -94,9 +94,14 @@ def find_span(text, c):
     return text[start:end]
 
 
+import traceback  # noqa: E402
+
 results = []
 ok = 0
-for c in C:
+
+
+def check(c):
+    global ok
     book, ref = c["ref"].split(":")
     num = int(re.match(r"\d+", ref).group())
     row = {"id": c["id"], "ref": c["ref"]}
@@ -106,7 +111,7 @@ for c in C:
             continue
         hits = [h for h in ed["hadiths"] if number_of(h) is not None and int(float(number_of(h))) == num]
         row[lang] = [{"hadithnumber": h.get("hadithnumber"), "arabicnumber": h.get("arabicnumber"), "grades": h.get("grades"),
-                      "reference": h.get("reference"), "text": h.get("text", "")[:4000]} for h in hits]
+                      "reference": h.get("reference"), "text": h.get("text", "")} for h in hits]
     spans = []
     ev = None
     for h in row.get("ara", []):
@@ -127,12 +132,19 @@ for c in C:
             for g in h.get("grades") or []:
                 grades.append(f'{g.get("name")}: {g.get("grade")}')
     row["grades"] = sorted(set(grades))
-    good = bool(spans) and (not c["find_evening"] or ev)
+    good = bool(spans) and (not c["find_evening"] or bool(ev))
     ok += good
-    p("OK " if good else "BAD", c["id"], c["ref"], "hits", len(row.get("ara", [])), "spans", len(spans), "| grades:", "; ".join(row["grades"]) or "-")
+    p("OK " if good else "BAD", c["id"], c["ref"], "hits", [h["arabicnumber"] for h in row.get("ara", [])], "spans", [s["arabicnumber"] for s in spans], "| grades:", "; ".join(row["grades"]) or "-")
     if not good:
         for h in row.get("ara", [])[:3]:
             p("   text:", re.sub(r"\s+", " ", h["text"])[:300])
     results.append(row)
+
+
+for c in C:
+    try:
+        check(c)
+    except Exception:  # noqa: BLE001
+        p("ERR", c["id"], c["ref"], traceback.format_exc().replace("\n", " | "))
 p("verified", ok, "of", len(C))
 json.dump(results, open(os.path.join(OUT, "hapi.json"), "w"), ensure_ascii=False, indent=1)
