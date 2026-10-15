@@ -1,0 +1,24 @@
+CHECK widget_preview_next: PASS المغرب · بعد ١ س ٧ د · حُدّث ٤:٢٠ م
+CHECK widget_preview_countdown: PASS ١ س ٧ د
+CHECK widget_preview_strip: PASS الفجر
+CHECK widget_preview_content: PASS جامع الترمذي ٣٥٠٥ · صحيح
+CHECK widget_preview_ramadan: PASS رمضان بعد ١١٧ يومًا
+CHECK widget_previews_render: PASS all ten rendered
+CHECK widget_pinned_next: PASS placed by the launcher
+CHECK widget_home_next: PASS المغرب · بعد ١ س ٧ د حُدّث ٤:٢٠ م
+CHECK widget_pinned_analog: PASS placed by the launcher
+CHECK widget_pinned_strip: PASS placed by the launcher
+CHECK widget_pinned_digital: PASS placed by the launcher
+CHECK widget_analog_label: PASS device clock labelled (device +0000)
+CHECK widget_home_strip: PASS الفجر
+CHECK widget_refresh: PASS update (manual:next)
+CHECK widget_opens_times: PASS opens the times tab
+CHECK widget_list: PASS placed widgets listed
+CHECK widget_config_saved: PASS saved on the device
+CHECK widget_config_applied: PASS Jeddah · Maghrib, in English
+CHECK widget_fixed_place: PASS kept Jeddah after the app moved to Makkah
+CHECK widget_follows_app: PASS strip follows the app language
+CHECK widget_tick: PASS in 7 h 36 min → in 7 h 35 min
+CHECK shortcuts_published: PASS times, qibla, quran, ramadan
+CHECK shortcut_pinned: PASS adhkar shortcut pinned
+CHECK shortcut_adhkar_opens: PASS opens the morning adhkar

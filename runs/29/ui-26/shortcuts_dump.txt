@@ -1,0 +1,150 @@
+Now: [1792088899687] 2026-10-15 18:28:19  Raw last reset: [1792088304722] 2026-10-15 18:18:24  Last reset: [1792088304722] 2026-10-15 18:18:24  Next reset: [1792174704722] 2026-10-16 18:18:24  Config:    Max icon dim: 252
+    Icon format: PNG
+    Icon quality: 100
+    saveDelayMillis: 3000
+    resetInterval: 86400000
+    maxUpdatesPerInterval: 10
+    maxShortcutsPerActivity: 5
+
+  Stats:
+    getHomeActivities(): count=28, total=29ms, avg=1.0ms
+    Launcher permission check: count=118, total=8ms, avg=0.1ms
+    getPackageInfo(): count=0, total=0ms, avg=0.0ms
+    getPackageInfo(SIG): count=39, total=1ms, avg=0.0ms
+    getApplicationInfo: count=40, total=30ms, avg=0.8ms
+    cleanupDanglingBitmaps: count=0, total=0ms, avg=0.0ms
+    getActivity+metadata: count=28, total=4ms, avg=0.1ms
+    getInstalledPackages: count=1, total=1ms, avg=1.0ms
+    checkPackageChanges: count=1, total=70ms, avg=70.0ms
+    getApplicationResources: count=64, total=3ms, avg=0.0ms
+    resourceNameLookup: count=64, total=1ms, avg=0.0ms
+    getLauncherActivity: count=13, total=0ms, avg=0.0ms
+    checkLauncherActivity: count=149, total=13ms, avg=0.1ms
+    isActivityEnabled: count=52, total=0ms, avg=0.0ms
+    packageUpdateCheck: count=118, total=31ms, avg=0.3ms
+    asyncPreloadUserDelay: count=1, total=4ms, avg=4.0ms
+    getDefaultLauncher(): count=28, total=31ms, avg=1.1ms
+
+  #Failures: 0
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@163621b[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 13]
+
+  User: 0  Known locales: en-US  Last app scan: [1792088303186] 2026-10-15 18:18:23  Last app scan FP: Android/sdk_phone_x86_64/generic_x86_64:8.0.0/OSR1.180418.004/4931640:userdebug/test-keys
+      Cached launcher: ComponentInfo{com.android.launcher3/com.android.launcher3.Launcher}
+      Last known launcher: ComponentInfo{com.android.launcher3/com.android.launcher3.Launcher}
+
+      Launcher: com.android.launcher3  Package user: 0  Owner user: 0
+
+        PackageInfo:
+          IsShadow: false
+          Version: -1
+          Last package update time: 0
+
+
+      Package: com.android.documentsui  UID: 10012
+        Calls: 0
+        Last known FG: 0
+        Last reset: [1792088304722] 2026-10-15 18:18:24
+
+        PackageInfo:
+          IsShadow: false
+          Version: 26
+          Last package update time: 1533323216000
+
+        Shortcuts:
+          ShortcutInfo {id=content://com.android.providers.media.documents/root/images_root, flags=0x1a4 [ImMIrSr], packageName=com.android.documentsui, activity=ComponentInfo{com.android.documentsui/com.android.documentsui.LauncherActivity}, shortLabel=Images, resId=2131689538[images_shortcut_label], longLabel=null, resId=0[null], disabledMessage=null, resId=0[null], categories=null, icon=null, rank=0, timestamp=1792088303256, intents=[Intent { act=android.intent.action.VIEW dat=content://com.android.providers.media.documents/root/images_root flg=0x1000c000 }/null], extras=null, iconRes=2131165320[drawable/ic_images_shortcut], bitmapPath=null}
+        Total bitmap size: 0 (0 B)
+
+      Package: com.android.contacts  UID: 10005
+        Calls: 0
+        Last known FG: 0
+        Last reset: [1792088304722] 2026-10-15 18:18:24
+
+        PackageInfo:
+          IsShadow: false
+          Version: 10710
+          Last package update time: 1533323259000
+
+        Shortcuts:
+          ShortcutInfo {id=shortcut-add-contact, flags=0x1a4 [ImMIrSr], packageName=com.android.contacts, activity=ComponentInfo{com.android.contacts/com.android.contacts.activities.PeopleActivity}, shortLabel=Add contact, resId=2131624040[shortcut_add_contact], longLabel=null, resId=0[null], disabledMessage=null, resId=0[null], categories=null, icon=null, rank=0, timestamp=1792088303252, intents=[Intent { act=android.intent.action.INSERT dat=content://com.android.contacts/contacts flg=0x1000c000 cmp=com.android.contacts/.activities.ContactEditorActivity }/null], extras=null, iconRes=2130837607[drawable/ic_add_circle_24dp], bitmapPath=null}
+        Total bitmap size: 0 (0 B)
+
+      Package: com.sakina.app.debug  UID: 10065
+        Calls: 0
+        Last known FG: 621794
+        Last reset: [1792088304722] 2026-10-15 18:18:24
+
+        PackageInfo:
+          IsShadow: false
+          Version: 29
+          Last package update time: 1792088312613
+
+        Shortcuts:
+          ShortcutInfo {id=qibla, flags=0x85 [DIrSr], packageName=com.sakina.app.debug, activity=ComponentInfo{com.sakina.app.debug/com.sakina.app.MainActivity}, shortLabel=القبلة, resId=0[null], longLabel=القبلة, resId=0[null], disabledMessage=null, resId=0[null], categories=null, icon=null, rank=1, timestamp=1792088893132, intents=[Intent { act=android.intent.action.VIEW dat=sakina://open/qibla cmp=com.sakina.app.debug/com.sakina.app.MainActivity }/PersistableBundle[{sakina_open=qibla}]], extras=PersistableBundle[{extraLongLived=false}], iconRes=2130968683[drawable/sc_qibla], bitmapPath=null}
+          ShortcutInfo {id=quran, flags=0x85 [DIrSr], packageName=com.sakina.app.debug, activity=ComponentInfo{com.sakina.app.debug/com.sakina.app.MainActivity}, shortLabel=القرآن, resId=0[null], longLabel=القرآن, resId=0[null], disabledMessage=null, resId=0[null], categories=null, icon=null, rank=2, timestamp=1792088893132, intents=[Intent { act=android.intent.action.VIEW dat=sakina://open/quran cmp=com.sakina.app.debug/com.sakina.app.MainActivity }/PersistableBundle[{sakina_open=quran}]], extras=PersistableBundle[{extraLongLived=false}], iconRes=2130968685[drawable/sc_quran], bitmapPath=null}
+          ShortcutInfo {id=times, flags=0x85 [DIrSr], packageName=com.sakina.app.debug, activity=ComponentInfo{com.sakina.app.debug/com.sakina.app.MainActivity}, shortLabel=المواقيت, resId=0[null], longLabel=مواقيت الصلاة, resId=0[null], disabledMessage=null, resId=0[null], categories=null, icon=null, rank=0, timestamp=1792088893132, intents=[Intent { act=android.intent.action.VIEW dat=sakina://open/times cmp=com.sakina.app.debug/com.sakina.app.MainActivity }/PersistableBundle[{sakina_open=times}]], extras=PersistableBundle[{extraLongLived=false}], iconRes=2130968689[drawable/sc_times], bitmapPath=null}
+          ShortcutInfo {id=ramadan, flags=0x85 [DIrSr], packageName=com.sakina.app.debug, activity=ComponentInfo{com.sakina.app.debug/com.sakina.app.MainActivity}, shortLabel=رمضان, resId=0[null], longLabel=رمضان, resId=0[null], disabledMessage=null, resId=0[null], categories=null, icon=null, rank=3, timestamp=1792088893132, intents=[Intent { act=android.intent.action.VIEW dat=sakina://open/ramadan cmp=com.sakina.app.debug/com.sakina.app.MainActivity }/PersistableBundle[{sakina_open=ramadan}]], extras=PersistableBundle[{extraLongLived=false}], iconRes=2130968687[drawable/sc_ramadan], bitmapPath=null}
+        Total bitmap size: 0 (0 B)
+
+      Package: com.android.settings  UID: 1000
+        Calls: 0
+        Last known FG: 621794
+        Last reset: [1792088304722] 2026-10-15 18:18:24
+
+        PackageInfo:
+          IsShadow: false
+          Version: 26
+          Last package update time: 1533323402000
+
+        Shortcuts:
+          ShortcutInfo {id=manifest-shortcut-wifi, flags=0x1a4 [ImMIrSr], packageName=com.android.settings, activity=ComponentInfo{com.android.settings/com.android.settings.Settings}, shortLabel=Wi‑Fi, resId=2131889612[wifi_settings], longLabel=null, resId=0[null], disabledMessage=null, resId=0[null], categories=null, icon=null, rank=0, timestamp=1792088312844, intents=[Intent { act=android.settings.WIFI_SETTINGS flg=0x1000c000 }/null], extras=null, iconRes=2131231016[drawable/ic_shortcut_wireless], bitmapPath=null}
+          ShortcutInfo {id=manifest-shortcut-battery, flags=0x1a4 [ImMIrSr], packageName=com.android.settings, activity=ComponentInfo{com.android.settings/com.android.settings.Settings}, shortLabel=Battery, resId=2131888206[power_usage_summary_title], longLabel=null, resId=0[null], disabledMessage=null, resId=0[null], categories=null, icon=null, rank=2, timestamp=1792088312844, intents=[Intent { act=android.intent.action.POWER_USAGE_SUMMARY flg=0x1000c000 }/null], extras=null, iconRes=2131231014[drawable/ic_shortcut_battery], bitmapPath=null}
+          ShortcutInfo {id=manifest-shortcut-data-usage, flags=0x1a4 [ImMIrSr], packageName=com.android.settings, activity=ComponentInfo{com.android.settings/com.android.settings.Settings}, shortLabel=Data usage, resId=2131887045[data_usage_summary_title], longLabel=null, resId=0[null], disabledMessage=null, resId=0[null], categories=null, icon=null, rank=1, timestamp=1792088312844, intents=[Intent { act=android.intent.action.MAIN flg=0x1000c000 cmp=com.android.settings/.Settings$DataUsageSummaryActivity }/null], extras=null, iconRes=2131231015[drawable/ic_shortcut_data_usage], bitmapPath=null}
+        Total bitmap size: 0 (0 B)
+
+      Package: com.android.deskclock  UID: 10037
+        Calls: 1
+        Last known FG: 0
+        Last reset: [1792088304722] 2026-10-15 18:18:24
+
+        PackageInfo:
+          IsShadow: false
+          Version: 26
+          Last package update time: 1533323273000
+
+        Shortcuts:
+          ShortcutInfo {id=Alarm_Create, flags=0x85 [DIrSr], packageName=com.android.deskclock, activity=ComponentInfo{com.android.deskclock/com.android.deskclock.DeskClock}, shortLabel=New alarm, resId=0[null], longLabel=Create new alarm, resId=0[null], disabledMessage=null, resId=0[null], categories=null, icon=null, rank=0, timestamp=1792088306533, intents=[Intent { act=android.intent.action.SET_ALARM flg=0x10000000 cmp=com.android.deskclock/.HandleApiCalls }/PersistableBundle[{com.android.deskclock.extra.EVENT_LABEL=2131755499}]], extras=null, iconRes=2131230914[drawable/shortcut_new_alarm], bitmapPath=null}
+          ShortcutInfo {id=Stopwatch, flags=0x85 [DIrSr], packageName=com.android.deskclock, activity=ComponentInfo{com.android.deskclock/com.android.deskclock.DeskClock}, shortLabel=Start, resId=0[null], longLabel=Start stopwatch, resId=0[null], disabledMessage=null, resId=0[null], categories=null, icon=null, rank=2, timestamp=1792088306533, intents=[Intent { act=com.android.deskclock.action.START_STOPWATCH flg=0x10000000 cmp=com.android.deskclock/.HandleShortcuts }/PersistableBundle[{com.android.deskclock.extra.EVENT_LABEL=2131755499}]], extras=null, iconRes=2131230917[drawable/shortcut_stopwatch], bitmapPath=null}
+          ShortcutInfo {id=Screensaver_Show, flags=0x85 [DIrSr], packageName=com.android.deskclock, activity=ComponentInfo{com.android.deskclock/com.android.deskclock.DeskClock}, shortLabel=Screen saver, resId=0[null], longLabel=Start screen saver, resId=0[null], disabledMessage=null, resId=0[null], categories=null, icon=null, rank=3, timestamp=1792088306533, intents=[Intent { act=android.intent.action.MAIN flg=0x10000000 cmp=com.android.deskclock/.ScreensaverActivity }/PersistableBundle[{com.android.deskclock.extra.EVENT_LABEL=2131755499}]], extras=null, iconRes=2131230916[drawable/shortcut_screensaver], bitmapPath=null}
+          ShortcutInfo {id=Timer_Create, flags=0x85 [DIrSr], packageName=com.android.deskclock, activity=ComponentInfo{com.android.deskclock/com.android.deskclock.DeskClock}, shortLabel=New timer, resId=0[null], longLabel=Create new timer, resId=0[null], disabledMessage=null, resId=0[null], categories=null, icon=null, rank=1, timestamp=1792088306533, intents=[Intent { act=android.intent.action.SET_TIMER flg=0x10000000 cmp=com.android.deskclock/.HandleApiCalls }/PersistableBundle[{com.android.deskclock.extra.EVENT_LABEL=2131755499}]], extras=null, iconRes=2131230915[drawable/shortcut_new_timer], bitmapPath=null}
+        Total bitmap size: 0 (0 B)
+
+      Bitmap directories: 
+        Path: bitmaps/ has 0 files, size=0 (0 B)
+
+  UID state:
+    UID=1001 state=0  [FG]  last FG=28152
+    UID=10000 state=17  last FG=49115
+    UID=10002 state=17  last FG=0
+    UID=10003 state=18  last FG=0
+    UID=10004 state=17  last FG=0
+    UID=10005 state=17  last FG=0
+    UID=10007 state=17  last FG=0
+    UID=10009 state=18  last FG=0
+    UID=10011 state=17  last FG=33014
+    UID=10013 state=13  last FG=561077
+    UID=10014 state=17  last FG=0
+    UID=10015 state=17  last FG=0
+    UID=10016 state=18  last FG=0
+    UID=10018 state=17  last FG=0
+    UID=10023 state=0  [FG]  last FG=27951
+    UID=10032 state=18  last FG=0
+    UID=10034 state=17  last FG=0
+    UID=10037 state=17  last FG=0
+    UID=10042 state=17  last FG=0
+    UID=10043 state=17  last FG=0
+    UID=10047 state=7  last FG=0
+    UID=10050 state=17  last FG=39510
+    UID=10055 state=18  last FG=0
+    UID=10057 state=17  last FG=0
+    UID=10065 state=2  [FG]  last FG=615026
