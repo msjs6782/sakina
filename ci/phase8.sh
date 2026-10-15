@@ -164,11 +164,9 @@ tap id placed_settings_next && sleep 4 && cap 264_widget_config
 # Sections from the top: place, language, style and theme, text size, colours, corners and border.
 scroll_to exact "مدينة خاصة بهذه الويدجت" 4 && tap exact "مدينة خاصة بهذه الويدجت" && sleep 1
 scroll_to exact "جدة" 4 && tap exact "جدة" && sleep 1
-scroll_to id wcfg_lang_en 6 && tap id wcfg_lang_en
-scroll_to id wcfg_theme_dark 8 && tap id wcfg_theme_dark
-scroll_to id wcfg_bg_101010 8 && tap id wcfg_bg_101010
-scroll_to id wcfg_corner_24 8 && tap id wcfg_corner_24
-scroll_to id wcfg_border_1 4 && tap id wcfg_border_1
+for t in wcfg_lang_en wcfg_theme_dark wcfg_bg_101010 wcfg_corner_24 wcfg_border_1; do
+  into_view "$t"; tap id "$t"
+done
 scroll_top; sleep 1; cap 265_widget_config_changed
 tap id wcfg_save && sleep 4
 J=$(widgets_json)
@@ -253,8 +251,9 @@ if [ "$SDK" -ge 33 ]; then
   adb shell cmd statusbar collapse >/dev/null 2>&1; sleep 1
   save_log
   adb shell input keyevent 3; sleep 1
-  adb shell cmd statusbar click-tile "$PKG/com.sakina.app.widgets.TimesTileService" >/dev/null 2>&1; sleep 4
-  wlog | grep -q "tile clicked: times" && wlog | grep -q "open times" && check tile_times PASS "opens the prayer times" || check tile_times FAIL "$(wlog | grep -E 'Tiles|Open' | tail -2 | tr '\n' ' ')"
+  adb shell cmd statusbar click-tile "$PKG/com.sakina.app.widgets.TimesTileService" >/dev/null 2>&1
+  # The tile's process may start cold: wait for the click to reach the app.
+  wait_wlog "open times" 15 && wlog | grep -q "tile clicked: times" && check tile_times PASS "opens the prayer times" || check tile_times FAIL "$(wlog | grep -E 'Tiles|Open' | tail -2 | tr '\n' ' ')"
   cap 277_tile_opened_times
 fi
 save_log
