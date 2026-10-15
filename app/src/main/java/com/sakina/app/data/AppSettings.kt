@@ -21,7 +21,7 @@ enum class ThemeMode { SYSTEM, LIGHT, DARK, SUN }
 enum class HomeLayout { BALANCED, FOCUS, DASHBOARD }
 
 /** Home cards. Only cards whose content exists in this version are shown in the editor. */
-enum class HomeCard { VERSE, DATE, SUN }
+enum class HomeCard { VERSE, DATE, SUN, FRIDAY }
 
 enum class LocationSource { CITY, MANUAL, GPS }
 
@@ -97,6 +97,11 @@ data class AppSettings(
     val homeCards: List<CardPref> = DEFAULT_CARDS,
     /** Adhan, alerts and reminders. Everything is off until the user turns it on. */
     val alerts: AlertSettings = AlertSettings(),
+    /** Calendar view, personal occasions and fasting reminders (all reminders off by default). */
+    val calendar: com.sakina.app.core.calendar.CalendarPrefs = com.sakina.app.core.calendar.CalendarPrefs(),
+    /** Margins of the practical Duha window estimate, in minutes. */
+    val duhaAfterSunrise: Int = com.sakina.app.core.prayer.DuhaWindow.DEFAULT_AFTER_SUNRISE,
+    val duhaBeforeDhuhr: Int = com.sakina.app.core.prayer.DuhaWindow.DEFAULT_BEFORE_DHUHR,
 ) {
     val calcConfig: CalcConfig
         get() = CalcConfig(method, asr, highLatitude, ummAlQuraIsha, offsets.toCore())
@@ -120,7 +125,7 @@ data class AppSettings(
         }
 
     companion object {
-        val DEFAULT_CARDS = listOf(CardPref(HomeCard.VERSE), CardPref(HomeCard.SUN), CardPref(HomeCard.DATE))
+        val DEFAULT_CARDS = listOf(CardPref(HomeCard.FRIDAY), CardPref(HomeCard.VERSE), CardPref(HomeCard.SUN), CardPref(HomeCard.DATE))
         const val MAX_LOCATIONS = 20
     }
 }

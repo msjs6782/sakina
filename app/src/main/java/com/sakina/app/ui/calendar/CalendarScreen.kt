@@ -1,0 +1,472 @@
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class, androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
+
+package com.sakina.app.ui.calendar
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import com.sakina.app.core.calendar.CalendarKind
+import com.sakina.app.core.calendar.FastingDays
+import com.sakina.app.core.calendar.FastingKind
+import com.sakina.app.core.calendar.GridDay
+import com.sakina.app.core.calendar.MonthGrid
+import com.sakina.app.core.calendar.MonthRef
+import com.sakina.app.core.calendar.Occasions
+import com.sakina.app.core.calendar.PersonalOccasion
+import com.sakina.app.core.calendar.PersonalOccasionOps
+import com.sakina.app.core.calendar.UmmAlQura
+import com.sakina.app.core.format.Lang
+import com.sakina.app.core.prayer.PrayerKey
+import com.sakina.app.core.prayer.PrayerSchedule
+import com.sakina.app.data.AppClock
+import com.sakina.app.data.AppSettings
+import com.sakina.app.ui.LocalFmt
+import com.sakina.app.ui.LocalStrings
+import com.sakina.app.ui.MainViewModel
+import com.sakina.app.ui.Route
+import com.sakina.app.ui.components.DirectionalIcon
+import com.sakina.app.ui.components.NoteText
+import com.sakina.app.ui.components.SakinaIcons
+import com.sakina.app.ui.components.ScreenBar
+import com.sakina.app.ui.components.SectionCard
+import com.sakina.app.ui.components.exposeTestTags
+import com.sakina.app.ui.location.FullScreen
+import kotlinx.coroutines.launch
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.ZoneId
+
+private fun firstPage(kind: CalendarKind) = MonthRef(kind, if (kind == CalendarKind.HIJRI) UmmAlQura.MIN_YEAR else 1883, 1)
+private fun pageCount(kind: CalendarKind) = if (kind == CalendarKind.HIJRI) (UmmAlQura.MAX_YEAR - UmmAlQura.MIN_YEAR + 1) * 12 else (2173 - 1883 + 1) * 12
+
+internal fun weekStartFor(lang: Lang) = if (lang == Lang.AR) DayOfWeek.SATURDAY else DayOfWeek.MONDAY
+
+/** Markers of a day: computed occasions, fasting kinds and the user's occasions. */
+private class DayMarks(val occasions: Boolean, val fasting: Boolean, val forbidden: Boolean, val personal: Boolean)
+
+private fun marks(d: LocalDate, s: AppSettings): DayMarks {
+    val f = FastingDays.on(d, s.hijriOffset)
+    return DayMarks(
+        occasions = Occasions.on(d, s.hijriOffset).isNotEmpty(),
+        fasting = f.isNotEmpty() && !FastingDays.isForbidden(f),
+        forbidden = FastingDays.isForbidden(f),
+        personal = PersonalOccasionOps.on(s.calendar.occasions, d, s.hijriOffset).isNotEmpty(),
+    )
+}
+
+@Composable
+fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    val zone = s.activeLocation?.zoneId ?: ZoneId.systemDefault()
+    val today = AppClock.now().atZone(zone).toLocalDate()
+    val kind = s.calendar.kind
+    val focus = if (focusEpochDay == Long.MIN_VALUE) null else LocalDate.ofEpochDay(focusEpochDay)
+    var selected by rememberSaveable { mutableStateOf(focus?.toEpochDay() ?: Long.MIN_VALUE) }
+    // A date inside the month on screen, so switching calendars stays on the same time of year.
+    var anchor by rememberSaveable { mutableStateOf((focus ?: today).toEpochDay()) }
+    val pager = key(kind) {
+        val start = MonthRef.of(kind, LocalDate.ofEpochDay(anchor), s.hijriOffset) ?: firstPage(kind)
+        rememberPagerState(initialPage = firstPage(kind).distanceTo(start).coerceIn(0, pageCount(kind) - 1)) { pageCount(kind) }
+    }
+    LaunchedEffect(kind, pager.currentPage) {
+        MonthGrid.range(firstPage(kind).plus(pager.currentPage), s.hijriOffset)?.let { r -> anchor = r.start.plusDays(14).toEpochDay() }
+    }
+    val scope = rememberCoroutineScope()
+    var picker by remember { mutableStateOf(false) }
+    val snackbar = remember { SnackbarHostState() }
+    // Offers to undo the last change to the occasions (made here or on the edit screen).
+    val undo = vm.occasionUndo
+    LaunchedEffect(undo?.stamp) {
+        val u = undo ?: return@LaunchedEffect
+        val r = snackbar.showSnackbar(u.message, actionLabel = str.undo, duration = SnackbarDuration.Long)
+        if (r == SnackbarResult.ActionPerformed) vm.undoOccasions() else if (vm.occasionUndo?.stamp == u.stamp) vm.occasionUndo = null
+    }
+    val current = firstPage(kind).plus(pager.currentPage)
+    FullScreen {
+        Scaffold(
+            containerColor = MaterialTheme.colorScheme.background,
+            snackbarHost = { SnackbarHost(snackbar, Modifier.exposeTestTags()) },
+            topBar = {
+                ScreenBar(str.calendarTitle, onBack = { vm.pop() }) {
+                    IconButton(onClick = { vm.update { it.copy(calendar = it.calendar.copy(listMode = !it.calendar.listMode)) } }, modifier = Modifier.testTag("cal_view_toggle")) {
+                        Icon(if (s.calendar.listMode) SakinaIcons.Grid else SakinaIcons.Lines, if (s.calendar.listMode) str.gridView else str.listView)
+                    }
+                    IconButton(onClick = { vm.push(Route.CalendarTools) }, modifier = Modifier.testTag("cal_tools")) { Icon(SakinaIcons.Table, str.calendarTools) }
+                }
+            },
+        ) { pad ->
+            Column(Modifier.fillMaxSize().padding(pad)) {
+                Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(onClick = { scope.launch { pager.animateScrollToPage((pager.currentPage - 1).coerceAtLeast(0)) } }, modifier = Modifier.testTag("cal_prev")) {
+                        DirectionalIcon(SakinaIcons.ChevronStart, str.prevMonth)
+                    }
+                    Text(
+                        monthName(str, kind, current.month) + " " + fmt.num(current.year) + if (kind == CalendarKind.HIJRI && str.isAr) " هـ" else "",
+                        style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center,
+                        modifier = Modifier.weight(1f).clip(RoundedCornerShape(12.dp)).clickable { picker = true }.padding(vertical = 6.dp).testTag("cal_title"),
+                    )
+                    IconButton(onClick = { scope.launch { pager.animateScrollToPage((pager.currentPage + 1).coerceAtMost(pageCount(kind) - 1)) } }, modifier = Modifier.testTag("cal_next")) {
+                        DirectionalIcon(SakinaIcons.ChevronEnd, str.nextMonth)
+                    }
+                }
+                Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FilterChip(selected = kind == CalendarKind.HIJRI, onClick = { vm.update { it.copy(calendar = it.calendar.copy(kind = CalendarKind.HIJRI)) } },
+                        label = { Text(str.hijriLabel) }, modifier = Modifier.testTag("cal_kind_hijri"))
+                    FilterChip(selected = kind == CalendarKind.GREGORIAN, onClick = { vm.update { it.copy(calendar = it.calendar.copy(kind = CalendarKind.GREGORIAN)) } },
+                        label = { Text(str.gregorianLabel) }, modifier = Modifier.testTag("cal_kind_gregorian"))
+                    Spacer(Modifier.weight(1f))
+                    OutlinedButton(onClick = {
+                        MonthRef.of(kind, today, s.hijriOffset)?.let { m -> scope.launch { pager.animateScrollToPage(firstPage(kind).distanceTo(m)) } }
+                    }, modifier = Modifier.testTag("cal_today")) { Text(str.todayButton) }
+                }
+                HorizontalPager(pager, modifier = Modifier.fillMaxSize(), beyondViewportPageCount = 0, verticalAlignment = Alignment.Top) { page ->
+                    val month = firstPage(kind).plus(page)
+                    if (s.calendar.listMode) MonthList(month, s, today) { selected = it.toEpochDay() }
+                    else MonthPage(month, s, today, selected) { selected = it.toEpochDay() }
+                }
+            }
+        }
+    }
+    if (picker) MonthPicker(kind, current, onDismiss = { picker = false }) { m ->
+        picker = false
+        if (m.isSupported) scope.launch { pager.scrollToPage(firstPage(kind).distanceTo(m).coerceIn(0, pageCount(kind) - 1)) }
+    }
+    if (selected != Long.MIN_VALUE) {
+        DaySheet(vm, s, LocalDate.ofEpochDay(selected), onDismiss = { selected = Long.MIN_VALUE })
+    }
+}
+
+@Composable
+private fun MonthPage(month: MonthRef, s: AppSettings, today: LocalDate, selected: Long, onDay: (LocalDate) -> Unit) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    val weekStart = weekStartFor(str.lang)
+    val grid = remember(month, s.hijriOffset, weekStart) { MonthGrid.build(month, s.hijriOffset, weekStart) }
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 10.dp, vertical = 8.dp)) {
+        if (grid == null) {
+            NoteText(str.outOfRange, Modifier.padding(16.dp))
+            return@Column
+        }
+        Row(Modifier.fillMaxWidth()) {
+            MonthGrid.weekdays(weekStart).forEach { d ->
+                Text(fmt.weekday(d, short = true), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center, modifier = Modifier.weight(1f).padding(vertical = 4.dp))
+            }
+        }
+        grid.chunked(7).forEach { week ->
+            Row(Modifier.fillMaxWidth()) {
+                week.forEach { day -> DayCell(day, month.kind, s, today, day.date.toEpochDay() == selected, Modifier.weight(1f)) { onDay(day.date) } }
+            }
+        }
+        Spacer(Modifier.height(10.dp))
+        Legend()
+        Spacer(Modifier.height(8.dp))
+        NoteText(str.occasionNote)
+        NoteText(str.fastingNote, Modifier.padding(top = 4.dp))
+        Spacer(Modifier.height(16.dp))
+    }
+}
+
+@Composable
+private fun DayCell(day: GridDay, kind: CalendarKind, s: AppSettings, today: LocalDate, selected: Boolean, modifier: Modifier, onClick: () -> Unit) {
+    val fmt = LocalFmt.current
+    val m = remember(day.date, s.hijriOffset, s.calendar.occasions) { marks(day.date, s) }
+    val isToday = day.date == today
+    val primary = if (kind == CalendarKind.HIJRI) day.hijri?.day else day.date.dayOfMonth
+    val secondary = if (kind == CalendarKind.HIJRI) day.date.dayOfMonth else day.hijri?.day
+    val bg = when {
+        selected -> MaterialTheme.colorScheme.primaryContainer
+        m.forbidden -> MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.35f)
+        else -> Color.Transparent
+    }
+    Box(
+        modifier
+            .aspectRatio(0.82f)
+            .padding(2.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(bg)
+            .then(if (isToday) Modifier.border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp)) else Modifier)
+            .clickable(onClick = onClick)
+            .alpha(if (day.inMonth) 1f else 0.38f)
+            .testTag("cal_day_${day.date}"),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(primary?.let { fmt.num(it) } ?: "–", style = MaterialTheme.typography.titleLarge,
+                fontWeight = if (isToday) FontWeight.Bold else FontWeight.Medium,
+                color = if (isToday) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface)
+            Text(secondary?.let { fmt.num(it) } ?: "", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Row(horizontalArrangement = Arrangement.spacedBy(3.dp), modifier = Modifier.height(6.dp)) {
+                if (m.occasions) Dot(MaterialTheme.colorScheme.primary)
+                if (m.fasting) Dot(MaterialTheme.colorScheme.tertiary)
+                if (m.personal) Dot(MaterialTheme.colorScheme.secondary)
+            }
+        }
+    }
+}
+
+@Composable
+private fun Dot(color: Color) = Box(Modifier.size(5.dp).clip(CircleShape).background(color))
+
+@Composable
+private fun Legend() {
+    val str = LocalStrings.current
+    FlowRow(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.padding(horizontal = 6.dp)) {
+        listOf(
+            MaterialTheme.colorScheme.primary to str.legendOccasion,
+            MaterialTheme.colorScheme.tertiary to str.legendFasting,
+            MaterialTheme.colorScheme.secondary to str.legendPersonal,
+        ).forEach { (c, t) ->
+            Row(verticalAlignment = Alignment.CenterVertically) { Dot(c); Spacer(Modifier.width(6.dp)); Text(t, style = MaterialTheme.typography.labelMedium) }
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(Modifier.size(12.dp).clip(RoundedCornerShape(3.dp)).background(MaterialTheme.colorScheme.errorContainer))
+            Spacer(Modifier.width(6.dp)); Text(str.legendForbidden, style = MaterialTheme.typography.labelMedium)
+        }
+    }
+}
+
+@Composable
+private fun MonthList(month: MonthRef, s: AppSettings, today: LocalDate, onDay: (LocalDate) -> Unit) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    val range = remember(month, s.hijriOffset) { MonthGrid.range(month, s.hijriOffset) }
+    if (range == null) {
+        NoteText(str.outOfRange, Modifier.padding(16.dp))
+        return
+    }
+    val days = remember(range) { generateSequence(range.start) { it.plusDays(1) }.takeWhile { it <= range.endInclusive }.toList() }
+    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        items(days, key = { it.toEpochDay() }) { d ->
+            val h = UmmAlQura.displayed(d, s.hijriOffset)
+            val labels = buildList {
+                Occasions.on(d, s.hijriOffset).forEach { add(str.occasion(it)) }
+                FastingDays.on(d, s.hijriOffset).forEach { add(str.fastingKind(it)) }
+                PersonalOccasionOps.on(s.calendar.occasions, d, s.hijriOffset).forEach { add(it.title) }
+            }
+            Surface(
+                onClick = { onDay(d) },
+                shape = RoundedCornerShape(14.dp),
+                color = if (d == today) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f) else MaterialTheme.colorScheme.surfaceContainerLow,
+                modifier = Modifier.fillMaxWidth().testTag("cal_row_$d"),
+            ) {
+                Row(Modifier.padding(horizontal = 14.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Column(Modifier.width(110.dp)) {
+                        Text(fmt.weekday(d.dayOfWeek), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        val main = if (month.kind == CalendarKind.HIJRI) h?.let { fmt.hijri(it, withYear = false) } ?: "–" else fmt.gregorian(d, withYear = false)
+                        Text(main, style = MaterialTheme.typography.titleMedium)
+                        val other = if (month.kind == CalendarKind.HIJRI) fmt.gregorian(d, withYear = false) else h?.let { fmt.hijri(it, withYear = false) } ?: ""
+                        Text(other, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    Text(labels.joinToString("، "), style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
+                }
+            }
+        }
+        item { NoteText(str.occasionNote, Modifier.padding(8.dp)) }
+    }
+}
+
+@Composable
+private fun MonthPicker(kind: CalendarKind, current: MonthRef, onDismiss: () -> Unit, onPick: (MonthRef) -> Unit) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    var year by remember { mutableIntStateOf(current.year) }
+    val range = if (kind == CalendarKind.HIJRI) UmmAlQura.MIN_YEAR..UmmAlQura.MAX_YEAR else 1883..2173
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(str.pickMonth) },
+        text = {
+            Column {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(onClick = { if (year > range.first) year-- }, modifier = Modifier.testTag("picker_year_minus")) { Text("−", style = MaterialTheme.typography.titleLarge) }
+                    Text(fmt.num(year), style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center, modifier = Modifier.weight(1f).testTag("picker_year"))
+                    IconButton(onClick = { if (year < range.last) year++ }, modifier = Modifier.testTag("picker_year_plus")) { Text("+", style = MaterialTheme.typography.titleLarge) }
+                }
+                Spacer(Modifier.height(8.dp))
+                (1..12).chunked(3).forEach { row ->
+                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(vertical = 3.dp)) {
+                        row.forEach { m ->
+                            val sel = year == current.year && m == current.month
+                            Surface(
+                                onClick = { onPick(MonthRef(kind, year, m)) },
+                                shape = RoundedCornerShape(10.dp),
+                                color = if (sel) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                contentColor = if (sel) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.weight(1f).testTag("picker_month_$m"),
+                            ) {
+                                Text(monthName(str, kind, m), style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center, maxLines = 1,
+                                    modifier = Modifier.padding(vertical = 10.dp, horizontal = 2.dp))
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(str.cancel) } },
+        modifier = Modifier.exposeTestTags(),
+    )
+}
+
+@Composable
+private fun DaySheet(vm: MainViewModel, s: AppSettings, date: LocalDate, onDismiss: () -> Unit) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val h = UmmAlQura.displayed(date, s.hijriOffset)
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet) {
+        Column(
+            Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp).padding(bottom = 28.dp).exposeTestTags(),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Text(fmt.weekday(date.dayOfWeek), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (h != null) Text(fmt.hijri(h), style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.primary, modifier = Modifier.testTag("day_hijri"))
+            Text(fmt.gregorian(date, withYear = true), style = MaterialTheme.typography.titleMedium, modifier = Modifier.testTag("day_gregorian"))
+            val occ = Occasions.on(date, s.hijriOffset)
+            if (occ.isNotEmpty()) {
+                SectionCard(title = str.legendOccasion, icon = SakinaIcons.Calendar) {
+                    occ.forEach { Text(str.occasion(it), style = MaterialTheme.typography.bodyLarge) }
+                    NoteText(str.occasionNote)
+                }
+            }
+            val fasting = FastingDays.on(date, s.hijriOffset)
+            if (fasting.isNotEmpty()) {
+                SectionCard(title = str.fastingDayTitle, icon = SakinaIcons.Moon) {
+                    fasting.forEach { Text(str.fastingKind(it), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.testTag("day_fasting_${it.name.lowercase()}")) }
+                    NoteText(str.fastingNote)
+                }
+                FastingRefs(vm, fasting)
+            }
+            val loc = s.activeLocation
+            val zone = loc?.zoneId
+            if (loc != null && zone != null && loc.isUsable) {
+                val day = remember(date, loc, s.calcConfig) { PrayerSchedule(loc.point, zone, s.calcConfig).day(date) }
+                SectionCard(title = str.dayTimesTitle, icon = SakinaIcons.Clock) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        listOf(PrayerKey.FAJR, PrayerKey.MAGHRIB).forEach { k ->
+                            Column(Modifier.weight(1f)) {
+                                Text(str.prayer(k), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(day[k].instant?.let { fmt.time(it, zone) } ?: str.unavailable, style = MaterialTheme.typography.titleMedium)
+                            }
+                        }
+                    }
+                }
+            }
+            val mine = PersonalOccasionOps.on(s.calendar.occasions, date, s.hijriOffset)
+            SectionCard(title = str.myOccasions, icon = SakinaIcons.Bookmark) {
+                if (mine.isEmpty()) NoteText(str.noMyOccasions)
+                mine.forEach { o -> OccasionRow(vm, o) }
+                Spacer(Modifier.height(6.dp))
+                FilledTonalButton(onClick = { onDismiss(); vm.push(Route.OccasionEdit("", date.toEpochDay())) }, modifier = Modifier.testTag("day_add_occasion")) {
+                    Icon(SakinaIcons.Plus, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text(str.addOccasion)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun OccasionRow(vm: MainViewModel, o: PersonalOccasion) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+        Column(Modifier.weight(1f).clickable { vm.push(Route.OccasionEdit(o.id)) }.testTag("occasion_${o.id}")) {
+            Text(o.title, style = MaterialTheme.typography.bodyLarge)
+            val bits = listOfNotNull(
+                o.minuteOfDay?.let { fmt.clock(it / 60, it % 60) },
+                when (o.repeat) {
+                    PersonalOccasion.Repeat.NONE -> null
+                    PersonalOccasion.Repeat.YEARLY_HIJRI -> str.repeatHijri
+                    PersonalOccasion.Repeat.YEARLY_GREGORIAN -> str.repeatGregorian
+                },
+                if (o.notify) str.occasionNotify else null,
+            )
+            if (bits.isNotEmpty()) Text(bits.joinToString(" · "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (o.note.isNotBlank()) Text(o.note, style = MaterialTheme.typography.bodySmall)
+        }
+        IconButton(onClick = { vm.changeOccasions(str.occasionDeleted) { PersonalOccasionOps.remove(it, o.id) } }, modifier = Modifier.testTag("occasion_delete_${o.id}")) {
+            Icon(SakinaIcons.Trash, str.delete)
+        }
+    }
+}
+
+/** References for the fasting kinds of a day. */
+@Composable
+private fun FastingRefs(vm: MainViewModel, kinds: List<FastingKind>) {
+    val ids = kinds.flatMap {
+        when (it) {
+            FastingKind.MONDAY -> listOf("mon_thu_tahari", "monday_born")
+            FastingKind.THURSDAY -> listOf("mon_thu_tahari", "mon_thu_amal")
+            FastingKind.WHITE_DAY -> listOf("white_days")
+            FastingKind.ARAFAH -> listOf("arafah")
+            FastingKind.TASUA -> listOf("tasua")
+            FastingKind.ASHURA -> listOf("ashura")
+            FastingKind.SHAWWAL -> listOf("shawwal_six")
+            FastingKind.FORBIDDEN_EID -> listOf("eid_forbidden")
+            FastingKind.FORBIDDEN_TASHREEQ -> listOf("tashreeq")
+            FastingKind.RAMADAN -> emptyList()
+        }
+    }.distinct()
+    if (ids.isNotEmpty()) RefsCard(vm, ids)
+}

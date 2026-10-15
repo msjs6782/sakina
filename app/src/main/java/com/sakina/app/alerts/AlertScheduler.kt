@@ -68,7 +68,7 @@ object AlertScheduler {
         val state = app.alertState
         val now = Instant.now()
         val c = build(s)
-        val plan = AlertPlanner.plan(s.alerts, c.schedule, c.zone, now)
+        val plan = AlertPlanner.plan(s.alerts, c.schedule, c.zone, now, calendar = s.calendar, hijriOffset = s.hijriOffset)
         val notifier = Notifier(app, s)
         var fired = state.fired()
         val window = when (mode) {

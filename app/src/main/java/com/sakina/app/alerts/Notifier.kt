@@ -69,6 +69,15 @@ class Notifier(private val context: Context, private val s: AppSettings) {
         )
     }
 
+    /** Calendar notifications open the calendar on their day. */
+    private fun openCalendar(day: java.time.LocalDate): PendingIntent? = PendingIntent.getActivity(
+        context, 200 + Math.floorMod(day.toEpochDay(), 50L).toInt(),
+        Intent(context, MainActivity::class.java)
+            .putExtra(MainActivity.EXTRA_OPEN, MainActivity.OPEN_CALENDAR + day)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP),
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+    )
+
     private fun base(channel: String) = NotificationCompat.Builder(context, channel)
         .setSmallIcon(R.drawable.ic_stat_sakina)
         .setColor(0xFF0E6B5E.toInt())
@@ -129,6 +138,31 @@ class Notifier(private val context: Context, private val s: AppSettings) {
                     .setTimeoutAfter(Duration.ofHours(3).toMillis())
                 openPractice(kind)?.let { b.setContentIntent(it) }
                 id = ID_REMINDER + kind.ordinal
+            }
+            EventKind.OCCASION -> {
+                val o = s.calendar.occasions.firstOrNull { it.id == e.subject } ?: return false
+                val time = o.minuteOfDay?.let { fmt.clock(it / 60, it % 60) }
+                b = base(Channels.forReminder(if (late) NotifyStyle.SILENT else e.style ?: NotifyStyle.NORMAL))
+                    .setContentTitle(o.title)
+                    .setContentText(listOfNotNull(time, o.note.takeIf { it.isNotBlank() }).joinToString(" · ").ifBlank { str.occasionNotifText } + lateNote)
+                    .setStyle(NotificationCompat.BigTextStyle().bigText(o.note.ifBlank { str.occasionNotifText }))
+                    .setCategory(NotificationCompat.CATEGORY_EVENT)
+                    .setTimeoutAfter(Duration.ofHours(12).toMillis())
+                openCalendar(e.date)?.let { b.setContentIntent(it) }
+                id = ID_OCCASION + Math.floorMod(o.id.hashCode(), 90)
+            }
+            EventKind.FASTING -> {
+                val (dayText, kindsText) = (e.subject ?: return false).split('|').let { it[0] to it.getOrElse(1) { "" } }
+                val day = runCatching { java.time.LocalDate.parse(dayText) }.getOrNull() ?: return false
+                val kinds = kindsText.split(',').mapNotNull { k -> runCatching { com.sakina.app.core.calendar.FastingKind.valueOf(k) }.getOrNull() }
+                val tomorrow = day != e.date
+                b = base(Channels.forReminder(if (late) NotifyStyle.SILENT else e.style ?: NotifyStyle.NORMAL))
+                    .setContentTitle(str.fastingNotifTitle(tomorrow))
+                    .setContentText(kinds.joinToString("، ") { str.fastingKind(it) } + " · " + fmt.gregorian(day, withYear = false, withWeekday = true) + lateNote)
+                    .setCategory(NotificationCompat.CATEGORY_REMINDER)
+                    .setTimeoutAfter(Duration.ofHours(12).toMillis())
+                openCalendar(day)?.let { b.setContentIntent(it) }
+                id = ID_FASTING
             }
             EventKind.TEST -> {
                 val mode = overrideMode ?: e.mode ?: AlertMode.NOTIFY
@@ -231,6 +265,8 @@ class Notifier(private val context: Context, private val s: AppSettings) {
         const val ID_IQAMA = 300
         const val ID_SUHOOR = 400
         const val ID_REMINDER = 500
+        const val ID_OCCASION = 600
+        const val ID_FASTING = 700
         const val ID_TEST = 900
     }
 }

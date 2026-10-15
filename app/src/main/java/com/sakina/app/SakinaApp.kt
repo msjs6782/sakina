@@ -57,7 +57,7 @@ class SakinaApp : Application() {
         // Whenever anything that affects alerts changes (and once at start), rebuild the alarm chain.
         appScope.launch {
             settings.settings
-                .map { s -> listOf(s.alerts, s.calcConfig, s.activeLocation, s.language, s.arabicDigits, s.clock24) }
+                .map { s -> listOf(s.alerts, s.calcConfig, s.activeLocation, s.language, s.arabicDigits, s.clock24, s.calendar, s.hijriOffset) }
                 .distinctUntilChanged()
                 .collect {
                     val s = settings.current()

@@ -35,6 +35,10 @@ class MainActivity : ComponentActivity() {
         if (open == OPEN_LISTEN && vm.stack.lastOrNull() !is com.sakina.app.ui.Route.Listen) {
             vm.push(com.sakina.app.ui.Route.Listen())
         }
+        if (open.startsWith(OPEN_CALENDAR)) {
+            val day = runCatching { java.time.LocalDate.parse(open.removePrefix(OPEN_CALENDAR)) }.getOrNull()
+            vm.push(com.sakina.app.ui.Route.HijriCalendar(day?.toEpochDay() ?: Long.MIN_VALUE))
+        }
         if (open.startsWith(OPEN_ADHKAR)) {
             val route = com.sakina.app.ui.Route.Wird(open.removePrefix(OPEN_ADHKAR))
             if (vm.stack.lastOrNull() != route) vm.push(route)
@@ -45,5 +49,6 @@ class MainActivity : ComponentActivity() {
         const val EXTRA_OPEN = "sakina_open"
         const val OPEN_LISTEN = "listen"
         const val OPEN_ADHKAR = "adhkar:"
+        const val OPEN_CALENDAR = "calendar:"
     }
 }

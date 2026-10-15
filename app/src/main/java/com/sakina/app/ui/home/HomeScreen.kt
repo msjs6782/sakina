@@ -455,6 +455,9 @@ private fun DateCard(m: HomeModel, s: AppSettings, modifier: Modifier = Modifier
         }
         Spacer(Modifier.height(8.dp))
         NoteText(str.occasionNote)
+        LocalMainVm.current?.let { vm ->
+            TextButton(onClick = { vm.push(com.sakina.app.ui.Route.HijriCalendar()) }, modifier = Modifier.testTag("home_open_calendar")) { Text(str.calendarTitle) }
+        }
     }
 }
 
@@ -465,6 +468,13 @@ private fun Cards(m: HomeModel, s: AppSettings) {
             HomeCard.DATE -> DateCard(m, s)
             HomeCard.SUN -> SunCard(m)
             HomeCard.VERSE -> VerseCard(m.today)
+            HomeCard.FRIDAY -> {
+                val vm = LocalMainVm.current
+                val eve = remember(m.location, s.calcConfig, m.now.epochSecond / 60) {
+                    com.sakina.app.ui.seasons.fridayWindow(PrayerSchedule(m.location.point, m.zone, s.calcConfig), m.now)
+                }
+                if (vm != null && eve != null) com.sakina.app.ui.seasons.FridayHomeCard(vm, eve)
+            }
         }
     }
 }

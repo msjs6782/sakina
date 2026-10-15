@@ -85,6 +85,29 @@ object Demo {
                 if (e.containsKey("demo_card")) s = s.copy(alerts = s.alerts.copy(ongoingCard = e.getBoolean("demo_card")))
                 if (e.containsKey("demo_route_alarm")) s = s.copy(alerts = s.alerts.copy(audioRoute = if (e.getBoolean("demo_route_alarm")) AudioRoute.ALARM else AudioRoute.NOTIFICATION))
                 if (e.containsKey("demo_suhoor")) s = s.copy(alerts = s.alerts.copy(suhoor = s.alerts.suhoor.copy(enabled = true, ramadanOnly = false, minutesBeforeFajr = e.getInt("demo_suhoor"))))
+                // Phase 7: calendar view, personal occasions ("date:title[:minute[:repeat]]" with _ for spaces, ";"-free), fasting reminders.
+                e.getString("demo_cal_kind")?.let { k -> s = s.copy(calendar = s.calendar.copy(kind = com.sakina.app.core.calendar.CalendarKind.valueOf(k.uppercase()))) }
+                if (e.containsKey("demo_cal_list")) s = s.copy(calendar = s.calendar.copy(listMode = e.getBoolean("demo_cal_list")))
+                e.getString("demo_occasions")?.split(',')?.filter { it.isNotBlank() }?.forEachIndexed { i, spec ->
+                    val f = spec.split(':')
+                    val d = LocalDate.parse(f[0])
+                    val h = com.sakina.app.core.calendar.UmmAlQura.displayed(d, s.hijriOffset)
+                    val o = com.sakina.app.core.calendar.PersonalOccasion(
+                        id = "demo$i", title = f[1].replace('_', ' '), epochDay = d.toEpochDay(),
+                        minuteOfDay = f.getOrNull(2)?.toIntOrNull(),
+                        repeat = f.getOrNull(3)?.let { r -> com.sakina.app.core.calendar.PersonalOccasion.Repeat.valueOf(r.uppercase()) } ?: com.sakina.app.core.calendar.PersonalOccasion.Repeat.NONE,
+                        hijriMonth = h?.month ?: 0, hijriDay = h?.day ?: 0, notify = true,
+                    )
+                    s = s.copy(calendar = s.calendar.copy(occasions = s.calendar.occasions + o))
+                }
+                e.getString("demo_fasting")?.let { spec ->
+                    // monthu|white|both[:minute[:same]]
+                    val f = spec.split(':')
+                    s = s.copy(calendar = s.calendar.copy(fasting = com.sakina.app.core.calendar.FastingReminders(
+                        mondayThursday = f[0] == "monthu" || f[0] == "both", whiteDays = f[0] == "white" || f[0] == "both",
+                        minuteOfDay = f.getOrNull(1)?.toIntOrNull() ?: 21 * 60, eveningBefore = f.getOrNull(2) != "same",
+                    )))
+                }
                 // KIND or KIND:minuteOfDay, comma-separated.
                 e.getString("demo_reminders")?.split(',')?.filter { it.isNotBlank() }?.forEach { spec ->
                     val f = spec.split(':')
@@ -212,6 +235,8 @@ object Demo {
                 r.startsWith("quran_search:") -> Route.QuranSearch(r.removePrefix("quran_search:"))
                 r.startsWith("listen:") -> Route.Listen(r.removePrefix("listen:").toInt())
                 r.startsWith("adhkar_cat:") -> Route.AdhkarCategory(r.removePrefix("adhkar_cat:"))
+                r.startsWith("calendar_day:") -> Route.HijriCalendar(LocalDate.parse(r.removePrefix("calendar_day:")).toEpochDay())
+                r.startsWith("occasion_new:") -> Route.OccasionEdit("", LocalDate.parse(r.removePrefix("occasion_new:")).toEpochDay())
                 r.startsWith("adhkar_search:") -> Route.Adhkar(r.removePrefix("adhkar_search:"))
                 r.startsWith("adhkar_item:") -> Route.AdhkarItem(r.removePrefix("adhkar_item:"))
                 r.startsWith("wird:") -> r.removePrefix("wird:").split(':').let { Route.Wird(it[0], it.getOrElse(1) { "" }) }
@@ -270,6 +295,11 @@ object Demo {
         "adhkar" -> Route.Adhkar()
         "tasbih" -> Route.Tasbih
         "qibla" -> Route.Qibla
+        "month" -> Route.HijriCalendar()
+        "calendar_tools" -> Route.CalendarTools
+        "ramadan" -> Route.Ramadan
+        "night" -> Route.Night
+        "friday" -> Route.Friday
         else -> null
     }
 

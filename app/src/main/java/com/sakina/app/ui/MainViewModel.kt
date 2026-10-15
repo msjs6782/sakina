@@ -60,7 +60,18 @@ sealed interface Route {
     data class Wird(val practice: String, val session: String = "") : Route
     data object Tasbih : Route
     data object Qibla : Route
+    /** The month calendar; [focusEpochDay] opens a day's details (Long.MIN_VALUE for none). */
+    data class HijriCalendar(val focusEpochDay: Long = Long.MIN_VALUE) : Route
+    /** Adding ([id] empty) or editing a personal occasion; [epochDay] is the date for a new one. */
+    data class OccasionEdit(val id: String = "", val epochDay: Long = Long.MIN_VALUE) : Route
+    data object CalendarTools : Route
+    data object Ramadan : Route
+    data object Night : Route
+    data object Friday : Route
 }
+
+/** The occasions list before the last change, so the change can be undone from the calendar. */
+data class OccasionUndo(val previous: List<com.sakina.app.core.calendar.PersonalOccasion>, val message: String, val stamp: Long)
 
 sealed interface GpsUi {
     data object Idle : GpsUi
@@ -100,6 +111,27 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         .stateIn(viewModelScope, SharingStarted.Eagerly, com.sakina.app.data.ToolsState())
     val adhkar: StateFlow<com.sakina.app.core.adhkar.AdhkarLibrary?> get() = sakina.tools.library
     val toolsRepo get() = sakina.tools
+
+    val refs: StateFlow<Map<String, com.sakina.app.core.adhkar.HadithRef>?> get() = sakina.tools.refs
+
+    fun loadRefs() {
+        viewModelScope.launch { sakina.tools.loadRefs() }
+    }
+
+    var occasionUndo by mutableStateOf<OccasionUndo?>(null)
+
+    /** Changes the personal occasions and keeps the previous list for one undo. */
+    fun changeOccasions(message: String, transform: (List<com.sakina.app.core.calendar.PersonalOccasion>) -> List<com.sakina.app.core.calendar.PersonalOccasion>) {
+        val prev = settings.value?.calendar?.occasions ?: return
+        update { it.copy(calendar = it.calendar.copy(occasions = transform(it.calendar.occasions))) }
+        occasionUndo = OccasionUndo(prev, message, System.nanoTime())
+    }
+
+    fun undoOccasions() {
+        val u = occasionUndo ?: return
+        update { it.copy(calendar = it.calendar.copy(occasions = u.previous)) }
+        occasionUndo = null
+    }
 
     fun loadAdhkar() {
         viewModelScope.launch { sakina.tools.loadLibrary() }

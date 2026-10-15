@@ -156,6 +156,12 @@ private fun RouteScreen(route: Route, vm: MainViewModel, s: AppSettings) {
         is Route.Wird -> com.sakina.app.ui.adhkar.WirdScreen(vm, s, route.practice, route.session)
         Route.Tasbih -> com.sakina.app.ui.adhkar.TasbihScreen(vm)
         Route.Qibla -> com.sakina.app.ui.qibla.QiblaScreen(vm, s)
+        is Route.HijriCalendar -> com.sakina.app.ui.calendar.CalendarScreen(vm, s, route.focusEpochDay)
+        is Route.OccasionEdit -> com.sakina.app.ui.calendar.OccasionEditScreen(vm, s, route.id, route.epochDay)
+        Route.CalendarTools -> com.sakina.app.ui.calendar.CalendarToolsScreen(vm, s)
+        Route.Ramadan -> com.sakina.app.ui.seasons.RamadanScreen(vm, s)
+        Route.Night -> com.sakina.app.ui.seasons.NightScreen(vm, s)
+        Route.Friday -> com.sakina.app.ui.seasons.FridayScreen(vm, s)
     }
 }
 

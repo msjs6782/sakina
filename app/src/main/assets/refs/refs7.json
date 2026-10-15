@@ -1,0 +1,503 @@
+{
+ "arafah": {
+  "ar": "صحيح مسلم 1162",
+  "book": "muslim",
+  "en": "Sahih Muslim 1162a",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح مسلم",
+   "byEn": "Sahih Muslim",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "1162a",
+  "text": "صِيَامُ يَوْمِ عَرَفَةَ أَحْتَسِبُ عَلَى اللَّهِ أَنْ يُكَفِّرَ السَّنَةَ الَّتِي قَبْلَهُ وَالسَّنَةَ الَّتِي بَعْدَهُ",
+  "url": "https://sunnah.com/muslim:1162a"
+ },
+ "ashura": {
+  "ar": "صحيح مسلم 1162",
+  "book": "muslim",
+  "en": "Sahih Muslim 1162a",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح مسلم",
+   "byEn": "Sahih Muslim",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "1162a",
+  "text": "صِيَامُ يَوْمِ عَاشُورَاءَ أَحْتَسِبُ عَلَى اللَّهِ أَنْ يُكَفِّرَ السَّنَةَ الَّتِي قَبْلَهُ",
+  "url": "https://sunnah.com/muslim:1162a"
+ },
+ "duha_awwabin": {
+  "ar": "صحيح مسلم 748",
+  "book": "muslim",
+  "en": "Sahih Muslim 748a",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح مسلم",
+   "byEn": "Sahih Muslim",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "748a",
+  "text": "صَلاَةُ الأَوَّابِينَ حِينَ تَرْمَضُ الْفِصَالُ",
+  "url": "https://sunnah.com/muslim:748a"
+ },
+ "duha_rumh": {
+  "ar": "سنن أبي داود 1277",
+  "book": "abudawud",
+  "en": "Sunan Abi Dawud 1277",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "الألباني",
+   "byEn": "Al-Albani",
+   "en": "Sahih"
+  },
+  "graders": [
+   {
+    "by": "Al-Albani",
+    "grade": "Sahih"
+   },
+   {
+    "by": "Muhammad Muhyi Al-Din Abdul Hamid",
+    "grade": "Sahih"
+   },
+   {
+    "by": "Shuaib Al Arnaut",
+    "grade": "Sahih"
+   },
+   {
+    "by": "Zubair Ali Zai",
+    "grade": "Isnaad Sahih"
+   }
+  ],
+  "number": "1277",
+  "text": "حَتَّى تُصَلِّيَ الصُّبْحَ ثُمَّ أَقْصِرْ حَتَّى تَطْلُعَ الشَّمْسُ فَتَرْتَفِعَ قِيْسَ رُمْحٍ أَوْ رُمْحَيْنِ",
+  "url": "https://sunnah.com/abudawud:1277"
+ },
+ "eid_forbidden": {
+  "ar": "صحيح البخاري 1991",
+  "book": "bukhari",
+  "en": "Sahih al-Bukhari 1991",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح البخاري",
+   "byEn": "Sahih al-Bukhari",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "1991",
+  "text": "نَهَى النَّبِيُّ ﷺ عَنْ صَوْمِ يَوْمِ الْفِطْرِ وَالنَّحْرِ",
+  "url": "https://sunnah.com/bukhari:1991"
+ },
+ "eid_forbidden_m": {
+  "ar": "صحيح مسلم 1138",
+  "book": "muslim",
+  "en": "Sahih Muslim 1138",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح مسلم",
+   "byEn": "Sahih Muslim",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "1138",
+  "text": "نَهَى عَنْ صِيَامِ يَوْمَيْنِ يَوْمِ الأَضْحَى وَيَوْمِ الْفِطْرِ",
+  "url": "https://sunnah.com/muslim:1138"
+ },
+ "forbidden_times": {
+  "ar": "صحيح مسلم 831",
+  "book": "muslim",
+  "en": "Sahih Muslim 831",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح مسلم",
+   "byEn": "Sahih Muslim",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "831",
+  "text": "ثَلاَثُ سَاعَاتٍ كَانَ رَسُولُ اللَّهِ ﷺ يَنْهَانَا أَنْ نُصَلِّيَ فِيهِنَّ أَوْ أَنْ نَقْبُرَ فِيهِنَّ مَوْتَانَا حِينَ تَطْلُعُ الشَّمْسُ بَازِغَةً حَتَّى تَرْتَفِعَ وَحِينَ يَقُومُ قَائِمُ الظَّهِيرَةِ حَتَّى تَمِيلَ الشَّمْسُ وَحِينَ تَضَيَّفُ الشَّمْسُ لِلْغُرُوبِ حَتَّى تَغْرُبَ",
+  "url": "https://sunnah.com/muslim:831"
+ },
+ "friday_best": {
+  "ar": "صحيح مسلم 854",
+  "book": "muslim",
+  "en": "Sahih Muslim 854a",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح مسلم",
+   "byEn": "Sahih Muslim",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "854a",
+  "text": "خَيْرُ يَوْمٍ طَلَعَتْ عَلَيْهِ الشَّمْسُ يَوْمُ الْجُمُعَةِ",
+  "url": "https://sunnah.com/muslim:854a"
+ },
+ "friday_hour": {
+  "ar": "صحيح البخاري 935",
+  "book": "bukhari",
+  "en": "Sahih al-Bukhari 935",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح البخاري",
+   "byEn": "Sahih al-Bukhari",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "935",
+  "text": "فِيهِ سَاعَةٌ لاَ يُوَافِقُهَا عَبْدٌ مُسْلِمٌ، وَهْوَ قَائِمٌ يُصَلِّي، يَسْأَلُ اللَّهَ تَعَالَى شَيْئًا إِلاَّ أَعْطَاهُ إِيَّاهُ",
+  "url": "https://sunnah.com/bukhari:935"
+ },
+ "friday_salawat": {
+  "ar": "سنن أبي داود 1047",
+  "book": "abudawud",
+  "en": "Sunan Abi Dawud 1047",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "الألباني",
+   "byEn": "Al-Albani",
+   "en": "Sahih"
+  },
+  "graders": [
+   {
+    "by": "Al-Albani",
+    "grade": "Sahih"
+   },
+   {
+    "by": "Muhammad Muhyi Al-Din Abdul Hamid",
+    "grade": "Sahih"
+   },
+   {
+    "by": "Shuaib Al Arnaut",
+    "grade": "Sahih Lighairihi"
+   },
+   {
+    "by": "Zubair Ali Zai",
+    "grade": "Daif"
+   }
+  ],
+  "number": "1047",
+  "text": "إِنَّ مِنْ أَفْضَلِ أَيَّامِكُمْ يَوْمَ الْجُمُعَةِ فِيهِ خُلِقَ آدَمُ وَفِيهِ قُبِضَ وَفِيهِ النَّفْخَةُ وَفِيهِ الصَّعْقَةُ فَأَكْثِرُوا عَلَىَّ مِنَ الصَّلاَةِ فِيهِ فَإِنَّ صَلاَتَكُمْ مَعْرُوضَةٌ عَلَىَّ",
+  "url": "https://sunnah.com/abudawud:1047"
+ },
+ "hasten_iftar": {
+  "ar": "صحيح البخاري 1957",
+  "book": "bukhari",
+  "en": "Sahih al-Bukhari 1957",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح البخاري",
+   "byEn": "Sahih al-Bukhari",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "1957",
+  "text": "لاَ يَزَالُ النَّاسُ بِخَيْرٍ مَا عَجَّلُوا الْفِطْرَ",
+  "url": "https://sunnah.com/bukhari:1957"
+ },
+ "iftar_time": {
+  "ar": "صحيح البخاري 1954",
+  "book": "bukhari",
+  "en": "Sahih al-Bukhari 1954",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح البخاري",
+   "byEn": "Sahih al-Bukhari",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "1954",
+  "text": "إِذَا أَقْبَلَ اللَّيْلُ مِنْ هَا هُنَا، وَأَدْبَرَ النَّهَارُ مِنْ هَا هُنَا، وَغَرَبَتِ الشَّمْسُ، فَقَدْ أَفْطَرَ الصَّائِمُ",
+  "url": "https://sunnah.com/bukhari:1954"
+ },
+ "isha_half": {
+  "ar": "صحيح مسلم 612",
+  "book": "muslim",
+  "en": "Sahih Muslim 612d",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح مسلم",
+   "byEn": "Sahih Muslim",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "612d",
+  "text": "وَوَقْتُ صَلاَةِ الْعِشَاءِ إِلَى نِصْفِ اللَّيْلِ الأَوْسَطِ",
+  "url": "https://sunnah.com/muslim:612d"
+ },
+ "kahf_ten": {
+  "ar": "صحيح مسلم 809",
+  "book": "muslim",
+  "en": "Sahih Muslim 809a",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح مسلم",
+   "byEn": "Sahih Muslim",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "809a",
+  "text": "مَنْ حَفِظَ عَشْرَ آيَاتٍ مِنْ أَوَّلِ سُورَةِ الْكَهْفِ عُصِمَ مِنَ الدَّجَّالِ",
+  "url": "https://sunnah.com/muslim:809a"
+ },
+ "last_third": {
+  "ar": "صحيح البخاري 1145",
+  "book": "bukhari",
+  "en": "Sahih al-Bukhari 1145",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح البخاري",
+   "byEn": "Sahih al-Bukhari",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "1145",
+  "text": "يَنْزِلُ رَبُّنَا تَبَارَكَ وَتَعَالَى كُلَّ لَيْلَةٍ إِلَى السَّمَاءِ الدُّنْيَا حِينَ يَبْقَى ثُلُثُ اللَّيْلِ الآخِرُ يَقُولُ مَنْ يَدْعُونِي فَأَسْتَجِيبَ لَهُ مَنْ يَسْأَلُنِي فَأُعْطِيَهُ مَنْ يَسْتَغْفِرُنِي فَأَغْفِرَ لَهُ",
+  "url": "https://sunnah.com/bukhari:1145"
+ },
+ "mon_thu_amal": {
+  "ar": "جامع الترمذي 747",
+  "book": "tirmidhi",
+  "en": "Jami at-Tirmidhi 747",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "الألباني",
+   "byEn": "Al-Albani",
+   "en": "Sahih"
+  },
+  "graders": [
+   {
+    "by": "Ahmad Muhammad Shakir",
+    "grade": "Sahih"
+   },
+   {
+    "by": "Al-Albani",
+    "grade": "Sahih"
+   },
+   {
+    "by": "Bashar Awad Maarouf",
+    "grade": "Hasan"
+   },
+   {
+    "by": "Zubair Ali Zai",
+    "grade": "Isnaad Hasan"
+   }
+  ],
+  "number": "747",
+  "text": "تُعْرَضُ الأَعْمَالُ يَوْمَ الاِثْنَيْنِ وَالْخَمِيسِ فَأُحِبُّ أَنْ يُعْرَضَ عَمَلِي وَأَنَا صَائِمٌ",
+  "url": "https://sunnah.com/tirmidhi:747"
+ },
+ "mon_thu_tahari": {
+  "ar": "جامع الترمذي 745",
+  "book": "tirmidhi",
+  "en": "Jami at-Tirmidhi 745",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "الألباني",
+   "byEn": "Al-Albani",
+   "en": "Sahih"
+  },
+  "graders": [
+   {
+    "by": "Ahmad Muhammad Shakir",
+    "grade": "Sahih"
+   },
+   {
+    "by": "Al-Albani",
+    "grade": "Sahih"
+   },
+   {
+    "by": "Zubair Ali Zai",
+    "grade": "Isnaad Sahih"
+   }
+  ],
+  "number": "745",
+  "text": "كَانَ النَّبِيُّ ﷺ يَتَحَرَّى صَوْمَ الاِثْنَيْنِ وَالْخَمِيسِ",
+  "url": "https://sunnah.com/tirmidhi:745"
+ },
+ "monday_born": {
+  "ar": "صحيح مسلم 1162",
+  "book": "muslim",
+  "en": "Sahih Muslim 1162b",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح مسلم",
+   "byEn": "Sahih Muslim",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "1162b",
+  "text": "وَسُئِلَ عَنْ صَوْمِ يَوْمِ الاِثْنَيْنِ قَالَ ذَاكَ يَوْمٌ وُلِدْتُ فِيهِ وَيَوْمٌ بُعِثْتُ أَوْ أُنْزِلَ عَلَىَّ فِيهِ",
+  "url": "https://sunnah.com/muslim:1162b"
+ },
+ "qadr_odd": {
+  "ar": "صحيح البخاري 2017",
+  "book": "bukhari",
+  "en": "Sahih al-Bukhari 2017",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح البخاري",
+   "byEn": "Sahih al-Bukhari",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "2017",
+  "text": "تَحَرَّوْا لَيْلَةَ الْقَدْرِ فِي الْوِتْرِ مِنَ الْعَشْرِ الأَوَاخِرِ مِنْ رَمَضَانَ",
+  "url": "https://sunnah.com/bukhari:2017"
+ },
+ "qadr_virtue": {
+  "ar": "صحيح البخاري 1901",
+  "book": "bukhari",
+  "en": "Sahih al-Bukhari 1901",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح البخاري",
+   "byEn": "Sahih al-Bukhari",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "1901",
+  "text": "مَنْ قَامَ لَيْلَةَ الْقَدْرِ إِيمَانًا وَاحْتِسَابًا غُفِرَ لَهُ مَا تَقَدَّمَ مِنْ ذَنْبِهِ",
+  "url": "https://sunnah.com/bukhari:1901"
+ },
+ "qiyam_ramadan": {
+  "ar": "صحيح البخاري 2009",
+  "book": "bukhari",
+  "en": "Sahih al-Bukhari 2009",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح البخاري",
+   "byEn": "Sahih al-Bukhari",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "2009",
+  "text": "مَنْ قَامَ رَمَضَانَ إِيمَانًا وَاحْتِسَابًا غُفِرَ لَهُ مَا تَقَدَّمَ مِنْ ذَنْبِهِ",
+  "url": "https://sunnah.com/bukhari:2009"
+ },
+ "salawat_ten": {
+  "ar": "صحيح مسلم 408",
+  "book": "muslim",
+  "en": "Sahih Muslim 408",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح مسلم",
+   "byEn": "Sahih Muslim",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "408",
+  "text": "مَنْ صَلَّى عَلَىَّ وَاحِدَةً صَلَّى اللَّهُ عَلَيْهِ عَشْرًا",
+  "url": "https://sunnah.com/muslim:408"
+ },
+ "shawwal_six": {
+  "ar": "صحيح مسلم 1164",
+  "book": "muslim",
+  "en": "Sahih Muslim 1164a",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح مسلم",
+   "byEn": "Sahih Muslim",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "1164a",
+  "text": "مَنْ صَامَ رَمَضَانَ ثُمَّ أَتْبَعَهُ سِتًّا مِنْ شَوَّالٍ كَانَ كَصِيَامِ الدَّهْرِ",
+  "url": "https://sunnah.com/muslim:1164a"
+ },
+ "suhoor": {
+  "ar": "صحيح البخاري 1923",
+  "book": "bukhari",
+  "en": "Sahih al-Bukhari 1923",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح البخاري",
+   "byEn": "Sahih al-Bukhari",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "1923",
+  "text": "تَسَحَّرُوا فَإِنَّ فِي السَّحُورِ بَرَكَةً",
+  "url": "https://sunnah.com/bukhari:1923"
+ },
+ "tashreeq": {
+  "ar": "صحيح مسلم 1141",
+  "book": "muslim",
+  "en": "Sahih Muslim 1141a",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح مسلم",
+   "byEn": "Sahih Muslim",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "1141a",
+  "text": "أَيَّامُ التَّشْرِيقِ أَيَّامُ أَكْلٍ وَشُرْبٍ",
+  "url": "https://sunnah.com/muslim:1141a"
+ },
+ "tasua": {
+  "ar": "صحيح مسلم 1134",
+  "book": "muslim",
+  "en": "Sahih Muslim 1134b",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح مسلم",
+   "byEn": "Sahih Muslim",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "1134b",
+  "text": "لَئِنْ بَقِيتُ إِلَى قَابِلٍ لأَصُومَنَّ التَّاسِعَ",
+  "url": "https://sunnah.com/muslim:1134b"
+ },
+ "ten_ihya": {
+  "ar": "صحيح البخاري 2024",
+  "book": "bukhari",
+  "en": "Sahih al-Bukhari 2024",
+  "grade": {
+   "ar": "صحيح",
+   "byAr": "صحيح البخاري",
+   "byEn": "Sahih al-Bukhari",
+   "en": "Sahih"
+  },
+  "graders": [],
+  "number": "2024",
+  "text": "كَانَ النَّبِيُّ ﷺ إِذَا دَخَلَ الْعَشْرُ شَدَّ مِئْزَرَهُ، وَأَحْيَا لَيْلَهُ، وَأَيْقَظَ أَهْلَهُ",
+  "url": "https://sunnah.com/bukhari:2024"
+ },
+ "white_days": {
+  "ar": "جامع الترمذي 761",
+  "book": "tirmidhi",
+  "en": "Jami at-Tirmidhi 761",
+  "grade": {
+   "ar": "حسن صحيح",
+   "byAr": "الألباني",
+   "byEn": "Al-Albani",
+   "en": "Hasan Sahih"
+  },
+  "graders": [
+   {
+    "by": "Ahmad Muhammad Shakir",
+    "grade": "Hasan Sahih"
+   },
+   {
+    "by": "Al-Albani",
+    "grade": "Hasan Sahih"
+   },
+   {
+    "by": "Bashar Awad Maarouf",
+    "grade": "Hasan"
+   },
+   {
+    "by": "Zubair Ali Zai",
+    "grade": "Isnaad Hasan"
+   }
+  ],
+  "number": "761",
+  "text": "يَا أَبَا ذَرٍّ إِذَا صُمْتَ مِنَ الشَّهْرِ ثَلاَثَةَ أَيَّامٍ فَصُمْ ثَلاَثَ عَشْرَةَ وَأَرْبَعَ عَشْرَةَ وَخَمْسَ عَشْرَةَ",
+  "url": "https://sunnah.com/tirmidhi:761"
+ }
+}

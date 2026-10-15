@@ -49,6 +49,10 @@ fun DiscoverScreen(vm: MainViewModel, contentPadding: PaddingValues) {
         ToolCard(SakinaIcons.Sparkle, str.toolsAdhkar, str.toolsAdhkarBody, "tool_adhkar") { vm.push(Route.Adhkar()) }
         ToolCard(SakinaIcons.Beads, str.toolsTasbih, str.toolsTasbihBody, "tool_tasbih") { vm.push(Route.Tasbih) }
         ToolCard(SakinaIcons.Kaaba, str.toolsQibla, str.toolsQiblaBody, "tool_qibla") { vm.push(Route.Qibla) }
+        ToolCard(SakinaIcons.Calendar, str.calendarTitle, str.toolsCalendarBody, "tool_calendar") { vm.push(Route.HijriCalendar()) }
+        ToolCard(SakinaIcons.Moon, str.ramadanTitle, str.toolsRamadanBody, "tool_ramadan") { vm.push(Route.Ramadan) }
+        ToolCard(SakinaIcons.Isha, str.nightTitle, str.toolsNightBody, "tool_night") { vm.push(Route.Night) }
+        ToolCard(SakinaIcons.Book, str.fridayTitle, str.toolsFridayBody, "tool_friday") { vm.push(Route.Friday) }
         SectionCard(title = str.plannedTitle, icon = SakinaIcons.Calendar) {
             str.plannedLater.forEachIndexed { i, (name, phase) ->
                 if (i > 0) Divider()

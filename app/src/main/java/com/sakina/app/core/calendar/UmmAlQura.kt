@@ -20,22 +20,33 @@ data class HijriDate(val year: Int, val month: Int, val day: Int) : Comparable<H
 object UmmAlQura {
     private val chrono: HijrahChronology = HijrahChronology.INSTANCE
 
+    /** The years the published Umm al-Qura data covers. */
+    const val MIN_YEAR = 1300
+    const val MAX_YEAR = 1600
+
     fun fromGregorian(date: LocalDate): HijriDate? = try {
         val h = HijrahDate.from(date)
         HijriDate(h.get(ChronoField.YEAR), h.get(ChronoField.MONTH_OF_YEAR), h.get(ChronoField.DAY_OF_MONTH))
     } catch (e: DateTimeException) {
         null
-    }
-
-    fun toGregorian(h: HijriDate): LocalDate? = try {
-        LocalDate.from(chrono.date(h.year, h.month, h.day))
-    } catch (e: DateTimeException) {
+    } catch (e: IndexOutOfBoundsException) {
         null
     }
 
-    fun monthLength(year: Int, month: Int): Int? = try {
+    // Checked before calling the chronology: outside its data some JDKs throw an index error, not a DateTimeException.
+    fun toGregorian(h: HijriDate): LocalDate? = if (h.year !in MIN_YEAR..MAX_YEAR || h.month !in 1..12) null else try {
+        LocalDate.from(chrono.date(h.year, h.month, h.day))
+    } catch (e: DateTimeException) {
+        null
+    } catch (e: IndexOutOfBoundsException) {
+        null
+    }
+
+    fun monthLength(year: Int, month: Int): Int? = if (year !in MIN_YEAR..MAX_YEAR || month !in 1..12) null else try {
         chrono.date(year, month, 1).lengthOfMonth()
     } catch (e: DateTimeException) {
+        null
+    } catch (e: IndexOutOfBoundsException) {
         null
     }
 

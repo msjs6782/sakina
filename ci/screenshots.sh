@@ -735,6 +735,152 @@ if [ "$SUITE" = "full" ]; then
 fi
 save_log
 
+# ---------- Phase 7: calendar, Ramadan, night and Friday ----------
+save_log
+settings_json() { adb shell run-as "$PKG" cat files/datastore/settings.json 2>/dev/null; }
+# Minutes after midnight of a time as the app shows it ("٥:٣٧ م", "4:35 PM" or "16:35").
+mins() { python3 -c "
+import sys,re
+t=sys.argv[1].translate(str.maketrans('٠١٢٣٤٥٦٧٨٩','0123456789'))
+h,m=map(int,re.search(r'(\d+):(\d+)',t).groups())
+pm=('م' in t) or ('PM' in t); am=('ص' in t) or ('AM' in t)
+if pm and h<12: h+=12
+if am and h==12: h=0
+print(h*60+m)" "$1"; }
+C=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh --es demo_active riyadh --es demo_now "$T_AFTERNOON" "${FREEZE[@]}")
+
+# Month grid (Hijri first), navigation by arrows, swipe, the month picker and Today; reached from Discover.
+shot 200_discover_calendar 7 "${C[@]}" --es demo_tab discover
+scroll_to id tool_calendar && tap id tool_calendar && sleep 3 && cap 201_calendar_hijri
+T0=$(ui_text cal_title); echo "$T0" | grep -q "١٤٤٨" && ui_has id cal_day_2026-10-14 && check cal_grid PASS "$T0" || check cal_grid FAIL "title $T0"
+tap id cal_next && sleep 2
+T1=$(ui_text cal_title); [ "$T1" != "$T0" ] && check cal_next PASS "$T1" || check cal_next FAIL "$T1"
+adb shell input swipe 300 1300 900 1300 300; sleep 2
+T2=$(ui_text cal_title); [ "$T2" = "$T0" ] && check cal_swipe PASS "back to $T2 by swiping" || check cal_swipe FAIL "after swipe: $T2"
+tap id cal_kind_gregorian && sleep 2 && cap 202_calendar_gregorian
+T=$(ui_text cal_title); echo "$T" | grep -q "أكتوبر ٢٠٢٦" && check cal_gregorian PASS "$T" || check cal_gregorian FAIL "$T"
+tap id cal_title && sleep 1 && tap id picker_year_minus && tap id picker_month_3 && sleep 2
+T=$(ui_text cal_title); echo "$T" | grep -q "مارس ٢٠٢٥" && check cal_picker PASS "$T" || check cal_picker FAIL "$T"
+tap id cal_today && sleep 2
+T=$(ui_text cal_title); echo "$T" | grep -q "أكتوبر ٢٠٢٦" && check cal_today PASS "$T" || check cal_today FAIL "$T"
+settings_json | grep -q '"kind":"GREGORIAN"' && check cal_kind_saved PASS "calendar choice saved" || check cal_kind_saved FAIL "$(settings_json | grep -o '"calendar":{[^}]*' | head -c 200)"
+# A day of the next month shown dimmed opens its details too; Monday shows its sunnah fast with references.
+tap id cal_day_2026-11-02 && sleep 2 && cap 203_day_adjacent_month
+ui_has id day_fasting_monday && check cal_adjacent_day PASS "2 Nov (next month) opens; Monday fast" || check cal_adjacent_day FAIL "no details"
+adb shell input keyevent 4; sleep 1
+# Add an occasion from a day, then delete it and undo the delete.
+start "${C[@]}" --es demo_route calendar_day:2026-10-22; sleep 7
+cap 204_day_sheet
+tap id day_add_occasion && sleep 2
+tap id occ_title && adb shell input text "Family%svisit" && adb shell input keyevent 111
+tap id occ_repeat_yearly_hijri
+scroll_to contains "تنبيه في يومها" && tap contains "تنبيه في يومها"
+cap 205_occasion_edit
+scroll_to id occ_save && tap id occ_save && sleep 2 && cap 206_occasion_saved
+J=$(settings_json)
+echo "$J" | grep -q '"title":"Family visit"' && echo "$J" | grep -q '"repeat":"YEARLY_HIJRI"' && echo "$J" | grep -q '"notify":true' \
+  && check occ_saved PASS "saved with yearly Hijri repeat and alert" || check occ_saved FAIL "$(echo "$J" | grep -o '"occasions":\[[^]]*' | head -c 300)"
+ui_has id cal_day_2026-10-22 && check occ_back PASS "back on the calendar" || check occ_back FAIL "not on the calendar"
+start "${C[@]}" --es demo_occasions 2026-10-22:Family_visit --es demo_route calendar_day:2026-10-22; sleep 7
+tap id occasion_delete_demo0 && sleep 1 && cap 207_occasion_deleted
+settings_json | grep -q '"occasions":\[\]' && check occ_delete PASS "deleted" || check occ_delete FAIL "still stored"
+tap exact "تراجع" && sleep 2
+settings_json | grep -q '"title":"Family visit"' && check occ_undo PASS "delete undone" || check occ_undo FAIL "$(settings_json | grep -o '"occasions":\[[^]]*' | head -c 200)"
+# List mode is a separate choice: a larger font keeps the grid.
+shot 208_calendar_list 8 "${C[@]}" --ez demo_cal_list true --es demo_occasions 2026-10-22:Family_visit --es demo_route month
+ui_has id cal_row_2026-10-14 && check cal_list PASS "list rows" || check cal_list FAIL "no list"
+adb shell settings put system font_scale 1.3; sleep 1
+shot 209_calendar_font130 8 "${C[@]}" --es demo_route month
+ui_has id cal_day_2026-10-14 && check cal_font_grid PASS "grid kept at 130% font" || check cal_font_grid FAIL "grid not shown"
+adb shell settings put system font_scale 1.0; sleep 1
+# The display offset moves the Hijri date shown, not the prayer times.
+start "${C[@]}" --es demo_route calendar_day:2026-10-14; sleep 7
+H0=$(ui_text day_hijri); F0=$(ui_text day_gregorian)
+start "${C[@]}" --ei demo_hijri 1 --es demo_route calendar_day:2026-10-14; sleep 7
+H1=$(ui_text day_hijri); cap 210_day_offset_plus1
+[ -n "$H0" ] && [ "$H0" != "$H1" ] && check cal_offset PASS "$H0 → $H1 ($F0)" || check cal_offset FAIL "$H0 / $H1"
+# Tools: conversion and the interval between dates.
+shot 211_calendar_tools 7 "${C[@]}" --es demo_route calendar_tools
+tap id conv_hijri; tap id conv_day && adb shell input text "1"; tap id conv_month && adb shell input text "9"; tap id conv_year && adb shell input text "1448"
+adb shell input keyevent 111; sleep 1
+T=$(ui_text conv_result); cap 212_converter
+echo "$T" | grep -q "رمضان ١٤٤٨" && echo "$T" | grep -q "٢٠٢٧" && check cal_convert PASS "$T" || check cal_convert FAIL "$T"
+scroll_to id int_days && T=$(ui_text int_days)
+echo "$T" | grep -q "٣٠ يومًا" && check cal_interval PASS "$T" || check cal_interval FAIL "$T"
+cap 213_interval
+# Fasting reminders: off by default; when on, the next Monday/Thursday evening-before reminder is scheduled.
+save_log
+start "${C[@]}" --es demo_fasting monthu:1260 --ez demo_log_alarm true --es demo_route month; sleep 8
+adb logcat -d -s SakinaAlerts:I | grep "Scheduled" | tail -1 > "$OUT/fasting_scheduled.txt"
+grep -q "FASTING:" "$OUT/fasting_scheduled.txt" && check fasting_scheduled PASS "$(cut -c1-160 "$OUT/fasting_scheduled.txt")" || check fasting_scheduled FAIL "$(cat "$OUT/fasting_scheduled.txt")"
+# A personal occasion with an alert two minutes from now (the emulator's real clock, Riyadh time): a real notification.
+save_log
+D=$(TZ=Asia/Riyadh date -d '+2 min' +%F); M=$(TZ=Asia/Riyadh date -d '+2 min' +'%H %M' | awk '{print $1*60+$2}')
+adb shell am force-stop "$PKG"
+adb shell am start -W -n "$PKG/$ACT" --ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh --es demo_active riyadh --es demo_occasions "$D:Occasion_test:$M" >/dev/null
+adb shell input keyevent 3
+POSTED=0
+for _ in $(seq 1 200); do
+  if adb shell dumpsys notification --noredact 2>/dev/null | grep -q "android.title=String (Occasion test)"; then POSTED=1; break; fi
+  sleep 1
+done
+[ "$POSTED" -eq 1 ] && check occ_notification PASS "posted at its time ($D, minute $M)" || check occ_notification FAIL "not posted; $(adb logcat -d -s SakinaAlerts:I | tail -2 | tr '\n' ' ')"
+if [ "$POSTED" -eq 1 ]; then
+  shade_open; cap 214_occasion_notification
+  tap contains "Occasion test" && sleep 3
+  cap 215_occasion_opens_calendar
+  ui_has id day_hijri && check occ_notif_opens PASS "opens the calendar on its day" || check occ_notif_opens FAIL "calendar not opened"
+  shade_close
+fi
+save_log
+
+# Ramadan: on 12 Ramadan 1447 at 17:30 in Riyadh the fast is waiting for Maghrib.
+shot 220_ramadan 8 --es demo_now "$T_RAMADAN" "${FREEZE[@]}" --ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh --es demo_route ramadan
+S=$(ui_text ramadan_status); L=$(ui_text ramadan_length)
+echo "$S" | grep -q "حتى الإفطار" && check ramadan_status PASS "$S · $L" || check ramadan_status FAIL "$S"
+scroll_to id imsak_12 && cap 221_imsakiya && check ramadan_imsakiya PASS "imsakiya rows" || check ramadan_imsakiya FAIL "no imsakiya"
+scroll_to id night_27 12 && cap 222_last_ten
+ui_has id night_27 && check ramadan_last_ten PASS "last ten nights listed" || check ramadan_last_ten FAIL "missing"
+start --es demo_now "$T_RAMADAN" "${FREEZE[@]}" --ez demo_onboarded true --es demo_route ramadan; sleep 7
+tap id ramadan_khatma && sleep 2 && ui_has id khatma_start && check ramadan_khatma PASS "khatma linked" || check ramadan_khatma FAIL "not opened"
+shot 223_ramadan_ahead 7 "${C[@]}" --es demo_route ramadan
+S=$(ui_text ramadan_status); echo "$S" | grep -q "يبدأ بعد" && check ramadan_ahead PASS "$S" || check ramadan_ahead FAIL "$S"
+# Night: at 21:30 in Riyadh the night is under way; midnight is halfway from Maghrib to Fajr.
+shot 224_night 8 --es demo_now "$T_NIGHT" "${FREEZE[@]}" --ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh --es demo_route night
+MG=$(mins "$(ui_text night_maghrib)"); MD=$(mins "$(ui_text night_midnight)"); FJ=$(mins "$(ui_text night_fajr)"); LT=$(mins "$(ui_text night_last_third)")
+python3 -c "
+m,md,f,lt=$MG,$MD,$FJ,$LT
+f+=1440
+ok=abs((m+f)/2-md)<=1 and abs(m+(f-m)*2/3-lt)<=1
+print('ok' if ok else 'bad')" | grep -q ok && check night_times PASS "maghrib $MG, midnight $MD, last third $LT, fajr $FJ (minutes)" || check night_times FAIL "maghrib $MG midnight $MD third $LT fajr $FJ"
+ui_has id night_until_third && check night_current PASS "countdown to the last third" || check night_current FAIL "no countdown"
+scroll_to id duha_range && cap 225_duha
+D1=$(ui_text duha_range)
+start --es demo_now "$T_NIGHT" "${FREEZE[@]}" --ez demo_onboarded true --es demo_route night; sleep 7
+scroll_to id duha_range; tap exact "+" && sleep 1
+D2=$(ui_text duha_range); [ -n "$D1" ] && [ "$D1" != "$D2" ] && check duha_margin PASS "$D1 → $D2" || check duha_margin FAIL "$D1 / $D2"
+# Friday: Surat al-Kahf opens in the reader; the blessing opens its dhikr; the home card shows on Friday only.
+shot 226_friday 7 "${C[@]}" --es demo_quran view=TEXT --es demo_route friday
+tap id friday_kahf && sleep 4 && cap 227_friday_kahf
+ui_has contains "الكهف" && check friday_kahf PASS "al-Kahf opened" || check friday_kahf FAIL "not opened"
+start "${C[@]}" --es demo_route friday; sleep 6
+tap id friday_salawat && sleep 3 && ui_has id dhikr_source && check friday_salawat PASS "blessing opened" || check friday_salawat FAIL "not opened"
+shot 228_home_friday 8 --es demo_now "2026-10-16T06:30:00Z" "${FREEZE[@]}" --ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh
+scroll_to id home_friday && check friday_home PASS "card on Friday morning" || check friday_home FAIL "no card"
+cap 229_home_friday_card
+start "${C[@]}"; sleep 7
+H=0; for _ in 1 2 3; do ui_has id home_friday && H=1; adb shell input swipe 540 1700 540 900 400; sleep 1; done
+[ "$H" -eq 0 ] && check friday_home_hidden PASS "hidden on Wednesday" || check friday_home_hidden FAIL "card on Wednesday"
+if [ "$SUITE" = "full" ]; then
+  shot 230_calendar_english 8 "${C[@]}" --es demo_lang en --es demo_route month
+  shot 231_calendar_dark 8 "${C[@]}" --es demo_theme DARK --es demo_occasions 2026-10-22:Family_visit --es demo_route month
+  shot 232_ramadan_english 8 --es demo_now "$T_RAMADAN" "${FREEZE[@]}" --ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh --es demo_lang en --es demo_route ramadan
+  shot 233_night_dark 8 --es demo_now "$T_NIGHT" "${FREEZE[@]}" --ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh --es demo_theme DARK --es demo_route night
+  shot 234_friday_dark 7 "${C[@]}" --es demo_theme DARK --es demo_route friday
+  shot 235_calendar_settings 7 "${C[@]}" --es demo_fasting both:1260 --es demo_route calendar
+fi
+save_log
+
 # ---------- Phase 2: alerts (real AlarmManager, notifications, playback) ----------
 save_log
 REAL=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh,jeddah --es demo_active riyadh)

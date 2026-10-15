@@ -21,6 +21,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.Serializable
 import java.io.InputStream
 import java.io.OutputStream
@@ -102,6 +103,18 @@ class ToolsRepository(context: Context) {
             SettingsJson.decodeFromString(AdhkarLibrary.serializer(), text)
         }.also { _library.value = it }
     }
+
+    private val _refs = MutableStateFlow<Map<String, com.sakina.app.core.adhkar.HadithRef>?>(null)
+    val refs: StateFlow<Map<String, com.sakina.app.core.adhkar.HadithRef>?> = _refs.asStateFlow()
+
+    /** Hadith references of the calendar, Ramadan, night and Friday pages (assets/refs/refs7.json). */
+    suspend fun loadRefs(): Map<String, com.sakina.app.core.adhkar.HadithRef> = _refs.value ?: withContext(Dispatchers.Default) {
+        val text = app.assets.open("refs/refs7.json").bufferedReader(Charsets.UTF_8).use { it.readText() }
+        SettingsJson.decodeFromString(
+            kotlinx.serialization.builtins.MapSerializer(String.serializer(), com.sakina.app.core.adhkar.HadithRef.serializer()),
+            text,
+        )
+    }.also { _refs.value = it }
 
     private val geoCache = java.util.concurrent.ConcurrentHashMap<String, GeoRings>()
 

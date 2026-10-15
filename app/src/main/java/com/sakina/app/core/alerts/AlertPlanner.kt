@@ -1,5 +1,7 @@
 package com.sakina.app.core.alerts
 
+import com.sakina.app.core.calendar.CalendarPrefs
+import com.sakina.app.core.calendar.FastingReminderRules
 import com.sakina.app.core.calendar.UmmAlQura
 import com.sakina.app.core.prayer.PrayerKey
 import com.sakina.app.core.prayer.PrayerSchedule
@@ -9,7 +11,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 
-enum class EventKind { ADHAN, PRE, IQAMA, SUHOOR, REMINDER, TEST }
+enum class EventKind { ADHAN, PRE, IQAMA, SUHOOR, REMINDER, OCCASION, FASTING, TEST }
 
 data class AlertEvent(
     /** Unique per kind, subject and civil date; used to prevent repeats. */
@@ -24,6 +26,8 @@ data class AlertEvent(
     val mode: AlertMode? = null,
     val style: NotifyStyle? = null,
     val minutes: Int = 0,
+    /** OCCASION: the personal occasion's id. FASTING: the fasting day and its kinds, "2026-10-19|MONDAY,WHITE_DAY". */
+    val subject: String? = null,
 )
 
 enum class Decision {
@@ -55,9 +59,21 @@ object AlertPlanner {
      * All events from one day before [from] to [days] days after, sorted by time.
      * [schedule] is null when no place is chosen; then only personal reminders exist (in [zone]).
      */
-    fun plan(alerts: AlertSettings, schedule: PrayerSchedule?, zone: ZoneId, from: Instant, days: Int = 8): List<AlertEvent> {
+    fun plan(
+        alerts: AlertSettings,
+        schedule: PrayerSchedule?,
+        zone: ZoneId,
+        from: Instant,
+        days: Int = 8,
+        calendar: CalendarPrefs = CalendarPrefs(),
+        hijriOffset: Int = 0,
+    ): List<AlertEvent> {
         val out = ArrayList<AlertEvent>()
         val start = from.atZone(zone).toLocalDate().minusDays(1)
+        fun at(date: LocalDate, minute: Int): Instant {
+            val m = minute.coerceIn(0, 24 * 60 - 1)
+            return date.atTime(LocalTime.of(m / 60, m % 60)).atZone(zone).toInstant()
+        }
         for (i in 0..days) {
             val date = start.plusDays(i.toLong())
             if (schedule != null) {
@@ -89,9 +105,21 @@ object AlertPlanner {
             }
             for (r in alerts.allReminders) {
                 if (!r.enabled || !r.appliesOn(date.dayOfWeek)) continue
-                val m = r.minuteOfDay.coerceIn(0, 24 * 60 - 1)
-                val at = date.atTime(LocalTime.of(m / 60, m % 60)).atZone(zone).toInstant()
-                out += AlertEvent(eventId(EventKind.REMINDER, r.kind.name, date), EventKind.REMINDER, at, date, reminder = r.kind, style = r.style)
+                out += AlertEvent(eventId(EventKind.REMINDER, r.kind.name, date), EventKind.REMINDER, at(date, r.minuteOfDay), date, reminder = r.kind, style = r.style)
+            }
+            for (o in calendar.occasions) {
+                if (!o.notify || !o.occursOn(date, hijriOffset)) continue
+                out += AlertEvent(eventId(EventKind.OCCASION, o.id, date), EventKind.OCCASION, at(date, o.notifyMinute), date, style = o.style, subject = o.id)
+            }
+            // Fasting reminders: for the fasting day itself, or the evening before it.
+            val f = calendar.fasting
+            if (f.anyEnabled) {
+                val fastDay = if (f.eveningBefore) date.plusDays(1) else date
+                val kinds = FastingReminderRules.kindsFor(fastDay, f, hijriOffset)
+                if (kinds.isNotEmpty()) {
+                    out += AlertEvent(eventId(EventKind.FASTING, fastDay.toString(), date), EventKind.FASTING, at(date, f.minuteOfDay), date,
+                        style = f.style, subject = fastDay.toString() + "|" + kinds.joinToString(",") { it.name })
+                }
             }
         }
         return out.sortedWith(compareBy({ it.at }, { it.kind.ordinal }))
@@ -124,7 +152,7 @@ object AlertPlanner {
             // A pre-alert or suhoor reminder is useless once the prayer time has come.
             EventKind.PRE, EventKind.SUHOOR -> if (event.prayerAt != null && now.isBefore(event.prayerAt)) Decision.FIRE else Decision.SKIP_LATE
             EventKind.IQAMA -> if (late <= IQAMA_LATE_LIMIT) Decision.FIRE else Decision.SKIP_LATE
-            EventKind.REMINDER -> if (late <= REMINDER_LATE_LIMIT) Decision.FIRE else Decision.SKIP_LATE
+            EventKind.REMINDER, EventKind.OCCASION, EventKind.FASTING -> if (late <= REMINDER_LATE_LIMIT) Decision.FIRE else Decision.SKIP_LATE
         }
     }
 }

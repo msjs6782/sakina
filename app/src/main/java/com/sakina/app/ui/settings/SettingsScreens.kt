@@ -32,7 +32,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -320,6 +323,58 @@ fun CalendarSettingsScreen(vm: MainViewModel, s: AppSettings) {
             Spacer(Modifier.height(6.dp))
             NoteText(str.hijriOffsetNote)
         }
+        SectionCard(title = str.calendarTitle, icon = SakinaIcons.Calendar) {
+            Text(str.defaultCalendar, style = MaterialTheme.typography.labelLarge)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                listOf(com.sakina.app.core.calendar.CalendarKind.HIJRI to str.hijriLabel, com.sakina.app.core.calendar.CalendarKind.GREGORIAN to str.gregorianLabel).forEach { (k, label) ->
+                    androidx.compose.material3.FilterChip(selected = s.calendar.kind == k, onClick = { vm.update { it.copy(calendar = it.calendar.copy(kind = k)) } },
+                        label = { Text(label) }, modifier = Modifier.testTag("set_kind_${k.name.lowercase()}"))
+                }
+            }
+            SwitchRow(s.calendar.listMode, str.listModeTitle, str.listModeNote) { v -> vm.update { it.copy(calendar = it.calendar.copy(listMode = v)) } }
+            TextButton(onClick = { vm.push(Route.HijriCalendar()) }, modifier = Modifier.testTag("set_open_calendar")) { Text(str.calendarTitle) }
+        }
+        FastingRemindersCard(vm, s)
+    }
+}
+
+@Composable
+private fun FastingRemindersCard(vm: MainViewModel, s: AppSettings) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    val f = s.calendar.fasting
+    var timeOpen by remember { mutableStateOf(false) }
+    fun set(t: (com.sakina.app.core.calendar.FastingReminders) -> com.sakina.app.core.calendar.FastingReminders) =
+        vm.update { it.copy(calendar = it.calendar.copy(fasting = t(it.calendar.fasting))) }
+    SectionCard(title = str.fastingRemindersTitle, icon = SakinaIcons.Bell) {
+        SwitchRow(f.mondayThursday, str.fastingMonThu) { v -> set { it.copy(mondayThursday = v) } }
+        SwitchRow(f.whiteDays, str.fastingWhiteDays) { v -> set { it.copy(whiteDays = v) } }
+        if (f.anyEnabled) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(str.reminderTime, style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f))
+                androidx.compose.material3.OutlinedButton(onClick = { timeOpen = true }, modifier = Modifier.testTag("fast_time")) {
+                    Text(fmt.clock(f.minuteOfDay / 60, f.minuteOfDay % 60))
+                }
+            }
+            Text(str.fastingWhen, style = MaterialTheme.typography.labelLarge)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                androidx.compose.material3.FilterChip(selected = f.eveningBefore, onClick = { set { it.copy(eveningBefore = true) } }, label = { Text(str.fastingEveningBefore) },
+                    modifier = Modifier.testTag("fast_evening"))
+                androidx.compose.material3.FilterChip(selected = !f.eveningBefore, onClick = { set { it.copy(eveningBefore = false) } }, label = { Text(str.fastingSameDay) },
+                    modifier = Modifier.testTag("fast_same_day"))
+            }
+        }
+        NoteText(str.fastingRemindersNote)
+    }
+    if (timeOpen) {
+        val st = androidx.compose.material3.rememberTimePickerState(initialHour = f.minuteOfDay / 60, initialMinute = f.minuteOfDay % 60, is24Hour = s.clock24)
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { timeOpen = false },
+            title = { Text(str.pickTime) },
+            text = { androidx.compose.material3.TimePicker(state = st) },
+            confirmButton = { TextButton(onClick = { set { it.copy(minuteOfDay = st.hour * 60 + st.minute) }; timeOpen = false }) { Text(str.save) } },
+            dismissButton = { TextButton(onClick = { timeOpen = false }) { Text(str.cancel) } },
+        )
     }
 }
 
