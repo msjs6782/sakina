@@ -29,9 +29,30 @@ class MainActivity : ComponentActivity() {
         handleOpen(intent)
     }
 
-    /** The recitation notification opens the listening screen; an adhkar reminder opens its set. */
+    /**
+     * Opens a screen asked for from outside: notifications (listening, an adhkar set, the calendar), widgets,
+     * icon shortcuts and Quick Settings tiles.
+     */
     private fun handleOpen(intent: Intent?) {
         val open = intent?.getStringExtra(EXTRA_OPEN) ?: return
+        android.util.Log.i("SakinaOpen", "open $open")
+        fun fresh(tab: com.sakina.app.ui.Tab, route: com.sakina.app.ui.Route? = null) {
+            vm.clearStack()
+            vm.tab = tab
+            route?.let { vm.push(it) }
+        }
+        when {
+            open == "times" -> fresh(com.sakina.app.ui.Tab.TIMES)
+            open == "home" -> fresh(com.sakina.app.ui.Tab.HOME)
+            open == "quran" -> fresh(com.sakina.app.ui.Tab.QURAN)
+            open == "discover" -> fresh(com.sakina.app.ui.Tab.DISCOVER)
+            open == "qibla" -> fresh(com.sakina.app.ui.Tab.DISCOVER, com.sakina.app.ui.Route.Qibla)
+            open == "ramadan" -> fresh(com.sakina.app.ui.Tab.DISCOVER, com.sakina.app.ui.Route.Ramadan)
+            open == "locations" -> fresh(com.sakina.app.ui.Tab.SETTINGS, com.sakina.app.ui.Route.Locations)
+            open == "adhkar_lib" -> fresh(com.sakina.app.ui.Tab.DISCOVER, com.sakina.app.ui.Route.Adhkar())
+            open.startsWith("dhikr:") -> fresh(com.sakina.app.ui.Tab.DISCOVER, com.sakina.app.ui.Route.AdhkarItem(open.removePrefix("dhikr:")))
+            open.startsWith("ayah:") -> open.removePrefix("ayah:").split(':').mapNotNull { it.toIntOrNull() }.takeIf { it.size == 2 }?.let { vm.openAyah(it[0], it[1]) }
+        }
         if (open == OPEN_LISTEN && vm.stack.lastOrNull() !is com.sakina.app.ui.Route.Listen) {
             vm.push(com.sakina.app.ui.Route.Listen())
         }

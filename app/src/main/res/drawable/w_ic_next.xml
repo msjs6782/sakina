@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Next item" on the content widget; mirrored in right-to-left layouts. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24"
+    android:autoMirrored="true">
+    <path android:fillColor="#FF4A4840" android:pathData="M6,18l8.5,-6L6,6v12zM16,6v12h2V6h-2z" />
+</vector>

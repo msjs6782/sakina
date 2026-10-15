@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Widget text. Sizes and colours are set at runtime from each widget's settings and measured size;
+         these defaults are what the launcher's preview shows. -->
+    <style name="W.Text">
+        <item name="android:fontFamily">@font/plex_regular</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">#FF1C1B17</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+    <style name="W.Text.Small">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">#FF4A4840</item>
+    </style>
+    <style name="W.Text.Medium">
+        <item name="android:fontFamily">@font/plex_medium</item>
+    </style>
+    <style name="W.Text.Title">
+        <item name="android:fontFamily">@font/plex_semibold</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+    <style name="W.Text.Big">
+        <item name="android:fontFamily">@font/plex_semibold</item>
+        <item name="android:textSize">34sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+    <style name="W.Cell">
+        <item name="android:fontFamily">@font/plex_regular</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">none</item>
+        <item name="android:textColor">#FF1C1B17</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+    <style name="W.Cell.Time">
+        <item name="android:fontFamily">@font/plex_semibold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <!-- The glass panel keeps a soft shadow behind its text, part of its contrast protection. -->
+    <style name="W.Glass" parent="W.Text">
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:shadowColor">#B3000000</item>
+        <item name="android:shadowRadius">4</item>
+        <item name="android:shadowDy">1</item>
+    </style>
+    <style name="W.Glass.Light" parent="W.Text">
+        <item name="android:textColor">#FF15140F</item>
+        <item name="android:shadowColor">#CCFFFFFF</item>
+        <item name="android:shadowRadius">4</item>
+        <item name="android:shadowDy">1</item>
+    </style>
+</resources>

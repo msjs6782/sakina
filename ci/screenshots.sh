@@ -147,6 +147,51 @@ T_RAMADAN="2026-03-01T14:30:00Z"     # 17:30 in Riyadh, 12 Ramadan 1447
 FREEZE=(--ez demo_freeze true)
 BASE=(--es demo_now "$T_AFTERNOON" "${FREEZE[@]}" --ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh,jeddah,makkah --es demo_active riyadh)
 
+# Helpers used by several phases (also defined again where they were first needed).
+ui_text() {
+  adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1
+  adb shell cat /sdcard/ui.xml > "$OUT/.ui.xml" 2>/dev/null
+  python3 "$HERE/find_node.py" "$OUT/.ui.xml" "$1" idtext
+}
+settings_json() { adb shell run-as "$PKG" cat files/datastore/settings.json 2>/dev/null; }
+hide_ime() { if adb shell dumpsys input_method 2>/dev/null | grep -q "mInputShown=true"; then adb shell input keyevent 4; sleep 1; fi; }
+# shellcheck source=ci/phase8.sh
+source "$HERE/phase8.sh"
+
+finish_run() {
+  adb logcat -d >> "$OUT/logcat_part2.txt"
+  cat "$OUT/logcat_part1.txt" "$OUT/logcat_part2.txt" > "$OUT/logcat.txt" 2>/dev/null
+  rm -f "$OUT"/logcat_part*.txt "$OUT/.ui.xml"
+  grep -E "SakinaDemo|SakinaAlerts|SakinaAdhan|SakinaWidgets|SakinaOpen|SakinaShortcuts|SakinaTiles|AndroidRuntime: FATAL" "$OUT/logcat.txt" | head -400 > "$OUT/app_log.txt" || true
+  grep "HijriCheck" "$OUT/logcat.txt" | tee "$OUT/hijri_check.txt"
+  if ! grep -q "HijriCheck compared=.* mismatches=0" "$OUT/logcat.txt"; then
+    echo "::warning::Umm al-Qura check against Android ICU did not report zero mismatches (SDK $SDK)"
+  fi
+  if grep -q "FATAL EXCEPTION" "$OUT/logcat.txt"; then
+    echo "::error::The app crashed on the emulator (SDK $SDK)"
+    grep -A 30 "FATAL EXCEPTION" "$OUT/logcat.txt" | head -80
+    exit 1
+  fi
+  if [ "$FAILS" -gt 0 ]; then
+    echo "::error::$FAILS expected element(s) were not found on screen (SDK $SDK)"
+    exit 1
+  fi
+  if [ "$CRITICAL" -gt 0 ]; then
+    echo "::error::$CRITICAL critical alert check(s) failed (SDK $SDK)"
+    grep "FAIL" "$CHECKS"
+    exit 1
+  fi
+  echo "UI check passed (SDK $SDK)"
+  exit 0
+}
+
+# A commit marked [ci:widgets] runs only the phase 8 checks (quicker while developing; never released).
+if [ "${ONLY:-}" = "widgets" ]; then
+  phase8
+  adb logcat -d > "$OUT/logcat_part1.txt"; adb logcat -c
+  finish_run
+fi
+
 # ---------- Real flow: onboarding, picking a city by typing, switching tabs, restart ----------
 shot 01_onboarding_welcome 7 --es demo_now "$T_AFTERNOON" "${FREEZE[@]}" --ez demo_reset true
 tap exact "التالي" && cap 02_onboarding_location
@@ -889,6 +934,9 @@ if [ "$SUITE" = "full" ]; then
 fi
 save_log
 
+# ---------- Phase 8: widgets, shortcuts and tiles (ci/phase8.sh) ----------
+phase8
+
 # ---------- Phase 2: alerts (real AlarmManager, notifications, playback) ----------
 save_log
 REAL=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh,jeddah --es demo_active riyadh)
@@ -1037,26 +1085,4 @@ if [ "$SUITE" = "full" ]; then
   cat "$OUT/logcat_part3.txt" >> "$OUT/logcat_part2.txt"; rm -f "$OUT/logcat_part3.txt"
 fi
 
-adb logcat -d >> "$OUT/logcat_part2.txt"
-cat "$OUT/logcat_part1.txt" "$OUT/logcat_part2.txt" > "$OUT/logcat.txt"
-rm -f "$OUT"/logcat_part*.txt "$OUT/.ui.xml"
-grep -E "SakinaDemo|SakinaAlerts|SakinaAdhan|AndroidRuntime: FATAL" "$OUT/logcat.txt" | head -200 > "$OUT/app_log.txt" || true
-grep "HijriCheck" "$OUT/logcat.txt" | tee "$OUT/hijri_check.txt"
-if ! grep -q "HijriCheck compared=.* mismatches=0" "$OUT/logcat.txt"; then
-  echo "::warning::Umm al-Qura check against Android ICU did not report zero mismatches (SDK $SDK)"
-fi
-if grep -q "FATAL EXCEPTION" "$OUT/logcat.txt"; then
-  echo "::error::The app crashed on the emulator (SDK $SDK)"
-  grep -A 30 "FATAL EXCEPTION" "$OUT/logcat.txt" | head -80
-  exit 1
-fi
-if [ "$FAILS" -gt 0 ]; then
-  echo "::error::$FAILS expected element(s) were not found on screen (SDK $SDK)"
-  exit 1
-fi
-if [ "$CRITICAL" -gt 0 ]; then
-  echo "::error::$CRITICAL critical alert check(s) failed (SDK $SDK)"
-  grep "FAIL" "$CHECKS"
-  exit 1
-fi
-echo "UI check passed (SDK $SDK)"
+finish_run

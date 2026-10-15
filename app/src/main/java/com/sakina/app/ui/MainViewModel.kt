@@ -68,6 +68,8 @@ sealed interface Route {
     data object Ramadan : Route
     data object Night : Route
     data object Friday : Route
+    /** Home-screen widgets, icon shortcuts and Quick Settings tiles. */
+    data object Widgets : Route
 }
 
 /** The occasions list before the last change, so the change can be undone from the calendar. */
@@ -155,6 +157,18 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             push(Route.Mushaf(d.meta.pageOf(global), if (highlight) global else -1))
         } else {
             push(Route.QuranReader(global, highlight))
+        }
+    }
+
+    /** Opens an ayah from outside the app (a widget), on the Quran tab, once the text is loaded. */
+    fun openAyah(sura: Int, aya: Int) {
+        viewModelScope.launch {
+            val d = sakina.quran.load()
+            val ref = com.sakina.app.core.quran.AyahRef(sura, aya)
+            if (sura !in 1..d.meta.suras.size || aya !in 1..d.meta.surah(sura).ayahCount) return@launch
+            clearStack()
+            tab = Tab.QURAN
+            openQuran(d.meta.global(ref), highlight = true)
         }
     }
 

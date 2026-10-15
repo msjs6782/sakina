@@ -39,6 +39,8 @@ class SakinaApp : Application() {
         private set
     lateinit var tools: com.sakina.app.data.ToolsRepository
         private set
+    lateinit var widgets: com.sakina.app.data.WidgetRepository
+        private set
 
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
@@ -53,6 +55,7 @@ class SakinaApp : Application() {
         mushaf = MushafRepository(this, appScope)
         recitations = RecitationRepository(this, appScope)
         tools = com.sakina.app.data.ToolsRepository(this)
+        widgets = com.sakina.app.data.WidgetRepository(this)
         appScope.launch { tools.prune(java.time.LocalDate.now()) }
         // Whenever anything that affects alerts changes (and once at start), rebuild the alarm chain.
         appScope.launch {
@@ -65,6 +68,14 @@ class SakinaApp : Application() {
                     SoundLibrary.cleanup(this@SakinaApp, s)
                     AlertScheduler.run(this@SakinaApp, AlertScheduler.Run.REFRESH, "settings")
                 }
+        }
+        // Widgets, icon shortcuts and tiles follow the settings (place, method, language, style...); widgets only
+        // redraw when what they show changes.
+        appScope.launch {
+            settings.settings.distinctUntilChanged().collect { s ->
+                com.sakina.app.widgets.WidgetUpdater.request(this@SakinaApp, "settings")
+                com.sakina.app.widgets.Shortcuts.publish(this@SakinaApp, s)
+            }
         }
     }
 }

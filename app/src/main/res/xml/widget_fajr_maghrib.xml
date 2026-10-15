@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sizes are suggestions; the launcher decides. The widget re-measures its text for the size it gets. -->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="com.sakina.app.widgets.WidgetConfigActivity"
+    android:description="@string/w_desc_fajr_maghrib"
+    android:initialLayout="@layout/w_fajr_maghrib"
+    android:minWidth="180dp"
+    android:minHeight="110dp"
+    android:minResizeWidth="110dp"
+    android:minResizeHeight="90dp"
+    android:previewLayout="@layout/w_fajr_maghrib"
+    android:resizeMode="horizontal|vertical"
+    android:targetCellWidth="3"
+    android:targetCellHeight="2"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="home_screen"
+    android:widgetFeatures="reconfigurable|configuration_optional" />

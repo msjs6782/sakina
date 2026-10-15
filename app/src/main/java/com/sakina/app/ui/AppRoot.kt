@@ -162,6 +162,7 @@ private fun RouteScreen(route: Route, vm: MainViewModel, s: AppSettings) {
         Route.Ramadan -> com.sakina.app.ui.seasons.RamadanScreen(vm, s)
         Route.Night -> com.sakina.app.ui.seasons.NightScreen(vm, s)
         Route.Friday -> com.sakina.app.ui.seasons.FridayScreen(vm, s)
+        Route.Widgets -> com.sakina.app.ui.widgets.WidgetsScreen(vm, s)
     }
 }
 

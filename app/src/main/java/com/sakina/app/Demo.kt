@@ -203,6 +203,7 @@ object Demo {
             else -> null
         }
         com.sakina.app.ui.mushaf.MushafDebug.initialZoom = e.getFloat("demo_zoom", 1f)
+        com.sakina.app.ui.widgets.WidgetsDebug.sizes = e.getBoolean("demo_widget_sizes")
         if (e.containsKey("demo_idle_ms")) com.sakina.app.audio.RecitationService.idleEndMs = e.getLong("demo_idle_ms")
         com.sakina.app.data.RecitationRepository.debugSlowMs = e.getLong("demo_dl_slow_ms", 0)
         if (e.getBoolean("demo_mushaf_clear")) runBlocking {
@@ -300,6 +301,7 @@ object Demo {
         "ramadan" -> Route.Ramadan
         "night" -> Route.Night
         "friday" -> Route.Friday
+        "widgets" -> Route.Widgets
         else -> null
     }
 

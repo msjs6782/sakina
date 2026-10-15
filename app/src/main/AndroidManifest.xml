@@ -80,5 +80,162 @@
             android:name=".alerts.AdhanService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
+
+        <!-- Phase 8: ten home-screen widgets. Each widget's settings stay on the device. -->
+        <activity
+            android:name=".widgets.WidgetConfigActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.Sakina">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".widgets.NextPrayerWidget"
+            android:exported="true"
+            android:label="@string/w_label_next">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_next" />
+        </receiver>
+
+        <receiver
+            android:name=".widgets.CountdownWidget"
+            android:exported="true"
+            android:label="@string/w_label_countdown">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_countdown" />
+        </receiver>
+
+        <receiver
+            android:name=".widgets.DayWidget"
+            android:exported="true"
+            android:label="@string/w_label_day">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_day" />
+        </receiver>
+
+        <receiver
+            android:name=".widgets.GlassWidget"
+            android:exported="true"
+            android:label="@string/w_label_glass">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_glass" />
+        </receiver>
+
+        <receiver
+            android:name=".widgets.MiniWidget"
+            android:exported="true"
+            android:label="@string/w_label_mini">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_mini" />
+        </receiver>
+
+        <receiver
+            android:name=".widgets.StripWidget"
+            android:exported="true"
+            android:label="@string/w_label_strip">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_strip" />
+        </receiver>
+
+        <receiver
+            android:name=".widgets.DigitalClockWidget"
+            android:exported="true"
+            android:label="@string/w_label_digital">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_digital" />
+        </receiver>
+
+        <receiver
+            android:name=".widgets.AnalogClockWidget"
+            android:exported="true"
+            android:label="@string/w_label_analog">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_analog" />
+        </receiver>
+
+        <receiver
+            android:name=".widgets.ContentWidget"
+            android:exported="true"
+            android:label="@string/w_label_content">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_content" />
+        </receiver>
+
+        <receiver
+            android:name=".widgets.FajrMaghribWidget"
+            android:exported="true"
+            android:label="@string/w_label_fajr_maghrib">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_fajr_maghrib" />
+        </receiver>
+
+        <!-- Redraws widgets when their content changes; a non-waking alarm. -->
+        <receiver android:name=".widgets.WidgetTickReceiver" android:exported="false" />
+
+        <!-- Quick Settings tiles that open the Qibla and prayer-times screens. -->
+        <service
+            android:name=".widgets.TimesTileService"
+            android:exported="true"
+            android:icon="@drawable/g_times"
+            android:label="@string/tile_times"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".widgets.QiblaTileService"
+            android:exported="true"
+            android:icon="@drawable/g_qibla"
+            android:label="@string/tile_qibla"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
     </application>
 </manifest>

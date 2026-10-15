@@ -344,14 +344,12 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
         "الاستماع للتلاوة" to "المرحلة ٥",
         "الأذكار والتسبيح والقبلة" to "المرحلة ٦",
         "التقويم ورمضان والليل والجمعة" to "المرحلة ٧",
-        "الويدجت والاختصارات" to "المرحلة ٨",
         "السجل والتصدير ومساجدي والنسخ الاحتياطي" to "المرحلة ٩",
     ) else listOf(
         "Printed Mushaf" to "Phase 4",
         "Recitation audio" to "Phase 5",
         "Adhkar, tasbih and Qibla" to "Phase 6",
         "Calendar, Ramadan, night and Friday" to "Phase 7",
-        "Widgets and shortcuts" to "Phase 8",
         "Log, export, my mosques and backup" to "Phase 9",
     )).map { digits(it.first) to digits(it.second) }
 
@@ -853,10 +851,8 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val toolsQibla get() = t("القبلة", "Qibla")
     val toolsQiblaBody get() = t("الاتجاه والمسافة، وبوصلة، وخريطة تعمل دون إنترنت", "Direction and distance, a compass, and a map that works offline")
     val plannedLater get() = (if (isAr) listOf(
-        "الويدجت والاختصارات" to "المرحلة ٨",
         "السجل والتصدير ومساجدي والنسخ الاحتياطي" to "المرحلة ٩",
     ) else listOf(
-        "Widgets and shortcuts" to "Phase 8",
         "Log, export, my mosques and backup" to "Phase 9",
     )).map { digits(it.first) to digits(it.second) }
 
@@ -1154,6 +1150,126 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     fun fridayWindow(isEve: Boolean) = if (isEve) t("ليلة الجمعة", "Friday eve") else t("يوم الجمعة", "Friday")
     val fridayCardHidden get() = t("تظهر من مغرب الخميس إلى مغرب الجمعة.", "Shown from Thursday's Maghrib to Friday's Maghrib.")
     fun gradersLine(text: String) = t("أحكام المحققين: $text", "Graders: $text")
+
+    // Phase 8: home-screen widgets, shortcuts and Quick Settings tiles.
+    fun wIn(d: String) = t("بعد $d", "in $d")
+    fun wUpdated(time: String) = t("حُدّث $time", "updated $time")
+    fun wUntil(name: String) = t("حتى $name", "Until $name")
+    val wNoPlace get() = t("اختر موقعًا في سكينة لعرض المواقيت", "Choose a place in Sakina to show prayer times")
+    val wNoTimes get() = t("تعذّر حساب المواقيت هنا اليوم؛ راجع التقويم المحلي", "Times cannot be calculated here today; check the local calendar")
+    val wDeviceClock get() = t("ساعة الجهاز، والعلامات بتوقيته", "Device clock; marks in device time")
+    val wLabelAyah get() = t("آية", "Verse")
+    val wLabelDhikr get() = t("ذكر", "Dhikr")
+    fun wTimesCount(n: String) = t("$n مرة", "$n times")
+    fun wRamadanIn(days: String) = t("رمضان بعد $days", "Ramadan in $days")
+    fun wRamadanFasting(day: String, d: String) = t("رمضان $day · حتى الإفطار $d", "Ramadan $day · $d to iftar")
+    fun wRamadanBeforeFajr(day: String, d: String) = t("رمضان $day · حتى الإمساك $d", "Ramadan $day · $d to imsak")
+    val wContentTooSmall get() = t("لا يتسع هذا الحجم لنص كامل؛ كبّر الويدجت", "Too small for a full text; make the widget larger")
+
+    val widgetsTitle get() = t("الويدجت والاختصارات", "Widgets and shortcuts")
+    val toolsWidgetsBody get() = t("عشرة ويدجت للشاشة الرئيسية، واختصارات الأيقونة، وأدوات الإعدادات السريعة", "Ten home-screen widgets, icon shortcuts and Quick Settings tiles")
+    val widgetsGallery get() = t("معرض الويدجت", "Widget gallery")
+    val widgetsGalleryNote get() = t("كل معاينة هي الويدجت نفسها بإعداداتها الافتراضية ومدينة التطبيق الحالية.", "Each preview is the widget itself, with default settings and the app's current place.")
+    val addToHome get() = t("إضافة إلى الشاشة الرئيسية", "Add to home screen")
+    val pinUnsupported get() = t("مشغّل الشاشة الرئيسية لا يدعم الإضافة من داخل التطبيق. اضغط مطولًا على مكان فارغ في الشاشة الرئيسية، ثم اختر الأدوات (Widgets) وابحث عن سكينة.", "Your launcher does not support adding from the app. Long-press an empty spot on the home screen, choose Widgets, and find Sakina.")
+    val pinRequested get() = t("أكمل الإضافة من نافذة مشغّل الشاشة الرئيسية.", "Finish adding it in the launcher's dialog.")
+    val myWidgets get() = t("على شاشتك الرئيسية", "On your home screen")
+    val noWidgets get() = t("لم تُضف أي ويدجت بعد.", "No widgets added yet.")
+    val widgetSettings get() = t("إعدادات الويدجت", "Widget settings")
+    val refreshNow get() = t("تحديث الآن", "Refresh now")
+    val refreshAll get() = t("تحديث كل الويدجت", "Refresh all widgets")
+    val refreshed get() = t("تم التحديث", "Refreshed")
+    val wRemainingNote get() = t("المتبقي في الويدجت لقطة تُحدَّث نحو كل دقيقة ما دام الجهاز مستيقظًا، وتظهر معه ساعة آخر تحديث؛ قد يؤخره Android، والموعد المطلق هو المرجع.", "The time left on a widget is a snapshot refreshed about every minute while the device is awake, shown with the time it was taken; Android may delay it, and the prayer's own time is the reference.")
+    val wPlace get() = t("الموقع", "Place")
+    val wPlaceApp get() = t("مدينة التطبيق (تتبع السفر)", "The app's place (follows travel)")
+    val wPlaceFixed get() = t("مدينة خاصة بهذه الويدجت", "A place for this widget only")
+    val wPlaceKept get() = t("تبقى هذه المدينة لهذه الويدجت مهما غيّرت مدينة التطبيق أو سافرت.", "This widget keeps this place whatever you change in the app, including travel.")
+    val wPlaceSearch get() = t("ابحث عن مدينة", "Search for a city")
+    val wPlaceSaved get() = t("من مواقعك المحفوظة", "From your saved places")
+    val wLanguage get() = t("اللغة", "Language")
+    val wFollowApp get() = t("كالتطبيق", "As the app")
+    val wStyle get() = t("النمط", "Style")
+    val wTheme get() = t("المظهر", "Theme")
+    val wThemeSystem get() = t("كالجهاز", "As the device")
+    val wThemeLight get() = t("فاتح", "Light")
+    val wThemeDark get() = t("داكن", "Dark")
+    val wDynamic get() = t("ألوان من خلفية الجهاز", "Colours from the wallpaper")
+    val wDynamicNote get() = t("تتطلب Android 12 أو أحدث.", "Needs Android 12 or later.")
+    val wClock get() = t("تنسيق الساعة", "Clock format")
+    val wH12 get() = t("١٢ ساعة", "12-hour")
+    val wH24 get() = t("٢٤ ساعة", "24-hour")
+    val wTextSize get() = t("حجم الخط", "Text size")
+    val wTextSizeNote get() = t("إن لم يتسع النص صغُر تلقائيًا، فلا تُقص المواقيت.", "Text shrinks when it would not fit, so times are never cut off.")
+    val wColors get() = t("الألوان", "Colours")
+    val wTextColor get() = t("النص", "Text")
+    val wBgColor get() = t("الخلفية", "Background")
+    val wAccentColor get() = t("التمييز", "Accent")
+    val wAuto get() = t("تلقائي", "Auto")
+    val wOpacity get() = t("عتامة الخلفية", "Background opacity")
+    val wCorners get() = t("الزوايا", "Corners")
+    val wBorder get() = t("الحدود", "Border")
+    val wBorderNone get() = t("بلا حدود", "None")
+    val wBorderThin get() = t("رفيعة", "Thin")
+    val wBorderThick get() = t("سميكة", "Thick")
+    val wContrastGuard get() = t("حماية التباين", "Contrast protection")
+    fun wContrastGuardNote(min: String) = t("لا تقل عتامة اللوحة عن $min مع ظل خفيف للنص، ليبقى مقروءًا على أي خلفية.", "The panel stays at least $min opaque, with a soft text shadow, so it reads on any wallpaper.")
+    val wContent get() = t("المحتوى", "Content")
+    val wContentMixed get() = t("أذكار وآيات", "Adhkar and verses")
+    val wContentAdhkar get() = t("أذكار فقط", "Adhkar only")
+    val wContentVerses get() = t("آيات فقط", "Verses only")
+    val wContentNote get() = t("أذكار قصيرة من مكتبة الأذكار المضمّنة، وآيات مختارة من نص القرآن المضمّن (تنزيل)، كلٌّ مع مصدره. يتغيّر النص يوميًا، وزر «التالي» ينتقل إلى غيره، ويُتخطّى ما لا يتسع كاملًا.", "Short adhkar from the bundled adhkar library and selected verses from the bundled Quran text (Tanzil), each with its source. It changes daily, the Next button moves on, and anything that would not fit whole is skipped.")
+    val wAnalogNoteNew get() = t("تعرض الساعة توقيت مدينة الويدجت، والعلامات أوقات صلاتها.", "The clock shows the widget's place time, with its prayer times marked.")
+    val wAnalogNoteOld get() = t("على Android 8 إلى 11 لا تقبل الساعة الأصلية منطقة زمنية، فتعرض توقيت الجهاز وتُرسم العلامات بتوقيته، مع تسمية واضحة إن اختلف عن توقيت المدينة.", "On Android 8 to 11 the native clock takes no time zone, so it shows device time with the marks converted to it, and says so when it differs from the place.")
+    val wDigitalNote get() = t("الساعة الرقمية أصلية تعمل بلا تحديث من التطبيق، وأرقامها تتبع لغة الجهاز.", "The digital clock is native and runs without app updates; its digits follow the device language.")
+    val wSave get() = t("حفظ", "Save")
+    val wReset get() = t("الإعدادات الافتراضية", "Defaults")
+    val wPreview get() = t("المعاينة", "Preview")
+    val wSaved get() = t("حُفظت الإعدادات", "Settings saved")
+    fun widgetName(id: String) = when (id) {
+        "next" -> t("الصلاة التالية", "Next prayer")
+        "countdown" -> t("المتبقي الكبير", "Big countdown")
+        "day" -> t("مواقيت اليوم", "Today's prayers")
+        "glass" -> t("اللوحة الزجاجية", "Glass panel")
+        "mini" -> t("المربع المصغّر", "Mini square")
+        "strip" -> t("شريط المواقيت", "Prayer strip")
+        "digital" -> t("الساعة الرقمية", "Digital clock")
+        "analog" -> t("الساعة ذات العقارب", "Analog clock")
+        "content" -> t("ذكر وآية", "Dhikr and verse")
+        else -> t("الفجر والمغرب", "Fajr and Maghrib")
+    }
+    fun widgetDesc(id: String) = when (id) {
+        "next" -> t("الصلاة التالية وموعدها والمتبقي مع وقت تحديثه.", "The next prayer, its time, and the time left with when it was updated.")
+        "countdown" -> t("المتبقي بخط كبير مع موعد الصلاة المطلق.", "Large time left with the prayer's own time.")
+        "day" -> t("الصلوات الخمس والشروق، والتالية مميزة.", "The five prayers and sunrise, the next one highlighted.")
+        "glass" -> t("لوحة شفافة فوق الخلفية مع حماية للتباين.", "A see-through panel with contrast protection.")
+        "mini" -> t("الصلاة التالية في خانة واحدة.", "The next prayer in a single cell.")
+        "strip" -> t("مواقيت اليوم في شريط أفقي.", "The day's times in one row.")
+        "digital" -> t("ساعة رقمية أصلية مع التاريخ والصلاة التالية.", "A native digital clock with the date and next prayer.")
+        "analog" -> t("ساعة بعقارب أصلية وعلامات أوقات الصلاة على وجهها.", "A native analog clock with prayer times marked on its face.")
+        "content" -> t("ذكر قصير أو آية مختارة مع المصدر.", "A short dhikr or a selected verse with its source.")
+        else -> t("الفجر والمغرب والتاريخ الهجري وسياق رمضان.", "Fajr, Maghrib, the Hijri date and the Ramadan context.")
+    }
+    val shortcutsTitle get() = t("اختصارات أيقونة التطبيق", "App icon shortcuts")
+    val shortcutsBody get() = t("اضغط مطولًا على أيقونة سكينة لتظهر اختصارات: المواقيت، القبلة، القرآن، رمضان.", "Long-press Sakina's icon for shortcuts: Prayer times, Qibla, Quran, Ramadan.")
+    val pinAdhkarTitle get() = t("اختصار أذكار مستقل", "A separate adhkar shortcut")
+    val pinAdhkarBody get() = t("يضيف أيقونة على الشاشة الرئيسية تفتح ما تختاره مباشرة.", "Adds a home-screen icon that opens your choice directly.")
+    val pinShortcut get() = t("تثبيت الاختصار", "Add shortcut")
+    val adhkarLibrary get() = t("مكتبة الأذكار", "Adhkar library")
+    val shortcutRequested get() = t("أكمل إضافة الاختصار من نافذة مشغّل الشاشة الرئيسية.", "Finish adding the shortcut in the launcher's dialog.")
+    val shortcutUnsupported get() = t("مشغّل الشاشة الرئيسية لا يدعم تثبيت الاختصارات من التطبيق.", "Your launcher does not support adding shortcuts from the app.")
+    val tilesTitle get() = t("أدوات الإعدادات السريعة", "Quick Settings tiles")
+    val tilesBody get() = t("أداتان أصليتان للقبلة والمواقيت تفتحان الشاشتين. أداة المواقيت تعرض الصلاة التالية حين تفتح اللوحة.", "Two native tiles for Qibla and Prayer times that open those screens. The times tile shows the next prayer when the panel opens.")
+    fun addTile(name: String) = t("إضافة أداة $name", "Add the $name tile")
+    val tilesManual get() = t("اسحب لوحة الإعدادات السريعة، واضغط زر التعديل، ثم اسحب أداة سكينة إلى اللوحة.", "Pull down Quick Settings, tap Edit, then drag Sakina's tile into the panel.")
+    val tileAdded get() = t("أُضيفت الأداة", "Tile added")
+    val tileAlready get() = t("الأداة مضافة من قبل", "The tile is already added")
+    val tileNotAdded get() = t("لم تُضف الأداة", "The tile was not added")
+    val scTimesLong get() = t("مواقيت الصلاة", "Prayer times")
+    val scAdhkarMorning get() = t("أذكار الصباح", "Morning adhkar")
+    val scAdhkarEvening get() = t("أذكار المساء", "Evening adhkar")
+    val scAdhkarSleep get() = t("أذكار النوم", "Sleep adhkar")
+    val scAdhkarWaking get() = t("أذكار الاستيقاظ", "Waking adhkar")
+    fun tileNext(name: String, time: String) = t("$name $time", "$name $time")
 
 }
 

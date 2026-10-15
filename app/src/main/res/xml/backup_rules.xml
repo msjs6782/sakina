@@ -2,4 +2,6 @@
 <!-- Android's own device-to-device transfer may copy settings; nothing goes to a Sakina server. -->
 <full-backup-content>
     <include domain="file" path="datastore/" />
+    <!-- Widget settings belong to widget ids on this home screen only. -->
+    <exclude domain="file" path="datastore/widgets.json" />
 </full-backup-content>

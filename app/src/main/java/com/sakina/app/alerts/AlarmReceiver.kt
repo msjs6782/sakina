@@ -62,6 +62,10 @@ class SystemEventsReceiver : BroadcastReceiver() {
             else -> AlertScheduler.Run.CATCH_UP
         }
         Log.i("SakinaAlerts", "System event ${intent.action}")
-        async { AlertScheduler.run(context, mode, intent.action ?: "system") }
+        async {
+            AlertScheduler.run(context, mode, intent.action ?: "system")
+            // Widgets show times and dates too: redraw them all after a reboot, an update or a clock change.
+            com.sakina.app.widgets.WidgetUpdater.update(context, intent.action ?: "system", force = true)
+        }
     }
 }

@@ -37,7 +37,7 @@ import com.sakina.app.ui.components.Divider
 import com.sakina.app.ui.components.SakinaIcons
 import com.sakina.app.ui.components.SectionCard
 
-/** The Discover tab: the adhkar, tasbih and qibla tools, then what later phases add. */
+/** The Discover tab: the tools, then what later phases add. */
 @Composable
 fun DiscoverScreen(vm: MainViewModel, contentPadding: PaddingValues) {
     val str = LocalStrings.current
@@ -53,6 +53,7 @@ fun DiscoverScreen(vm: MainViewModel, contentPadding: PaddingValues) {
         ToolCard(SakinaIcons.Moon, str.ramadanTitle, str.toolsRamadanBody, "tool_ramadan") { vm.push(Route.Ramadan) }
         ToolCard(SakinaIcons.Isha, str.nightTitle, str.toolsNightBody, "tool_night") { vm.push(Route.Night) }
         ToolCard(SakinaIcons.Book, str.fridayTitle, str.toolsFridayBody, "tool_friday") { vm.push(Route.Friday) }
+        ToolCard(SakinaIcons.Home, str.widgetsTitle, str.toolsWidgetsBody, "tool_widgets") { vm.push(Route.Widgets) }
         SectionCard(title = str.plannedTitle, icon = SakinaIcons.Calendar) {
             str.plannedLater.forEachIndexed { i, (name, phase) ->
                 if (i > 0) Divider()
