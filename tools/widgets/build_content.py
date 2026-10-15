@@ -23,7 +23,7 @@ VERSES = ("2:152 2:153 2:186 2:201 2:255 2:286 3:8 3:139 3:173 3:200 6:162 7:23 
 MAX_VERSE = 200
 
 # Short adhkar not tied to a time or situation (no morning-and-evening, after-prayer, food, travel or sleep adhkar).
-ADHKAR = ["kalimatan", "hawqala", "baqiyat", "istighfar_70", "tahlil_100",
+ADHKAR = ["kalimatan", "hawqala", "baqiyat", "istighfar_70",
           "rabbighfir_100", "rabbana_atina", "dhun_nun", "hasbunallah", "hamm_hazan"]
 
 
