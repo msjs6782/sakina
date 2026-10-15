@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.data.AdhkarAssetTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-15T18:12:19.756Z" hostname="runnervm8k3b6" time="0.123">
+  <properties/>
+  <testcase name="quranPassagesExistInTheBundledText" classname="com.sakina.app.data.AdhkarAssetTest" time="0.085"/>
+  <testcase name="morningAndEveningWordings" classname="com.sakina.app.data.AdhkarAssetTest" time="0.009"/>
+  <testcase name="everyItemHasTextSourceGradeAndLinks" classname="com.sakina.app.data.AdhkarAssetTest" time="0.008"/>
+  <testcase name="practicesLinkToTheirReminders" classname="com.sakina.app.data.AdhkarAssetTest" time="0.005"/>
+  <testcase name="searchFindsByTextTitleAndCategory" classname="com.sakina.app.data.AdhkarAssetTest" time="0.012"/>
+  <testcase name="countsMatchTheSpecification" classname="com.sakina.app.data.AdhkarAssetTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

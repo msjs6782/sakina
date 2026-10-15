@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.core.WidgetTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-15T18:12:19.734Z" hostname="runnervm8k3b6" time="0.02">
+  <properties/>
+  <testcase name="remainingIsRoundedUpAndNeverNegative" classname="com.sakina.app.core.WidgetTest" time="0.001"/>
+  <testcase name="blockFitting" classname="com.sakina.app.core.WidgetTest" time="0.001"/>
+  <testcase name="snapshotFollowsTheNextPrayerAndMovesToTomorrowAfterIsha" classname="com.sakina.app.core.WidgetTest" time="0.002"/>
+  <testcase name="dawnDuskCardAndRamadanContext" classname="com.sakina.app.core.WidgetTest" time="0.003"/>
+  <testcase name="polarDayIsReportedIncomplete" classname="com.sakina.app.core.WidgetTest" time="0.0"/>
+  <testcase name="refreshTimes" classname="com.sakina.app.core.WidgetTest" time="0.002"/>
+  <testcase name="contrastGuard" classname="com.sakina.app.core.WidgetTest" time="0.003"/>
+  <testcase name="dialAnglesAndClockZone" classname="com.sakina.app.core.WidgetTest" time="0.001"/>
+  <testcase name="contentPickerRotatesDailyAndSkipsItemsThatDoNotFit" classname="com.sakina.app.core.WidgetTest" time="0.004"/>
+  <testcase name="fittingShrinksToTheNarrowestLineAndStack" classname="com.sakina.app.core.WidgetTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

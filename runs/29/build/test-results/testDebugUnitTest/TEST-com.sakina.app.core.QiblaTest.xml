@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.core.QiblaTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-10-15T18:12:19.183Z" hostname="runnervm8k3b6" time="0.038">
+  <properties/>
+  <testcase name="bearingsAgreeWithIndependentConstructionAndKnownValues" classname="com.sakina.app.core.QiblaTest" time="0.001"/>
+  <testcase name="issuesAndReliability" classname="com.sakina.app.core.QiblaTest" time="0.002"/>
+  <testcase name="compassHeadingFromSensors" classname="com.sakina.app.core.QiblaTest" time="0.0"/>
+  <testcase name="angleFilterWrapsAndAlignmentFiresOnce" classname="com.sakina.app.core.QiblaTest" time="0.001"/>
+  <testcase name="greatCircleEndsAndPassesNorthFromNewYork" classname="com.sakina.app.core.QiblaTest" time="0.0"/>
+  <testcase name="poleZones" classname="com.sakina.app.core.QiblaTest" time="0.004"/>
+  <testcase name="distances" classname="com.sakina.app.core.QiblaTest" time="0.0"/>
+  <testcase name="wmmHeaderAndLife" classname="com.sakina.app.core.QiblaTest" time="0.001"/>
+  <testcase name="azimuthalProjectionKeepsDirectionAndDistanceFromCentre" classname="com.sakina.app.core.QiblaTest" time="0.001"/>
+  <testcase name="wmmMatchesReportTable" classname="com.sakina.app.core.QiblaTest" time="0.007"/>
+  <testcase name="wmmMatchesNoaaTestValues" classname="com.sakina.app.core.QiblaTest" time="0.018"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

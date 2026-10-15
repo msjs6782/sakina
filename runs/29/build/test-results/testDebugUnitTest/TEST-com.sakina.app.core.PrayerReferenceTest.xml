@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.core.PrayerReferenceTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-15T18:12:18.939Z" hostname="runnervm8k3b6" time="0.203">
+  <properties/>
+  <testcase name="matchesAdhanReference" classname="com.sakina.app.core.PrayerReferenceTest" time="0.193"/>
+  <testcase name="matchesOfficialUmmAlQuraMakkah" classname="com.sakina.app.core.PrayerReferenceTest" time="0.01"/>
+  <system-out><![CDATA[Reference comparison: 25920 times, 25920 exact, worst difference 0 min
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
