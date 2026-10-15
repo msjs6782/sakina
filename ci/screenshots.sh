@@ -738,6 +738,8 @@ save_log
 # ---------- Phase 7: calendar, Ramadan, night and Friday ----------
 save_log
 settings_json() { adb shell run-as "$PKG" cat files/datastore/settings.json 2>/dev/null; }
+# Hides the on-screen keyboard if it is showing (Back would otherwise leave the screen).
+hide_ime() { if adb shell dumpsys input_method 2>/dev/null | grep -q "mInputShown=true"; then adb shell input keyevent 4; sleep 1; fi; }
 # Minutes after midnight of a time as the app shows it ("٥:٣٧ م", "4:35 PM" or "16:35").
 mins() { python3 -c "
 import sys,re
@@ -755,7 +757,8 @@ scroll_to id tool_calendar && tap id tool_calendar && sleep 3 && cap 201_calenda
 T0=$(ui_text cal_title); echo "$T0" | grep -q "١٤٤٨" && ui_has id cal_day_2026-10-14 && check cal_grid PASS "$T0" || check cal_grid FAIL "title $T0"
 tap id cal_next && sleep 2
 T1=$(ui_text cal_title); [ "$T1" != "$T0" ] && check cal_next PASS "$T1" || check cal_next FAIL "$T1"
-adb shell input swipe 300 1300 900 1300 300; sleep 2
+# Right-to-left: the previous month is to the right, so a swipe from right to left goes back.
+adb shell input swipe 900 1300 300 1300 300; sleep 2
 T2=$(ui_text cal_title); [ "$T2" = "$T0" ] && check cal_swipe PASS "back to $T2 by swiping" || check cal_swipe FAIL "after swipe: $T2"
 tap id cal_kind_gregorian && sleep 2 && cap 202_calendar_gregorian
 T=$(ui_text cal_title); echo "$T" | grep -q "أكتوبر ٢٠٢٦" && check cal_gregorian PASS "$T" || check cal_gregorian FAIL "$T"
@@ -771,9 +774,9 @@ adb shell input keyevent 4; sleep 1
 # Add an occasion from a day, then delete it and undo the delete.
 start "${C[@]}" --es demo_route calendar_day:2026-10-22; sleep 7
 cap 204_day_sheet
-tap id day_add_occasion && sleep 2
-tap id occ_title && adb shell input text "Family%svisit" && adb shell input keyevent 111
-tap id occ_repeat_yearly_hijri
+scroll_to id day_add_occasion && tap id day_add_occasion && sleep 2
+tap id occ_title && adb shell input text "Family%svisit" && hide_ime
+scroll_to id occ_repeat_yearly_hijri && tap id occ_repeat_yearly_hijri
 scroll_to contains "تنبيه في يومها" && tap contains "تنبيه في يومها"
 cap 205_occasion_edit
 scroll_to id occ_save && tap id occ_save && sleep 2 && cap 206_occasion_saved
@@ -782,9 +785,9 @@ echo "$J" | grep -q '"title":"Family visit"' && echo "$J" | grep -q '"repeat":"Y
   && check occ_saved PASS "saved with yearly Hijri repeat and alert" || check occ_saved FAIL "$(echo "$J" | grep -o '"occasions":\[[^]]*' | head -c 300)"
 ui_has id cal_day_2026-10-22 && check occ_back PASS "back on the calendar" || check occ_back FAIL "not on the calendar"
 start "${C[@]}" --es demo_occasions 2026-10-22:Family_visit --es demo_route calendar_day:2026-10-22; sleep 7
-tap id occasion_delete_demo0 && sleep 1 && cap 207_occasion_deleted
+scroll_to id occasion_delete_demo0 && tap id occasion_delete_demo0 && sleep 1 && cap 207_occasion_deleted
 settings_json | grep -q '"occasions":\[\]' && check occ_delete PASS "deleted" || check occ_delete FAIL "still stored"
-tap exact "تراجع" && sleep 2
+tap id day_undo && sleep 2
 settings_json | grep -q '"title":"Family visit"' && check occ_undo PASS "delete undone" || check occ_undo FAIL "$(settings_json | grep -o '"occasions":\[[^]]*' | head -c 200)"
 # List mode is a separate choice: a larger font keeps the grid.
 shot 208_calendar_list 8 "${C[@]}" --ez demo_cal_list true --es demo_occasions 2026-10-22:Family_visit --es demo_route month
@@ -801,8 +804,10 @@ H1=$(ui_text day_hijri); cap 210_day_offset_plus1
 [ -n "$H0" ] && [ "$H0" != "$H1" ] && check cal_offset PASS "$H0 → $H1 ($F0)" || check cal_offset FAIL "$H0 / $H1"
 # Tools: conversion and the interval between dates.
 shot 211_calendar_tools 7 "${C[@]}" --es demo_route calendar_tools
-tap id conv_hijri; tap id conv_day && adb shell input text "1"; tap id conv_month && adb shell input text "9"; tap id conv_year && adb shell input text "1448"
-adb shell input keyevent 111; sleep 1
+# The fields start with today's date: clear each one before typing.
+typein() { tap id "$1" && adb shell input keyevent 123 && for _ in 1 2 3 4 5; do adb shell input keyevent 67; done && adb shell input text "$2"; }
+tap id conv_hijri; typein conv_day 1; typein conv_month 9; typein conv_year 1448
+hide_ime; sleep 1
 T=$(ui_text conv_result); cap 212_converter
 echo "$T" | grep -q "رمضان ١٤٤٨" && echo "$T" | grep -q "٢٠٢٧" && check cal_convert PASS "$T" || check cal_convert FAIL "$T"
 scroll_to id int_days && T=$(ui_text int_days)
@@ -851,6 +856,8 @@ MG=$(mins "$(ui_text night_maghrib)"); MD=$(mins "$(ui_text night_midnight)"); F
 python3 -c "
 m,md,f,lt=$MG,$MD,$FJ,$LT
 f+=1440
+lt=lt+1440 if lt<m else lt
+md=md+1440 if md<m else md
 ok=abs((m+f)/2-md)<=1 and abs(m+(f-m)*2/3-lt)<=1
 print('ok' if ok else 'bad')" | grep -q ok && check night_times PASS "maghrib $MG, midnight $MD, last third $LT, fajr $FJ (minutes)" || check night_times FAIL "maghrib $MG midnight $MD third $LT fajr $FJ"
 ui_has id night_until_third && check night_current PASS "countdown to the last third" || check night_current FAIL "no countdown"

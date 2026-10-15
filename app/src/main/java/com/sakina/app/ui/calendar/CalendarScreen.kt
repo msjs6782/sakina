@@ -97,8 +97,12 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.ZoneId
 
-private fun firstPage(kind: CalendarKind) = MonthRef(kind, if (kind == CalendarKind.HIJRI) UmmAlQura.MIN_YEAR else 1883, 1)
-private fun pageCount(kind: CalendarKind) = if (kind == CalendarKind.HIJRI) (UmmAlQura.MAX_YEAR - UmmAlQura.MIN_YEAR + 1) * 12 else (2173 - 1883 + 1) * 12
+/** Months either side of the current month that the pager can reach (the calendars' own limits apply inside). */
+private const val SPAN = 300 * 12
+private const val PAGES = 2 * SPAN + 1
+
+/** The month on a pager page: pages count months from the current month in the chosen calendar. */
+private fun monthAt(page: Int, base: MonthRef) = base.plus(page - SPAN)
 
 internal fun weekStartFor(lang: Lang) = if (lang == Lang.AR) DayOfWeek.SATURDAY else DayOfWeek.MONDAY
 
@@ -126,12 +130,20 @@ fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long) {
     var selected by rememberSaveable { mutableStateOf(focus?.toEpochDay() ?: Long.MIN_VALUE) }
     // A date inside the month on screen, so switching calendars stays on the same time of year.
     var anchor by rememberSaveable { mutableStateOf((focus ?: today).toEpochDay()) }
-    val pager = key(kind) {
-        val start = MonthRef.of(kind, LocalDate.ofEpochDay(anchor), s.hijriOffset) ?: firstPage(kind)
-        rememberPagerState(initialPage = firstPage(kind).distanceTo(start).coerceIn(0, pageCount(kind) - 1)) { pageCount(kind) }
+    // One pager state for both calendars: page SPAN is the current month; switching calendars moves to the
+    // month that contains the date on screen (a fresh state per calendar would not be the one attached to the layout).
+    val base = MonthRef.of(kind, today, s.hijriOffset) ?: MonthRef(kind, if (kind == CalendarKind.HIJRI) 1448 else today.year, 1)
+    val pager = rememberPagerState(initialPage = (SPAN + base.distanceTo(MonthRef.of(kind, LocalDate.ofEpochDay(anchor), s.hijriOffset) ?: base)).coerceIn(0, PAGES - 1)) { PAGES }
+    var shownKind by rememberSaveable { mutableStateOf(kind) }
+    LaunchedEffect(kind) {
+        if (shownKind != kind) {
+            val target = MonthRef.of(kind, LocalDate.ofEpochDay(anchor), s.hijriOffset) ?: base
+            pager.scrollToPage((SPAN + base.distanceTo(target)).coerceIn(0, PAGES - 1))
+            shownKind = kind
+        }
     }
     LaunchedEffect(kind, pager.currentPage) {
-        MonthGrid.range(firstPage(kind).plus(pager.currentPage), s.hijriOffset)?.let { r -> anchor = r.start.plusDays(14).toEpochDay() }
+        if (shownKind == kind) MonthGrid.range(monthAt(pager.currentPage, base), s.hijriOffset)?.let { r -> anchor = r.start.plusDays(14).toEpochDay() }
     }
     val scope = rememberCoroutineScope()
     var picker by remember { mutableStateOf(false) }
@@ -143,7 +155,7 @@ fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long) {
         val r = snackbar.showSnackbar(u.message, actionLabel = str.undo, duration = SnackbarDuration.Long)
         if (r == SnackbarResult.ActionPerformed) vm.undoOccasions() else if (vm.occasionUndo?.stamp == u.stamp) vm.occasionUndo = null
     }
-    val current = firstPage(kind).plus(pager.currentPage)
+    val current = monthAt(pager.currentPage, base)
     FullScreen {
         Scaffold(
             containerColor = MaterialTheme.colorScheme.background,
@@ -167,7 +179,7 @@ fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long) {
                         style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center,
                         modifier = Modifier.weight(1f).clip(RoundedCornerShape(12.dp)).clickable { picker = true }.padding(vertical = 6.dp).testTag("cal_title"),
                     )
-                    IconButton(onClick = { scope.launch { pager.animateScrollToPage((pager.currentPage + 1).coerceAtMost(pageCount(kind) - 1)) } }, modifier = Modifier.testTag("cal_next")) {
+                    IconButton(onClick = { scope.launch { pager.animateScrollToPage((pager.currentPage + 1).coerceAtMost(PAGES - 1)) } }, modifier = Modifier.testTag("cal_next")) {
                         DirectionalIcon(SakinaIcons.ChevronEnd, str.nextMonth)
                     }
                 }
@@ -178,11 +190,11 @@ fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long) {
                         label = { Text(str.gregorianLabel) }, modifier = Modifier.testTag("cal_kind_gregorian"))
                     Spacer(Modifier.weight(1f))
                     OutlinedButton(onClick = {
-                        MonthRef.of(kind, today, s.hijriOffset)?.let { m -> scope.launch { pager.animateScrollToPage(firstPage(kind).distanceTo(m)) } }
+                        scope.launch { pager.animateScrollToPage(SPAN) }
                     }, modifier = Modifier.testTag("cal_today")) { Text(str.todayButton) }
                 }
                 HorizontalPager(pager, modifier = Modifier.fillMaxSize(), beyondViewportPageCount = 0, verticalAlignment = Alignment.Top) { page ->
-                    val month = firstPage(kind).plus(page)
+                    val month = monthAt(page, base)
                     if (s.calendar.listMode) MonthList(month, s, today) { selected = it.toEpochDay() }
                     else MonthPage(month, s, today, selected) { selected = it.toEpochDay() }
                 }
@@ -191,7 +203,7 @@ fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long) {
     }
     if (picker) MonthPicker(kind, current, onDismiss = { picker = false }) { m ->
         picker = false
-        if (m.isSupported) scope.launch { pager.scrollToPage(firstPage(kind).distanceTo(m).coerceIn(0, pageCount(kind) - 1)) }
+        if (m.isSupported) scope.launch { pager.scrollToPage((SPAN + base.distanceTo(m)).coerceIn(0, PAGES - 1)) }
     }
     if (selected != Long.MIN_VALUE) {
         DaySheet(vm, s, LocalDate.ofEpochDay(selected), onDismiss = { selected = Long.MIN_VALUE })
@@ -417,6 +429,13 @@ private fun DaySheet(vm: MainViewModel, s: AppSettings, date: LocalDate, onDismi
             SectionCard(title = str.myOccasions, icon = SakinaIcons.Bookmark) {
                 if (mine.isEmpty()) NoteText(str.noMyOccasions)
                 mine.forEach { o -> OccasionRow(vm, o) }
+                // The calendar's undo bar sits behind this sheet, so the sheet offers the undo itself.
+                vm.occasionUndo?.let { u ->
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(u.message, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+                        TextButton(onClick = { vm.undoOccasions() }, modifier = Modifier.testTag("day_undo")) { Text(str.undo) }
+                    }
+                }
                 Spacer(Modifier.height(6.dp))
                 FilledTonalButton(onClick = { onDismiss(); vm.push(Route.OccasionEdit("", date.toEpochDay())) }, modifier = Modifier.testTag("day_add_occasion")) {
                     Icon(SakinaIcons.Plus, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text(str.addOccasion)
