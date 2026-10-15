@@ -1,0 +1,210 @@
+10-15 18:18:46.761  3531  3591 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-15 18:18:46.904  3531  3599 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-15 18:18:47.019  3531  3596 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:18:47.176  3531  3531 I SakinaDemo: applied tab=DISCOVER routes=[] view=null
+10-15 18:18:47.250  3531  3599 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-15 18:18:47.594  3531  3591 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:21:04.357  6819  6842 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-15 18:21:04.419  6819  6843 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-15 18:21:04.475  6819  6841 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:21:04.476  6819  6819 I SakinaDemo: applied tab=null routes=[Widgets] view=null
+10-15 18:21:51.870  7081  7099 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-15 18:21:51.890  7081  7099 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-15 18:21:51.977  7081  7104 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:21:52.017  7081  7104 I SakinaShortcuts: published 4 shortcuts (EN), pinned adhkar=0
+10-15 18:21:52.028  7081  7100 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-15 18:21:52.033  7081  7081 I SakinaDemo: applied tab=null routes=[Widgets] view=null
+10-15 18:21:52.033  7081  7101 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:22:42.471  7411  7438 I SakinaShortcuts: published 4 shortcuts (EN), pinned adhkar=0
+10-15 18:22:42.536  7411  7437 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-15 18:22:42.586  7411  7435 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-15 18:22:42.588  7411  7411 I SakinaDemo: applied tab=null routes=[] view=null
+10-15 18:22:42.598  7411  7435 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-15 18:22:42.612  7411  7436 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:22:42.651  7411  7435 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:22:50.124  7473  7490 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-15 18:22:50.174  7473  7489 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-15 18:22:50.248  7473  7473 I SakinaDemo: applied tab=null routes=[Widgets] view=null
+10-15 18:22:50.252  7473  7497 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:23:02.864  7473  7473 I SakinaWidgets: pin requested next ok=true
+10-15 18:23:11.468  7473  7492 I SakinaWidgets: drawn next #2 lang=APP place=APP
+10-15 18:23:11.471  7473  7492 I SakinaWidgets: update (update:next) widgets=1 pushed=1 next=2026-10-14T13:21:01Z
+10-15 18:23:11.474  7473  7473 I SakinaWidgets: pinned next id=2
+10-15 18:23:11.496  7473  7492 I SakinaWidgets: drawn next #2 lang=APP place=APP
+10-15 18:23:11.498  7473  7492 I SakinaWidgets: update (pinned) widgets=1 pushed=1 next=2026-10-14T13:21:01Z
+10-15 18:23:32.046  7762  7790 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-15 18:23:32.204  7762  7762 I SakinaDemo: applied tab=null routes=[Widgets] view=null
+10-15 18:23:32.235  7762  7786 I SakinaWidgets: drawn next #2 lang=APP place=APP
+10-15 18:23:32.237  7762  7786 I SakinaWidgets: update (settings) widgets=1 pushed=1 next=2026-10-14T13:21:01Z
+10-15 18:23:32.271  7762  7784 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:24:24.233  7762  7762 I SakinaWidgets: pin requested analog ok=true
+10-15 18:24:33.065  7762  7790 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:24:33.066  7762  7790 I SakinaWidgets: update (update:analog) widgets=2 pushed=1 next=2026-10-14T13:21:01Z
+10-15 18:24:33.071  7762  7762 I SakinaWidgets: pinned analog id=3
+10-15 18:24:33.204  7762  7781 I SakinaWidgets: drawn next #2 lang=APP place=APP
+10-15 18:24:33.226  7762  7781 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:24:33.227  7762  7781 I SakinaWidgets: update (pinned) widgets=2 pushed=2 next=2026-10-14T13:21:01Z
+10-15 18:24:41.926  8300  8321 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-15 18:24:42.016  8300  8300 I SakinaDemo: applied tab=null routes=[Widgets] view=null
+10-15 18:24:42.046  8300  8324 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:24:42.072  8300  8322 I SakinaWidgets: drawn next #2 lang=APP place=APP
+10-15 18:24:42.093  8300  8322 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:24:42.095  8300  8322 I SakinaWidgets: update (settings) widgets=2 pushed=2 next=2026-10-14T13:21:01Z
+10-15 18:25:22.534  8300  8300 I SakinaWidgets: pin requested strip ok=true
+10-15 18:25:31.209  8300  8325 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:25:31.311  8300  8325 I SakinaWidgets: update (update:strip) widgets=3 pushed=1 next=2026-10-14T13:21:01Z
+10-15 18:25:31.323  8300  8300 I SakinaWidgets: pinned strip id=4
+10-15 18:25:31.401  8300  8320 I SakinaWidgets: drawn next #2 lang=APP place=APP
+10-15 18:25:31.425  8300  8320 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:25:31.445  8300  8320 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:25:31.446  8300  8320 I SakinaWidgets: update (pinned) widgets=3 pushed=3 next=2026-10-14T13:21:01Z
+10-15 18:25:40.124  8662  8680 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-15 18:25:40.254  8662  8662 I SakinaDemo: applied tab=null routes=[Widgets] view=null
+10-15 18:25:40.308  8662  8681 I SakinaWidgets: drawn next #2 lang=APP place=APP
+10-15 18:25:40.315  8662  8683 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:25:40.322  8662  8681 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:25:40.341  8662  8681 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:25:40.343  8662  8681 I SakinaWidgets: update (settings) widgets=3 pushed=3 next=2026-10-14T13:21:01Z
+10-15 18:26:40.074  8662  8662 I SakinaWidgets: pin requested content ok=true
+10-15 18:26:42.173  8662  8681 I SakinaWidgets: update (tick) widgets=3 pushed=0 next=2026-10-14T13:21:01Z
+10-15 18:26:49.385  8662  8684 I SakinaWidgets: drawn content #5 lang=APP place=APP
+10-15 18:26:49.386  8662  8684 I SakinaWidgets: update (update:content) widgets=4 pushed=1 next=2026-10-14T13:21:01Z
+10-15 18:26:49.526  8662  8662 I SakinaWidgets: pinned content id=5
+10-15 18:26:49.595  8662  9066 I SakinaWidgets: drawn next #2 lang=APP place=APP
+10-15 18:26:49.611  8662  9066 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:26:49.722  8662  9066 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:26:49.744  8662  9066 I SakinaWidgets: drawn content #5 lang=APP place=APP
+10-15 18:26:49.745  8662  9066 I SakinaWidgets: update (pinned) widgets=4 pushed=4 next=2026-10-14T13:21:01Z
+10-15 18:26:57.965  9165  9192 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-15 18:26:58.286  9165  9192 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:26:58.294  9165  9188 I SakinaWidgets: drawn next #2 lang=APP place=APP
+10-15 18:26:58.312  9165  9188 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:26:58.334  9165  9165 I SakinaDemo: applied tab=null routes=[Widgets] view=null
+10-15 18:26:58.335  9165  9188 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:26:58.366  9165  9188 I SakinaWidgets: drawn content #5 lang=APP place=APP
+10-15 18:26:58.367  9165  9188 I SakinaWidgets: update (settings) widgets=4 pushed=4 next=2026-10-14T13:21:01Z
+10-15 18:28:02.844  9165  9165 I SakinaWidgets: pin requested fajr_maghrib ok=true
+10-15 18:28:11.722  9165  9193 I SakinaWidgets: drawn fajr_maghrib #6 lang=APP place=APP
+10-15 18:28:11.724  9165  9193 I SakinaWidgets: update (update:fajr_maghrib) widgets=5 pushed=1 next=2026-10-14T13:21:01Z
+10-15 18:28:11.740  9165  9165 I SakinaWidgets: pinned fajr_maghrib id=6
+10-15 18:28:11.790  9165  9193 I SakinaWidgets: drawn next #2 lang=APP place=APP
+10-15 18:28:11.810  9165  9193 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:28:11.899  9165  9193 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:28:11.967  9165  9193 I SakinaWidgets: drawn content #5 lang=APP place=APP
+10-15 18:28:12.034  9165  9193 I SakinaWidgets: drawn fajr_maghrib #6 lang=APP place=APP
+10-15 18:28:12.036  9165  9193 I SakinaWidgets: update (pinned) widgets=5 pushed=5 next=2026-10-14T13:21:01Z
+10-15 18:29:05.878  9165  9616 I SakinaWidgets: drawn next #2 lang=APP place=APP
+10-15 18:29:05.887  9165  9616 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:29:05.911  9165  9616 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:29:05.953  9165  9616 I SakinaWidgets: drawn content #5 lang=APP place=APP
+10-15 18:29:06.026  9165  9616 I SakinaWidgets: drawn fajr_maghrib #6 lang=APP place=APP
+10-15 18:29:06.027  9165  9616 I SakinaWidgets: update (manual:next) widgets=5 pushed=5 next=2026-10-14T13:21:01Z
+10-15 18:29:21.685  9165  9165 I SakinaDemo: applied on new intent: []
+10-15 18:29:21.685  9165  9165 I SakinaOpen: open times
+10-15 18:29:42.882  9165  9188 I SakinaWidgets: drawn next #2 lang=APP place=APP
+10-15 18:29:42.889  9165  9188 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:29:42.901  9165  9188 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:29:42.966  9165  9188 I SakinaWidgets: drawn content #5 lang=APP place=APP
+10-15 18:29:43.017  9165  9188 I SakinaWidgets: drawn fajr_maghrib #6 lang=APP place=APP
+10-15 18:29:43.018  9165  9188 I SakinaWidgets: update (next:content) widgets=5 pushed=5 next=2026-10-14T13:21:01Z
+10-15 18:29:53.685  9165  9165 I SakinaDemo: applied on new intent: []
+10-15 18:29:53.685  9165  9165 I SakinaOpen: open ayah:3:200
+10-15 18:30:07.270  9165  9165 I SakinaDemo: applied on new intent: []
+10-15 18:30:07.270  9165  9165 I SakinaOpen: open ramadan
+10-15 18:30:13.670 10292 10310 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-15 18:30:13.824 10292 10292 I SakinaDemo: applied tab=null routes=[Widgets] view=null
+10-15 18:30:13.911 10292 10309 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:30:13.918 10292 10310 I SakinaWidgets: drawn next #2 lang=APP place=APP
+10-15 18:30:13.930 10292 10310 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:30:13.947 10292 10310 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:30:13.982 10292 10310 I SakinaWidgets: drawn content #5 lang=APP place=APP
+10-15 18:30:14.016 10292 10310 I SakinaWidgets: drawn fajr_maghrib #6 lang=APP place=APP
+10-15 18:30:14.018 10292 10310 I SakinaWidgets: update (settings) widgets=5 pushed=5 next=2026-10-14T13:21:01Z
+10-15 18:32:00.861 10292 11022 I SakinaWidgets: update (tick) widgets=5 pushed=0 next=2026-10-14T13:21:01Z
+10-15 18:32:11.175 10292 10292 I SakinaWidgets: drawn next #2 lang=EN place=FIXED
+10-15 18:32:11.189 10292 10292 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:32:11.204 10292 10292 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:32:11.219 10292 10292 I SakinaWidgets: drawn content #5 lang=APP place=APP
+10-15 18:32:11.237 10292 10292 I SakinaWidgets: drawn fajr_maghrib #6 lang=APP place=APP
+10-15 18:32:11.238 10292 10292 I SakinaWidgets: update (config) widgets=5 pushed=5 next=2026-10-14T13:21:01Z
+10-15 18:32:11.238 10292 10292 I SakinaWidgets: saved next #2 lang=EN place=FIXED:city:jeddah theme=DARK corner=24 border=1 bg=4279242768
+10-15 18:32:42.889 11278 11303 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-15 18:32:42.967 11278 11307 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:32:42.986 11278 11300 I SakinaWidgets: drawn next #2 lang=EN place=FIXED
+10-15 18:32:43.001 11278 11300 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:32:43.021 11278 11300 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:32:43.057 11278 11297 I SakinaShortcuts: published 4 shortcuts (EN), pinned adhkar=0
+10-15 18:32:43.057 11278 11300 I SakinaWidgets: drawn content #5 lang=APP place=APP
+10-15 18:32:43.063 11278 11278 I SakinaDemo: applied tab=null routes=[] view=null
+10-15 18:32:43.082 11278 11301 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:32:43.095 11278 11300 I SakinaWidgets: drawn fajr_maghrib #6 lang=APP place=APP
+10-15 18:32:43.098 11278 11300 I SakinaWidgets: update (settings) widgets=5 pushed=5 next=2026-10-14T13:21:01Z
+10-15 18:32:43.130 11278 11307 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:32:43.146 11278 11307 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:32:43.168 11278 11307 I SakinaWidgets: drawn content #5 lang=APP place=APP
+10-15 18:32:43.188 11278 11307 I SakinaWidgets: drawn fajr_maghrib #6 lang=APP place=APP
+10-15 18:32:43.189 11278 11307 I SakinaWidgets: update (settings) widgets=5 pushed=4 next=2026-10-14T13:21:01Z
+10-15 18:33:10.480 11429 11447 I SakinaShortcuts: published 4 shortcuts (EN), pinned adhkar=0
+10-15 18:33:10.592 11429 11429 I SakinaDemo: applied tab=null routes=[] view=null
+10-15 18:33:10.639 11429 11448 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:33:10.651 11429 11448 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-15 18:33:10.675 11429 11449 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:33:10.684 11429 11452 I SakinaWidgets: drawn next #2 lang=EN place=FIXED
+10-15 18:33:10.699 11429 11452 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:33:10.712 11429 11452 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:33:10.783 11429 11452 I SakinaWidgets: drawn content #5 lang=APP place=APP
+10-15 18:33:10.868 11429 11452 I SakinaWidgets: drawn fajr_maghrib #6 lang=APP place=APP
+10-15 18:33:10.870 11429 11452 I SakinaWidgets: update (settings) widgets=5 pushed=5 next=2026-10-14T13:21:01Z
+10-15 18:33:10.941 11429 11455 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:33:10.976 11429 11455 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:33:11.002 11429 11455 I SakinaWidgets: drawn content #5 lang=APP place=APP
+10-15 18:33:11.025 11429 11455 I SakinaWidgets: drawn fajr_maghrib #6 lang=APP place=APP
+10-15 18:33:11.026 11429 11455 I SakinaWidgets: update (settings) widgets=5 pushed=4 next=2026-10-14T13:21:01Z
+10-15 18:33:17.157 11483 11504 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-15 18:33:17.331 11483 11505 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:33:17.630 11483 11507 I SakinaWidgets: drawn next #2 lang=EN place=FIXED
+10-15 18:33:17.644 11483 11507 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:33:17.659 11483 11507 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:33:17.680 11483 11507 I SakinaWidgets: drawn content #5 lang=APP place=APP
+10-15 18:33:17.706 11483 11507 I SakinaWidgets: drawn fajr_maghrib #6 lang=APP place=APP
+10-15 18:33:17.707 11483 11507 I SakinaWidgets: update (settings) widgets=5 pushed=5 next=2026-10-15T18:34:01Z
+10-15 18:34:34.385 11483 11503 I SakinaWidgets: drawn next #2 lang=EN place=FIXED
+10-15 18:34:34.451 11483 11503 I SakinaWidgets: drawn fajr_maghrib #6 lang=APP place=APP
+10-15 18:34:34.452 11483 11503 I SakinaWidgets: update (tick) widgets=5 pushed=2 next=2026-10-15T18:35:01Z
+10-15 18:34:43.284 11745 11770 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-15 18:34:43.428 11745 11769 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:34:43.451 11745 11745 I SakinaDemo: applied tab=null routes=[] view=null
+10-15 18:34:43.452 11745 11770 I SakinaWidgets: drawn next #2 lang=EN place=FIXED
+10-15 18:34:43.464 11745 11770 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:34:43.486 11745 11770 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:34:43.521 11745 11770 I SakinaWidgets: drawn content #5 lang=APP place=APP
+10-15 18:34:43.556 11745 11770 I SakinaWidgets: drawn fajr_maghrib #6 lang=APP place=APP
+10-15 18:34:43.557 11745 11770 I SakinaWidgets: update (settings) widgets=5 pushed=5 next=2026-10-14T13:21:01Z
+10-15 18:35:03.226 11745 11745 I SakinaDemo: applied on new intent: []
+10-15 18:35:03.226 11745 11745 I SakinaOpen: open qibla
+10-15 18:35:09.973 11912 11929 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-15 18:35:10.060 11912 11912 I SakinaDemo: applied tab=null routes=[Widgets] view=null
+10-15 18:35:10.097 11912 11931 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:35:10.112 11912 11934 I SakinaWidgets: drawn next #2 lang=EN place=FIXED
+10-15 18:35:10.125 11912 11934 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:35:10.143 11912 11934 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:35:10.167 11912 11934 I SakinaWidgets: drawn content #5 lang=APP place=APP
+10-15 18:35:10.196 11912 11934 I SakinaWidgets: drawn fajr_maghrib #6 lang=APP place=APP
+10-15 18:35:10.197 11912 11934 I SakinaWidgets: update (settings) widgets=5 pushed=5 next=2026-10-14T13:21:01Z
+10-15 18:36:24.933 11912 11912 I SakinaShortcuts: pin requested adhkar_morning ok=true
+10-15 18:36:48.791 11912 11912 I SakinaDemo: applied on new intent: []
+10-15 18:36:48.791 11912 11912 I SakinaOpen: open adhkar:morning
+10-15 18:36:55.638 12567 12587 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=1
+10-15 18:36:55.754 12567 12587 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-15 18:36:55.773 12567 12567 I SakinaDemo: applied tab=null routes=[Widgets] view=null
+10-15 18:36:55.840 12567 12592 I SakinaWidgets: drawn next #2 lang=EN place=FIXED
+10-15 18:36:55.852 12567 12592 I SakinaWidgets: drawn strip #4 lang=APP place=APP
+10-15 18:36:55.872 12567 12592 I SakinaWidgets: drawn analog #3 lang=APP place=APP
+10-15 18:36:55.923 12567 12592 I SakinaWidgets: drawn content #5 lang=APP place=APP
+10-15 18:36:55.965 12567 12592 I SakinaWidgets: drawn fajr_maghrib #6 lang=APP place=APP
+10-15 18:36:55.967 12567 12592 I SakinaWidgets: update (settings) widgets=5 pushed=5 next=2026-10-14T13:21:01Z
+10-15 18:38:41.204 12567 12567 I SakinaTiles: add tile QiblaTileService result=2
+10-15 18:38:42.824 12567 12592 I SakinaWidgets: update (tick) widgets=5 pushed=0 next=2026-10-14T13:21:01Z
+10-15 18:38:50.061 12567 12567 I SakinaTiles: tile clicked: times
+10-15 18:38:50.119 12567 12567 I SakinaDemo: applied on new intent: []
+10-15 18:38:50.119 12567 12567 I SakinaOpen: open times
