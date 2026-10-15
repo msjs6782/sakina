@@ -25,7 +25,7 @@ object WidgetDial {
         val p = Paint(Paint.ANTI_ALIAS_FLAG)
         // Face.
         p.style = Paint.Style.FILL
-        p.color = (0x99 shl 24) or (c.soft and 0xFFFFFF)
+        p.color = (minOf(0x99, c.softAlpha) shl 24) or (c.soft and 0xFFFFFF)
         cv.drawCircle(cx, cx, r, p)
         p.style = Paint.Style.STROKE
         p.strokeWidth = size * 0.012f

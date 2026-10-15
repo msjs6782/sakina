@@ -219,7 +219,7 @@ fun WidgetsScreen(vm: MainViewModel, s: AppSettings) {
                     if (WidgetsDebug.sizes) {
                         for (sz in WidgetRenderer.sampleSizes(kind).filter { it != size }) {
                             val v = remember(kind, s, tick, sz) { previewViews(app, s, kind, WidgetConfig.defaultsFor(kind.id), sz) }
-                            Text("${sz.width.toInt()}×${sz.height.toInt()} dp", style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(top = 8.dp))
+                            Text("\u2066${sz.width.toInt()}×${sz.height.toInt()} dp\u2069", style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(top = 8.dp))
                             RemoteViewPreview(v, sz.width, sz.height, "preview_${kind.id}_${sz.width.toInt()}")
                         }
                     }
@@ -318,7 +318,8 @@ fun WidgetConfigScreen(
     val context = LocalContext.current
     var cfg by remember { mutableStateOf(initial) }
     val sizes = remember { WidgetUpdater.sizesOf(context, id, kind) }
-    val size = sizes.lastOrNull() ?: WidgetRenderer.defaultSize(kind)
+    // The portrait size (the tallest the launcher reported), as the widget usually appears on a phone.
+    val size = sizes.maxByOrNull { it.height } ?: WidgetRenderer.defaultSize(kind)
     val views = remember(cfg, s) { previewViews(app, s, kind, cfg, size) }
     var cities by remember { mutableStateOf<List<City>>(emptyList()) }
     LaunchedEffect(Unit) { cities = app.cities.all() }

@@ -13,7 +13,7 @@ try_tap() {
 # Accepts the launcher's "add widget/shortcut" dialog (Launcher3 wording differs across versions).
 pin_accept() {
   sleep 3
-  try_tap icontains "add to home" || try_tap icontains "add automatically" || try_tap icontains "add widget" || try_tap icontains "add"
+  try_tap button "add automatically" || try_tap button "add to home" || try_tap button "add widget" || try_tap button "add"
   sleep 4
   # Some launchers open the widget's own settings after placing it; keep the defaults.
   if ui_has id wcfg_save; then tap id wcfg_save; sleep 3; fi
@@ -21,9 +21,14 @@ pin_accept() {
 # Home screen, then the next pages, until a node is on screen.
 home_find() {
   adb shell input keyevent 3; sleep 3
-  for _ in 1 2 3 4; do
-    ui_has "$1" "$2" && return 0
-    adb shell input swipe 950 1200 120 1200 350; sleep 2
+  ui_has "$1" "$2" && return 0
+  # Pages to one side, then to the other (the launcher may open on any page). Swipes run below the widgets.
+  for dir in left right; do
+    for _ in 1 2 3; do
+      if [ "$dir" = left ]; then adb shell input swipe 980 1450 100 1450 300; else adb shell input swipe 100 1450 980 1450 300; fi
+      sleep 2
+      ui_has "$1" "$2" && return 0
+    done
   done
   return 1
 }
@@ -38,6 +43,8 @@ pin_kind() {  # pin_kind <kind> <shot>
 
 phase8() {
 save_log
+# Widgets are redrawn by alarms that wait while the screen is off: keep it on for these checks.
+adb shell svc power stayon true >/dev/null 2>&1
 WB=(--ez demo_onboarded true --es demo_cities riyadh,jeddah,makkah --es demo_active riyadh --es demo_now "$T_AFTERNOON" "${FREEZE[@]}")
 W=(--ez demo_reset true "${WB[@]}")
 
@@ -74,8 +81,8 @@ start "${W[@]}"; sleep 6
 pin_kind next 250_pin_dialog_next
 if home_find id w_name; then
   cap 251_home_next
-  N=$(ui_text w_name); R=$(ui_text w_remain)
-  [ "$N" = "المغرب" ] && echo "$R" | grep -q "حُدّث" && check widget_home_next PASS "$N · $R" || check widget_home_next FAIL "name='$N' remain='$R'"
+  N=$(ui_text w_name); R=$(ui_text w_remain); ST=$(ui_text w_stamp)
+  [ "$N" = "المغرب" ] && echo "$R $ST" | grep -q "حُدّث" && check widget_home_next PASS "$N · $R $ST" || check widget_home_next FAIL "name='$N' remain='$R' stamp='$ST'"
 else
   check widget_home_next FAIL "not found on the home screen"; cap 251_home_next_missing
 fi
@@ -88,8 +95,8 @@ else
   pin_kind digital 254_pin_dialog_digital
 fi
 adb shell input keyevent 3; sleep 3; cap 256_home_page1
-adb shell input swipe 950 1200 120 1200 350; sleep 2; cap 257_home_page2
-adb shell input swipe 950 1200 120 1200 350; sleep 2; cap 258_home_page3
+adb shell input swipe 980 1450 100 1450 300; sleep 2; cap 257_home_page_left
+adb shell input keyevent 3; sleep 2; adb shell input swipe 100 1450 980 1450 300; sleep 2; cap 258_home_page_right
 
 # The analog clock: the place's own time on Android 12+, the device clock (labelled) before it.
 OFFS=$(adb shell date +%z | tr -d '\r')
@@ -140,9 +147,10 @@ start "${WB[@]}" --es demo_route widgets; sleep 6
 ui_has id placed_next && ui_has id placed_analog && check widget_list PASS "placed widgets listed" || check widget_list FAIL "list incomplete"
 cap 263_my_widgets
 tap id placed_settings_next && sleep 4 && cap 264_widget_config
-tap id wcfg_lang_en
+# Sections from the top: place, language, style and theme, text size, colours, corners and border.
 scroll_to exact "مدينة خاصة بهذه الويدجت" 4 && tap exact "مدينة خاصة بهذه الويدجت" && sleep 1
 scroll_to exact "جدة" 4 && tap exact "جدة" && sleep 1
+scroll_to id wcfg_lang_en 6 && tap id wcfg_lang_en
 scroll_to id wcfg_theme_dark 8 && tap id wcfg_theme_dark
 scroll_to id wcfg_bg_101010 8 && tap id wcfg_bg_101010
 scroll_to id wcfg_corner_24 8 && tap id wcfg_corner_24
@@ -223,7 +231,7 @@ if [ "$SDK" -ge 33 ]; then
   save_log
   start "${WB[@]}" --es demo_route widgets; sleep 6
   scroll_to id tile_add_qibla 22 && bring_up tile_add_qibla && tap id tile_add_qibla && sleep 3 && cap 275_tile_request
-  try_tap exact "Add tile" || try_tap exact "ADD TILE" || try_tap icontains "add"
+  try_tap buttonis "add tile" || try_tap exact "Add tile" || true
   sleep 2
   wait_wlog "add tile QiblaTileService result=" 6 && check tile_request PASS "$(wlog | grep -o 'add tile .*' | tail -1)" || check tile_request FAIL "no result"
   adb shell cmd statusbar add-tile "$PKG/com.sakina.app.widgets.TimesTileService" >/dev/null 2>&1

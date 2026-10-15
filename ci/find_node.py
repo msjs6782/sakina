@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Prints the centre "x y" of the first UI node whose text, content-desc or resource-id matches.
-Usage: find_node.py <ui.xml> <text> [exact|contains|icontains|id|idtext]
+Usage: find_node.py <ui.xml> <text> [exact|contains|icontains|button|buttonis|id|idtext]
+button: case-insensitive contains, on clickable nodes only (dialog buttons rather than titles); buttonis: whole text.
 id matches a resource id exactly (with or without the package prefix) first, then by suffix.
 idtext prints the text (or content-desc) of the node with that test tag instead of its centre."""
 import re, sys
@@ -22,6 +23,10 @@ def hit(n, strict):
         return needle in t or needle in d
     if mode == "icontains":
         return needle.lower() in t.lower() or needle.lower() in d.lower()
+    if mode == "buttonis":
+        return n.get("clickable") == "true" and needle.lower() in (t.lower().strip(), d.lower().strip())
+    if mode == "button":
+        return n.get("clickable") == "true" and (needle.lower() in t.lower() or needle.lower() in d.lower())
     if strict:
         return rid == needle or rid.endswith(":id/" + needle)
     return rid.endswith(needle)

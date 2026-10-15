@@ -19,10 +19,11 @@ data class WidgetColors(
     val text: Int,
     val muted: Int,
     val accent: Int,
-    /** Highlight behind the next prayer in tables. */
+    /** Highlight behind the next prayer in tables (opaque; drawn at [softAlpha]). */
     val soft: Int,
     val border: Int,
     val dark: Boolean,
+    val softAlpha: Int = 255,
 ) {
     /** Whether hands and marks drawn over the background should be light. */
     val lightInk: Boolean get() = Contrast.luminance(text) > 0.4
@@ -82,12 +83,15 @@ object WidgetPalette {
         var text = b.text
         var accent = b.accent
         var soft = b.soft
+        var softAlpha = 255
         if (glass) {
             // A neutral scrim in the theme's tone, with text of the opposite tone.
             bg = if (dark) 0xFF000000.toInt() else 0xFFFFFFFF.toInt()
             text = if (dark) 0xFFFFFFFF.toInt() else 0xFF15140F.toInt()
             accent = if (dark) lighten(b.accent) else b.accent
-            soft = withAlpha(if (dark) 0xFFFFFFFF.toInt() else 0xFF000000.toInt(), 0.16f)
+            // A colour filter cannot make the highlight see-through, so it is drawn opaque at a low image alpha.
+            soft = if (dark) 0xFFFFFFFF.toInt() else 0xFF000000.toInt()
+            softAlpha = if (dark) 56 else 30
         }
         cfg.backgroundColor?.let { bg = it.argb() or (0xFF shl 24) }
         cfg.textColor?.let { text = it.argb() or (0xFF shl 24) }
@@ -95,8 +99,8 @@ object WidgetPalette {
         val muted = if (cfg.textColor != null || glass) withAlpha(text, 0.78f) else b.muted
         var opacity = cfg.opacity.coerceIn(0, 100)
         if (glass && cfg.contrastGuard) opacity = maxOf(opacity, Contrast.minScrimPercent(text, bg, GLASS_TARGET))
-        if (cfg.backgroundColor != null && !glass) soft = withAlpha(accent, 0.22f)
-        return WidgetColors(bg, opacity * 255 / 100, text, muted, accent, soft, accent, dark)
+        if (cfg.backgroundColor != null && !glass) { soft = accent; softAlpha = 60 }
+        return WidgetColors(bg, opacity * 255 / 100, text, muted, accent, soft, accent, dark, softAlpha)
     }
 
     /** The minimum glass opacity the contrast guard keeps for these colours, in percent. */

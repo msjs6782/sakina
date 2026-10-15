@@ -230,7 +230,9 @@ object WidgetUpdater {
                     pushed++
                     Log.i(TAG, "drawn ${kind.id} #$id lang=${cfg.lang} place=${cfg.placeMode}")
                 }
-                next = if (next == null || r.nextChange.isBefore(next)) r.nextChange else next
+                // At least every 15 minutes, so a change of the system's dark mode or wallpaper colours shows soon.
+                val change = minOf(r.nextChange, now.plus(Duration.ofMinutes(15)))
+                next = if (next == null || change.isBefore(next)) change else next
             }
         }
         lastKeys.keys.retainAll(alive)

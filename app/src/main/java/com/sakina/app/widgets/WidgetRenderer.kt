@@ -159,6 +159,8 @@ object WidgetRenderer {
 
         /** px per sp at the user's text size and the system font scale. */
         val unit = density * ctx.resources.configuration.fontScale * cfg.textScale.coerceIn(WidgetConfig.SCALES) / 100f
+        /** A roomy widget may grow its text up to this much beyond the chosen size. */
+        val maxUnit = unit * 1.35f
         val pad = (minOf(wDp, hDp) * 0.085f).coerceIn(6f, 14f) * density
         val boxW = wDp * density - 2 * pad
         val boxH = hDp * density - 2 * pad
@@ -280,7 +282,7 @@ object WidgetRenderer {
                 val keep = lines.filter { it.drop == 0 || it.drop < cut }
                 // The refresh button (22 dp) can be taller than the small place text beside it.
                 val extra = if (keep.any { R.id.w_refresh in it.with }) 8f * density else 0f
-                val sc = Fit.scale(keep.map { it.fit() }, w, h - extra, unit, density * 0.4f, measure, lh, gap)
+                val sc = Fit.scale(keep.map { it.fit() }, w, h - extra, maxUnit, density * 0.4f, measure, lh, gap)
                 if (sc != null) { chosen = keep; scale = sc }
                 if (sc != null && sc >= readable) break
             }
@@ -382,7 +384,7 @@ object WidgetRenderer {
                 Line(intArrayOf(R.id.w_stamp), listOf(stamp), 11f, regular),
             )
             val readable = density * 0.72f * minOf(1f, cfg.textScale / 100f)
-            val probe = Fit.scale(roomy.filter { it.drop == 0 }.map { it.fit() }, boxW, boxH, unit, density * 0.4f, Typo.measure(regular), Typo.lineHeight(regular), 2f)
+            val probe = Fit.scale(roomy.filter { it.drop == 0 }.map { it.fit() }, boxW, boxH, maxUnit, density * 0.4f, Typo.measure(regular), Typo.lineHeight(regular), 2f)
             if (probe != null && probe >= readable) {
                 solve(roomy)
             } else {
@@ -407,6 +409,7 @@ object WidgetRenderer {
                 color(CELL_NAMES[i], if (wt.isNext) colors.accent else colors.muted)
                 color(CELL_TIMES[i], if (wt.isNext) colors.accent else colors.text)
                 rv.setInt(CELL_HL[i], "setColorFilter", colors.soft)
+                rv.setInt(CELL_HL[i], "setImageAlpha", colors.softAlpha)
                 visible(CELL_HL[i], wt.isNext, gone = false)
             }
             return names to times
@@ -462,7 +465,7 @@ object WidgetRenderer {
             val full = fmt.time(at, zone)
             val short = fmt.time(at, zone, suffix = false)
             val readable = density * 0.72f * minOf(1f, cfg.textScale / 100f)
-            val tryFull = Fit.scale(listOf(FitLine(name, 12f, measure = Typo.measure(medium), lineHeight = Typo.lineHeight(medium)), FitLine(full, 20f, measure = Typo.measure(semibold), lineHeight = Typo.lineHeight(semibold))), boxW, boxH, unit, density * 0.4f, Typo.measure(regular), Typo.lineHeight(regular), 1f)
+            val tryFull = Fit.scale(listOf(FitLine(name, 12f, measure = Typo.measure(medium), lineHeight = Typo.lineHeight(medium)), FitLine(full, 20f, measure = Typo.measure(semibold), lineHeight = Typo.lineHeight(semibold))), boxW, boxH, maxUnit, density * 0.4f, Typo.measure(regular), Typo.lineHeight(regular), 1f)
             val t = if (tryFull != null && tryFull >= readable) full else short
             text(R.id.w_time, t); color(R.id.w_time, colors.text)
             solve(listOf(Line(intArrayOf(R.id.w_name), listOf(name), 12f, medium), Line(intArrayOf(R.id.w_time), listOf(t), 20f, semibold)), gap = 1f)
@@ -546,7 +549,7 @@ object WidgetRenderer {
             val textH = boxH - headerH - sourceH
             val ayahFace = Typo.face(ctx, R.font.amiri_quran)
             val dhikrFace = Typo.face(ctx, R.font.amiri_regular)
-            val maxPx = 22f * unit
+            val maxPx = 24f * unit
             val minPx = 12.5f * density
             fun sizeFor(item: ContentItem): Float? =
                 Fit.block(item.text, boxW, textH, maxPx, minPx, Typo.block(if (item.isAyah) ayahFace else dhikrFace, 1.1f))
