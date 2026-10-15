@@ -386,7 +386,7 @@ fun WidgetConfigScreen(
             SectionCard(title = str.wTextSize) {
                 Text(str.digits("${cfg.textScale}%"), style = MaterialTheme.typography.titleMedium, modifier = Modifier.testTag("wcfg_scale_value"))
                 Slider(
-                    value = cfg.textScale.toFloat(), onValueChange = { cfg = cfg.copy(textScale = (it / 10).toInt() * 10) },
+                    value = cfg.textScale.toFloat(), onValueChange = { cfg = cfg.copy(textScale = kotlin.math.round(it / 10f).toInt() * 10) },
                     valueRange = 80f..140f, steps = 5, modifier = Modifier.testTag("wcfg_scale"),
                 )
                 NoteText(str.wTextSizeNote)

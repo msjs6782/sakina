@@ -240,10 +240,10 @@ object WidgetRenderer {
             }
         }
 
-        fun message(text: String, target: String?) {
+        fun message(msg: String, target: String?) {
             visible(R.id.w_content, false)
             visible(R.id.w_msg, true)
-            text(R.id.w_msg, text)
+            text(R.id.w_msg, msg)
             color(R.id.w_msg, colors.text)
             val px = (13f * unit).coerceAtMost(boxW / 12f).coerceAtLeast(9f * density)
             size(R.id.w_msg, px)

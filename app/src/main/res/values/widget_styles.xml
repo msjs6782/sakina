@@ -2,7 +2,7 @@
 <resources>
     <!-- Widget text. Sizes and colours are set at runtime from each widget's settings and measured size;
          these defaults are what the launcher's preview shows. -->
-    <style name="W.Text">
+    <style name="W.Text" parent="">
         <item name="android:fontFamily">@font/plex_regular</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:maxLines">1</item>
@@ -29,7 +29,7 @@
         <item name="android:gravity">center</item>
         <item name="android:textAlignment">center</item>
     </style>
-    <style name="W.Cell">
+    <style name="W.Cell" parent="">
         <item name="android:fontFamily">@font/plex_regular</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:maxLines">1</item>

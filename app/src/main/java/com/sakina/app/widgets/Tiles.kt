@@ -45,7 +45,7 @@ abstract class SakinaTile(private val target: String) : TileService() {
 }
 
 class QiblaTileService : SakinaTile("qibla") {
-    override fun describe(app: SakinaApp, s: com.sakina.app.data.AppSettings, str: Strings) = str.toolsQibla to null
+    override fun describe(app: SakinaApp, s: com.sakina.app.data.AppSettings, str: Strings): Pair<String, String?> = str.toolsQibla to null
 }
 
 /** Shows the next prayer as its subtitle when the panel opens (a snapshot, like the widgets). */
