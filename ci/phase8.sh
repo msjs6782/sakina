@@ -32,11 +32,25 @@ home_find() {
   done
   return 1
 }
+# Scrolls until a node's centre sits in the middle band of the screen (off-screen nodes can be in the dump).
+into_view() {
+  local xy y
+  for _ in 1 2 3 4 5 6 7 8; do
+    adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1
+    adb shell cat /sdcard/ui.xml > "$OUT/.ui.xml" 2>/dev/null
+    xy=$(python3 "$HERE/find_node.py" "$OUT/.ui.xml" "$1" id) || { adb shell input swipe 540 1700 540 1000 500; sleep 1; continue; }
+    y=${xy#* }
+    if [ "$y" -gt 1750 ]; then adb shell input swipe 540 1700 540 1100 500; sleep 1
+    elif [ "$y" -lt 350 ]; then adb shell input swipe 540 1000 540 1600 500; sleep 1
+    else return 0; fi
+  done
+  return 1
+}
 widgets_json() { adb shell run-as "$PKG" cat files/datastore/widgets.json 2>/dev/null; }
 scroll_top() { for _ in 1 2 3 4 5 6; do adb shell input swipe 540 700 540 1800 250; done; sleep 1; }
 pin_kind() {  # pin_kind <kind> <shot>
   start "${WB[@]}" --es demo_route widgets; sleep 6
-  scroll_to id "pin_$1" 14 && bring_up "pin_$1" && tap id "pin_$1" && cap "$2"
+  scroll_to id "pin_$1" 14; into_view "pin_$1"; tap id "pin_$1" && cap "$2"
   pin_accept
   wait_wlog "pinned $1 " 8 && check "widget_pinned_$1" PASS "placed by the launcher" || check "widget_pinned_$1" FAIL "no pin callback ($(wlog | grep -E 'pin requested' | tail -1))"
 }
@@ -55,7 +69,7 @@ scroll_to id w_remain 10
 N=$(ui_text w_name); R=$(ui_text w_remain)
 [ "$N" = "المغرب" ] && echo "$R" | grep -q "حُدّث" && check widget_preview_next PASS "$N · $R" || check widget_preview_next FAIL "name='$N' remain='$R'"
 for k in next countdown day glass mini strip digital analog content fajr_maghrib; do
-  scroll_to id "gallery_$k" 14 && bring_up "gallery_$k" && cap "242_gallery_$k"
+  scroll_to id "gallery_$k" 14; into_view "gallery_$k"; cap "242_gallery_$k"
   case $k in
     countdown) B=$(ui_text w_big); [ -n "$B" ] && check widget_preview_countdown PASS "$B" || check widget_preview_countdown FAIL "no big remaining" ;;
     strip) S=$(ui_text w_n0); [ "$S" = "الفجر" ] && check widget_preview_strip PASS "$S" || check widget_preview_strip FAIL "'$S'" ;;
@@ -213,7 +227,7 @@ if [ "$SUITE" = "full" ]; then
   fi
 fi
 start "${WB[@]}" --es demo_route widgets; sleep 6
-scroll_to id sc_target_morning 20 && bring_up sc_target_morning && tap id sc_target_morning
+scroll_to id sc_target_morning 20; into_view sc_target_morning; tap id sc_target_morning
 tap id pin_adhkar && cap 272_pin_shortcut_dialog
 pin_accept
 adb shell dumpsys shortcut 2>/dev/null | tr -d '\r' | grep -q "id=adhkar_morning," && check shortcut_pinned PASS "adhkar shortcut pinned" || check shortcut_pinned FAIL "not in the shortcut list"
@@ -230,7 +244,7 @@ fi
 if [ "$SDK" -ge 33 ]; then
   save_log
   start "${WB[@]}" --es demo_route widgets; sleep 6
-  scroll_to id tile_add_qibla 22 && bring_up tile_add_qibla && tap id tile_add_qibla && sleep 3 && cap 275_tile_request
+  scroll_to id tile_add_qibla 22; into_view tile_add_qibla; tap id tile_add_qibla && sleep 3 && cap 275_tile_request
   try_tap buttonis "add tile" || try_tap exact "Add tile" || true
   sleep 2
   wait_wlog "add tile QiblaTileService result=" 6 && check tile_request PASS "$(wlog | grep -o 'add tile .*' | tail -1)" || check tile_request FAIL "no result"

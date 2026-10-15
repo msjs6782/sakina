@@ -97,7 +97,7 @@ jobs:
   ui-check:
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 80
+    timeout-minutes: 110
     strategy:
       fail-fast: false
       matrix:
