@@ -272,7 +272,7 @@ private fun DayCell(day: GridDay, kind: CalendarKind, s: AppSettings, today: Loc
             Text(secondary?.let { fmt.num(it) } ?: "", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Row(horizontalArrangement = Arrangement.spacedBy(3.dp), modifier = Modifier.height(6.dp)) {
                 if (m.occasions) Dot(MaterialTheme.colorScheme.primary)
-                if (m.fasting) Dot(MaterialTheme.colorScheme.tertiary)
+                if (m.fasting) Dot(MaterialTheme.colorScheme.tertiary, hollow = true)
                 if (m.personal) Dot(MaterialTheme.colorScheme.secondary)
             }
         }
@@ -280,18 +280,20 @@ private fun DayCell(day: GridDay, kind: CalendarKind, s: AppSettings, today: Loc
 }
 
 @Composable
-private fun Dot(color: Color) = Box(Modifier.size(5.dp).clip(CircleShape).background(color))
+private fun Dot(color: Color, hollow: Boolean = false) =
+    // A ring for fasting days, so the markers differ in shape as well as colour.
+    Box(Modifier.size(if (hollow) 6.dp else 5.dp).clip(CircleShape).then(if (hollow) Modifier.border(1.5.dp, color, CircleShape) else Modifier.background(color)))
 
 @Composable
 private fun Legend() {
     val str = LocalStrings.current
     FlowRow(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.padding(horizontal = 6.dp)) {
         listOf(
-            MaterialTheme.colorScheme.primary to str.legendOccasion,
-            MaterialTheme.colorScheme.tertiary to str.legendFasting,
-            MaterialTheme.colorScheme.secondary to str.legendPersonal,
-        ).forEach { (c, t) ->
-            Row(verticalAlignment = Alignment.CenterVertically) { Dot(c); Spacer(Modifier.width(6.dp)); Text(t, style = MaterialTheme.typography.labelMedium) }
+            Triple(MaterialTheme.colorScheme.primary, str.legendOccasion, false),
+            Triple(MaterialTheme.colorScheme.tertiary, str.legendFasting, true),
+            Triple(MaterialTheme.colorScheme.secondary, str.legendPersonal, false),
+        ).forEach { (c, t, hollow) ->
+            Row(verticalAlignment = Alignment.CenterVertically) { Dot(c, hollow); Spacer(Modifier.width(6.dp)); Text(t, style = MaterialTheme.typography.labelMedium) }
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(12.dp).clip(RoundedCornerShape(3.dp)).background(MaterialTheme.colorScheme.errorContainer))

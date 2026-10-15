@@ -779,11 +779,12 @@ tap id occ_title && adb shell input text "Family%svisit" && hide_ime
 scroll_to id occ_repeat_yearly_hijri && tap id occ_repeat_yearly_hijri
 scroll_to contains "تنبيه في يومها" && tap contains "تنبيه في يومها"
 cap 205_occasion_edit
-scroll_to id occ_save && tap id occ_save && sleep 2 && cap 206_occasion_saved
+scroll_to id occ_save && bring_up occ_save && tap id occ_save && sleep 2 && cap 206_occasion_saved
 J=$(settings_json)
 echo "$J" | grep -q '"title":"Family visit"' && echo "$J" | grep -q '"repeat":"YEARLY_HIJRI"' && echo "$J" | grep -q '"notify":true' \
   && check occ_saved PASS "saved with yearly Hijri repeat and alert" || check occ_saved FAIL "$(echo "$J" | grep -o '"occasions":\[[^]]*' | head -c 300)"
-ui_has id cal_day_2026-10-22 && check occ_back PASS "back on the calendar" || check occ_back FAIL "not on the calendar"
+# Back on the calendar, which opened on this day: its details now list the new occasion.
+scroll_to exact "Family visit" && check occ_back PASS "day details list the new occasion" || check occ_back FAIL "not listed"
 start "${C[@]}" --es demo_occasions 2026-10-22:Family_visit --es demo_route calendar_day:2026-10-22; sleep 7
 scroll_to id occasion_delete_demo0 && tap id occasion_delete_demo0 && sleep 1 && cap 207_occasion_deleted
 settings_json | grep -q '"occasions":\[\]' && check occ_delete PASS "deleted" || check occ_delete FAIL "still stored"
@@ -874,7 +875,7 @@ start "${C[@]}" --es demo_route friday; sleep 6
 tap id friday_salawat && sleep 3 && ui_has id dhikr_source && check friday_salawat PASS "blessing opened" || check friday_salawat FAIL "not opened"
 shot 228_home_friday 8 --es demo_now "2026-10-16T06:30:00Z" "${FREEZE[@]}" --ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh
 scroll_to id home_friday && check friday_home PASS "card on Friday morning" || check friday_home FAIL "no card"
-cap 229_home_friday_card
+bring_up home_friday; cap 229_home_friday_card
 start "${C[@]}"; sleep 7
 H=0; for _ in 1 2 3; do ui_has id home_friday && H=1; adb shell input swipe 540 1700 540 900 400; sleep 1; done
 [ "$H" -eq 0 ] && check friday_home_hidden PASS "hidden on Wednesday" || check friday_home_hidden FAIL "card on Wednesday"
