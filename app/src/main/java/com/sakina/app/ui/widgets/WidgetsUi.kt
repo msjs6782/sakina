@@ -203,7 +203,7 @@ fun WidgetsScreen(vm: MainViewModel, s: AppSettings) {
                         // The widget as it is now: its own settings at the size the launcher gave it.
                         val psize = remember(w.id, tick) { WidgetUpdater.sizesOf(context, w.id, w.kind).maxByOrNull { it.height } ?: WidgetRenderer.defaultSize(w.kind) }
                         val pviews = remember(w, s, tick) { previewViews(app, s, w.kind, w.config, psize) }
-                        RemoteViewPreview(pviews, psize.width, psize.height, "placed_preview_${w.kind.id}", Modifier.padding(vertical = 6.dp), maxHeightDp = 220f)
+                        RemoteViewPreview(pviews, psize.width, psize.height, "placed_preview_${w.kind.id}", Modifier.padding(vertical = 6.dp), maxHeightDp = 140f)
                         val sub = if (w.kind.needsPlace) place else when (w.config.contentMode) {
                             ContentMode.MIXED -> str.wContentMixed
                             ContentMode.ADHKAR -> str.wContentAdhkar

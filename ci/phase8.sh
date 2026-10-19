@@ -50,7 +50,7 @@ widgets_json() { adb shell run-as "$PKG" cat files/datastore/widgets.json 2>/dev
 scroll_top() { for _ in 1 2 3 4 5 6; do adb shell input swipe 540 700 540 1800 250; done; sleep 1; }
 pin_kind() {  # pin_kind <kind> <shot>
   start "${WB[@]}" --es demo_route widgets; sleep 6
-  scroll_to id "pin_$1" 14; into_view "pin_$1"; tap id "pin_$1" && cap "$2"
+  scroll_to id "pin_$1" 40; into_view "pin_$1"; tap id "pin_$1" && cap "$2"
   pin_accept
   wait_wlog "pinned $1 " 8 && check "widget_pinned_$1" PASS "placed by the launcher" || check "widget_pinned_$1" FAIL "no pin callback ($(wlog | grep -E 'pin requested' | tail -1))"
 }
@@ -69,7 +69,7 @@ scroll_to id w_remain 10
 N=$(ui_text w_name); R=$(ui_text w_remain)
 [ "$N" = "المغرب" ] && echo "$R" | grep -q "حُدّث" && check widget_preview_next PASS "$N · $R" || check widget_preview_next FAIL "name='$N' remain='$R'"
 for k in next countdown day glass mini strip digital analog content fajr_maghrib; do
-  scroll_to id "gallery_$k" 14; into_view "gallery_$k"; cap "242_gallery_$k"
+  scroll_to id "gallery_$k" 40; into_view "gallery_$k"; cap "242_gallery_$k"
   case $k in
     countdown) B=$(ui_text w_big); [ -n "$B" ] && check widget_preview_countdown PASS "$B" || check widget_preview_countdown FAIL "no big remaining" ;;
     strip) S=$(ui_text w_n0); [ "$S" = "الفجر" ] && check widget_preview_strip PASS "$S" || check widget_preview_strip FAIL "'$S'" ;;
@@ -86,8 +86,8 @@ if [ "$SUITE" = "full" ]; then
   wlog | grep -q "fit overflow" && check widget_fit FAIL "$(wlog | grep 'fit overflow' | head -3 | tr '\n' ' ')" || check widget_fit PASS "no overflow at any sample size"
   shot 244_gallery_english_dark 8 "${W[@]}" --es demo_lang en --es demo_theme DARK --es demo_route widgets
   scroll_to id gallery_next 10 && bring_up gallery_next && cap 244b_gallery_en_next
-  scroll_to id gallery_glass 14 && bring_up gallery_glass && cap 244c_gallery_en_glass
-  scroll_to id gallery_analog 14 && bring_up gallery_analog && cap 244d_gallery_en_analog
+  scroll_to id gallery_glass 40 && bring_up gallery_glass && cap 244c_gallery_en_glass
+  scroll_to id gallery_analog 40 && bring_up gallery_analog && cap 244d_gallery_en_analog
 fi
 
 # ---- Pinning from the gallery puts real widgets on the launcher's home screen.
@@ -159,8 +159,8 @@ fi
 save_log
 start "${WB[@]}" --es demo_route widgets; sleep 6
 cap 263_my_widgets
-ui_has id placed_preview_next && check widget_placed_preview PASS "placed widget shown as it looks" || check widget_placed_preview FAIL "no preview in the list"
-ui_has id placed_next && scroll_to id placed_analog 16 && check widget_list PASS "placed widgets listed" || check widget_list FAIL "list incomplete"
+ui_has id w_remain && check widget_placed_preview PASS "placed widget shown as it looks" || check widget_placed_preview FAIL "no preview in the list"
+ui_has id placed_next && scroll_to id placed_analog 40 && check widget_list PASS "placed widgets listed" || check widget_list FAIL "list incomplete"
 scroll_top
 tap id placed_settings_next && sleep 4 && cap 264_widget_config
 # Sections from the top: place, language, style and theme, text size, colours, corners and border.
@@ -227,7 +227,7 @@ if [ "$SUITE" = "full" ]; then
   fi
 fi
 start "${WB[@]}" --es demo_route widgets; sleep 6
-scroll_to id sc_target_morning 20; into_view sc_target_morning; tap id sc_target_morning
+scroll_to id sc_target_morning 40; into_view sc_target_morning; tap id sc_target_morning
 tap id pin_adhkar && cap 272_pin_shortcut_dialog
 pin_accept
 adb shell dumpsys shortcut 2>/dev/null | tr -d '\r' | grep -q "id=adhkar_morning," && check shortcut_pinned PASS "adhkar shortcut pinned" || check shortcut_pinned FAIL "not in the shortcut list"

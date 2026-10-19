@@ -32,7 +32,7 @@ shot 409_more_english 7 "${R[@]}" --es demo_tab more --es demo_lang en
 # The day-name widget: previews in the gallery, then on the home screen with its day stretched by kashida.
 WB=(--ez demo_onboarded true --es demo_cities riyadh,jeddah --es demo_active riyadh --es demo_now "$T_AFTERNOON" "${FREEZE[@]}")
 start "${R[@]}" --es demo_route widgets; sleep 7
-scroll_to id gallery_dayname 16; into_view gallery_dayname; cap 410_gallery_dayname
+scroll_to id gallery_dayname 40; into_view gallery_dayname; cap 410_gallery_dayname
 D=$(ui_text w_dayname)
 echo "$D" | grep -q "ـ" && check dayname_preview PASS "$D" || check dayname_preview FAIL "'$D'"
 pin_kind dayname 411_pin_dayname
@@ -44,7 +44,7 @@ else
 fi
 # Its settings: Kufi, highlight by colour only, sunrise shown, no update time.
 start "${WB[@]}" --es demo_route widgets; sleep 6
-scroll_to id placed_settings_dayname 16; into_view placed_settings_dayname; tap id placed_settings_dayname && sleep 4
+scroll_to id placed_settings_dayname 40; into_view placed_settings_dayname; tap id placed_settings_dayname && sleep 4
 cap 413_dayname_config
 into_view wcfg_elements; cap 414_config_elements
 into_view wcfg_show_sunrise; tap id wcfg_show_sunrise

@@ -29,7 +29,7 @@ settings_json | grep -q '"heroArt":false' && check hero_art_switch PASS "turned 
 # Widgets: the gallery on the painted sky, then a real widget switched to it.
 shot 320_gallery_sky 8 --ez demo_reset true "${VB[@]}" --es demo_now 2026-10-14T14:45:00Z --es demo_route widgets --ez demo_gallery_sky true
 for k in next countdown day mini strip digital analog content fajr_maghrib; do
-  scroll_to id "gallery_$k" 14; into_view "gallery_$k"; cap "321_gallery_sky_$k"
+  scroll_to id "gallery_$k" 40; into_view "gallery_$k"; cap "321_gallery_sky_$k"
 done
 wlog | grep -q "preview failed\|render failed" && check widget_sky_previews FAIL "$(wlog | grep failed | head -2)" || check widget_sky_previews PASS "previews rendered on the sky"
 WB=(--ez demo_onboarded true --es demo_cities riyadh,jeddah --es demo_active riyadh --es demo_now 2026-10-14T14:45:00Z "${FREEZE[@]}")
@@ -38,7 +38,7 @@ pin_kind next 330_pin_next
 pin_kind strip 331_pin_strip
 for k in next strip; do
   start "${WB[@]}" --es demo_route widgets; sleep 6
-  scroll_to id "placed_settings_$k" 16; into_view "placed_settings_$k"; tap id "placed_settings_$k" && sleep 4
+  scroll_to id "placed_settings_$k" 40; into_view "placed_settings_$k"; tap id "placed_settings_$k" && sleep 4
   into_view wcfg_background_sky; tap id wcfg_background_sky && sleep 1 && cap "332_config_sky_$k"
   scroll_top; tap id wcfg_save && sleep 4
 done
