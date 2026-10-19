@@ -21,7 +21,7 @@ enum class ThemeMode { SYSTEM, LIGHT, DARK, SUN }
 enum class HomeLayout { BALANCED, FOCUS, DASHBOARD }
 
 /** Home cards. Only cards whose content exists in this version are shown in the editor. */
-enum class HomeCard { VERSE, DATE, SUN, FRIDAY }
+enum class HomeCard { VERSE, DATE, SUN, FRIDAY, QUICK }
 
 enum class LocationSource { CITY, MANUAL, GPS }
 
@@ -123,11 +123,14 @@ data class AppSettings(
     val orderedCards: List<CardPref>
         get() {
             val known = homeCards.filter { p -> HomeCard.entries.contains(p.card) }.distinctBy { it.card }
-            return known + HomeCard.entries.filter { c -> known.none { it.card == c } }.map { CardPref(it) }
+            val missing = HomeCard.entries.filter { c -> known.none { it.card == c } }.map { CardPref(it) }
+            // Quick access goes first when it is new to a saved order.
+            val (quick, rest) = missing.partition { it.card == HomeCard.QUICK }
+            return quick + known + rest
         }
 
     companion object {
-        val DEFAULT_CARDS = listOf(CardPref(HomeCard.FRIDAY), CardPref(HomeCard.VERSE), CardPref(HomeCard.SUN), CardPref(HomeCard.DATE))
+        val DEFAULT_CARDS = listOf(CardPref(HomeCard.QUICK), CardPref(HomeCard.FRIDAY), CardPref(HomeCard.VERSE), CardPref(HomeCard.SUN), CardPref(HomeCard.DATE))
         const val MAX_LOCATIONS = 20
     }
 }

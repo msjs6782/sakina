@@ -18,7 +18,7 @@ enum class Reciter(
     MINSHAWI("minshawi", "محمد صديق المنشاوي", "Mohamed Siddiq al-Minshawi", 112, "https://cdn.mp3quran.net/audio/muhammad-minshawi/r1/", 112),
     HUSARY("husary", "محمود خليل الحصري", "Mahmoud Khalil al-Husary", 118, "https://cdn.mp3quran.net/audio/mahmoud-husary/r1/", 118);
 
-    fun url(sura: Int): String = server + "%03d.mp3".format(sura)
+    fun url(sura: Int): String = server + "%03d.mp3".format(java.util.Locale.ROOT, sura)
     fun timingUrl(sura: Int): String = "$API/ayat_timing?surah=$sura&read=$timingRead"
 
     companion object {

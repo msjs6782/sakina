@@ -62,7 +62,6 @@ import com.sakina.app.ui.settings.CalcScreen
 import com.sakina.app.ui.settings.CalendarSettingsScreen
 import com.sakina.app.ui.settings.HomeSetupScreen
 import com.sakina.app.ui.settings.LicenseScreen
-import com.sakina.app.ui.settings.SettingsScreen
 import com.sakina.app.ui.theme.SakinaTheme
 import com.sakina.app.ui.times.TimesScreen
 import com.sakina.app.ui.times.TimesView
@@ -173,8 +172,8 @@ private fun MainTabs(vm: MainViewModel, s: AppSettings, startTimesView: TimesVie
         Tab.HOME to (SakinaIcons.Home to str.tabHome),
         Tab.TIMES to (SakinaIcons.Clock to str.tabTimes),
         Tab.QURAN to (SakinaIcons.Book to str.tabQuran),
-        Tab.DISCOVER to (SakinaIcons.Compass to str.tabDiscover),
-        Tab.SETTINGS to (SakinaIcons.Sliders to str.tabSettings),
+        Tab.CALENDAR to (SakinaIcons.Calendar to str.tabCalendar),
+        Tab.MORE to (SakinaIcons.Grid to str.tabMore),
     )
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -197,8 +196,10 @@ private fun MainTabs(vm: MainViewModel, s: AppSettings, startTimesView: TimesVie
                 Tab.HOME -> HomeScreen(vm, s, padding)
                 Tab.TIMES -> TimesScreen(vm, s, padding, startTimesView)
                 Tab.QURAN -> QuranHome(vm, padding)
-                Tab.DISCOVER -> com.sakina.app.ui.more.DiscoverScreen(vm, padding)
-                Tab.SETTINGS -> SettingsScreen(vm, s, padding)
+                Tab.CALENDAR -> androidx.compose.runtime.key(vm.calendarFocus) {
+                    com.sakina.app.ui.calendar.CalendarScreen(vm, s, vm.calendarFocus, tabPadding = padding)
+                }
+                Tab.MORE -> com.sakina.app.ui.more.MoreScreen(vm, s, padding)
             }
         }
     }

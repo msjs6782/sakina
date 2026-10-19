@@ -1,5 +1,6 @@
 package com.sakina.app.core
 
+import com.sakina.app.core.mushaf.hex
 import com.sakina.app.core.recitation.LibraryLimits
 import com.sakina.app.core.recitation.Reciter
 import com.sakina.app.core.recitation.RecitationSources
@@ -122,5 +123,18 @@ class RecitationTest {
         assertEquals(3, run(RepeatCount.THREE))
         assertEquals(5, run(RepeatCount.FIVE))
         assertEquals(50, run(RepeatCount.FOREVER))
+    }
+
+    /** File names and URLs keep Latin digits on a phone set to Arabic (the bug behind the Mushaf crash). */
+    @Test fun latinDigitsUnderArabicLocale() {
+        val saved = java.util.Locale.getDefault()
+        try {
+            java.util.Locale.setDefault(java.util.Locale.forLanguageTag("ar-SA-u-nu-arab"))
+            assertTrue("%03d".format(7) != "007") // the platform really does use Arabic digits here
+            assertEquals("https://cdn.mp3quran.net/audio/mishary-alafasy/r1/007.mp3", Reciter.ALAFASY.url(7))
+            assertEquals("0aff", byteArrayOf(10, -1).hex())
+        } finally {
+            java.util.Locale.setDefault(saved)
+        }
     }
 }

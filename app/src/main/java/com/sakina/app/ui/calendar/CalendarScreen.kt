@@ -65,6 +65,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.sakina.app.core.calendar.CalendarKind
 import com.sakina.app.core.calendar.FastingDays
@@ -72,6 +73,7 @@ import com.sakina.app.core.calendar.FastingKind
 import com.sakina.app.core.calendar.GridDay
 import com.sakina.app.core.calendar.MonthGrid
 import com.sakina.app.core.calendar.MonthRef
+import com.sakina.app.core.calendar.Occasion
 import com.sakina.app.core.calendar.Occasions
 import com.sakina.app.core.calendar.PersonalOccasion
 import com.sakina.app.core.calendar.PersonalOccasionOps
@@ -120,7 +122,7 @@ private fun marks(d: LocalDate, s: AppSettings): DayMarks {
 }
 
 @Composable
-fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long) {
+fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long, tabPadding: PaddingValues? = null) {
     val str = LocalStrings.current
     val fmt = LocalFmt.current
     val zone = s.activeLocation?.zoneId ?: ZoneId.systemDefault()
@@ -156,12 +158,13 @@ fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long) {
         if (r == SnackbarResult.ActionPerformed) vm.undoOccasions() else if (vm.occasionUndo?.stamp == u.stamp) vm.occasionUndo = null
     }
     val current = monthAt(pager.currentPage, base)
-    FullScreen {
+    val coming = remember(today, s.hijriOffset, s.calendar.occasions, str.lang) { upcoming(str, s, today) }
+    val body: @Composable () -> Unit = {
         Scaffold(
             containerColor = MaterialTheme.colorScheme.background,
             snackbarHost = { SnackbarHost(snackbar, Modifier.exposeTestTags()) },
             topBar = {
-                ScreenBar(str.calendarTitle, onBack = { vm.pop() }) {
+                ScreenBar(str.calendarTitle, onBack = if (tabPadding == null) ({ vm.pop() }) else null) {
                     IconButton(onClick = { vm.update { it.copy(calendar = it.calendar.copy(listMode = !it.calendar.listMode)) } }, modifier = Modifier.testTag("cal_view_toggle")) {
                         Icon(if (s.calendar.listMode) SakinaIcons.Grid else SakinaIcons.Lines, if (s.calendar.listMode) str.gridView else str.listView)
                     }
@@ -196,11 +199,13 @@ fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long) {
                 HorizontalPager(pager, modifier = Modifier.fillMaxSize(), beyondViewportPageCount = 0, verticalAlignment = Alignment.Top) { page ->
                     val month = monthAt(page, base)
                     if (s.calendar.listMode) MonthList(month, s, today) { selected = it.toEpochDay() }
-                    else MonthPage(month, s, today, selected) { selected = it.toEpochDay() }
+                    else MonthPage(month, s, today, selected, if (month == base) coming else emptyList()) { selected = it.toEpochDay() }
                 }
             }
         }
     }
+    // As a tab the calendar sits above the navigation bar; opened from elsewhere it fills the screen.
+    if (tabPadding == null) FullScreen(body) else Box(Modifier.fillMaxSize().padding(tabPadding).testTag("calendar_tab")) { body() }
     if (picker) MonthPicker(kind, current, onDismiss = { picker = false }) { m ->
         picker = false
         if (m.isSupported) scope.launch { pager.scrollToPage((SPAN + base.distanceTo(m)).coerceIn(0, PAGES - 1)) }
@@ -211,7 +216,7 @@ fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long) {
 }
 
 @Composable
-private fun MonthPage(month: MonthRef, s: AppSettings, today: LocalDate, selected: Long, onDay: (LocalDate) -> Unit) {
+private fun MonthPage(month: MonthRef, s: AppSettings, today: LocalDate, selected: Long, coming: List<Pair<LocalDate, String>>, onDay: (LocalDate) -> Unit) {
     val str = LocalStrings.current
     val fmt = LocalFmt.current
     val weekStart = weekStartFor(str.lang)
@@ -234,6 +239,7 @@ private fun MonthPage(month: MonthRef, s: AppSettings, today: LocalDate, selecte
         }
         Spacer(Modifier.height(10.dp))
         Legend()
+        if (coming.isNotEmpty()) Upcoming(coming, today, onDay)
         Spacer(Modifier.height(8.dp))
         NoteText(str.occasionNote)
         NoteText(str.fastingNote, Modifier.padding(top = 4.dp))
@@ -274,6 +280,49 @@ private fun DayCell(day: GridDay, kind: CalendarKind, s: AppSettings, today: Loc
                 if (m.occasions) Dot(MaterialTheme.colorScheme.primary)
                 if (m.fasting) Dot(MaterialTheme.colorScheme.tertiary, hollow = true)
                 if (m.personal) Dot(MaterialTheme.colorScheme.secondary)
+            }
+        }
+    }
+}
+
+/** The next occasions and personal dates from today (about four months ahead), at most five. */
+private fun upcoming(str: com.sakina.app.ui.Strings, s: AppSettings, today: LocalDate): List<Pair<LocalDate, String>> {
+    val out = mutableListOf<Pair<LocalDate, String>>()
+    var d = today.plusDays(1)
+    var last: Occasion? = null
+    repeat(130) {
+        if (out.size >= 5) return out
+        // A multi-day occasion is listed on its first day only.
+        val o = Occasions.on(d, s.hijriOffset).firstOrNull()
+        if (o != null && o != last) out += d to str.occasion(o)
+        last = o
+        PersonalOccasionOps.on(s.calendar.occasions, d, s.hijriOffset).forEach { out += d to it.title }
+        d = d.plusDays(1)
+    }
+    return out.take(5)
+}
+
+@Composable
+private fun Upcoming(items: List<Pair<LocalDate, String>>, today: LocalDate, onDay: (LocalDate) -> Unit) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    Column(Modifier.padding(top = 14.dp).testTag("cal_upcoming")) {
+        Text(str.upcomingTitle, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(start = 6.dp, bottom = 6.dp))
+        Surface(shape = RoundedCornerShape(18.dp), color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(vertical = 4.dp)) {
+                items.forEach { (d, title) ->
+                    val days = java.time.temporal.ChronoUnit.DAYS.between(today, d).toInt()
+                    Row(
+                        Modifier.fillMaxWidth().clickable { onDay(d) }.padding(horizontal = 14.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Column(Modifier.weight(1f)) {
+                            Text(title, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            Text(fmt.weekday(d.dayOfWeek) + " · " + fmt.gregorian(d, withYear = false), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Text(if (days == 1) str.tomorrow else str.inDays(str.daysCount(fmt.num(days), days.toLong())), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                    }
+                }
             }
         }
     }

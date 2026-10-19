@@ -54,8 +54,8 @@ class RecitationRepository(private val context: Context, private val scope: Coro
     private val dir = File(context.filesDir, "recitations")
     private val timingDir = File(dir, "timing")
 
-    fun file(r: Recording) = File(dir, "${r.reciter.key}/%03d.mp3".format(r.sura))
-    private fun timingFile(r: Recording) = File(timingDir, "${r.reciter.timingRead}/%03d.json".format(r.sura))
+    fun file(r: Recording) = File(dir, "${r.reciter.key}/%03d.mp3".format(java.util.Locale.ROOT, r.sura))
+    private fun timingFile(r: Recording) = File(timingDir, "${r.reciter.timingRead}/%03d.json".format(java.util.Locale.ROOT, r.sura))
 
     private val _downloaded = MutableStateFlow<Map<String, Long>>(emptyMap())
     /** Downloaded recordings: id -> size in bytes. */

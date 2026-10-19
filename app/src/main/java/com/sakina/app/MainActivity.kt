@@ -45,12 +45,12 @@ class MainActivity : ComponentActivity() {
             open == "times" -> fresh(com.sakina.app.ui.Tab.TIMES)
             open == "home" -> fresh(com.sakina.app.ui.Tab.HOME)
             open == "quran" -> fresh(com.sakina.app.ui.Tab.QURAN)
-            open == "discover" -> fresh(com.sakina.app.ui.Tab.DISCOVER)
-            open == "qibla" -> fresh(com.sakina.app.ui.Tab.DISCOVER, com.sakina.app.ui.Route.Qibla)
-            open == "ramadan" -> fresh(com.sakina.app.ui.Tab.DISCOVER, com.sakina.app.ui.Route.Ramadan)
-            open == "locations" -> fresh(com.sakina.app.ui.Tab.SETTINGS, com.sakina.app.ui.Route.Locations)
-            open == "adhkar_lib" -> fresh(com.sakina.app.ui.Tab.DISCOVER, com.sakina.app.ui.Route.Adhkar())
-            open.startsWith("dhikr:") -> fresh(com.sakina.app.ui.Tab.DISCOVER, com.sakina.app.ui.Route.AdhkarItem(open.removePrefix("dhikr:")))
+            open == "discover" -> fresh(com.sakina.app.ui.Tab.MORE)
+            open == "qibla" -> fresh(com.sakina.app.ui.Tab.MORE, com.sakina.app.ui.Route.Qibla)
+            open == "ramadan" -> fresh(com.sakina.app.ui.Tab.MORE, com.sakina.app.ui.Route.Ramadan)
+            open == "locations" -> fresh(com.sakina.app.ui.Tab.MORE, com.sakina.app.ui.Route.Locations)
+            open == "adhkar_lib" -> fresh(com.sakina.app.ui.Tab.MORE, com.sakina.app.ui.Route.Adhkar())
+            open.startsWith("dhikr:") -> fresh(com.sakina.app.ui.Tab.MORE, com.sakina.app.ui.Route.AdhkarItem(open.removePrefix("dhikr:")))
             open.startsWith("ayah:") -> open.removePrefix("ayah:").split(':').mapNotNull { it.toIntOrNull() }.takeIf { it.size == 2 }?.let { vm.openAyah(it[0], it[1]) }
         }
         if (open == OPEN_LISTEN && vm.stack.lastOrNull() !is com.sakina.app.ui.Route.Listen) {
@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
         }
         if (open.startsWith(OPEN_CALENDAR)) {
             val day = runCatching { java.time.LocalDate.parse(open.removePrefix(OPEN_CALENDAR)) }.getOrNull()
-            vm.push(com.sakina.app.ui.Route.HijriCalendar(day?.toEpochDay() ?: Long.MIN_VALUE))
+            vm.openCalendar(day)
         }
         if (open.startsWith(OPEN_ADHKAR)) {
             val route = com.sakina.app.ui.Route.Wird(open.removePrefix(OPEN_ADHKAR))

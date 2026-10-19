@@ -300,6 +300,7 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
         HomeCard.SUN -> t("الشروق والغروب القادمان", "Next sunrise and sunset")
         HomeCard.VERSE -> t("آية اليوم", "Verse of the day")
         HomeCard.FRIDAY -> t("مساحة الجمعة (ليلتها ويومها)", "Friday (its eve and day)")
+        HomeCard.QUICK -> t("وصول سريع: الأذكار والمسبحة والقبلة والاستماع", "Quick access: adhkar, tasbih, Qibla, listen")
     }
     val moveUp get() = t("تحريك للأعلى", "Move up")
     val moveDown get() = t("تحريك للأسفل", "Move down")
@@ -1278,6 +1279,26 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val wBgColorMode get() = t("لون", "Colour")
     val wBgSkyMode get() = t("لوحة السماء", "Painted sky")
     val wBgSkyNote get() = t("تتبدّل اللوحة مع وقت الصلاة في مدينة الويدجت، مع طبقة داكنة تحفظ وضوح النص الأبيض. الزوايا المستديرة للصورة من Android 12.", "The painting follows the time at the widget's place, under a veil that keeps the white text readable. Rounded corners on the picture need Android 12.")
+
+
+    // Tabs and the More tab.
+    val tabCalendar get() = t("التقويم", "Calendar")
+    val tabMore get() = t("المزيد", "More")
+    val groupWorship get() = t("للعبادة", "Worship")
+    val groupSeasons get() = t("مواسم وأيام", "Seasons and days")
+    val groupDevice get() = t("على شاشة الجهاز", "On your phone")
+    val groupPlaceTimes get() = t("المكان والمواقيت", "Place and times")
+    val groupAlerts get() = t("التنبيهات", "Alerts")
+    val groupLook get() = t("الشكل والعرض", "Look and layout")
+    val toolsAdhkarShort get() = t("الصباح والمساء والنوم", "Morning, evening, sleep")
+    val toolsTasbihShort get() = t("عدّاد بهدف", "Counter with a goal")
+    val toolsQiblaShort get() = t("بوصلة وخريطة", "Compass and map")
+    val toolsRamadanShort get() = t("الإمساكية والعشر", "Timetable, last ten")
+    val toolsNightShort get() = t("الثلث الأخير والضحى", "Last third, Duha")
+    val toolsFridayShort get() = t("الكهف والصلاة على النبي", "Al-Kahf, salawat")
+    val upcomingTitle get() = t("القادم", "Coming up")
+    fun inDays(days: String) = t("بعد $days", "in $days")
+    val homeQuickTitle get() = t("وصول سريع", "Quick access")
 
 }
 

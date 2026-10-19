@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.Instant
 
-enum class Tab { HOME, TIMES, QURAN, DISCOVER, SETTINGS }
+enum class Tab { HOME, TIMES, QURAN, CALENDAR, MORE }
 
 enum class PlacePurpose { ADD, TRAVEL }
 
@@ -94,6 +94,15 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     val cities: StateFlow<List<City>> = _cities.asStateFlow()
 
     var tab by mutableStateOf(Tab.HOME)
+    /** The day the calendar tab opens on (an epoch day; Long.MIN_VALUE for today). */
+    var calendarFocus by mutableStateOf(Long.MIN_VALUE)
+
+    /** Opens the calendar tab, on [day] if given. */
+    fun openCalendar(day: java.time.LocalDate? = null) {
+        clearStack()
+        calendarFocus = day?.toEpochDay() ?: Long.MIN_VALUE
+        tab = Tab.CALENDAR
+    }
     var stack by mutableStateOf(listOf<Route>())
         private set
 

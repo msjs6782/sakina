@@ -476,7 +476,7 @@ private fun SwatchRow(title: String, value: Long?, tagPrefix: String, onSelect: 
                     .background(Color(c.toInt()))
                     .border(BorderStroke(if (selected) 3.dp else 1.dp, if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant), CircleShape)
                     .clickable { onSelect(c) }
-                    .testTag(tagPrefix + String.format("%06X", c and 0xFFFFFF)),
+                    .testTag(tagPrefix + String.format(java.util.Locale.ROOT, "%06X", c and 0xFFFFFF)),
             )
         }
     }

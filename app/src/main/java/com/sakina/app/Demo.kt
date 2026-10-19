@@ -227,7 +227,7 @@ object Demo {
             val sc = app.alertState.scheduled()
             Log.i(TAG, "AlarmState scheduled=${sc?.ids} at=${sc?.at} epochMs=${sc?.at?.toEpochMilli()} exact=${sc?.exact}")
         }
-        val tab = e.getString("demo_tab")?.let { Tab.valueOf(it.uppercase()) }
+        val tab = e.getString("demo_tab")?.let { when (it.lowercase()) { "discover", "settings" -> Tab.MORE; else -> Tab.valueOf(it.uppercase()) } }
         val routes = e.getString("demo_route")?.split(',')?.mapNotNull { r ->
             when {
                 r.startsWith("quran_reader:") -> {

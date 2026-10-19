@@ -456,7 +456,7 @@ private fun DateCard(m: HomeModel, s: AppSettings, modifier: Modifier = Modifier
         Spacer(Modifier.height(8.dp))
         NoteText(str.occasionNote)
         LocalMainVm.current?.let { vm ->
-            TextButton(onClick = { vm.push(com.sakina.app.ui.Route.HijriCalendar()) }, modifier = Modifier.testTag("home_open_calendar")) { Text(str.calendarTitle) }
+            TextButton(onClick = { vm.openCalendar() }, modifier = Modifier.testTag("home_open_calendar")) { Text(str.calendarTitle) }
         }
     }
 }
@@ -468,12 +468,42 @@ private fun Cards(m: HomeModel, s: AppSettings) {
             HomeCard.DATE -> DateCard(m, s)
             HomeCard.SUN -> SunCard(m)
             HomeCard.VERSE -> VerseCard(m.today)
+            HomeCard.QUICK -> QuickCard()
             HomeCard.FRIDAY -> {
                 val vm = LocalMainVm.current
                 val eve = remember(m.location, s.calcConfig, m.now.epochSecond / 60) {
                     com.sakina.app.ui.seasons.fridayWindow(PrayerSchedule(m.location.point, m.zone, s.calcConfig), m.now)
                 }
                 if (vm != null && eve != null) com.sakina.app.ui.seasons.FridayHomeCard(vm, eve)
+            }
+        }
+    }
+}
+
+/** Four tiles to the tools used most, so they are one tap from home. */
+@Composable
+private fun QuickCard() {
+    val str = LocalStrings.current
+    val vm = LocalMainVm.current ?: return
+    Row(Modifier.fillMaxWidth().testTag("home_quick"), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        listOf(
+            Triple(SakinaIcons.Sparkle, str.toolsAdhkar, "quick_adhkar") to { vm.push(com.sakina.app.ui.Route.Adhkar()) },
+            Triple(SakinaIcons.Beads, str.toolsTasbih, "quick_tasbih") to { vm.push(com.sakina.app.ui.Route.Tasbih) },
+            Triple(SakinaIcons.Kaaba, str.toolsQibla, "quick_qibla") to { vm.push(com.sakina.app.ui.Route.Qibla) },
+            Triple(SakinaIcons.Headphones, str.listenTitle, "quick_listen") to { vm.push(com.sakina.app.ui.Route.Listen()) },
+        ).forEach { (t, go) ->
+            Surface(
+                onClick = go, shape = RoundedCornerShape(20.dp), color = MaterialTheme.colorScheme.surfaceContainerLow,
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f)),
+                modifier = Modifier.weight(1f).testTag(t.third),
+            ) {
+                Column(Modifier.padding(vertical = 12.dp, horizontal = 4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Box(Modifier.size(40.dp).clip(RoundedCornerShape(14.dp)).background(MaterialTheme.colorScheme.primaryContainer), contentAlignment = Alignment.Center) {
+                        Icon(t.first, null, Modifier.size(22.dp), tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                    }
+                    Spacer(Modifier.height(6.dp))
+                    Text(t.second, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
+                }
             }
         }
     }

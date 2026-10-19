@@ -78,37 +78,34 @@ import com.sakina.app.ui.theme.dynamicColorSupported
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+/** The settings, grouped: place and times, alerts, look, and the app. Shown at the end of the More tab. */
 @Composable
-fun SettingsScreen(vm: MainViewModel, s: AppSettings, contentPadding: PaddingValues) {
+fun SettingsGroups(vm: MainViewModel, s: AppSettings) {
     val str = LocalStrings.current
-    Column(
-        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(contentPadding).padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
-    ) {
-        Text(str.tabSettings, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 8.dp))
-        SectionCard(padding = PaddingValues(6.dp)) {
+    val fmt = LocalFmt.current
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.testTag("settings_groups")) {
+        SectionCard(title = str.groupPlaceTimes, padding = PaddingValues(start = 6.dp, end = 6.dp, top = 14.dp, bottom = 6.dp)) {
             NavRow(SakinaIcons.Pin, str.locations, s.activeLocation?.name(str.lang) ?: str.chooseLocationTitle, onClick = { vm.push(Route.Locations) })
             NavRow(SakinaIcons.Clock, str.settingsCalc, str.methodName(s.method), onClick = { vm.push(Route.Calc) })
         }
-        SectionCard(padding = PaddingValues(6.dp)) {
+        SectionCard(title = str.groupAlerts, padding = PaddingValues(start = 6.dp, end = 6.dp, top = 14.dp, bottom = 6.dp)) {
             val on = com.sakina.app.core.prayer.PrayerKey.prayers.count { s.alerts.prayer(it).mode != com.sakina.app.core.alerts.AlertMode.OFF }
             NavRow(
                 SakinaIcons.Bell, str.settingsAlerts,
-                if (!s.alerts.anyEnabled) str.alertsAllOff else str.alertsOnCount(LocalFmt.current.num(on)),
+                if (!s.alerts.anyEnabled) str.alertsAllOff else str.alertsOnCount(fmt.num(on)),
                 onClick = { vm.push(Route.Alerts) },
                 modifier = Modifier.testTag("nav_alerts"),
             )
-            NavRow(SakinaIcons.Repeat, str.settingsReminders, s.alerts.allReminders.count { it.enabled }.let { if (it == 0) str.alertsAllOff else str.alertsOnCount(LocalFmt.current.num(it)) }, onClick = { vm.push(Route.Reminders) })
+            NavRow(SakinaIcons.Repeat, str.settingsReminders, s.alerts.allReminders.count { it.enabled }.let { if (it == 0) str.alertsAllOff else str.alertsOnCount(fmt.num(it)) }, onClick = { vm.push(Route.Reminders) })
         }
-        SectionCard(padding = PaddingValues(6.dp)) {
-            NavRow(SakinaIcons.Palette, str.settingsAppearance, str.styleName(s.style) + " · " + str.themeName(s.themeMode) + " · " + (if (s.language == Lang.AR) "العربية" else "English"), onClick = { vm.push(Route.Appearance) })
-            NavRow(SakinaIcons.Grid, str.settingsHome, str.layoutName(s.homeLayout), onClick = { vm.push(Route.HomeSetup) })
-            NavRow(SakinaIcons.Calendar, str.settingsCalendar, str.hijriOffsetTitle + ": " + LocalFmt.current.signed(s.hijriOffset), onClick = { vm.push(Route.Calendar) })
+        SectionCard(title = str.groupLook, padding = PaddingValues(start = 6.dp, end = 6.dp, top = 14.dp, bottom = 6.dp)) {
+            NavRow(SakinaIcons.Palette, str.settingsAppearance, str.styleName(s.style) + " · " + str.themeName(s.themeMode) + " · " + (if (s.language == Lang.AR) "العربية" else "English"), onClick = { vm.push(Route.Appearance) }, modifier = Modifier.testTag("nav_appearance"))
+            NavRow(SakinaIcons.Grid, str.settingsHome, str.layoutName(s.homeLayout), onClick = { vm.push(Route.HomeSetup) }, modifier = Modifier.testTag("nav_home_setup"))
+            NavRow(SakinaIcons.Calendar, str.settingsCalendar, str.hijriOffsetTitle + ": " + fmt.signed(s.hijriOffset), onClick = { vm.push(Route.Calendar) }, modifier = Modifier.testTag("nav_calendar_settings"))
         }
         SectionCard(padding = PaddingValues(6.dp)) {
             NavRow(SakinaIcons.Info, str.settingsAbout, str.aboutVersion + " " + BuildConfig.VERSION_NAME, onClick = { vm.push(Route.About) })
         }
-        Spacer(Modifier.height(8.dp))
     }
 }
 
@@ -333,7 +330,7 @@ fun CalendarSettingsScreen(vm: MainViewModel, s: AppSettings) {
                 }
             }
             SwitchRow(s.calendar.listMode, str.listModeTitle, str.listModeNote) { v -> vm.update { it.copy(calendar = it.calendar.copy(listMode = v)) } }
-            TextButton(onClick = { vm.push(Route.HijriCalendar()) }, modifier = Modifier.testTag("set_open_calendar")) { Text(str.calendarTitle) }
+            TextButton(onClick = { vm.openCalendar() }, modifier = Modifier.testTag("set_open_calendar")) { Text(str.calendarTitle) }
         }
         FastingRemindersCard(vm, s)
     }

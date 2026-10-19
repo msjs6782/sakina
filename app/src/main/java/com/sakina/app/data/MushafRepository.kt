@@ -99,7 +99,7 @@ class MushafRepository(private val context: Context, private val scope: Coroutin
         MushafManifest.parse(context.assets.open("mushaf/pages.tsv").bufferedReader(Charsets.UTF_8).use { it.readText() })
     }
     private val dir = File(context.filesDir, "mushaf/pages")
-    fun file(page: Int) = File(dir, "%03d.pdf".format(page))
+    fun file(page: Int) = File(dir, "%03d.pdf".format(java.util.Locale.ROOT, page))
 
     private val _available = MutableStateFlow<Set<Int>>(emptySet())
     val available: StateFlow<Set<Int>> = _available.asStateFlow()
@@ -126,10 +126,15 @@ class MushafRepository(private val context: Context, private val scope: Coroutin
             withContext(Dispatchers.IO) {
                 dir.mkdirs()
                 dir.listFiles()?.filter { it.name.endsWith(".part") }?.forEach { it.delete() }
+                // Older builds could name pages with Arabic-Indic digits on phones set to Arabic.
+                dir.listFiles()?.forEach { f ->
+                    val latin = f.name.map { c -> if (c in '٠'..'٩') '0' + (c - '٠') else c }.joinToString("")
+                    if (latin != f.name) f.renameTo(File(dir, latin))
+                }
                 for (p in MushafManifest.BUNDLED) {
                     val f = file(p)
                     if (PageVerifier.check(f, manifest.entry(p)) != PageCheck.OK) {
-                        context.assets.open("mushaf/%03d.pdf".format(p)).use { input -> f.outputStream().use { input.copyTo(it) } }
+                        context.assets.open("mushaf/%03d.pdf".format(java.util.Locale.ROOT, p)).use { input -> f.outputStream().use { input.copyTo(it) } }
                         Log.i(TAG, "bundled page $p copied: ${PageVerifier.check(f, manifest.entry(p))}")
                     }
                 }

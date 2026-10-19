@@ -55,7 +55,7 @@ private class StorageException(cause: IOException) : IOException(cause)
 private class CancelledException : IOException("cancelled")
 private class VerifyException(val failure: FetchFailure, msg: String) : IOException(msg)
 
-fun ByteArray.hex(): String = joinToString("") { "%02x".format(it) }
+fun ByteArray.hex(): String = joinToString("") { "%02x".format(java.util.Locale.ROOT, it) }
 
 /**
  * Fetches one page from the zip with a byte-range request, inflates it, and checks its size,
@@ -134,7 +134,7 @@ class PageFetcher(private val source: RangeSource) {
                     }
                 }
                 if (size != e.size) throw VerifyException(FetchFailure.SIZE, "got $size bytes, expected ${e.size}")
-                if (crc.value != e.crc32) throw VerifyException(FetchFailure.CRC, "CRC %08x, expected %08x".format(crc.value, e.crc32))
+                if (crc.value != e.crc32) throw VerifyException(FetchFailure.CRC, "CRC %08x, expected %08x".format(java.util.Locale.ROOT, crc.value, e.crc32))
                 val digest = sha.digest().hex()
                 if (digest != e.sha256) throw VerifyException(FetchFailure.SHA256, "SHA-256 $digest, expected ${e.sha256}")
                 if (target.exists() && !target.delete()) throw StorageException(IOException("cannot replace $target"))
