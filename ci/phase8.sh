@@ -158,8 +158,10 @@ fi
 # ---- The app lists the placed widgets; one widget's own settings: English, Jeddah, dark, corners, border.
 save_log
 start "${WB[@]}" --es demo_route widgets; sleep 6
-ui_has id placed_next && ui_has id placed_analog && check widget_list PASS "placed widgets listed" || check widget_list FAIL "list incomplete"
 cap 263_my_widgets
+ui_has id placed_preview_next && check widget_placed_preview PASS "placed widget shown as it looks" || check widget_placed_preview FAIL "no preview in the list"
+ui_has id placed_next && scroll_to id placed_analog 16 && check widget_list PASS "placed widgets listed" || check widget_list FAIL "list incomplete"
+scroll_top
 tap id placed_settings_next && sleep 4 && cap 264_widget_config
 # Sections from the top: place, language, style and theme, text size, colours, corners and border.
 scroll_to exact "مدينة خاصة بهذه الويدجت" 4 && tap exact "مدينة خاصة بهذه الويدجت" && sleep 1

@@ -81,7 +81,7 @@ class WidgetTest {
         val maghrib = Instant.parse("2026-10-14T14:47:00Z")
         assertEquals(maghrib.plusSeconds(1), WidgetMath.nextChange(WidgetKind.ANALOG, now, riyadh, maghrib))
         assertEquals(WidgetMath.nextMidnight(now, riyadh), WidgetMath.nextChange(WidgetKind.CONTENT, now, riyadh, null))
-        assertTrue(WidgetKind.entries.count { it.showsRemaining } == 6)
+        assertTrue(WidgetKind.entries.count { it.showsRemaining } == 7)
         assertEquals(WidgetKind.FAJR_MAGHRIB, WidgetKind.of("fajr_maghrib"))
         assertEquals(11, WidgetKind.entries.map { it.id }.toSet().size)
     }

@@ -38,7 +38,7 @@ pin_kind next 330_pin_next
 pin_kind strip 331_pin_strip
 for k in next strip; do
   start "${WB[@]}" --es demo_route widgets; sleep 6
-  tap id "placed_settings_$k" && sleep 4
+  scroll_to id "placed_settings_$k" 16; into_view "placed_settings_$k"; tap id "placed_settings_$k" && sleep 4
   into_view wcfg_background_sky; tap id wcfg_background_sky && sleep 1 && cap "332_config_sky_$k"
   scroll_top; tap id wcfg_save && sleep 4
 done

@@ -159,6 +159,8 @@ hide_ime() { if adb shell dumpsys input_method 2>/dev/null | grep -q "mInputShow
 source "$HERE/phase8.sh"
 # shellcheck source=ci/visual.sh
 source "$HERE/visual.sh"
+# shellcheck source=ci/r10.sh
+source "$HERE/r10.sh"
 
 finish_run() {
   adb logcat -d >> "$OUT/logcat_part2.txt"
@@ -193,6 +195,12 @@ if [ "${ONLY:-}" = "widgets" ]; then
   adb logcat -d > "$OUT/logcat_part1.txt"; adb logcat -c
   finish_run
 fi
+# [ci:r10] runs only this round's checks (tabs, quick access, day-name widget, Mushaf on an Arabic phone).
+if [ "${ONLY:-}" = "r10" ]; then
+  r10
+  adb logcat -d > "$OUT/logcat_part1.txt"; adb logcat -c
+  finish_run
+fi
 # [ci:visual] runs only the painted-sky checks.
 if [ "${ONLY:-}" = "visual" ]; then
   visual
@@ -211,7 +219,8 @@ tap id city_search && adb shell input text "Jeddah" && sleep 2 && cap 07_city_se
 tap exact "جدة" && sleep 2 && cap 08_home_jeddah_after_tap
 tap id tab_times && sleep 1.5 && cap 09_times_day
 tap exact "الأسبوع" && sleep 1.5 && cap 10_times_week
-tap id tab_settings && sleep 1.5 && cap 11_settings
+tap id tab_more && sleep 1.5 && cap 11a_more
+scroll_to exact "المظهر واللغة" 6 && cap 11_settings
 tap exact "المظهر واللغة" && sleep 1.5 && tap exact "English" && sleep 2 && cap 11b_switched_to_english
 adb shell input keyevent 4; sleep 1.5; cap 11c_back_to_settings_en
 # Close the app completely and reopen it normally: the chosen city and language must come back.
@@ -804,9 +813,10 @@ if am and h==12: h=0
 print(h*60+m)" "$1"; }
 C=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh --es demo_active riyadh --es demo_now "$T_AFTERNOON" "${FREEZE[@]}")
 
-# Month grid (Hijri first), navigation by arrows, swipe, the month picker and Today; reached from Discover.
-shot 200_discover_calendar 7 "${C[@]}" --es demo_tab discover
-scroll_to id tool_calendar && tap id tool_calendar && sleep 3 && cap 201_calendar_hijri
+# Month grid (Hijri first), navigation by arrows, swipe, the month picker and Today; the calendar has its own tab.
+shot 200_home_before_calendar 7 "${C[@]}"
+tap id tab_calendar && sleep 3 && cap 201_calendar_hijri
+ui_has id calendar_tab && check cal_tab PASS "calendar opens as a tab" || check cal_tab FAIL "no calendar tab"
 T0=$(ui_text cal_title); echo "$T0" | grep -q "١٤٤٨" && ui_has id cal_day_2026-10-14 && check cal_grid PASS "$T0" || check cal_grid FAIL "title $T0"
 tap id cal_next && sleep 2
 T1=$(ui_text cal_title); [ "$T1" != "$T0" ] && check cal_next PASS "$T1" || check cal_next FAIL "$T1"
@@ -969,7 +979,7 @@ shot 61_alerts_permissions_granted 7 "${REAL[@]}" --es demo_route alerts --es de
 # Turning on an alert by tapping: Settings > Adhan and alerts > Maghrib > Notification with sound.
 start "${REAL[@]}" --es demo_tab settings
 sleep 4
-tap id nav_alerts && tap_scroll id prayer_alert_maghrib && cap 62_prayer_page_before
+scroll_to id nav_alerts 8; into_view nav_alerts; tap id nav_alerts && tap_scroll id prayer_alert_maghrib && cap 62_prayer_page_before
 tap exact "إشعار بصوت" && sleep 1 && cap 63_prayer_page_selected
 adb shell input keyevent 4; sleep 2; cap 64_alerts_after_tap
 
@@ -1095,5 +1105,8 @@ if [ "$SUITE" = "full" ]; then
   rlog | grep -q "service created" && check recitation_no_resume FAIL "recitation service started after boot" critical || check recitation_no_resume PASS "nothing resumed after boot" critical
   cat "$OUT/logcat_part3.txt" >> "$OUT/logcat_part2.txt"; rm -f "$OUT/logcat_part3.txt"
 fi
+
+# ---------- Round 10: tabs, quick access, day-name widget, widget settings, Mushaf on an Arabic phone (ci/r10.sh) ----------
+r10
 
 finish_run

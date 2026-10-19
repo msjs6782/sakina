@@ -376,7 +376,6 @@ fun WidgetConfigScreen(
             Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            ElementsCard(kind, cfg) { cfg = it }
 
             if (kind.needsPlace) SectionCard(title = str.wPlace) {
                 ChoiceRow(cfg.placeMode == WidgetPlaceMode.APP, str.wPlaceApp, s.activeLocation?.name(s.language), onClick = { cfg = cfg.copy(placeMode = WidgetPlaceMode.APP) })
@@ -405,6 +404,8 @@ fun WidgetConfigScreen(
                     }
                 }
             }
+
+            ElementsCard(kind, cfg) { cfg = it }
 
             SectionCard(title = str.wLanguage) {
                 Chips(listOf(WidgetLang.APP to str.wFollowApp, WidgetLang.AR to "العربية", WidgetLang.EN to "English"), cfg.lang, "wcfg_lang_") { cfg = cfg.copy(lang = it) }
