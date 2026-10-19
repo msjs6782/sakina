@@ -82,6 +82,7 @@ class DigitalClockWidget : SakinaWidgetProvider(WidgetKind.DIGITAL)
 class AnalogClockWidget : SakinaWidgetProvider(WidgetKind.ANALOG)
 class ContentWidget : SakinaWidgetProvider(WidgetKind.CONTENT)
 class FajrMaghribWidget : SakinaWidgetProvider(WidgetKind.FAJR_MAGHRIB)
+class DayNameWidget : SakinaWidgetProvider(WidgetKind.DAYNAME)
 
 /** The non-waking alarm that redraws widgets when their content changes (every minute for remaining times). */
 class WidgetTickReceiver : BroadcastReceiver() {
@@ -146,6 +147,7 @@ object WidgetUpdater {
         WidgetKind.ANALOG to AnalogClockWidget::class.java,
         WidgetKind.CONTENT to ContentWidget::class.java,
         WidgetKind.FAJR_MAGHRIB to FajrMaghribWidget::class.java,
+        WidgetKind.DAYNAME to DayNameWidget::class.java,
     )
 
     fun providerClass(kind: WidgetKind): Class<out SakinaWidgetProvider> = providers.getValue(kind)

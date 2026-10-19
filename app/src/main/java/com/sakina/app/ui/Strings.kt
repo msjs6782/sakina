@@ -1156,6 +1156,7 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     fun wIn(d: String) = t("بعد $d", "in $d")
     fun wUpdated(time: String) = t("حُدّث $time", "updated $time")
     fun wUntil(name: String) = t("حتى $name", "Until $name")
+    fun wLeftUntil(name: String, d: String) = t("باقي على $name $d", "$name in $d")
     val wNoPlace get() = t("اختر موقعًا في سكينة لعرض المواقيت", "Choose a place in Sakina to show prayer times")
     val wNoTimes get() = t("تعذّر حساب المواقيت هنا اليوم؛ راجع التقويم المحلي", "Times cannot be calculated here today; check the local calendar")
     val wDeviceClock get() = t("ساعة الجهاز، والعلامات بتوقيته", "Device clock; marks in device time")
@@ -1236,6 +1237,7 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
         "digital" -> t("الساعة الرقمية", "Digital clock")
         "analog" -> t("الساعة ذات العقارب", "Analog clock")
         "content" -> t("ذكر وآية", "Dhikr and verse")
+        "dayname" -> t("اليوم الممدود", "Day name")
         else -> t("الفجر والمغرب", "Fajr and Maghrib")
     }
     fun widgetDesc(id: String) = when (id) {
@@ -1248,6 +1250,7 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
         "digital" -> t("ساعة رقمية أصلية مع التاريخ والصلاة التالية.", "A native digital clock with the date and next prayer.")
         "analog" -> t("ساعة بعقارب أصلية وعلامات أوقات الصلاة على وجهها.", "A native analog clock with prayer times marked on its face.")
         "content" -> t("ذكر قصير أو آية مختارة مع المصدر.", "A short dhikr or a selected verse with its source.")
+        "dayname" -> t("اسم اليوم بخط كوفي ممدود بالكشيدة على عرض الويدجت، مع التاريخين والصلوات والمتبقي.", "The day's name in bold Kufi stretched with kashida across the widget, with both dates, the prayers and the time left.")
         else -> t("الفجر والمغرب والتاريخ الهجري وسياق رمضان.", "Fajr, Maghrib, the Hijri date and the Ramadan context.")
     }
     val shortcutsTitle get() = t("اختصارات أيقونة التطبيق", "App icon shortcuts")
@@ -1299,6 +1302,24 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val upcomingTitle get() = t("القادم", "Coming up")
     fun inDays(days: String) = t("بعد $days", "in $days")
     val homeQuickTitle get() = t("وصول سريع", "Quick access")
+
+
+    // Widget settings: what shows, font, highlight; previews on the wallpaper.
+    val wElements get() = t("ما يظهر في الويدجت", "What the widget shows")
+    val wShowPlace get() = t("اسم المدينة", "Place name")
+    val wShowRefresh get() = t("زر التحديث", "Refresh button")
+    val wShowDate get() = t("التاريخ", "Date")
+    val wShowRemaining get() = t("الوقت المتبقي", "Time left")
+    val wShowStamp get() = t("وقت آخر تحديث", "Last updated time")
+    val wShowSunrise get() = t("الشروق في الجدول", "Sunrise in the table")
+    val wFont get() = t("الخط", "Font")
+    val wFontApp get() = t("خط التطبيق", "App font")
+    val wFontKufi get() = t("كوفي", "Kufi")
+    val wHighlight get() = t("تمييز الصلاة القادمة", "Next prayer highlight")
+    val wHighlightFill get() = t("خلفية ملوّنة", "Filled")
+    val wHighlightText get() = t("لون النص فقط", "Text colour only")
+    val wPreviewOnWallpaper get() = t("المعاينة فوق ألوان خلفية جهازك وبمقاس الويدجت الفعلي.", "Previews sit on your wallpaper's colours, at the widget's real size.")
+    val wPlacedPreview get() = t("كما يظهر الآن", "As it looks now")
 
 }
 

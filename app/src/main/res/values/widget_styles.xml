@@ -56,4 +56,73 @@
         <item name="android:shadowRadius">4</item>
         <item name="android:shadowDy">1</item>
     </style>
+
+    <!-- The same styles in Noto Kufi Arabic (a widget's font setting); generated from the ones above. -->
+    
+    <style name="WK.Text" parent="">
+        <item name="android:fontFamily">@font/kufi_regular</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">#FF1C1B17</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+    <style name="WK.Text.Small">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">#FF4A4840</item>
+    </style>
+    <style name="WK.Text.Medium">
+        <item name="android:fontFamily">@font/kufi_medium</item>
+    </style>
+    <style name="WK.Text.Title">
+        <item name="android:fontFamily">@font/kufi_bold</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+    <style name="WK.Text.Big">
+        <item name="android:fontFamily">@font/kufi_bold</item>
+        <item name="android:textSize">34sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+    <style name="WK.Cell" parent="">
+        <item name="android:fontFamily">@font/kufi_regular</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">none</item>
+        <item name="android:textColor">#FF1C1B17</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+    <style name="WK.Cell.Time">
+        <item name="android:fontFamily">@font/kufi_bold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    
+    <style name="WK.Glass" parent="WK.Text">
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:shadowColor">#B3000000</item>
+        <item name="android:shadowRadius">4</item>
+        <item name="android:shadowDy">1</item>
+    </style>
+    <style name="WK.Glass.Light" parent="WK.Text">
+        <item name="android:textColor">#FF15140F</item>
+        <item name="android:shadowColor">#CCFFFFFF</item>
+        <item name="android:shadowRadius">4</item>
+        <item name="android:shadowDy">1</item>
+    </style>
+
+    <!-- The day-name widget's stretched day (heavy Kufi in both font settings). -->
+    <style name="W.Day" parent="">
+        <item name="android:fontFamily">@font/kufi_black</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">none</item>
+        <item name="android:textColor">#FF1C1B17</item>
+        <item name="android:textSize">34sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment">center</item>
+    </style>
 </resources>

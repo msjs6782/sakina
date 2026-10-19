@@ -83,7 +83,7 @@ class WidgetTest {
         assertEquals(WidgetMath.nextMidnight(now, riyadh), WidgetMath.nextChange(WidgetKind.CONTENT, now, riyadh, null))
         assertTrue(WidgetKind.entries.count { it.showsRemaining } == 6)
         assertEquals(WidgetKind.FAJR_MAGHRIB, WidgetKind.of("fajr_maghrib"))
-        assertEquals(10, WidgetKind.entries.map { it.id }.toSet().size)
+        assertEquals(11, WidgetKind.entries.map { it.id }.toSet().size)
     }
 
     @Test
@@ -191,5 +191,27 @@ class WidgetTest {
         assertEquals("1:1", ContentPicker.pick(pack, ContentMode.VERSES, day, 1) { it.text.length < 20 }!!.ref)
         assertNull(ContentPicker.pick(pack, ContentMode.MIXED, day, 0) { false })
         assertNull(ContentPicker.pick(ContentPack(), ContentMode.MIXED, day, 0) { true })
+    }
+
+    @Test fun kashidaGoesBeforeTheLastJoinedLetter() {
+        val t = com.sakina.app.core.widgets.Kashida
+        assertEquals("الاثنيـــن", t.stretch("الاثنين", 3))
+        assertEquals("السبـــت", t.stretch("السبت", 3))
+        assertEquals("الأحـــد", t.stretch("الأحد", 3))
+        assertEquals("الثلاثـــاء", t.stretch("الثلاثاء", 3))
+        assertEquals("الأربعـــاء", t.stretch("الأربعاء", 3))
+        assertEquals("الخميـــس", t.stretch("الخميس", 3))
+        assertEquals("الجمعـــة", t.stretch("الجمعة", 3))
+        assertEquals("MONDAY", t.stretch("MONDAY", 3))
+        assertEquals(null, t.point("دار"))
+    }
+
+    @Test fun kashidaFillsTheWidth() {
+        val t = com.sakina.app.core.widgets.Kashida
+        // Each letter 10 px, each tatweel 4 px: 7 letters (70) + n*4 <= 100 gives n = 7.
+        val w: (String) -> Float = { s -> s.sumOf { c -> if (c == t.TATWEEL) 4.0 else 10.0 }.toFloat() }
+        assertEquals("الاثني" + "ـ".repeat(7) + "ن", t.fill("الاثنين", 100f, width = w))
+        assertEquals("الاثنين", t.fill("الاثنين", 50f, width = w))
+        assertEquals(80, t.fill("الاثنين", 10_000f, width = w).count { it == t.TATWEEL })
     }
 }

@@ -120,3 +120,43 @@ object Fit {
         return lo
     }
 }
+
+/**
+ * Stretches an Arabic word with tatweel (kashida) to fill a width, as in a calligraphic day name. The tatweel
+ * goes before the last letter that the previous letter joins: الاثنيـــن، السبـــت، الثلاثـــاء، الجمعـــة.
+ */
+object Kashida {
+    const val TATWEEL = 'ـ'
+
+    /** Letters that do not join the letter after them (they still join the one before). */
+    private const val RIGHT_JOINING = "آأؤإاةدذرزوءٱ"
+
+    private fun joinsNext(c: Char) = c in 'ؠ'..'ي' && c != TATWEEL && c !in RIGHT_JOINING
+    private fun isLetter(c: Char) = c in 'ؠ'..'ي' && c != TATWEEL
+
+    /** Index where tatweel can go (before word[i]), or null when the word cannot be stretched (no joins, or Latin). */
+    fun point(word: String): Int? {
+        for (i in word.length - 1 downTo 1) {
+            if (isLetter(word[i]) && joinsNext(word[i - 1])) return i
+        }
+        return null
+    }
+
+    fun stretch(word: String, count: Int): String {
+        val at = point(word) ?: return word
+        return word.substring(0, at) + TATWEEL.toString().repeat(count.coerceAtLeast(0)) + word.substring(at)
+    }
+
+    /** The longest stretch of [word] whose [width] stays within [target] (at most [max] tatweel). */
+    fun fill(word: String, target: Float, max: Int = 80, width: (String) -> Float): String {
+        if (point(word) == null) return word
+        var lo = 0
+        var hi = max
+        if (width(stretch(word, 0)) > target) return word
+        while (lo < hi) {
+            val mid = (lo + hi + 1) / 2
+            if (width(stretch(word, mid)) <= target) lo = mid else hi = mid - 1
+        }
+        return stretch(word, lo)
+    }
+}

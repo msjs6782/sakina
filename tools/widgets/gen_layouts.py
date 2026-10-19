@@ -385,6 +385,39 @@ LAYOUTS["w_fajr_maghrib"] = frame(content(refresh_row() + '''
     + text("w_ramadan", "W.Text.Medium", "w_sample_ramadan", extra='\n            android:gravity="center"\n            android:textAlignment="center"')
     + text("w_stamp", "W.Text.Small", "w_sample_stamp", extra='\n            android:gravity="center"\n            android:textAlignment="center"')))
 
+# 11. The day's name stretched with kashida across the widget, the dates above it, the prayers and the time left.
+LAYOUTS["w_dayname"] = frame(content('''
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/w_lead"
+                android:layout_width="22dp"
+                android:layout_height="1dp" />
+''' + indent(text("w_place", "W.Text.Small", "w_sample_dates", "weight", extra='\n            android:gravity="center"\n            android:textAlignment="center"')) + '''
+
+            <ImageView
+                android:id="@+id/w_refresh"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@string/w_refresh"
+                android:padding="2dp"
+                android:src="@drawable/w_ic_refresh" />
+        </LinearLayout>''' + text("w_dayname", "W.Day", "w_sample_dayname") + cells()
+    + text("w_remain", "W.Text.Small", "w_sample_left_until")))
+
+
+def kufi(xml):
+    """The same layout in Noto Kufi Arabic: every W.* style becomes its WK.* copy (the day name keeps its font)."""
+    return xml.replace('style="@style/W.', 'style="@style/WK.').replace("@style/WK.Day", "@style/W.Day")
+
+
+for name, xml in list(LAYOUTS.items()):
+    LAYOUTS[name + "_k"] = kufi(xml)
+
 for name, xml in LAYOUTS.items():
     (OUT / f"{name}.xml").write_text(xml, encoding="utf-8")
 print(f"wrote {len(LAYOUTS)} layouts to {OUT}")

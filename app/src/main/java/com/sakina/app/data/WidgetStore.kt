@@ -24,6 +24,12 @@ enum class WidgetTheme { APP, SYSTEM, LIGHT, DARK }
 
 enum class WidgetClock { APP, H12, H24 }
 
+/** The widget's typeface: the app's (IBM Plex Sans Arabic) or Noto Kufi Arabic. */
+enum class WidgetFont { APP, KUFI }
+
+/** How the next prayer stands out in a table: a filled pill behind it, or its text colour only. */
+enum class WidgetHighlight { FILL, TEXT }
+
 /** A plain colour, or the painted sky of the time of day at the widget's place. */
 enum class WidgetBackground { COLOR, SKY }
 
@@ -58,6 +64,17 @@ data class WidgetConfig(
     val border: Int = 0,
     /** Glass panel: keeps the panel opaque enough for the text to stay readable on any wallpaper. */
     val contrastGuard: Boolean = true,
+    val font: WidgetFont = WidgetFont.APP,
+    val highlight: WidgetHighlight = WidgetHighlight.FILL,
+    /** What the widget shows, where its type has it: the place (with the refresh button), the refresh button, the date. */
+    val showPlace: Boolean = true,
+    val showRefresh: Boolean = true,
+    val showDate: Boolean = true,
+    /** The time left until the next prayer, and the time it was last updated. */
+    val showRemaining: Boolean = true,
+    val showStamp: Boolean = true,
+    /** Sunrise in the prayer tables; null: the type's default (the day-name widget leaves it out). */
+    val showSunrise: Boolean? = null,
     val contentMode: ContentMode = ContentMode.MIXED,
     /** Steps taken with the content widget's "next" button; added to the day's position in the list. */
     val contentShift: Int = 0,

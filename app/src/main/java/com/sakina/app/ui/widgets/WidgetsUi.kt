@@ -77,6 +77,8 @@ import com.sakina.app.data.VisualStyle
 import com.sakina.app.data.WidgetBackground
 import com.sakina.app.data.WidgetClock
 import com.sakina.app.data.WidgetConfig
+import com.sakina.app.data.WidgetFont
+import com.sakina.app.data.WidgetHighlight
 import com.sakina.app.data.WidgetLang
 import com.sakina.app.data.WidgetPlaceMode
 import com.sakina.app.data.WidgetTheme
@@ -103,16 +105,40 @@ object WidgetsDebug {
     @Volatile var gallerySky = false
 }
 
-/** A native preview: the widget's own RemoteViews inflated here, on a wallpaper-like backdrop to show transparency. */
+/**
+ * The colours of the phone's wallpaper (Android 8.1+, no permission needed), for a backdrop that shows a widget's
+ * transparency the way the home screen will. Falls back to a neutral gradient.
+ */
 @Composable
-fun RemoteViewPreview(views: RemoteViews?, wDp: Float, hDp: Float, tag: String, modifier: Modifier = Modifier) {
+fun wallpaperBrush(): Brush {
+    val context = LocalContext.current
+    val colors = remember {
+        runCatching {
+            if (Build.VERSION.SDK_INT < 27) null
+            else android.app.WallpaperManager.getInstance(context).getWallpaperColors(android.app.WallpaperManager.FLAG_SYSTEM)?.let { wc ->
+                listOfNotNull(wc.primaryColor, wc.secondaryColor, wc.tertiaryColor).map { Color(it.toArgb()) }
+            }
+        }.getOrNull()?.takeIf { it.isNotEmpty() }
+    }
+    val list = when {
+        colors == null -> listOf(Color(0xFF3E6B8A), Color(0xFFD9A066), Color(0xFFF2EEE6))
+        colors.size == 1 -> listOf(colors[0], colors[0].copy(alpha = 0.85f))
+        else -> colors
+    }
+    return Brush.linearGradient(list)
+}
+
+/** A native preview: the widget's own RemoteViews inflated here, on the wallpaper's colours to show transparency. */
+@Composable
+fun RemoteViewPreview(views: RemoteViews?, wDp: Float, hDp: Float, tag: String, modifier: Modifier = Modifier, maxHeightDp: Float = Float.MAX_VALUE) {
+    val backdrop = wallpaperBrush()
     BoxWithConstraints(modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         val avail = maxWidth.value - 24f
-        val scale = if (wDp > avail) avail / wDp else 1f
+        val scale = minOf(1f, avail / wDp, maxHeightDp / hDp)
         Box(
             Modifier
                 .clip(RoundedCornerShape(20.dp))
-                .background(Brush.linearGradient(listOf(Color(0xFF3E6B8A), Color(0xFFD9A066), Color(0xFFF2EEE6))))
+                .background(backdrop)
                 .padding(12.dp),
             contentAlignment = Alignment.Center,
         ) {
@@ -174,6 +200,10 @@ fun WidgetsScreen(vm: MainViewModel, s: AppSettings) {
                     val place = w.config.place?.takeIf { w.config.placeMode == WidgetPlaceMode.FIXED }?.name(s.language) ?: str.wPlaceApp
                     Column(Modifier.fillMaxWidth().padding(vertical = 4.dp).testTag("placed_${w.kind.id}")) {
                         Text(str.widgetName(w.kind.id), style = MaterialTheme.typography.bodyLarge)
+                        // The widget as it is now: its own settings at the size the launcher gave it.
+                        val psize = remember(w.id, tick) { WidgetUpdater.sizesOf(context, w.id, w.kind).maxByOrNull { it.height } ?: WidgetRenderer.defaultSize(w.kind) }
+                        val pviews = remember(w, s, tick) { previewViews(app, s, w.kind, w.config, psize) }
+                        RemoteViewPreview(pviews, psize.width, psize.height, "placed_preview_${w.kind.id}", Modifier.padding(vertical = 6.dp), maxHeightDp = 220f)
                         val sub = if (w.kind.needsPlace) place else when (w.config.contentMode) {
                             ContentMode.MIXED -> str.wContentMixed
                             ContentMode.ADHKAR -> str.wContentAdhkar
@@ -211,6 +241,7 @@ fun WidgetsScreen(vm: MainViewModel, s: AppSettings) {
 
             Text(str.widgetsGallery, style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(top = 4.dp))
             NoteText(str.widgetsGalleryNote)
+            NoteText(str.wPreviewOnWallpaper)
             // Preview every widget on a plain colour or on the painted sky (a setting of each widget).
             var gallerySky by remember { mutableStateOf(WidgetsDebug.gallerySky) }
             Chips(listOf(false to str.wBgColorMode, true to str.wBgSkyMode), gallerySky, "gallery_bg_") { gallerySky = it }
@@ -332,15 +363,20 @@ fun WidgetConfigScreen(
     LaunchedEffect(Unit) { cities = app.cities.all() }
     Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars).imePadding()) {
         ScreenBar(str.widgetName(kind.id), onBack = onBack)
-        Column(
-            Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            RemoteViewPreview(views, size.width, size.height, "wcfg_preview")
+        // The preview and the save button stay in view while the settings scroll beneath them.
+        Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            RemoteViewPreview(views, size.width, size.height, "wcfg_preview", maxHeightDp = 230f)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(onClick = { onSave(cfg) }, modifier = Modifier.weight(1f).testTag("wcfg_save")) { Text(str.wSave) }
                 OutlinedButton(onClick = onRefresh, modifier = Modifier.testTag("wcfg_refresh")) { Text(str.refreshNow) }
             }
+            Divider()
+        }
+        Column(
+            Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            ElementsCard(kind, cfg) { cfg = it }
 
             if (kind.needsPlace) SectionCard(title = str.wPlace) {
                 ChoiceRow(cfg.placeMode == WidgetPlaceMode.APP, str.wPlaceApp, s.activeLocation?.name(s.language), onClick = { cfg = cfg.copy(placeMode = WidgetPlaceMode.APP) })
@@ -391,6 +427,10 @@ fun WidgetConfigScreen(
                 ) { cfg = cfg.copy(dynamicColor = it) }
             }
 
+            SectionCard(title = str.wFont) {
+                Chips(listOf(WidgetFont.APP to str.wFontApp, WidgetFont.KUFI to str.wFontKufi), cfg.font, "wcfg_font_") { cfg = cfg.copy(font = it) }
+            }
+
             SectionCard(title = str.wTextSize) {
                 Text(str.digits("${cfg.textScale}%"), style = MaterialTheme.typography.titleMedium, modifier = Modifier.testTag("wcfg_scale_value"))
                 Slider(
@@ -438,6 +478,30 @@ fun WidgetConfigScreen(
             if (kind == WidgetKind.ANALOG) NoteText(if (Build.VERSION.SDK_INT >= 31) str.wAnalogNoteNew else str.wAnalogNoteOld)
             OutlinedButton(onClick = { cfg = WidgetConfig.defaultsFor(kind.id) }, modifier = Modifier.fillMaxWidth().testTag("wcfg_reset")) { Text(str.wReset) }
             Spacer(Modifier.height(24.dp))
+        }
+    }
+}
+
+/** Which parts the widget shows, for the parts its type has. */
+@Composable
+private fun ElementsCard(kind: WidgetKind, cfg: WidgetConfig, onChange: (WidgetConfig) -> Unit) {
+    val str = LocalStrings.current
+    val hasPlace = kind in setOf(WidgetKind.NEXT, WidgetKind.COUNTDOWN, WidgetKind.DAY, WidgetKind.GLASS, WidgetKind.DIGITAL, WidgetKind.ANALOG, WidgetKind.FAJR_MAGHRIB, WidgetKind.DAYNAME)
+    val hasRefresh = hasPlace && kind != WidgetKind.ANALOG
+    val hasDate = kind in setOf(WidgetKind.DAY, WidgetKind.DIGITAL, WidgetKind.FAJR_MAGHRIB, WidgetKind.DAYNAME)
+    val hasRemaining = kind.showsRemaining && kind != WidgetKind.COUNTDOWN
+    val hasTable = kind in setOf(WidgetKind.DAY, WidgetKind.GLASS, WidgetKind.STRIP, WidgetKind.DAYNAME)
+    if (!hasPlace && !hasDate && !kind.showsRemaining && !hasTable) return
+    SectionCard(title = str.wElements, modifier = Modifier.testTag("wcfg_elements")) {
+        if (hasPlace) SwitchRow(cfg.showPlace, str.wShowPlace, modifier = Modifier.testTag("wcfg_show_place")) { onChange(cfg.copy(showPlace = it)) }
+        if (hasRefresh) SwitchRow(cfg.showRefresh, str.wShowRefresh, modifier = Modifier.testTag("wcfg_show_refresh")) { onChange(cfg.copy(showRefresh = it)) }
+        if (hasDate) SwitchRow(cfg.showDate, str.wShowDate, modifier = Modifier.testTag("wcfg_show_date")) { onChange(cfg.copy(showDate = it)) }
+        if (hasRemaining) SwitchRow(cfg.showRemaining, str.wShowRemaining, modifier = Modifier.testTag("wcfg_show_remaining")) { onChange(cfg.copy(showRemaining = it)) }
+        if (kind.showsRemaining) SwitchRow(cfg.showStamp && (cfg.showRemaining || kind == WidgetKind.COUNTDOWN), str.wShowStamp, enabled = cfg.showRemaining || kind == WidgetKind.COUNTDOWN, modifier = Modifier.testTag("wcfg_show_stamp")) { onChange(cfg.copy(showStamp = it)) }
+        if (hasTable) {
+            SwitchRow(cfg.showSunrise ?: (kind != WidgetKind.DAYNAME), str.wShowSunrise, modifier = Modifier.testTag("wcfg_show_sunrise")) { onChange(cfg.copy(showSunrise = it)) }
+            Text(str.wHighlight, style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 10.dp))
+            Chips(listOf(WidgetHighlight.FILL to str.wHighlightFill, WidgetHighlight.TEXT to str.wHighlightText), cfg.highlight, "wcfg_highlight_") { onChange(cfg.copy(highlight = it)) }
         }
     }
 }

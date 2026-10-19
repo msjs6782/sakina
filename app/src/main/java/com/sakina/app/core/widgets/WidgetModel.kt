@@ -24,10 +24,12 @@ enum class WidgetKind(val id: String) {
     DIGITAL("digital"),
     ANALOG("analog"),
     CONTENT("content"),
-    FAJR_MAGHRIB("fajr_maghrib");
+    FAJR_MAGHRIB("fajr_maghrib"),
+    /** The day's name stretched with kashida across the widget, the dates, the five prayers and the time left. */
+    DAYNAME("dayname");
 
     /** Types that show a remaining time; it is a snapshot refreshed about once a minute and shown with its time. */
-    val showsRemaining: Boolean get() = this in setOf(NEXT, COUNTDOWN, DAY, GLASS, DIGITAL, FAJR_MAGHRIB)
+    val showsRemaining: Boolean get() = this in setOf(NEXT, COUNTDOWN, DAY, GLASS, DIGITAL, FAJR_MAGHRIB, DAYNAME)
 
     /** Types whose content depends on prayer times (and so on a place). */
     val needsPlace: Boolean get() = this != CONTENT

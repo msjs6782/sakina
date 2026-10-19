@@ -198,9 +198,9 @@ fun ChoiceRow(selected: Boolean, title: String, detail: String? = null, onClick:
 }
 
 @Composable
-fun SwitchRow(checked: Boolean, title: String, detail: String? = null, enabled: Boolean = true, onChange: (Boolean) -> Unit) {
+fun SwitchRow(checked: Boolean, title: String, detail: String? = null, enabled: Boolean = true, modifier: Modifier = Modifier, onChange: (Boolean) -> Unit) {
     Row(
-        Modifier
+        modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(14.dp))
             .clickable(enabled = enabled, role = Role.Switch) { onChange(!checked) }

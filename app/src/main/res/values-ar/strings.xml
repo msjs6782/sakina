@@ -25,9 +25,14 @@
     <string name="w_label_content">ذكر وآية</string>
     <string name="w_desc_content">ذكر قصير أو آية مختارة مع مصدرها</string>
     <string name="w_label_fajr_maghrib">الفجر والمغرب</string>
+    <string name="w_label_dayname">اليوم الممدود</string>
+    <string name="w_desc_dayname">اسم اليوم ممدودًا مع التاريخين والصلوات</string>
     <string name="w_desc_fajr_maghrib">الفجر والمغرب والتاريخ الهجري ورمضان</string>
     <string name="w_refresh">تحديث</string>
     <string name="w_next_item">التالي</string>
+    <string name="w_sample_dates">١٤٤٨-٠٥-٠٩ | ٢٠٢٦-١٠-٢٠</string>
+    <string name="w_sample_dayname">الاثنيـــــــــــن</string>
+    <string name="w_sample_left_until">باقي على المغرب ٥٠ د</string>
     <string name="w_sample_place">الرياض</string>
     <string name="w_sample_name">العصر</string>
     <string name="w_sample_time">٣:٠٥ م</string>
