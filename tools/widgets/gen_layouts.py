@@ -393,10 +393,11 @@ LAYOUTS["w_dayname"] = frame(content('''
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <View
+            <ImageView
                 android:id="@+id/w_lead"
                 android:layout_width="22dp"
-                android:layout_height="1dp" />
+                android:layout_height="22dp"
+                android:importantForAccessibility="no" />
 ''' + indent(text("w_place", "W.Text.Small", "w_sample_dates", "weight", extra='\n            android:gravity="center"\n            android:textAlignment="center"')) + '''
 
             <ImageView

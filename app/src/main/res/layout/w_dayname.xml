@@ -54,10 +54,11 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <View
+            <ImageView
                 android:id="@+id/w_lead"
                 android:layout_width="22dp"
-                android:layout_height="1dp" />
+                android:layout_height="22dp"
+                android:importantForAccessibility="no" />
 
             <TextView
                 android:id="@+id/w_place"

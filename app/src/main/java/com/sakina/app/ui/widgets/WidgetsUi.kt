@@ -365,7 +365,7 @@ fun WidgetConfigScreen(
         ScreenBar(str.widgetName(kind.id), onBack = onBack)
         // The preview and the save button stay in view while the settings scroll beneath them.
         Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            RemoteViewPreview(views, size.width, size.height, "wcfg_preview", maxHeightDp = 230f)
+            RemoteViewPreview(views, size.width, size.height, "wcfg_preview", maxHeightDp = 170f)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(onClick = { onSave(cfg) }, modifier = Modifier.weight(1f).testTag("wcfg_save")) { Text(str.wSave) }
                 OutlinedButton(onClick = onRefresh, modifier = Modifier.testTag("wcfg_refresh")) { Text(str.refreshNow) }

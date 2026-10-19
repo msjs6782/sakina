@@ -285,12 +285,12 @@ private fun DayCell(day: GridDay, kind: CalendarKind, s: AppSettings, today: Loc
     }
 }
 
-/** The next occasions and personal dates from today (about four months ahead), at most five. */
+/** The next occasions and personal dates from today (up to about thirteen months ahead), at most five. */
 private fun upcoming(str: com.sakina.app.ui.Strings, s: AppSettings, today: LocalDate): List<Pair<LocalDate, String>> {
     val out = mutableListOf<Pair<LocalDate, String>>()
     var d = today.plusDays(1)
     var last: Occasion? = null
-    repeat(130) {
+    repeat(400) {
         if (out.size >= 5) return out
         // A multi-day occasion is listed on its first day only.
         val o = Occasions.on(d, s.hijriOffset).firstOrNull()
