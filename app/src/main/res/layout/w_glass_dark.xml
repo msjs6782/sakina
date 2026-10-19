@@ -3,7 +3,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/w_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clipToOutline="true">
 
     <ImageView
         android:id="@+id/w_bg"
@@ -12,6 +13,23 @@
         android:importantForAccessibility="no"
         android:scaleType="fitXY"
         android:src="@drawable/w_shape_16" android:tint="#73000000" android:tintMode="src_in" />
+
+    <ImageView
+        android:id="@+id/w_sky"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/w_scrim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="fitXY"
+        android:src="@drawable/w_scrim"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/w_border"

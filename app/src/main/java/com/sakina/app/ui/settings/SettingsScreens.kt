@@ -214,6 +214,7 @@ fun AppearanceScreen(vm: MainViewModel, s: AppSettings) {
                 StyleOption(st, s.style == st, str.styleName(st), str.styleDetail(st)) { vm.update { it.copy(style = st) } }
                 Spacer(Modifier.height(8.dp))
             }
+            SwitchRow(s.heroArt, str.heroArt, str.heroArtNote) { v -> vm.update { it.copy(heroArt = v) } }
         }
         SectionCard(title = str.themeTitle, icon = SakinaIcons.Moon) {
             val modes = listOf(ThemeMode.SYSTEM, ThemeMode.LIGHT, ThemeMode.DARK, ThemeMode.SUN)

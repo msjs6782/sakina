@@ -79,6 +79,8 @@ data class SakinaExtras(
     val gold: Color,
     val stars: Boolean,
     val sahar: Pair<Color, Color>,
+    /** The prayer card shows the painted sky of the time of day (light text over it). */
+    val art: Boolean = false,
 ) {
     fun heroBrush(period: SkyPeriod): Brush = when (style) {
         VisualStyle.OASIS -> {
@@ -167,7 +169,7 @@ private fun raml(dark: Boolean): ColorScheme = if (!dark) lightColorScheme(
 val dynamicColorSupported: Boolean get() = Build.VERSION.SDK_INT >= 31
 
 @Composable
-fun SakinaTheme(style: VisualStyle, dark: Boolean, dynamic: Boolean, content: @Composable () -> Unit) {
+fun SakinaTheme(style: VisualStyle, dark: Boolean, dynamic: Boolean, heroArt: Boolean = false, content: @Composable () -> Unit) {
     val context = LocalContext.current
     val useDynamic = dynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val scheme = if (dynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -185,13 +187,14 @@ fun SakinaTheme(style: VisualStyle, dark: Boolean, dynamic: Boolean, content: @C
     val extras = SakinaExtras(
         style = style,
         dark = dark,
-        heroIsGradient = style != VisualStyle.RAML,
-        heroOn = if (style == VisualStyle.RAML) scheme.onSurface else Color.White,
-        heroOnMuted = if (style == VisualStyle.RAML) scheme.onSurfaceVariant else Color.White.copy(alpha = 0.8f),
+        heroIsGradient = heroArt || style != VisualStyle.RAML,
+        heroOn = if (style == VisualStyle.RAML && !heroArt) scheme.onSurface else Color.White,
+        heroOnMuted = if (style == VisualStyle.RAML && !heroArt) scheme.onSurfaceVariant else Color.White.copy(alpha = if (heroArt) 0.86f else 0.8f),
         heroFlat = scheme.surfaceContainerHigh,
         gold = if (dark) Color(0xFFE9C77F) else Color(0xFF9A7428),
         stars = style == VisualStyle.SAHAR,
         sahar = saharColors,
+        art = heroArt,
     )
     CompositionLocalProvider(LocalExtras provides extras) {
         MaterialTheme(colorScheme = scheme, typography = SakinaTypography, content = content)

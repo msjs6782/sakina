@@ -24,6 +24,9 @@ enum class WidgetTheme { APP, SYSTEM, LIGHT, DARK }
 
 enum class WidgetClock { APP, H12, H24 }
 
+/** A plain colour, or the painted sky of the time of day at the widget's place. */
+enum class WidgetBackground { COLOR, SKY }
+
 /**
  * One widget's own settings. Colours are ARGB; null means "from the visual style". Stored per widget id on the
  * device only, and never part of a backup (the spec keeps widget copies out of backups).
@@ -43,6 +46,7 @@ data class WidgetConfig(
     val clock: WidgetClock = WidgetClock.APP,
     /** Text size in percent of the type's default; the widget still shrinks text that would not fit. */
     val textScale: Int = 100,
+    val background: WidgetBackground = WidgetBackground.COLOR,
     val textColor: Long? = null,
     val backgroundColor: Long? = null,
     val accentColor: Long? = null,

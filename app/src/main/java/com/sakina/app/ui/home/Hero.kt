@@ -1,6 +1,7 @@
 package com.sakina.app.ui.home
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +25,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -38,6 +44,7 @@ import com.sakina.app.core.prayer.PrayerKey
 import com.sakina.app.ui.components.MonoDigits
 import com.sakina.app.ui.components.prayerIcon
 import com.sakina.app.ui.theme.LocalExtras
+import com.sakina.app.ui.theme.SkyArt
 import com.sakina.app.ui.theme.SkyPeriod
 import java.time.Instant
 import kotlin.random.Random
@@ -65,6 +72,37 @@ fun skyPeriod(day: DayTimes, now: Instant): SkyPeriod {
 /** The decorated surface behind the next-prayer card: sky gradient, starry indigo, or a flat sand panel. */
 @Composable
 fun HeroSurface(period: SkyPeriod, modifier: Modifier = Modifier, corner: Dp = 28.dp, decorate: Boolean = true, content: @Composable BoxScope.() -> Unit) {
+    val ex = LocalExtras.current
+    if (ex.art) SkySurface(period, modifier, corner, content) else GradientSurface(period, modifier, corner, decorate, content)
+}
+
+/**
+ * The painted sky of the time of day, anchored to the bottom (the skyline) and mirrored in right-to-left layouts so
+ * the town sits away from where the text starts, under a veil that keeps the white text readable.
+ */
+@Composable
+private fun SkySurface(period: SkyPeriod, modifier: Modifier, corner: Dp, content: @Composable BoxScope.() -> Unit) {
+    val ex = LocalExtras.current
+    val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val a = SkyArt.scrim(period, ex.dark)
+    Box(modifier.clip(RoundedCornerShape(corner)).background(Color(SkyArt.topColor(period))).testTag("hero_sky_${period.name.lowercase()}")) {
+        Image(
+            painterResource(SkyArt.drawable(period)), null,
+            Modifier.matchParentSize().graphicsLayer { if (rtl) scaleX = -1f },
+            contentScale = ContentScale.Crop,
+            alignment = Alignment.BottomCenter,
+        )
+        Box(
+            Modifier.matchParentSize().background(
+                Brush.verticalGradient(0f to Color.Black.copy(alpha = a), 0.55f to Color.Black.copy(alpha = a * 0.8f), 1f to Color.Black.copy(alpha = a)),
+            ),
+        )
+        content()
+    }
+}
+
+@Composable
+private fun GradientSurface(period: SkyPeriod, modifier: Modifier, corner: Dp, decorate: Boolean, content: @Composable BoxScope.() -> Unit) {
     val ex = LocalExtras.current
     val shape = RoundedCornerShape(corner)
     var m = modifier.clip(shape).background(ex.heroBrush(period))

@@ -81,6 +81,8 @@ data class AppSettings(
     val style: VisualStyle = VisualStyle.OASIS,
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val dynamicColor: Boolean = false,
+    /** The prayer card shows a painted sky that follows the time of day (instead of the style's colours). */
+    val heroArt: Boolean = true,
     /** Used by the printed Mushaf viewer (later phase); independent of the app theme. */
     val mushafNight: Boolean = false,
     val method: CalcMethod = CalcMethod.UMM_AL_QURA,

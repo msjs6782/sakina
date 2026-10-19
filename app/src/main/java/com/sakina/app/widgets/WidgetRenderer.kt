@@ -31,11 +31,15 @@ import com.sakina.app.core.widgets.WidgetKind
 import com.sakina.app.core.widgets.WidgetMath
 import com.sakina.app.data.AppSettings
 import com.sakina.app.data.SavedLocation
+import com.sakina.app.data.WidgetBackground
 import com.sakina.app.data.WidgetConfig
 import com.sakina.app.data.clock24
 import com.sakina.app.data.language
 import com.sakina.app.data.resolvePlace
 import com.sakina.app.ui.Strings
+import com.sakina.app.ui.home.skyPeriod
+import com.sakina.app.ui.theme.SkyArt
+import com.sakina.app.ui.theme.SkyPeriod
 import java.time.Duration
 import java.time.Instant
 import java.time.ZoneId
@@ -148,7 +152,12 @@ object WidgetRenderer {
         val zone: ZoneId = place?.zoneId ?: ZoneId.systemDefault()
         val schedule: PrayerSchedule? = place?.let { PrayerSchedule(it.point, zone, s.calcConfig) }
         val glass = kind == WidgetKind.GLASS
-        val colors = WidgetPalette.resolve(ctx, cfg, s, now, glass)
+        /** The painted sky behind the widget (null for a plain colour): the time of day at the widget's place. */
+        val sky: SkyPeriod? = if (cfg.background != WidgetBackground.SKY || glass) null else {
+            val sch = schedule ?: s.activeLocation?.takeIf { it.isUsable }?.let { l -> PrayerSchedule(l.point, l.zoneId!!, s.calcConfig) }
+            sch?.let { skyPeriod(it.day(it.localDate(now)), now) } ?: SkyPeriod.NOON
+        }
+        val colors = if (sky != null) WidgetPalette.sky(cfg, SkyArt.topColor(sky)) else WidgetPalette.resolve(ctx, cfg, s, now, glass)
         val key = StringBuilder()
         lateinit var rv: RemoteViews
 
@@ -228,6 +237,20 @@ object WidgetRenderer {
             } else {
                 rv.setViewVisibility(R.id.w_border, View.GONE)
             }
+            if (sky != null) {
+                // The launcher crops from the centre: wide widgets get a band from the bottom, so the skyline stays.
+                val wide = wDp >= hDp * 2.2f
+                rv.setImageViewResource(R.id.w_sky, if (wide) SkyArt.wideDrawable(sky) else SkyArt.drawable(sky))
+                rv.setViewVisibility(R.id.w_sky, View.VISIBLE)
+                rv.setViewVisibility(R.id.w_scrim, View.VISIBLE)
+                rv.setInt(R.id.w_scrim, "setImageAlpha", (SkyArt.scrim(sky, false) * 255).toInt())
+                key.append("sky").append(sky).append(wide).append('|')
+            } else {
+                rv.setViewVisibility(R.id.w_sky, View.GONE)
+                rv.setViewVisibility(R.id.w_scrim, View.GONE)
+            }
+            // Android 12+ clips the whole widget (painting included) to the chosen corners.
+            if (Build.VERSION.SDK_INT >= 31) rv.setViewOutlinePreferredRadius(R.id.w_root, corner.toFloat(), TypedValue.COMPLEX_UNIT_DIP)
             key.append("c").append(corner).append('b').append(cfg.border).append('|')
             rv.setInt(R.id.w_root, "setLayoutDirection", if (lang == Lang.AR) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR)
             val p = pad.toInt()

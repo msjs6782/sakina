@@ -103,6 +103,16 @@ object WidgetPalette {
         return WidgetColors(bg, opacity * 255 / 100, text, muted, accent, soft, accent, dark, softAlpha)
     }
 
+    /**
+     * Colours over a painted sky: white text, a warm gold accent (the user's own text and accent colours still win),
+     * and a see-through highlight.
+     */
+    fun sky(cfg: WidgetConfig, top: Int): WidgetColors {
+        val text = cfg.textColor?.let { it.toInt() or (0xFF shl 24) } ?: 0xFFFFFFFF.toInt()
+        val accent = cfg.accentColor?.let { it.toInt() or (0xFF shl 24) } ?: 0xFFF3D58B.toInt()
+        return WidgetColors(top, 255, text, withAlpha(text, 0.86f), accent, 0xFFFFFFFF.toInt(), accent, dark = true, softAlpha = 60)
+    }
+
     /** The minimum glass opacity the contrast guard keeps for these colours, in percent. */
     fun glassFloor(context: Context, cfg: WidgetConfig, s: AppSettings, now: Instant): Int {
         val c = resolve(context, cfg.copy(opacity = 0, contrastGuard = false), s, now, glass = true)

@@ -131,7 +131,7 @@ jobs:
           profile: pixel_6
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
           disable-animations: true
-          script: ONLY=${{ contains(github.event.head_commit.message, '[ci:widgets]') && 'widgets' || 'all' }} bash ci/screenshots.sh out/sakina-debug.apk screenshots-${{ matrix.api }} ${{ matrix.suite }}
+          script: ONLY=${{ contains(github.event.head_commit.message, '[ci:widgets]') && 'widgets' || (contains(github.event.head_commit.message, '[ci:visual]') && 'visual' || 'all') }} bash ci/screenshots.sh out/sakina-debug.apk screenshots-${{ matrix.api }} ${{ matrix.suite }}
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -149,8 +149,8 @@ jobs:
 
   release:
     needs: [build, ui-check]
-    # Partial runs ([ci:widgets] in the commit message) are for development and are never released.
-    if: needs.build.outputs.signed == 'true' && !contains(github.event.head_commit.message, '[ci:widgets]')
+    # Partial runs ([ci:widgets] or [ci:visual] in the commit message) are for development and are never released.
+    if: needs.build.outputs.signed == 'true' && !contains(github.event.head_commit.message, '[ci:widgets]') && !contains(github.event.head_commit.message, '[ci:visual]')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4

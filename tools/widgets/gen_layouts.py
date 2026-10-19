@@ -3,7 +3,7 @@
 
 The layouts are plain RemoteViews layouts (FrameLayout, LinearLayout, TextView, ImageView, TextClock,
 AnalogClock only). Each starts with a background and a border image that the app tints at runtime, so
-colours, opacity, corners and borders are per widget. Default texts come from string resources and are
+colours, opacity, corners and borders are per widget; a painted sky and its veil can replace the colour. Default texts come from string resources and are
 what the launcher's preview (previewLayout, Android 12+) shows. Sizes and colours are set at runtime.
 Run from the repository root after changing it: python3 tools/widgets/gen_layouts.py
 """
@@ -20,7 +20,8 @@ def frame(body, glass=False, msg_style="W.Text"):
 <FrameLayout {NS}
     android:id="@+id/w_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clipToOutline="true">
 
     <ImageView
         android:id="@+id/w_bg"
@@ -29,6 +30,23 @@ def frame(body, glass=False, msg_style="W.Text"):
         android:importantForAccessibility="no"
         android:scaleType="fitXY"
         android:src="@drawable/w_shape_16"{' android:tint="#73000000" android:tintMode="src_in"' if glass else ''} />
+
+    <ImageView
+        android:id="@+id/w_sky"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/w_scrim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="fitXY"
+        android:src="@drawable/w_scrim"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/w_border"

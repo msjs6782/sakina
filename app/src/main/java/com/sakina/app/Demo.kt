@@ -72,6 +72,7 @@ object Demo {
                 e.getString("demo_highlat")?.let { s = s.copy(highLatitude = HighLatitudeRule.valueOf(it)) }
                 e.getString("demo_isha")?.let { s = s.copy(ummAlQuraIsha = UmmAlQuraIsha.valueOf(it)) }
                 if (e.containsKey("demo_dynamic")) s = s.copy(dynamicColor = e.getBoolean("demo_dynamic"))
+                if (e.containsKey("demo_hero_art")) s = s.copy(heroArt = e.getBoolean("demo_hero_art"))
                 if (e.containsKey("demo_hijri")) s = s.copy(hijriOffset = e.getInt("demo_hijri"))
                 e.getString("demo_alerts")?.let { spec ->
                     var a = s.alerts
@@ -204,6 +205,7 @@ object Demo {
         }
         com.sakina.app.ui.mushaf.MushafDebug.initialZoom = e.getFloat("demo_zoom", 1f)
         com.sakina.app.ui.widgets.WidgetsDebug.sizes = e.getBoolean("demo_widget_sizes")
+        com.sakina.app.ui.widgets.WidgetsDebug.gallerySky = e.getBoolean("demo_gallery_sky")
         if (e.containsKey("demo_idle_ms")) com.sakina.app.audio.RecitationService.idleEndMs = e.getLong("demo_idle_ms")
         com.sakina.app.data.RecitationRepository.debugSlowMs = e.getLong("demo_dl_slow_ms", 0)
         if (e.getBoolean("demo_mushaf_clear")) runBlocking {

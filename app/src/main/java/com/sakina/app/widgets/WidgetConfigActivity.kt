@@ -80,7 +80,7 @@ class WidgetConfigActivity : ComponentActivity() {
             LocalStrings provides str,
             LocalFmt provides s.fmt,
         ) {
-            SakinaTheme(style = s.style, dark = dark, dynamic = s.dynamicColor) {
+            SakinaTheme(style = s.style, dark = dark, dynamic = s.dynamicColor, heroArt = s.heroArt) {
                 Surface(color = MaterialTheme.colorScheme.background, modifier = Modifier.fillMaxSize().semantics { testTagsAsResourceId = true }) {
                     WidgetConfigScreen(
                         app = app, s = s, id = id, kind = kind, initial = initial,

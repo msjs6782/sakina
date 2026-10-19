@@ -112,7 +112,7 @@ fun SakinaRoot(vm: MainViewModel, startTimesView: TimesView = TimesView.DAY) {
         LocalFmt provides s.fmt,
         LocalMainVm provides vm,
     ) {
-        SakinaTheme(style = s.style, dark = dark, dynamic = s.dynamicColor) {
+        SakinaTheme(style = s.style, dark = dark, dynamic = s.dynamicColor, heroArt = s.heroArt) {
             Surface(color = MaterialTheme.colorScheme.background, modifier = Modifier.fillMaxSize().semantics { testTagsAsResourceId = true }) {
                 BackHandler(enabled = vm.stack.isNotEmpty() || (s.onboardingDone && vm.tab != Tab.HOME)) {
                     if (!vm.pop()) vm.tab = Tab.HOME

@@ -157,6 +157,8 @@ settings_json() { adb shell run-as "$PKG" cat files/datastore/settings.json 2>/d
 hide_ime() { if adb shell dumpsys input_method 2>/dev/null | grep -q "mInputShown=true"; then adb shell input keyevent 4; sleep 1; fi; }
 # shellcheck source=ci/phase8.sh
 source "$HERE/phase8.sh"
+# shellcheck source=ci/visual.sh
+source "$HERE/visual.sh"
 
 finish_run() {
   adb logcat -d >> "$OUT/logcat_part2.txt"
@@ -188,6 +190,12 @@ finish_run() {
 # A commit marked [ci:widgets] runs only the phase 8 checks (quicker while developing; never released).
 if [ "${ONLY:-}" = "widgets" ]; then
   phase8
+  adb logcat -d > "$OUT/logcat_part1.txt"; adb logcat -c
+  finish_run
+fi
+# [ci:visual] runs only the painted-sky checks.
+if [ "${ONLY:-}" = "visual" ]; then
+  visual
   adb logcat -d > "$OUT/logcat_part1.txt"; adb logcat -c
   finish_run
 fi
@@ -936,6 +944,9 @@ save_log
 
 # ---------- Phase 8: widgets, shortcuts and tiles (ci/phase8.sh) ----------
 phase8
+
+# ---------- Painted skies on the prayer card and widgets (ci/visual.sh) ----------
+visual
 
 # ---------- Phase 2: alerts (real AlarmManager, notifications, playback) ----------
 save_log

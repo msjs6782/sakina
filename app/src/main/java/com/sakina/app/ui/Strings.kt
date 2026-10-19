@@ -1271,6 +1271,14 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val scAdhkarWaking get() = t("أذكار الاستيقاظ", "Waking adhkar")
     fun tileNext(name: String, time: String) = t("$name $time", "$name $time")
 
+    // Painted skies (Higgsfield art).
+    val heroArt get() = t("لوحة السماء في بطاقة الصلاة", "Painted sky on the prayer card")
+    val heroArtNote get() = t("رسم للسماء يتبدّل مع وقت الصلاة: الفجر والضحى والظهر والعصر والمغرب والليل. أطفئه لتعود ألوان النمط.", "A painting of the sky that follows the time: Fajr, morning, noon, Asr, Maghrib and night. Turn off for the style's colours.")
+    val wBackground get() = t("الخلفية", "Background")
+    val wBgColorMode get() = t("لون", "Colour")
+    val wBgSkyMode get() = t("لوحة السماء", "Painted sky")
+    val wBgSkyNote get() = t("تتبدّل اللوحة مع وقت الصلاة في مدينة الويدجت، مع طبقة داكنة تحفظ وضوح النص الأبيض. الزوايا المستديرة للصورة من Android 12.", "The painting follows the time at the widget's place, under a veil that keeps the white text readable. Rounded corners on the picture need Android 12.")
+
 }
 
 val LocalStrings = staticCompositionLocalOf { Strings(Lang.AR) }

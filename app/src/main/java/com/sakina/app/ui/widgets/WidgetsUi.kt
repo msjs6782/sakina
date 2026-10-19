@@ -74,6 +74,7 @@ import com.sakina.app.data.AppClock
 import com.sakina.app.data.AppSettings
 import com.sakina.app.data.SettingsOps
 import com.sakina.app.data.VisualStyle
+import com.sakina.app.data.WidgetBackground
 import com.sakina.app.data.WidgetClock
 import com.sakina.app.data.WidgetConfig
 import com.sakina.app.data.WidgetLang
@@ -98,6 +99,8 @@ import kotlinx.coroutines.launch
 /** Debug builds only: the gallery shows each widget at three sizes (set by the CI's demo extras). */
 object WidgetsDebug {
     @Volatile var sizes = false
+    /** Opens the gallery with the painted-sky previews (CI screenshots). */
+    @Volatile var gallerySky = false
 }
 
 /** A native preview: the widget's own RemoteViews inflated here, on a wallpaper-like backdrop to show transparency. */
@@ -208,9 +211,13 @@ fun WidgetsScreen(vm: MainViewModel, s: AppSettings) {
 
             Text(str.widgetsGallery, style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(top = 4.dp))
             NoteText(str.widgetsGalleryNote)
+            // Preview every widget on a plain colour or on the painted sky (a setting of each widget).
+            var gallerySky by remember { mutableStateOf(WidgetsDebug.gallerySky) }
+            Chips(listOf(false to str.wBgColorMode, true to str.wBgSkyMode), gallerySky, "gallery_bg_") { gallerySky = it }
             for (kind in WidgetKind.entries) {
                 val size = WidgetRenderer.defaultSize(kind)
-                val views = remember(kind, s, tick) { previewViews(app, s, kind, WidgetConfig.defaultsFor(kind.id), size) }
+                fun base() = WidgetConfig.defaultsFor(kind.id).let { if (gallerySky) it.copy(background = WidgetBackground.SKY) else it }
+                val views = remember(kind, s, tick, gallerySky) { previewViews(app, s, kind, base(), size) }
                 SectionCard(modifier = Modifier.testTag("gallery_${kind.id}")) {
                     Text(str.widgetName(kind.id), style = MaterialTheme.typography.titleMedium)
                     Text(str.widgetDesc(kind.id), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -218,7 +225,7 @@ fun WidgetsScreen(vm: MainViewModel, s: AppSettings) {
                     RemoteViewPreview(views, size.width, size.height, "preview_${kind.id}")
                     if (WidgetsDebug.sizes) {
                         for (sz in WidgetRenderer.sampleSizes(kind).filter { it != size }) {
-                            val v = remember(kind, s, tick, sz) { previewViews(app, s, kind, WidgetConfig.defaultsFor(kind.id), sz) }
+                            val v = remember(kind, s, tick, sz, gallerySky) { previewViews(app, s, kind, base(), sz) }
                             Text("\u2066${sz.width.toInt()}×${sz.height.toInt()} dp\u2069", style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(top = 8.dp))
                             RemoteViewPreview(v, sz.width, sz.height, "preview_${kind.id}_${sz.width.toInt()}")
                         }
@@ -393,15 +400,23 @@ fun WidgetConfigScreen(
                 NoteText(str.wTextSizeNote)
             }
 
+            if (kind != WidgetKind.GLASS) SectionCard(title = str.wBackground) {
+                Chips(listOf(WidgetBackground.COLOR to str.wBgColorMode, WidgetBackground.SKY to str.wBgSkyMode), cfg.background, "wcfg_background_") { cfg = cfg.copy(background = it) }
+                if (cfg.background == WidgetBackground.SKY) NoteText(str.wBgSkyNote, Modifier.padding(top = 6.dp))
+            }
+
+            val sky = cfg.background == WidgetBackground.SKY && kind != WidgetKind.GLASS
             SectionCard(title = str.wColors) {
                 SwatchRow(str.wTextColor, cfg.textColor, "wcfg_text_") { cfg = cfg.copy(textColor = it) }
-                SwatchRow(str.wBgColor, cfg.backgroundColor, "wcfg_bg_") { cfg = cfg.copy(backgroundColor = it) }
+                if (!sky) SwatchRow(str.wBgColor, cfg.backgroundColor, "wcfg_bg_") { cfg = cfg.copy(backgroundColor = it) }
                 SwatchRow(str.wAccentColor, cfg.accentColor, "wcfg_accent_") { cfg = cfg.copy(accentColor = it) }
-                Text("${str.wOpacity}: ${str.digits("${cfg.opacity}")}%", style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 10.dp))
-                Slider(
-                    value = cfg.opacity.toFloat(), onValueChange = { cfg = cfg.copy(opacity = it.toInt()) },
-                    valueRange = 0f..100f, modifier = Modifier.testTag("wcfg_opacity"),
-                )
+                if (!sky) {
+                    Text("${str.wOpacity}: ${str.digits("${cfg.opacity}")}%", style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 10.dp))
+                    Slider(
+                        value = cfg.opacity.toFloat(), onValueChange = { cfg = cfg.copy(opacity = it.toInt()) },
+                        valueRange = 0f..100f, modifier = Modifier.testTag("wcfg_opacity"),
+                    )
+                }
                 if (kind == WidgetKind.GLASS) {
                     val floor = remember(cfg, s) { WidgetPalette.glassFloor(context, cfg, s, AppClock.now()) }
                     SwitchRow(cfg.contrastGuard, str.wContrastGuard, str.wContrastGuardNote(str.digits("$floor%"))) { cfg = cfg.copy(contrastGuard = it) }
