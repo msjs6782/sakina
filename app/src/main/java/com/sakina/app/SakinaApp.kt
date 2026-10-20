@@ -69,6 +69,12 @@ class SakinaApp : Application() {
                     AlertScheduler.run(this@SakinaApp, AlertScheduler.Run.REFRESH, "settings")
                 }
         }
+        // The khatma widget follows the plan and the reading position.
+        appScope.launch {
+            quranState.state.map { it.khatma }.distinctUntilChanged().collect {
+                com.sakina.app.widgets.WidgetUpdater.request(this@SakinaApp, "quran")
+            }
+        }
         // Widgets, icon shortcuts and tiles follow the settings (place, method, language, style...); widgets only
         // redraw when what they show changes.
         appScope.launch {

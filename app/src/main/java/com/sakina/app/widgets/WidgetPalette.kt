@@ -113,6 +113,20 @@ object WidgetPalette {
         return WidgetColors(top, 255, text, withAlpha(text, 0.86f), accent, 0xFFFFFFFF.toInt(), accent, dark = true, softAlpha = 60)
     }
 
+    /** Colours over a painted texture: light text on the teal pattern and night lattice, dark ink on paper. */
+    fun texture(cfg: WidgetConfig, bg: com.sakina.app.data.WidgetBackground): WidgetColors {
+        val paper = bg == com.sakina.app.data.WidgetBackground.PAPER
+        val base = when (bg) {
+            com.sakina.app.data.WidgetBackground.PAPER -> 0xFFEAD7B2.toInt()
+            com.sakina.app.data.WidgetBackground.GEOMETRIC -> 0xFF4C7975.toInt()
+            else -> 0xFF24313F.toInt()
+        }
+        val text = cfg.textColor?.let { it.toInt() or (0xFF shl 24) } ?: if (paper) 0xFF2B2118.toInt() else 0xFFFFFFFF.toInt()
+        val accent = cfg.accentColor?.let { it.toInt() or (0xFF shl 24) } ?: if (paper) 0xFF8A4F1D.toInt() else 0xFFF3D58B.toInt()
+        return WidgetColors(base, 255, text, withAlpha(text, if (paper) 0.78f else 0.86f), accent,
+            if (paper) 0xFF000000.toInt() else 0xFFFFFFFF.toInt(), accent, dark = !paper, softAlpha = if (paper) 28 else 60)
+    }
+
     /** The minimum glass opacity the contrast guard keeps for these colours, in percent. */
     fun glassFloor(context: Context, cfg: WidgetConfig, s: AppSettings, now: Instant): Int {
         val c = resolve(context, cfg.copy(opacity = 0, contrastGuard = false), s, now, glass = true)

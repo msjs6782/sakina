@@ -21,6 +21,7 @@ import com.sakina.app.core.widgets.WidgetKind
 import com.sakina.app.data.AppClock
 import com.sakina.app.data.SettingsJson
 import com.sakina.app.data.WidgetConfig
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -83,6 +84,8 @@ class AnalogClockWidget : SakinaWidgetProvider(WidgetKind.ANALOG)
 class ContentWidget : SakinaWidgetProvider(WidgetKind.CONTENT)
 class FajrMaghribWidget : SakinaWidgetProvider(WidgetKind.FAJR_MAGHRIB)
 class DayNameWidget : SakinaWidgetProvider(WidgetKind.DAYNAME)
+class KhatmaWidget : SakinaWidgetProvider(WidgetKind.KHATMA)
+class DhikrWidget : SakinaWidgetProvider(WidgetKind.DHIKR)
 
 /** The non-waking alarm that redraws widgets when their content changes (every minute for remaining times). */
 class WidgetTickReceiver : BroadcastReceiver() {
@@ -148,6 +151,8 @@ object WidgetUpdater {
         WidgetKind.CONTENT to ContentWidget::class.java,
         WidgetKind.FAJR_MAGHRIB to FajrMaghribWidget::class.java,
         WidgetKind.DAYNAME to DayNameWidget::class.java,
+        WidgetKind.KHATMA to KhatmaWidget::class.java,
+        WidgetKind.DHIKR to DhikrWidget::class.java,
     )
 
     fun providerClass(kind: WidgetKind): Class<out SakinaWidgetProvider> = providers.getValue(kind)
@@ -212,7 +217,7 @@ object WidgetUpdater {
         val s = app.settings.current()
         val configs = app.widgets.all()
         val now = AppClock.now()
-        val env = WidgetEnv(app, s, now, loadPack(app))
+        val env = WidgetEnv(app, s, now, loadPack(app), app.quranState.state.first())
         var next: Instant? = null
         val alive = HashSet<Int>()
         var pushed = 0
@@ -239,6 +244,10 @@ object WidgetUpdater {
         }
         lastKeys.keys.retainAll(alive)
         if (configs.keys.any { k -> k.toIntOrNull() !in alive }) app.widgets.retain(alive)
+        // The lock-screen note shares the tick: it is put up again when its prayer has passed.
+        val note = NextPrayerNote.refresh(context, s, now)
+        val soon = next
+        if (note != null && (soon == null || note.isBefore(soon))) next = note
         schedule(context, now, next)
         Log.i(TAG, "update ($reason) widgets=${alive.size} pushed=$pushed next=$next")
     }

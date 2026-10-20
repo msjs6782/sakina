@@ -30,8 +30,11 @@ enum class WidgetFont { APP, KUFI }
 /** How the next prayer stands out in a table: a filled pill behind it, or its text colour only. */
 enum class WidgetHighlight { FILL, TEXT }
 
-/** A plain colour, or the painted sky of the time of day at the widget's place. */
-enum class WidgetBackground { COLOR, SKY }
+/**
+ * A plain colour, the painted sky of the time of day at the widget's place, or a painted texture: a geometric
+ * pattern, old paper, or a gold lattice on night blue (docs/ART.md).
+ */
+enum class WidgetBackground { COLOR, SKY, GEOMETRIC, PAPER, NIGHT }
 
 /**
  * One widget's own settings. Colours are ARGB; null means "from the visual style". Stored per widget id on the

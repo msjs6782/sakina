@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.sakina.app.core.format.Lang
@@ -105,7 +106,32 @@ fun OnboardingScreen(vm: MainViewModel, s: AppSettings) {
 private fun WelcomeStep(vm: MainViewModel, s: AppSettings) {
     val str = LocalStrings.current
     val ex = LocalExtras.current
-    HeroSurface(SkyPeriod.FAJR, Modifier.fillMaxWidth().padding(top = 8.dp), corner = 32.dp) {
+    if (ex.art) {
+        // The welcome painting: the town at golden hour under a tall sky, the words over the sky.
+        androidx.compose.foundation.layout.Box(
+            Modifier.fillMaxWidth().padding(top = 8.dp).height(340.dp).clip(androidx.compose.foundation.shape.RoundedCornerShape(32.dp)).testTag("welcome_art"),
+        ) {
+            androidx.compose.foundation.Image(
+                androidx.compose.ui.res.painterResource(com.sakina.app.R.drawable.art_welcome), null,
+                Modifier.matchParentSize(), contentScale = androidx.compose.ui.layout.ContentScale.Crop, alignment = androidx.compose.ui.Alignment.BottomCenter,
+            )
+            androidx.compose.foundation.layout.Box(
+                Modifier.matchParentSize().background(
+                    androidx.compose.ui.graphics.Brush.verticalGradient(
+                        0f to androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.45f), 0.55f to androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.12f),
+                        1f to androidx.compose.ui.graphics.Color.Transparent,
+                    ),
+                ),
+            )
+            Column(Modifier.fillMaxWidth().padding(24.dp)) {
+                Text(str.appName, style = MaterialTheme.typography.displaySmall.copy(fontFamily = Amiri, fontWeight = FontWeight.Bold), color = androidx.compose.ui.graphics.Color.White)
+                Spacer(Modifier.height(8.dp))
+                Text(str.welcomeTitle, style = MaterialTheme.typography.titleLarge, color = androidx.compose.ui.graphics.Color.White)
+                Spacer(Modifier.height(6.dp))
+                Text(str.welcomeBody, style = MaterialTheme.typography.bodyMedium, color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.9f))
+            }
+        }
+    } else HeroSurface(SkyPeriod.FAJR, Modifier.fillMaxWidth().padding(top = 8.dp), corner = 32.dp) {
         Column(Modifier.fillMaxWidth().padding(24.dp)) {
             Text(str.appName, style = MaterialTheme.typography.displaySmall.copy(fontFamily = Amiri, fontWeight = FontWeight.Bold), color = ex.heroOn)
             Spacer(Modifier.height(8.dp))

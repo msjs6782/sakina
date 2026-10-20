@@ -25,6 +25,10 @@
     <string name="w_label_content">Dhikr and verse</string>
     <string name="w_desc_content">A short dhikr or a selected verse with its source</string>
     <string name="w_label_fajr_maghrib">Fajr and Maghrib</string>
+    <string name="w_label_khatma">Khatma</string>
+    <string name="w_desc_khatma">Today's pages of your khatma</string>
+    <string name="w_label_dhikr">Stretched dhikr</string>
+    <string name="w_desc_dhikr">A short dhikr in stretched Kufi</string>
     <string name="w_label_dayname">Day name</string>
     <string name="w_desc_dayname">The day stretched across, with the dates and prayers</string>
     <string name="w_desc_fajr_maghrib">Fajr, Maghrib, the Hijri date and Ramadan</string>
@@ -33,6 +37,12 @@
     <string name="w_sample_dates">1448-05-09 | 2026-10-20</string>
     <string name="w_sample_dayname">MONDAY</string>
     <string name="w_sample_left_until">Maghrib in 50 min</string>
+    <string name="w_sample_dhikr" translatable="false">سبحـــان الله وبحمـــده</string>
+    <string name="w_sample_khatma">Khatma · 34%</string>
+    <string name="w_sample_pages">Pages 120 – 139</string>
+    <string name="w_sample_today">Today's portion</string>
+    <string name="w_sample_on_track">On track</string>
+    <string name="w_sample_label_dhikr">Dhikr</string>
     <string name="w_sample_place">Riyadh</string>
     <string name="w_sample_name">Asr</string>
     <string name="w_sample_time">3:05 PM</string>

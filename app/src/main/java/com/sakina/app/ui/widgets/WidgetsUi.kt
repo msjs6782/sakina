@@ -96,6 +96,7 @@ import com.sakina.app.widgets.WidgetEnv
 import com.sakina.app.widgets.WidgetPalette
 import com.sakina.app.widgets.WidgetRenderer
 import com.sakina.app.widgets.WidgetUpdater
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /** Debug builds only: the gallery shows each widget at three sizes (set by the CI's demo extras). */
@@ -168,7 +169,10 @@ fun RemoteViewPreview(views: RemoteViews?, wDp: Float, hDp: Float, tag: String, 
 
 /** Renders a widget for an in-app preview (no tap actions). */
 fun previewViews(app: SakinaApp, s: AppSettings, kind: WidgetKind, cfg: WidgetConfig, size: SizeF): RemoteViews? = try {
-    WidgetRenderer.render(WidgetEnv(app, s, AppClock.now(), WidgetUpdater.loadPack(app)), kind, cfg, 0, listOf(size), preview = true).views
+    WidgetRenderer.render(
+        WidgetEnv(app, s, AppClock.now(), WidgetUpdater.loadPack(app), kotlinx.coroutines.runBlocking { app.quranState.state.first() }),
+        kind, cfg, 0, listOf(size), preview = true,
+    ).views
 } catch (e: Exception) {
     Log.e("SakinaWidgets", "preview render failed for ${kind.id}", e)
     null
@@ -243,11 +247,14 @@ fun WidgetsScreen(vm: MainViewModel, s: AppSettings) {
             NoteText(str.widgetsGalleryNote)
             NoteText(str.wPreviewOnWallpaper)
             // Preview every widget on a plain colour or on the painted sky (a setting of each widget).
-            var gallerySky by remember { mutableStateOf(WidgetsDebug.gallerySky) }
-            Chips(listOf(false to str.wBgColorMode, true to str.wBgSkyMode), gallerySky, "gallery_bg_") { gallerySky = it }
+            var gallerySky by remember { mutableStateOf(if (WidgetsDebug.gallerySky) WidgetBackground.SKY else WidgetBackground.COLOR) }
+            Chips(listOf(
+                WidgetBackground.COLOR to str.wBgColorMode, WidgetBackground.SKY to str.wBgSkyMode, WidgetBackground.GEOMETRIC to str.wBgGeometric,
+                WidgetBackground.PAPER to str.wBgPaper, WidgetBackground.NIGHT to str.wBgNight,
+            ), gallerySky, "gallery_bg_") { gallerySky = it }
             for (kind in WidgetKind.entries) {
                 val size = WidgetRenderer.defaultSize(kind)
-                fun base() = WidgetConfig.defaultsFor(kind.id).let { if (gallerySky) it.copy(background = WidgetBackground.SKY) else it }
+                fun base() = WidgetConfig.defaultsFor(kind.id).let { if (kind != WidgetKind.GLASS) it.copy(background = gallerySky) else it }
                 val views = remember(kind, s, tick, gallerySky) { previewViews(app, s, kind, base(), size) }
                 SectionCard(modifier = Modifier.testTag("gallery_${kind.id}")) {
                     Text(str.widgetName(kind.id), style = MaterialTheme.typography.titleMedium)
@@ -272,9 +279,26 @@ fun WidgetsScreen(vm: MainViewModel, s: AppSettings) {
             }
             if (!mgr.isRequestPinAppWidgetSupported) NoteText(str.pinUnsupported)
 
+            LockNoteCard(vm, s)
             ShortcutsCard(s)
             TilesCard()
             Spacer(Modifier.height(24.dp))
+        }
+    }
+}
+
+/** The next prayer on the lock screen: a silent ongoing notification with a system-run countdown. */
+@Composable
+private fun LockNoteCard(vm: MainViewModel, s: AppSettings) {
+    val str = LocalStrings.current
+    val context = LocalContext.current
+    val ask = androidx.activity.compose.rememberLauncherForActivityResult(androidx.activity.result.contract.ActivityResultContracts.RequestPermission()) { }
+    SectionCard(title = str.lockNoteTitleSetting, modifier = Modifier.testTag("lock_note_card")) {
+        SwitchRow(s.lockNote, str.lockNoteTitleSetting, str.lockNoteBody, modifier = Modifier.testTag("lock_note_switch")) { on ->
+            vm.update { it.copy(lockNote = on) }
+            if (on && Build.VERSION.SDK_INT >= 33 &&
+                context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != android.content.pm.PackageManager.PERMISSION_GRANTED
+            ) ask.launch(android.Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 }
@@ -442,11 +466,14 @@ fun WidgetConfigScreen(
             }
 
             if (kind != WidgetKind.GLASS) SectionCard(title = str.wBackground) {
-                Chips(listOf(WidgetBackground.COLOR to str.wBgColorMode, WidgetBackground.SKY to str.wBgSkyMode), cfg.background, "wcfg_background_") { cfg = cfg.copy(background = it) }
+                Chips(listOf(
+                    WidgetBackground.COLOR to str.wBgColorMode, WidgetBackground.SKY to str.wBgSkyMode, WidgetBackground.GEOMETRIC to str.wBgGeometric,
+                    WidgetBackground.PAPER to str.wBgPaper, WidgetBackground.NIGHT to str.wBgNight,
+                ), cfg.background, "wcfg_background_") { cfg = cfg.copy(background = it) }
                 if (cfg.background == WidgetBackground.SKY) NoteText(str.wBgSkyNote, Modifier.padding(top = 6.dp))
             }
 
-            val sky = cfg.background == WidgetBackground.SKY && kind != WidgetKind.GLASS
+            val sky = cfg.background != WidgetBackground.COLOR && kind != WidgetKind.GLASS
             SectionCard(title = str.wColors) {
                 SwatchRow(str.wTextColor, cfg.textColor, "wcfg_text_") { cfg = cfg.copy(textColor = it) }
                 if (!sky) SwatchRow(str.wBgColor, cfg.backgroundColor, "wcfg_bg_") { cfg = cfg.copy(backgroundColor = it) }

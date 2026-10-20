@@ -26,13 +26,17 @@ enum class WidgetKind(val id: String) {
     CONTENT("content"),
     FAJR_MAGHRIB("fajr_maghrib"),
     /** The day's name stretched with kashida across the widget, the dates, the five prayers and the time left. */
-    DAYNAME("dayname");
+    DAYNAME("dayname"),
+    /** The khatma plan: today's pages, progress and whether the reader is on track. */
+    KHATMA("khatma"),
+    /** A short dhikr in heavy Kufi, stretched with kashida across the widget (never the divine name). */
+    DHIKR("dhikr");
 
     /** Types that show a remaining time; it is a snapshot refreshed about once a minute and shown with its time. */
     val showsRemaining: Boolean get() = this in setOf(NEXT, COUNTDOWN, DAY, GLASS, DIGITAL, FAJR_MAGHRIB, DAYNAME)
 
     /** Types whose content depends on prayer times (and so on a place). */
-    val needsPlace: Boolean get() = this != CONTENT
+    val needsPlace: Boolean get() = this != CONTENT && this != KHATMA && this != DHIKR
 
     companion object {
         fun of(id: String): WidgetKind? = entries.firstOrNull { it.id == id }

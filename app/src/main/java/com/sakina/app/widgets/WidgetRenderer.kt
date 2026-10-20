@@ -49,7 +49,7 @@ import java.time.Instant
 import java.time.ZoneId
 
 /** Everything a widget needs to draw itself at one moment. */
-class WidgetEnv(val context: Context, val settings: AppSettings, val now: Instant, val pack: ContentPack?)
+class WidgetEnv(val context: Context, val settings: AppSettings, val now: Instant, val pack: ContentPack?, val quran: com.sakina.app.data.QuranState? = null)
 
 /** A widget's views (possibly one per size), a key that changes when anything shown changes, and when to redraw. */
 class WidgetRender(val views: RemoteViews, val key: String, val nextChange: Instant)
@@ -99,6 +99,12 @@ private object Typo {
 
 object WidgetRenderer {
     private const val TAG = "SakinaWidgets"
+
+    /** Short, well-known adhkar for the stretched dhikr widget (one a day; the next button moves on). */
+    val DHIKR_AR = listOf(
+        "سبحان الله", "الحمد لله", "الله أكبر", "لا إله إلا الله", "سبحان الله وبحمده", "سبحان الله العظيم",
+        "أستغفر الله", "لا حول ولا قوة إلا بالله", "حسبي الله ونعم الوكيل", "اللهم صل على محمد",
+    )
     private val CELL_NAMES = intArrayOf(R.id.w_n0, R.id.w_n1, R.id.w_n2, R.id.w_n3, R.id.w_n4, R.id.w_n5)
     private val CELL_TIMES = intArrayOf(R.id.w_t0, R.id.w_t1, R.id.w_t2, R.id.w_t3, R.id.w_t4, R.id.w_t5)
     private val CELL_HL = intArrayOf(R.id.w_hl0, R.id.w_hl1, R.id.w_hl2, R.id.w_hl3, R.id.w_hl4, R.id.w_hl5)
@@ -111,6 +117,8 @@ object WidgetRenderer {
         WidgetKind.COUNTDOWN, WidgetKind.ANALOG -> SizeF(150f, 150f)
         WidgetKind.NEXT, WidgetKind.FAJR_MAGHRIB -> SizeF(230f, 140f)
         WidgetKind.DAYNAME -> SizeF(300f, 160f)
+        WidgetKind.KHATMA -> SizeF(230f, 140f)
+        WidgetKind.DHIKR -> SizeF(300f, 120f)
         else -> SizeF(300f, 150f)
     }
 
@@ -127,6 +135,8 @@ object WidgetRenderer {
         WidgetKind.CONTENT -> listOf(SizeF(180f, 110f), defaultSize(kind), SizeF(360f, 250f))
         WidgetKind.FAJR_MAGHRIB -> listOf(SizeF(110f, 90f), defaultSize(kind), SizeF(360f, 160f))
         WidgetKind.DAYNAME -> listOf(SizeF(180f, 110f), defaultSize(kind), SizeF(380f, 230f))
+        WidgetKind.KHATMA -> listOf(SizeF(140f, 110f), defaultSize(kind), SizeF(360f, 160f))
+        WidgetKind.DHIKR -> listOf(SizeF(140f, 70f), defaultSize(kind), SizeF(380f, 200f))
     }
 
     fun render(env: WidgetEnv, kind: WidgetKind, cfg: WidgetConfig, id: Int, sizes: List<SizeF>, preview: Boolean = false): WidgetRender {
@@ -171,7 +181,18 @@ object WidgetRenderer {
             val sch = schedule ?: s.activeLocation?.takeIf { it.isUsable }?.let { l -> PrayerSchedule(l.point, l.zoneId!!, s.calcConfig) }
             sch?.let { skyPeriod(it.day(it.localDate(now)), now) } ?: SkyPeriod.NOON
         }
-        val colors = if (sky != null) WidgetPalette.sky(cfg, SkyArt.topColor(sky)) else WidgetPalette.resolve(ctx, cfg, s, now, glass)
+        /** A painted texture behind the widget (pattern, paper, night lattice), or null. */
+        val texture: Int? = if (glass) null else when (cfg.background) {
+            WidgetBackground.GEOMETRIC -> R.drawable.tex_geometric
+            WidgetBackground.PAPER -> R.drawable.tex_paper
+            WidgetBackground.NIGHT -> R.drawable.tex_night
+            else -> null
+        }
+        val colors = when {
+            sky != null -> WidgetPalette.sky(cfg, SkyArt.topColor(sky))
+            texture != null -> WidgetPalette.texture(cfg, cfg.background)
+            else -> WidgetPalette.resolve(ctx, cfg, s, now, glass)
+        }
         val key = StringBuilder()
         lateinit var rv: RemoteViews
 
@@ -221,6 +242,8 @@ object WidgetRenderer {
                 WidgetKind.CONTENT -> pick(R.layout.w_content, R.layout.w_content_k)
                 WidgetKind.FAJR_MAGHRIB -> pick(R.layout.w_fajr_maghrib, R.layout.w_fajr_maghrib_k)
                 WidgetKind.DAYNAME -> pick(R.layout.w_dayname, R.layout.w_dayname_k)
+                WidgetKind.KHATMA -> pick(R.layout.w_khatma, R.layout.w_khatma_k)
+                WidgetKind.DHIKR -> pick(R.layout.w_dhikr, R.layout.w_dhikr_k)
             }
         }
 
@@ -249,6 +272,8 @@ object WidgetRenderer {
                 next = when (kind) {
                     WidgetKind.CONTENT -> content()
                     WidgetKind.FAJR_MAGHRIB -> dawnDusk()
+                    WidgetKind.KHATMA -> khatma()
+                    WidgetKind.DHIKR -> dhikr()
                     else -> prayers()
                 }
             }
@@ -281,6 +306,14 @@ object WidgetRenderer {
                 rv.setViewVisibility(R.id.w_scrim, View.VISIBLE)
                 rv.setInt(R.id.w_scrim, "setImageAlpha", (SkyArt.scrim(sky, false) * 255).toInt())
                 key.append("sky").append(sky).append(wide).append('|')
+            } else if (texture != null) {
+                rv.setImageViewResource(R.id.w_sky, texture)
+                rv.setViewVisibility(R.id.w_sky, View.VISIBLE)
+                // A light veil under light text on the teal pattern; the paper and night lattice need none.
+                val veil = if (cfg.background == WidgetBackground.GEOMETRIC) 50 else 0
+                rv.setViewVisibility(R.id.w_scrim, if (veil > 0) View.VISIBLE else View.GONE)
+                if (veil > 0) rv.setInt(R.id.w_scrim, "setImageAlpha", veil)
+                key.append("tex").append(cfg.background).append('|')
             } else {
                 rv.setViewVisibility(R.id.w_sky, View.GONE)
                 rv.setViewVisibility(R.id.w_scrim, View.GONE)
@@ -295,6 +328,8 @@ object WidgetRenderer {
                 val target = when (kind) {
                     WidgetKind.FAJR_MAGHRIB -> "ramadan"
                     WidgetKind.CONTENT -> "discover"
+                    WidgetKind.KHATMA -> "khatma"
+                    WidgetKind.DHIKR -> "adhkar_lib"
                     else -> "times"
                 }
                 rv.setOnClickPendingIntent(R.id.w_root, WidgetIntents.open(ctx, target))
@@ -693,6 +728,71 @@ object WidgetRenderer {
             ).joinToString(" · ")
             text(R.id.w_source, source); color(R.id.w_source, colors.muted); size(R.id.w_source, sourcePx)
             if (!preview) rv.setOnClickPendingIntent(R.id.w_root, WidgetIntents.open(ctx, if (item.isAyah) "ayah:${item.ref}" else "dhikr:${item.ref}"))
+            return WidgetMath.nextMidnight(now, zone)
+        }
+
+        /** The khatma: today's pages large, the progress bar, and how the reader stands against the plan. */
+        fun khatma(): Instant {
+            val plan = env.quran?.khatma
+            val today = now.atZone(zone).toLocalDate()
+            if (plan == null) {
+                message(str.wKhatmaNone, "khatma")
+                return WidgetMath.nextMidnight(now, zone)
+            }
+            val st = com.sakina.app.core.quran.Khatma.status(plan, today)
+            val label = str.khatmaTitle + " · " + str.digits("${st.percent}%")
+            text(R.id.w_label, label); color(R.id.w_label, colors.accent)
+            val caption = if (st.completed) "" else str.wKhatmaToday
+            text(R.id.w_name, caption); color(R.id.w_name, colors.muted)
+            val big = when {
+                st.completed -> str.khatmaDone
+                st.today != null && !st.today.isEmpty() -> str.wPages(fmt.num(st.today.first), fmt.num(st.today.last))
+                else -> str.khatmaTodayEmpty
+            }
+            text(R.id.w_big, big); color(R.id.w_big, colors.text)
+            val line = when {
+                st.completed -> ""
+                st.overdue -> str.khatmaOverdue(fmt.num(st.behind), st.behind)
+                st.behind > 0 -> str.khatmaBehind(fmt.num(st.behind), st.behind)
+                st.ahead > 0 -> str.khatmaAhead(fmt.num(st.ahead), st.ahead)
+                else -> str.khatmaOnTrack
+            }
+            text(R.id.w_remain, line); color(R.id.w_remain, colors.muted)
+            rv.setProgressBar(R.id.w_progress, 100, st.percent.coerceIn(0, 100), false)
+            if (Build.VERSION.SDK_INT >= 31) {
+                rv.setColorStateList(R.id.w_progress, "setProgressTintList", ColorStateList.valueOf(colors.accent))
+                rv.setColorStateList(R.id.w_progress, "setProgressBackgroundTintList", ColorStateList.valueOf((0x40 shl 24) or (colors.muted and 0xFFFFFF)))
+            }
+            key.append("khatma").append(st.percent).append('|')
+            solve(listOf(
+                Line(intArrayOf(R.id.w_label), listOf(label), 12f, medium),
+                opt(R.id.w_name, caption, 10.5f, regular, drop = 2),
+                Line(intArrayOf(R.id.w_big), listOf(big), 20f, semibold),
+                opt(R.id.w_remain, line, 11f, regular, drop = 1),
+            ), h = boxH - 10f * density, gap = 3f)
+            return WidgetMath.nextMidnight(now, zone)
+        }
+
+        /** A short dhikr of the day (or a later one with the next button), stretched to the widget's width. */
+        fun dhikr(): Instant {
+            // The adhkar stay in Arabic in both languages.
+            val list = DHIKR_AR
+            val today = now.atZone(zone).toLocalDate()
+            val i = Math.floorMod(today.dayOfYear + cfg.contentShift, list.size)
+            val phrase = list[i]
+            if (!preview) rv.setOnClickPendingIntent(R.id.w_next_btn, WidgetIntents.next(ctx, kind, id))
+            rv.setInt(R.id.w_next_btn, "setColorFilter", colors.muted)
+            text(R.id.w_label, str.wLabelDhikr); color(R.id.w_label, colors.accent)
+            val labelPx = (11f * unit).coerceAtMost(14f * density)
+            size(R.id.w_label, labelPx)
+            val dayFace = Typo.face(ctx, R.font.kufi_black)
+            val lh = Typo.lineHeight(dayFace)
+            val room = boxH - 24f * density
+            val perPx = Typo.rawWidth(dayFace, phrase, 100f) / 100f
+            val px = minOf(room * 0.9f / lh, boxW * 0.95f / perPx, 72f * maxUnit).coerceAtLeast(9f * density)
+            size(R.id.w_dayname, px)
+            val shown = Kashida.fillPhrase(phrase, boxW * 0.95f) { Typo.rawWidth(dayFace, it, px) }
+            text(R.id.w_dayname, shown); color(R.id.w_dayname, colors.text)
             return WidgetMath.nextMidnight(now, zone)
         }
 

@@ -410,6 +410,46 @@ LAYOUTS["w_dayname"] = frame(content('''
         </LinearLayout>''' + text("w_dayname", "W.Day", "w_sample_dayname") + cells()
     + text("w_remain", "W.Text.Small", "w_sample_left_until")))
 
+# 12. The khatma: today's pages, a progress bar, and the status against the plan.
+LAYOUTS["w_khatma"] = frame(content(text("w_label", "W.Text.Medium", "w_sample_khatma") + text("w_name", "W.Text.Small", "w_sample_today")
+    + text("w_big", "W.Text.Title", "w_sample_pages") + '''
+
+        <ProgressBar
+            android:id="@+id/w_progress"
+            style="@android:style/Widget.Material.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:max="100"
+            android:progress="34"
+            android:progressDrawable="@drawable/w_progress" />''' + text("w_remain", "W.Text.Small", "w_sample_on_track")))
+# 13. A short dhikr stretched across the widget, with the next button.
+LAYOUTS["w_dhikr"] = frame(content('''
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+''' + indent(text("w_label", "W.Text.Small", "w_sample_label_dhikr", "weight")) + '''
+
+            <ImageView
+                android:id="@+id/w_next_btn"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@string/w_next_item"
+                android:padding="2dp"
+                android:src="@drawable/w_ic_next" />
+        </LinearLayout>''' + '''
+
+        <TextView
+            android:id="@+id/w_dayname"
+            style="@style/W.Day"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/w_sample_dhikr" />'''))
+
 
 def kufi(xml):
     """The same layout in Noto Kufi Arabic: every W.* style becomes its WK.* copy (the day name keeps its font)."""

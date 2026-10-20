@@ -23,7 +23,7 @@ ui_has id hero_sky_asr && check hero_art_off FAIL "painting still shown" || chec
 shot 312_onboarding_fajr 7 --ez demo_reset true --es demo_now 2026-10-14T13:20:00Z "${FREEZE[@]}"
 # The switch in Appearance turns it off and on.
 start --ez demo_reset true "${VB[@]}" --es demo_now 2026-10-14T13:20:00Z --es demo_route appearance; sleep 6
-scroll_to exact "لوحة السماء في بطاقة الصلاة" 6 && cap 313_appearance_switch && tap exact "لوحة السماء في بطاقة الصلاة" && sleep 1
+scroll_to contains "الرسومات (بطاقة" 6 && cap 313_appearance_switch && tap contains "الرسومات (بطاقة" && sleep 1
 settings_json | grep -q '"heroArt":false' && check hero_art_switch PASS "turned off from Appearance" || check hero_art_switch FAIL "$(settings_json | grep -o '"heroArt":[a-z]*')"
 
 # Widgets: the gallery on the painted sky, then a real widget switched to it.

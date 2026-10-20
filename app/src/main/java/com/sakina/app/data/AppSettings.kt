@@ -83,6 +83,8 @@ data class AppSettings(
     val dynamicColor: Boolean = false,
     /** The prayer card shows a painted sky that follows the time of day (instead of the style's colours). */
     val heroArt: Boolean = true,
+    /** An ongoing, silent notification with the next prayer and a live countdown (lock screen and shade). */
+    val lockNote: Boolean = false,
     /** Used by the printed Mushaf viewer (later phase); independent of the app theme. */
     val mushafNight: Boolean = false,
     val method: CalcMethod = CalcMethod.UMM_AL_QURA,

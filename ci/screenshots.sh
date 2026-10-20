@@ -161,6 +161,8 @@ source "$HERE/phase8.sh"
 source "$HERE/visual.sh"
 # shellcheck source=ci/r10.sh
 source "$HERE/r10.sh"
+# shellcheck source=ci/r11.sh
+source "$HERE/r11.sh"
 
 finish_run() {
   adb logcat -d >> "$OUT/logcat_part2.txt"
@@ -198,6 +200,12 @@ fi
 # [ci:r10] runs only this round's checks (tabs, quick access, day-name widget, Mushaf on an Arabic phone).
 if [ "${ONLY:-}" = "r10" ]; then
   r10
+  adb logcat -d > "$OUT/logcat_part1.txt"; adb logcat -c
+  finish_run
+fi
+# [ci:r11] runs only round 11 (painted headers, textures, khatma and dhikr widgets, lock-screen note).
+if [ "${ONLY:-}" = "r11" ]; then
+  r11
   adb logcat -d > "$OUT/logcat_part1.txt"; adb logcat -c
   finish_run
 fi
@@ -1110,5 +1118,6 @@ fi
 
 # ---------- Round 10: tabs, quick access, day-name widget, widget settings, Mushaf on an Arabic phone (ci/r10.sh) ----------
 r10
+r11
 
 finish_run

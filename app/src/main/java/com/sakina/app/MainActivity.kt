@@ -43,6 +43,7 @@ class MainActivity : ComponentActivity() {
         }
         when {
             open == "times" -> fresh(com.sakina.app.ui.Tab.HOME)
+            open == "khatma" -> { fresh(com.sakina.app.ui.Tab.QURAN); vm.openKhatmaReading() }
             open == "home" -> fresh(com.sakina.app.ui.Tab.HOME)
             open == "quran" -> fresh(com.sakina.app.ui.Tab.QURAN)
             open == "discover" -> fresh(com.sakina.app.ui.Tab.MORE)

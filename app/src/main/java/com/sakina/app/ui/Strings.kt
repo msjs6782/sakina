@@ -1238,6 +1238,8 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
         "analog" -> t("الساعة ذات العقارب", "Analog clock")
         "content" -> t("ذكر وآية", "Dhikr and verse")
         "dayname" -> t("اليوم الممدود", "Day name")
+        "khatma" -> t("الختمة", "Khatma")
+        "dhikr" -> t("ذكر ممدود", "Stretched dhikr")
         else -> t("الفجر والمغرب", "Fajr and Maghrib")
     }
     fun widgetDesc(id: String) = when (id) {
@@ -1250,6 +1252,8 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
         "digital" -> t("ساعة رقمية أصلية مع التاريخ والصلاة التالية.", "A native digital clock with the date and next prayer.")
         "analog" -> t("ساعة بعقارب أصلية وعلامات أوقات الصلاة على وجهها.", "A native analog clock with prayer times marked on its face.")
         "content" -> t("ذكر قصير أو آية مختارة مع المصدر.", "A short dhikr or a selected verse with its source.")
+        "khatma" -> t("ورد اليوم من خطة الختمة ونسبة التقدم، ويفتح على صفحتك.", "Today's pages of your khatma and your progress; opens on your page.")
+        "dhikr" -> t("ذكر قصير بخط كوفي ثقيل ممدود بالكشيدة على عرض الويدجت، ويتبدّل كل يوم.", "A short dhikr in heavy Kufi stretched with kashida across the widget; a new one each day.")
         "dayname" -> t("اسم اليوم بخط كوفي ممدود بالكشيدة على عرض الويدجت، مع التاريخين والصلوات والمتبقي.", "The day's name in bold Kufi stretched with kashida across the widget, with both dates, the prayers and the time left.")
         else -> t("الفجر والمغرب والتاريخ الهجري وسياق رمضان.", "Fajr, Maghrib, the Hijri date and the Ramadan context.")
     }
@@ -1276,8 +1280,8 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     fun tileNext(name: String, time: String) = t("$name $time", "$name $time")
 
     // Painted skies (Higgsfield art).
-    val heroArt get() = t("لوحة السماء في بطاقة الصلاة", "Painted sky on the prayer card")
-    val heroArtNote get() = t("رسم للسماء يتبدّل مع وقت الصلاة: الفجر والضحى والظهر والعصر والمغرب والليل. أطفئه لتعود ألوان النمط.", "A painting of the sky that follows the time: Fajr, morning, noon, Asr, Maghrib and night. Turn off for the style's colours.")
+    val heroArt get() = t("الرسومات (بطاقة الصلاة ورؤوس الشاشات)", "Paintings (prayer card and screen headers)")
+    val heroArtNote get() = t("رسم للسماء يتبدّل مع وقت الصلاة في بطاقة الصلاة، ورسومات بالأسلوب نفسه في رؤوس القرآن والأذكار والتقويم وشاشة البداية. أطفئها لتعود ألوان النمط.", "A painting of the sky that follows the time: Fajr, morning, noon, Asr, Maghrib and night. Turn off for the style's colours.")
     val wBackground get() = t("الخلفية", "Background")
     val wBgColorMode get() = t("لون", "Colour")
     val wBgSkyMode get() = t("لوحة السماء", "Painted sky")
@@ -1325,6 +1329,18 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     // Round 11: the times tables as a screen, the Mushaf trim, the calendar's look.
     val weekAndMonth get() = t("مواقيت الأسبوع والشهر", "Week and month")
     val toolsTimesBody get() = t("مواقيت اليوم والأسبوع والشهر في جدول.", "Prayer times for the day, week and month in tables.")
+    val quranArtLine get() = t("المصحف والتلاوة والختمة", "Mushaf, recitation and khatma")
+    val adhkarArtLine get() = t("أذكار اليوم والليلة بمصادرها", "Adhkar of the day and night, with sources")
+    val wBgGeometric get() = t("زخرفة هندسية", "Geometric")
+    val wBgPaper get() = t("ورق قديم", "Old paper")
+    val wBgNight get() = t("نجوم ذهبية", "Gold lattice")
+    val wKhatmaNone get() = t("لا توجد خطة ختمة. اضغط لإنشائها.", "No khatma plan. Tap to make one.")
+    val wKhatmaToday get() = t("ورد اليوم", "Today's portion")
+    fun wPages(from: String, to: String) = t("صفحة $from – $to", "Pages $from – $to")
+    val lockNoteChannel get() = t("الصلاة القادمة على شاشة القفل", "Next prayer on the lock screen")
+    fun lockNoteTitle(name: String, time: String) = t("$name $time", "$name $time")
+    val lockNoteTitleSetting get() = t("الصلاة القادمة على شاشة القفل", "Next prayer on the lock screen")
+    val lockNoteBody get() = t("إشعار صامت ثابت يعرض الصلاة القادمة وعدًّا تنازليًا يحدّثه النظام بنفسه، ويختفي عند وقتها ليظهر التالي.", "A silent, ongoing notification with the next prayer and a countdown the system keeps itself; it leaves at the prayer's time and the next one appears.")
     val mushafTrim get() = t("الصفحة بعرض الشاشة (دون الهوامش)", "Page fills the screen (no margins)")
 
 }

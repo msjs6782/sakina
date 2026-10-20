@@ -134,8 +134,12 @@ object Kashida {
     private fun joinsNext(c: Char) = c in 'ؠ'..'ي' && c != TATWEEL && c !in RIGHT_JOINING
     private fun isLetter(c: Char) = c in 'ؠ'..'ي' && c != TATWEEL
 
+    /** The divine name keeps its ligature: it is never stretched. */
+    private val NEVER = setOf("الله", "لله", "بالله", "والله", "اللهم")
+
     /** Index where tatweel can go (before word[i]), or null when the word cannot be stretched (no joins, or Latin). */
     fun point(word: String): Int? {
+        if (word in NEVER) return null
         for (i in word.length - 1 downTo 1) {
             if (isLetter(word[i]) && joinsNext(word[i - 1])) return i
         }
@@ -145,6 +149,29 @@ object Kashida {
     fun stretch(word: String, count: Int): String {
         val at = point(word) ?: return word
         return word.substring(0, at) + TATWEEL.toString().repeat(count.coerceAtLeast(0)) + word.substring(at)
+    }
+
+    /** [phrase] with [count] tatweel shared out over its words (round robin, from the last word back). */
+    fun stretchPhrase(phrase: String, count: Int): String {
+        val words = phrase.split(' ')
+        val can = words.indices.filter { point(words[it]) != null }
+        if (can.isEmpty() || count <= 0) return phrase
+        val per = IntArray(words.size)
+        for (k in 0 until count) per[can[can.size - 1 - (k % can.size)]]++
+        return words.mapIndexed { i, w -> if (per[i] > 0) stretch(w, per[i]) else w }.joinToString(" ")
+    }
+
+    /** The longest stretch of [phrase] (tatweel over all its words) whose [width] stays within [target]. */
+    fun fillPhrase(phrase: String, target: Float, max: Int = 120, width: (String) -> Float): String {
+        if (phrase.split(' ').none { point(it) != null }) return phrase
+        if (width(phrase) > target) return phrase
+        var lo = 0
+        var hi = max
+        while (lo < hi) {
+            val mid = (lo + hi + 1) / 2
+            if (width(stretchPhrase(phrase, mid)) <= target) lo = mid else hi = mid - 1
+        }
+        return stretchPhrase(phrase, lo)
     }
 
     /** The longest stretch of [word] whose [width] stays within [target] (at most [max] tatweel). */

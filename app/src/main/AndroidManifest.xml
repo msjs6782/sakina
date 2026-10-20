@@ -225,6 +225,30 @@
                 android:resource="@xml/widget_dayname" />
         </receiver>
 
+        <receiver
+            android:name=".widgets.KhatmaWidget"
+            android:exported="true"
+            android:label="@string/w_label_khatma">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_khatma" />
+        </receiver>
+
+        <receiver
+            android:name=".widgets.DhikrWidget"
+            android:exported="true"
+            android:label="@string/w_label_dhikr">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_dhikr" />
+        </receiver>
+
         <!-- Redraws widgets when their content changes; a non-waking alarm. -->
         <receiver android:name=".widgets.WidgetTickReceiver" android:exported="false" />
 

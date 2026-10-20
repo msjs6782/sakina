@@ -83,7 +83,7 @@ class WidgetTest {
         assertEquals(WidgetMath.nextMidnight(now, riyadh), WidgetMath.nextChange(WidgetKind.CONTENT, now, riyadh, null))
         assertTrue(WidgetKind.entries.count { it.showsRemaining } == 7)
         assertEquals(WidgetKind.FAJR_MAGHRIB, WidgetKind.of("fajr_maghrib"))
-        assertEquals(11, WidgetKind.entries.map { it.id }.toSet().size)
+        assertEquals(13, WidgetKind.entries.map { it.id }.toSet().size)
     }
 
     @Test
@@ -213,5 +213,17 @@ class WidgetTest {
         assertEquals("الاثني" + "ـ".repeat(7) + "ن", t.fill("الاثنين", 100f, width = w))
         assertEquals("الاثنين", t.fill("الاثنين", 50f, width = w))
         assertEquals(80, t.fill("الاثنين", 10_000f, width = w).count { it == t.TATWEEL })
+    }
+
+    @Test fun kashidaSharedOverAPhrase() {
+        val t = com.sakina.app.core.widgets.Kashida
+        // The divine name is never stretched.
+        assertEquals("سبحـان الله", t.stretchPhrase("سبحان الله", 1))
+        assertEquals("سبحـــان الله", t.stretchPhrase("سبحان الله", 3))
+        assertEquals("الحمـد لله", t.stretchPhrase("الحمد لله", 1))
+        assertEquals("أستغفـر الله", t.stretchPhrase("أستغفر الله", 1))
+        val w: (String) -> Float = { s -> s.sumOf { c -> if (c == t.TATWEEL) 4.0 else if (c == ' ') 5.0 else 10.0 }.toFloat() }
+        // 9 letters + space = 95; 105 leaves room for two tatweel.
+        assertEquals(2, t.fillPhrase("سبحان الله", 105f, width = w).count { it == t.TATWEEL })
     }
 }

@@ -171,6 +171,16 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    /** From the khatma widget: the next page of the plan, or the plan's screen when there is none (or it is done). */
+    fun openKhatmaReading() {
+        viewModelScope.launch {
+            sakina.quran.load()
+            val plan = quranState.value.khatma
+            if (plan == null || plan.progressPage >= com.sakina.app.core.quran.Khatma.PAGES) push(Route.Khatma)
+            else openPage(plan.progressPage + 1)
+        }
+    }
+
     /** Opens an ayah from outside the app (a widget), on the Quran tab, once the text is loaded. */
     fun openAyah(sura: Int, aya: Int) {
         viewModelScope.launch {

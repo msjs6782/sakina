@@ -241,12 +241,24 @@ private fun MonthHeader(str: com.sakina.app.ui.Strings, fmt: com.sakina.app.core
                 monthName(str, CalendarKind.HIJRI, b.month) + " " + fmt.num(b.year) + (if (str.isAr) " هـ" else " AH")
         }
     }
-    Surface(
-        shape = RoundedCornerShape(26.dp), color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f),
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+    // With the paintings on, the month sits on the night sky with the new crescent (docs/ART.md).
+    val art = com.sakina.app.ui.theme.LocalExtras.current.art
+    val onHeader = if (art) Color.White else MaterialTheme.colorScheme.onPrimaryContainer
+    Box(
+        Modifier.fillMaxWidth().padding(horizontal = 16.dp).clip(RoundedCornerShape(26.dp))
+            .background(if (art) Color(0xFF1C2E5C) else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f))
+            .testTag(if (art) "cal_header_art" else "cal_header"),
     ) {
-        Row(Modifier.padding(horizontal = 4.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onPrev, modifier = Modifier.testTag("cal_prev")) { DirectionalIcon(SakinaIcons.ChevronStart, str.prevMonth) }
+        if (art) {
+            androidx.compose.foundation.Image(
+                androidx.compose.ui.res.painterResource(com.sakina.app.R.drawable.art_calendar), null, Modifier.matchParentSize(),
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop, alignment = Alignment.Center,
+            )
+            Box(Modifier.matchParentSize().background(Color.Black.copy(alpha = 0.18f)))
+        }
+        androidx.compose.runtime.CompositionLocalProvider(androidx.compose.material3.LocalContentColor provides onHeader) {
+        Row(Modifier.padding(horizontal = 4.dp, vertical = if (art) 22.dp else 10.dp), verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = onPrev, modifier = Modifier.testTag("cal_prev")) { DirectionalIcon(SakinaIcons.ChevronStart, str.prevMonth, tint = onHeader) }
             Column(
                 Modifier.weight(1f).clip(RoundedCornerShape(14.dp)).clickable(onClick = onPick).padding(vertical = 4.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -254,12 +266,13 @@ private fun MonthHeader(str: com.sakina.app.ui.Strings, fmt: com.sakina.app.core
                 Text(
                     monthName(str, kind, current.month) + " " + fmt.num(current.year) + if (kind == CalendarKind.HIJRI && str.isAr) " هـ" else "",
                     style = MaterialTheme.typography.headlineSmall.copy(fontFamily = com.sakina.app.ui.theme.Amiri, fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer, textAlign = TextAlign.Center,
+                    color = onHeader, textAlign = TextAlign.Center,
                     modifier = Modifier.testTag("cal_title"),
                 )
-                if (other != null) Text(other, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75f), textAlign = TextAlign.Center)
+                if (other != null) Text(other, style = MaterialTheme.typography.labelLarge, color = onHeader.copy(alpha = 0.8f), textAlign = TextAlign.Center)
             }
-            IconButton(onClick = onNext, modifier = Modifier.testTag("cal_next")) { DirectionalIcon(SakinaIcons.ChevronEnd, str.nextMonth) }
+            IconButton(onClick = onNext, modifier = Modifier.testTag("cal_next")) { DirectionalIcon(SakinaIcons.ChevronEnd, str.nextMonth, tint = onHeader) }
+        }
         }
     }
 }

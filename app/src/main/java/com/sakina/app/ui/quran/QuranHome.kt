@@ -70,7 +70,15 @@ import java.time.LocalDate
 fun QuranHome(vm: MainViewModel, contentPadding: PaddingValues) {
     val str = LocalStrings.current
     Column(Modifier.fillMaxSize().padding(contentPadding)) {
-        Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+        if (com.sakina.app.ui.theme.LocalExtras.current.art) {
+            com.sakina.app.ui.theme.ArtBanner(
+                com.sakina.app.R.drawable.art_quran, str.quranTitle, str.quranArtLine,
+                Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp), height = 150.dp, tag = "quran_art",
+            ) {
+                IconButton(onClick = { vm.push(Route.MushafDownloads) }, modifier = Modifier.testTag("quran_downloads")) { Icon(SakinaIcons.Download, str.dlTitle) }
+                IconButton(onClick = { vm.push(Route.QuranSources) }) { Icon(SakinaIcons.Info, str.sourcesTitle) }
+            }
+        } else Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(str.quranTitle, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.weight(1f))
             IconButton(onClick = { vm.push(Route.MushafDownloads) }, modifier = Modifier.testTag("quran_downloads")) { Icon(SakinaIcons.Download, str.dlTitle) }
             IconButton(onClick = { vm.push(Route.QuranSources) }) { Icon(SakinaIcons.Info, str.sourcesTitle) }
