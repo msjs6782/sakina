@@ -244,7 +244,7 @@ fi
 if [ "$SDK" -ge 33 ]; then
   save_log
   start "${WB[@]}" --es demo_route widgets; sleep 6
-  scroll_to id tile_add_qibla 22; into_view tile_add_qibla; tap id tile_add_qibla && sleep 3 && cap 275_tile_request
+  scroll_to id tile_add_qibla 45; into_view tile_add_qibla; tap id tile_add_qibla && sleep 3 && cap 275_tile_request
   try_tap buttonis "add tile" || try_tap exact "Add tile" || true
   sleep 2
   wait_wlog "add tile QiblaTileService result=" 6 && check tile_request PASS "$(wlog | grep -o 'add tile .*' | tail -1)" || check tile_request FAIL "no result"

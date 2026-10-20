@@ -636,6 +636,23 @@ object WidgetRenderer {
         fun measureWidth(face: Typeface, text: String) = Typo.measure(face).width(text, 100f)
 
         /**
+         * Large display text drawn here as an alpha mask and tinted by the launcher: the heavy Kufi and the kashida
+         * width then look the same on every launcher (some draw widget text in the system font).
+         */
+        fun bigText(id: Int, value: String, px: Float, face: Typeface, color: Int) {
+            val p = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply { typeface = face; textSize = px }
+            val fm = p.fontMetrics
+            val w = (kotlin.math.ceil(p.measureText(value).toDouble()).toInt() + 2).coerceIn(1, 2000)
+            val h = kotlin.math.ceil((fm.descent - fm.ascent).toDouble()).toInt().coerceIn(1, 600)
+            val bmp = android.graphics.Bitmap.createBitmap(w, h, android.graphics.Bitmap.Config.ALPHA_8)
+            android.graphics.Canvas(bmp).drawText(value, 1f, -fm.ascent, p)
+            rv.setImageViewBitmap(id, bmp)
+            rv.setInt(id, "setColorFilter", color)
+            rv.setContentDescription(id, value)
+            key.append(id).append('=').append(value).append('@').append(px.toInt()).append('|')
+        }
+
+        /**
          * The day's name in heavy Kufi, as large as the height allows and stretched with kashida to the widget's width
          * (English names are sized to the width instead); the dates above, the prayers and the time left below.
          */
@@ -655,17 +672,15 @@ object WidgetRenderer {
             val r = tail(left, stamp)
             text(R.id.w_remain, r); color(R.id.w_remain, colors.accent)
             val word = fmt.weekday(today.dayOfWeek).let { if (lang == Lang.AR) it else it.uppercase() }
-            color(R.id.w_dayname, colors.text)
             // The day takes up to 44% of the height, less on a short widget so the prayers still fit.
             val lh = Typo.lineHeight(dayFace)
             val share = if (hDp < 120f) 0.5f else 0.44f
             val base = if (Kashida.point(word) != null) Kashida.stretch(word, 2) else word
             val perPx = Typo.rawWidth(dayFace, base, 100f) / 100f
             val px = minOf(boxH * share / lh, boxW * (if (lang == Lang.AR) 0.82f else 0.94f) / perPx, 64f * maxUnit)
-            size(R.id.w_dayname, px)
-            val target = boxW * 0.95f
+            val target = boxW * 0.97f
             val stretched = Kashida.fill(word, target) { Typo.rawWidth(dayFace, it, px) }
-            text(R.id.w_dayname, stretched)
+            bigText(R.id.w_dayname, stretched, px, dayFace, colors.text)
             solve(listOf(
                 top,
                 Line(cellNameIds, names, 10.5f, regular, drop = 1, padPx = 4f * density, with = intArrayOf(R.id.w_cells)),
@@ -789,10 +804,9 @@ object WidgetRenderer {
             val lh = Typo.lineHeight(dayFace)
             val room = boxH - 24f * density
             val perPx = Typo.rawWidth(dayFace, phrase, 100f) / 100f
-            val px = minOf(room * 0.9f / lh, boxW * 0.95f / perPx, 72f * maxUnit).coerceAtLeast(9f * density)
-            size(R.id.w_dayname, px)
-            val shown = Kashida.fillPhrase(phrase, boxW * 0.95f) { Typo.rawWidth(dayFace, it, px) }
-            text(R.id.w_dayname, shown); color(R.id.w_dayname, colors.text)
+            val px = minOf(room * 0.9f / lh, boxW * 0.97f / perPx, 72f * maxUnit).coerceAtLeast(9f * density)
+            val shown = Kashida.fillPhrase(phrase, boxW * 0.97f) { Typo.rawWidth(dayFace, it, px) }
+            bigText(R.id.w_dayname, shown, px, dayFace, colors.text)
             return WidgetMath.nextMidnight(now, zone)
         }
 

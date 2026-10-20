@@ -407,7 +407,14 @@ LAYOUTS["w_dayname"] = frame(content('''
                 android:contentDescription="@string/w_refresh"
                 android:padding="2dp"
                 android:src="@drawable/w_ic_refresh" />
-        </LinearLayout>''' + text("w_dayname", "W.Day", "w_sample_dayname") + cells()
+        </LinearLayout>''' + '''
+
+        <ImageView
+            android:id="@+id/w_dayname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/w_sample_dayname"
+            android:scaleType="center" />''' + cells()
     + text("w_remain", "W.Text.Small", "w_sample_left_until")))
 
 # 12. The khatma: today's pages, a progress bar, and the status against the plan.
@@ -442,13 +449,13 @@ LAYOUTS["w_dhikr"] = frame(content('''
                 android:src="@drawable/w_ic_next" />
         </LinearLayout>''' + '''
 
-        <TextView
+        <ImageView
             android:id="@+id/w_dayname"
-            style="@style/W.Day"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="@string/w_sample_dhikr" />'''))
+            android:contentDescription="@string/w_sample_dhikr"
+            android:scaleType="center" />'''))
 
 
 def kufi(xml):
