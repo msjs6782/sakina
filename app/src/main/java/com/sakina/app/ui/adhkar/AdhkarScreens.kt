@@ -191,10 +191,11 @@ fun AdhkarHomeScreen(vm: MainViewModel, initialQuery: String = "") {
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            if (art && query.isEmpty()) item {
+            // Keys keep the search field the same item when the header leaves (typing keeps its focus).
+            if (art && query.isEmpty()) item(key = "art") {
                 com.sakina.app.ui.theme.ArtBanner(com.sakina.app.R.drawable.art_adhkar, str.adhkarTitle, str.adhkarArtLine, height = 140.dp, tag = "adhkar_art")
             }
-            item {
+            item(key = "search") {
                 OutlinedTextField(
                     value = query,
                     onValueChange = { query = it },
