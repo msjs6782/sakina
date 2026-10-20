@@ -185,12 +185,13 @@ fun AdhkarHomeScreen(vm: MainViewModel, initialQuery: String = "") {
         val s = settings ?: return@AdhkarFrame
         val today = todayOf(s).toString()
         val results = remember(lib, query) { lib.search(query) }
+        val art = com.sakina.app.ui.theme.LocalExtras.current.art
         LazyColumn(
             Modifier.fillMaxSize(),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            if (com.sakina.app.ui.theme.LocalExtras.current.art && query.isEmpty()) item {
+            if (art && query.isEmpty()) item {
                 com.sakina.app.ui.theme.ArtBanner(com.sakina.app.R.drawable.art_adhkar, str.adhkarTitle, str.adhkarArtLine, height = 140.dp, tag = "adhkar_art")
             }
             item {
