@@ -1102,7 +1102,12 @@ if [ "$SUITE" = "full" ]; then
   for _ in $(seq 1 90); do [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ] && break; sleep 2; done
   sleep 25
   adb shell input keyevent 82 >/dev/null 2>&1 || true
-  alarm_dump > "$OUT/alarm_dump_after_reboot.txt"
+  # The alarm service can answer empty for a while after boot: ask again until it lists the app's alarms.
+  for _ in $(seq 1 15); do
+    alarm_dump > "$OUT/alarm_dump_after_reboot.txt"
+    grep -q "ALERT_FIRE" "$OUT/alarm_dump_after_reboot.txt" && break
+    sleep 4
+  done
   adb logcat -d -s SakinaAlerts:I > "$OUT/alerts_after_reboot.txt"
   if grep -q "ALERT_FIRE" "$OUT/alarm_dump_after_reboot.txt" && grep -q "BOOT_COMPLETED" "$OUT/alerts_after_reboot.txt"; then
     check reboot PASS "alarm rescheduled after BOOT_COMPLETED" critical
