@@ -1,0 +1,400 @@
+10-20 18:55:39.179  2899  2922 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 18:55:39.260  2899  2917 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 18:55:39.271  2899  2918 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:55:39.277  2899  2922 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:55:39.292  2899  2899 I SakinaDemo: applied tab=null routes=[] view=null
+10-20 18:55:49.021  2899  2899 I SakinaAlerts: System event android.intent.action.TIME_SET
+10-20 18:55:49.067  2899  2919 I SakinaAlerts: Run CATCH_UP (android.intent.action.TIME_SET) handled=0
+10-20 18:55:49.091  2899  2919 I SakinaWidgets: update (android.intent.action.TIME_SET) widgets=0 pushed=0 next=null
+10-20 18:56:02.163  2899  2924 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:56:15.699  2899  2922 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:56:15.733  2899  2918 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:56:51.248  2899  2922 I SakinaShortcuts: published 4 shortcuts (EN), pinned adhkar=0
+10-20 18:56:51.268  2899  2918 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:56:51.325  2899  2920 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:56:57.922  3540  3562 I SakinaShortcuts: published 4 shortcuts (EN), pinned adhkar=0
+10-20 18:56:58.039  3540  3563 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:56:58.061  3540  3558 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 18:56:58.103  3540  3564 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:57:09.189  3594  3616 I SakinaShortcuts: published 4 shortcuts (EN), pinned adhkar=0
+10-20 18:57:09.250  3594  3618 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 18:57:09.261  3594  3614 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:57:09.300  3594  3614 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 18:57:09.309  3594  3594 I SakinaDemo: applied tab=null routes=[] view=null
+10-20 18:57:09.352  3594  3613 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:57:09.353  3594  3612 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:57:09.389  3594  3619 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:57:17.579  3646  3662 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 18:57:17.657  3646  3662 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 18:57:17.675  3646  3664 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:57:17.687  3646  3669 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:57:17.751  3646  3670 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:57:17.752  3646  3646 I SakinaDemo: applied tab=null routes=[] view=null
+10-20 18:57:27.253  3696  3717 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 18:57:27.280  3696  3718 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 18:57:27.291  3696  3718 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:57:27.352  3696  3716 I SakinaShortcuts: published 4 shortcuts (EN), pinned adhkar=0
+10-20 18:57:27.352  3696  3696 I SakinaDemo: applied tab=null routes=[] view=null
+10-20 18:57:27.361  3696  3715 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:57:27.395  3696  3715 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:57:27.410  3696  3719 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:57:35.619  3747  3765 I SakinaShortcuts: published 4 shortcuts (EN), pinned adhkar=0
+10-20 18:57:35.686  3747  3770 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 18:57:35.705  3747  3770 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:57:35.717  3747  3770 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 18:57:35.729  3747  3770 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:57:35.732  3747  3747 I SakinaDemo: applied tab=HOME routes=[Times(view=MONTH)] view=MONTH
+10-20 18:57:35.745  3747  3765 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:57:35.791  3747  3765 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:57:44.976  3799  3821 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 18:57:45.009  3799  3821 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 18:57:45.025  3799  3816 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:57:45.087  3799  3799 I SakinaDemo: applied tab=HOME routes=[Times(view=DAY)] view=null
+10-20 18:57:45.093  3799  3817 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:57:45.107  3799  3821 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:57:53.934  3849  3874 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 18:57:54.000  3849  3871 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 18:57:54.025  3849  3872 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:57:54.074  3849  3876 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:57:54.094  3849  3849 I SakinaDemo: applied tab=null routes=[Calc] view=null
+10-20 18:57:54.104  3849  3873 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:57:54.117  3849  3876 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:58:02.894  3901  3924 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 18:58:02.950  3901  3923 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 18:58:02.959  3901  3923 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:58:03.002  3901  3924 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:58:03.017  3901  3901 I SakinaDemo: applied tab=null routes=[] view=null
+10-20 18:58:03.032  3901  3919 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:58:03.052  3901  3926 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:58:11.266  3951  3973 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 18:58:11.325  3951  3970 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 18:58:11.355  3951  3968 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:58:11.401  3951  3974 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:58:11.406  3951  3969 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:58:11.441  3951  3972 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:58:11.585  3951  3951 I SakinaDemo: HijriCheck compared=2557 mismatches=0
+10-20 18:58:11.590  3951  3951 I SakinaDemo: applied tab=null routes=[] view=null
+10-20 18:58:27.188  4006  4025 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 18:58:27.234  4006  4023 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 18:58:27.245  4006  4023 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:58:27.285  4006  4024 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:58:27.296  4006  4006 I SakinaDemo: applied tab=QURAN routes=[] view=null
+10-20 18:58:27.321  4006  4030 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:58:59.461  4187  4204 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 18:58:59.532  4187  4204 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 18:58:59.558  4187  4204 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:58:59.616  4187  4207 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:59:00.793  4187  4187 I SakinaDemo: applied tab=null routes=[QuranReader(global=261, highlight=true)] view=null
+10-20 18:59:11.270  4235  4252 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 18:59:11.276  4235  4257 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 18:59:11.288  4235  4257 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:59:11.360  4235  4252 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:59:12.474  4235  4235 I SakinaDemo: applied tab=null routes=[QuranReader(global=261, highlight=true)] view=null
+10-20 18:59:23.016  4283  4305 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 18:59:23.069  4283  4305 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 18:59:23.079  4283  4305 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:59:23.147  4283  4299 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:59:23.176  4283  4283 I SakinaDemo: applied tab=null routes=[QuranSearch(query=)] view=null
+10-20 18:59:46.067  4480  4499 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 18:59:46.072  4480  4501 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 18:59:46.084  4480  4501 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:59:46.152  4480  4499 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:59:46.166  4480  4480 I SakinaDemo: applied tab=null routes=[QuranSearch(query=الرحمن)] view=null
+10-20 18:59:56.559  4530  4548 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 18:59:56.653  4530  4550 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 18:59:56.672  4530  4550 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 18:59:56.715  4530  4551 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 18:59:56.727  4530  4530 I SakinaDemo: applied tab=null routes=[Khatma] view=null
+10-20 19:00:07.108  4530  4547 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:00:10.892  4608  4629 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:00:11.007  4608  4626 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:00:11.020  4608  4628 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:00:11.030  4608  4631 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:00:11.044  4608  4608 I SakinaDemo: applied tab=null routes=[Khatma] view=null
+10-20 19:00:11.053  4608  4632 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:00:11.066  4608  4629 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:03:37.475  5571  5591 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:03:37.560  5571  5594 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:03:37.571  5571  5588 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:03:37.598  5571  5571 I SakinaDemo: corrupted stored page 3: true
+10-20 19:03:37.598  5571  5571 I SakinaDemo: applied tab=null routes=[MushafDownloads] view=null
+10-20 19:03:37.627  5571  5591 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:04:01.883  5746  5764 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:04:01.938  5746  5763 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:04:01.960  5746  5763 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:04:02.008  5746  5764 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:04:02.043  5746  5746 I SakinaDemo: applied tab=QURAN routes=[] view=null
+10-20 19:04:42.203  5746  5746 I SakinaAlerts: Test alert ADHAN scheduled at 2026-10-20T19:04:45.201Z
+10-20 19:04:42.204  5746  5746 I SakinaDemo: applied on new intent: [demo_test]
+10-20 19:04:47.211  5746  5763 I SakinaAlerts: Test alert ADHAN delivered 2007 ms after its time: FIRE
+10-20 19:04:47.283  5746  5746 I SakinaAdhan: AdhanPlayback started excerpt=false route=NOTIFICATION volume=0.8
+10-20 19:04:53.401  5746  5746 I SakinaDemo: applied on new intent: [demo_adhan_stop]
+10-20 19:04:53.414  5746  5746 I SakinaAdhan: AdhanPlayback finished STOPPED_BY_USER
+10-20 19:05:04.439  5746  5746 I SakinaDemo: applied on new intent: [demo_quiet]
+10-20 19:05:04.468  5746  5746 I SakinaAdhan: AdhanPlayback finished STOPPED_BY_USER
+10-20 19:05:04.485  5746  5770 I SakinaAlerts: Run REFRESH (quiet) handled=0
+10-20 19:05:12.581  5746  5746 I SakinaDemo: applied on new intent: [demo_quiet]
+10-20 19:05:12.596  5746  5770 I SakinaAlerts: Run REFRESH (quiet_end) handled=0
+10-20 19:05:15.044  6129  6152 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:05:15.165  6129  6152 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:05:15.193  6129  6152 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:05:15.200  6129  6129 I SakinaDemo: applied tab=null routes=[Listen(sura=112)] view=null
+10-20 19:05:15.236  6129  6146 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:07:25.290  6885  6903 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:07:25.383  6885  6908 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:07:25.396  6885  6904 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:07:25.461  6885  6903 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:07:25.495  6885  6885 I SakinaDemo: applied tab=null routes=[Listen(sura=112)] view=null
+10-20 19:07:53.814  7063  7086 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:07:53.885  7063  7081 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:07:53.917  7063  7081 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:07:53.961  7063  7085 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:07:53.988  7063  7063 I SakinaDemo: applied tab=MORE routes=[] view=null
+10-20 19:08:41.004  7384  7402 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:08:41.050  7384  7407 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:08:41.072  7384  7407 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:08:41.086  7384  7384 I SakinaDemo: applied tab=null routes=[Adhkar(query=الكرسي)] view=null
+10-20 19:08:41.171  7384  7405 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:08:51.570  7446  7465 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:08:51.637  7446  7470 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:08:51.646  7446  7467 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:08:51.672  7446  7446 I SakinaDemo: applied tab=null routes=[Adhkar(query=)] view=null
+10-20 19:08:51.711  7446  7472 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:09:05.278  7544  7560 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:09:05.322  7544  7544 I SakinaDemo: applied tab=null routes=[AdhkarItem(id=tasbih_33)] view=null
+10-20 19:09:05.347  7544  7566 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:09:05.387  7544  7566 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:09:05.396  7544  7567 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:09:22.752  7670  7688 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:09:22.843  7670  7694 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:09:22.861  7670  7688 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:09:22.903  7670  7670 I SakinaDemo: applied tab=null routes=[Wird(practice=morning, session=)] view=null
+10-20 19:09:22.923  7670  7692 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:10:19.527  8082  8101 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:10:19.589  8082  8101 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:10:19.600  8082  8101 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:10:19.625  8082  8082 I SakinaDemo: applied tab=null routes=[Wird(practice=evening, session=)] view=null
+10-20 19:10:19.649  8082  8099 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:10:45.830  8264  8281 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:10:45.884  8264  8285 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:10:45.894  8264  8285 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:10:45.959  8264  8281 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:10:45.974  8264  8264 I SakinaDemo: applied tab=null routes=[Wird(practice=after_prayer, session=)] view=null
+10-20 19:11:00.320  8353  8373 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:11:00.363  8353  8374 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:11:00.387  8353  8374 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:11:00.426  8353  8353 I SakinaDemo: applied tab=null routes=[Wird(practice=after_prayer, session=)] view=null
+10-20 19:11:00.445  8353  8370 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:11:11.411  8426  8447 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:11:11.470  8426  8447 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:11:11.485  8426  8447 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:11:11.527  8426  8426 I SakinaDemo: applied tab=null routes=[Wird(practice=morning, session=)] view=null
+10-20 19:11:11.550  8426  8443 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:11:11.559  8426  8450 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:11:11.597  8426  8445 I SakinaAlerts: Scheduled REMINDER:ADHKAR_MORNING:2026-10-21 at 2026-10-21T03:30:00Z exact=true alarmClock=false epochMs=1792553400000
+10-20 19:11:11.606  8426  8445 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:11:47.306  8656  8679 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:11:47.372  8656  8679 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:11:47.386  8656  8679 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:11:47.424  8656  8656 I SakinaDemo: applied tab=null routes=[Wird(practice=morning, session=)] view=null
+10-20 19:11:47.455  8656  8681 I SakinaAlerts: Scheduled REMINDER:ADHKAR_MORNING:2026-10-21 at 2026-10-21T03:30:00Z exact=true alarmClock=false epochMs=1792553400000
+10-20 19:11:47.458  8656  8681 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:12:26.517  8928  8947 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:12:26.619  8928  8946 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:12:26.636  8928  8946 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:12:26.679  8928  8951 I SakinaAlerts: Scheduled REMINDER:ADHKAR_MORNING:2026-10-21 at 2026-10-21T03:30:00Z exact=true alarmClock=false epochMs=1792553400000
+10-20 19:12:26.684  8928  8951 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:12:26.720  8928  8952 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:12:26.736  8928  8928 I SakinaDemo: applied tab=null routes=[Tasbih] view=null
+10-20 19:12:26.756  8928  8950 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:13:02.454  9210  9227 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:13:02.563  9210  9231 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:13:02.575  9210  9210 I SakinaDemo: applied tab=null routes=[Tasbih] view=null
+10-20 19:13:02.579  9210  9231 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:13:02.639  9210  9232 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:13:31.676  9407  9425 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:13:31.709  9407  9432 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:13:31.719  9407  9430 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:13:31.775  9407  9407 I SakinaDemo: applied tab=null routes=[Qibla] view=null
+10-20 19:13:31.787  9407  9424 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:13:55.238  9525  9542 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:13:55.260  9525  9542 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:13:55.273  9525  9542 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:13:55.333  9525  9549 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:13:55.372  9525  9525 I SakinaDemo: applied tab=null routes=[Qibla] view=null
+10-20 19:14:07.532  9590  9607 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:14:07.614  9590  9609 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:14:07.625  9590  9610 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:14:07.645  9590  9607 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:14:07.692  9590  9590 I SakinaDemo: applied tab=null routes=[Qibla] view=null
+10-20 19:14:29.617  9691  9712 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:14:29.686  9691  9713 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:14:29.728  9691  9713 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:14:29.748  9691  9691 I SakinaDemo: applied tab=null routes=[Qibla] view=null
+10-20 19:14:29.792  9691  9710 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:14:42.546  9756  9774 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:14:42.581  9756  9774 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:14:42.615  9756  9777 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:14:42.676  9756  9779 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:14:42.710  9756  9756 I SakinaDemo: applied tab=null routes=[Qibla] view=null
+10-20 19:15:01.573  9849  9869 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:15:01.661  9849  9873 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:15:01.687  9849  9873 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:15:01.735  9849  9868 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:15:01.762  9849  9849 I SakinaDemo: applied tab=null routes=[Qibla] view=null
+10-20 19:15:17.019  9914  9932 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:15:17.080  9914  9938 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:15:17.092  9914  9934 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:15:17.138  9914  9914 I SakinaDemo: applied tab=null routes=[Qibla] view=null
+10-20 19:15:17.143  9914  9931 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:15:46.379 10086 10107 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:15:46.460 10086 10104 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:15:46.485 10086 10104 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:15:46.488 10086 10086 I SakinaDemo: applied tab=null routes=[Qibla] view=null
+10-20 19:15:46.560 10086 10105 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:15:46.561 10086 10108 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:15:46.604 10086 10108 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:16:12.830 10222 10242 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:16:12.854 10222 10242 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:16:12.863 10222 10242 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:16:12.935 10222 10248 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:16:12.950 10222 10246 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:16:12.951 10222 10222 I SakinaDemo: applied tab=null routes=[] view=null
+10-20 19:16:12.982 10222 10248 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:16:43.383 10222 10243 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:16:43.416 10222 10246 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:17:14.160 10623 10644 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:17:14.241 10623 10647 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:17:14.261 10623 10647 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:17:14.293 10623 10623 I SakinaDemo: applied tab=null routes=[HijriCalendar(focusEpochDay=20748)] view=null
+10-20 19:17:14.306 10623 10640 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:17:14.309 10623 10644 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:17:14.343 10623 10640 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:17:52.255 10623 10642 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:17:52.277 10623 10644 I SakinaAlerts: Scheduled OCCASION:5cb37b88-1a89-4f12-b582-250d7cb4bfef:2026-10-22 at 2026-10-22T06:00:00Z exact=true alarmClock=false epochMs=1792648800000
+10-20 19:17:52.282 10623 10644 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:17:57.100 10945 10967 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:17:57.276 10945 10962 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:17:57.297 10945 10962 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:17:57.341 10945 10967 I SakinaAlerts: Scheduled OCCASION:5cb37b88-1a89-4f12-b582-250d7cb4bfef:2026-10-22 at 2026-10-22T06:00:00Z exact=true alarmClock=false epochMs=1792648800000
+10-20 19:17:57.343 10945 10967 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:17:57.377 10945 10963 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:17:57.388 10945 10945 I SakinaDemo: applied tab=null routes=[HijriCalendar(focusEpochDay=20748)] view=null
+10-20 19:17:57.406 10945 10966 I SakinaAlerts: Scheduled OCCASION:demo0:2026-10-22 at 2026-10-22T06:00:00Z exact=true alarmClock=false epochMs=1792648800000
+10-20 19:17:57.410 10945 10966 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:18:12.501 10945 10967 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:18:12.518 10945 10966 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:18:16.360 10945 10962 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:18:16.376 10945 10967 I SakinaAlerts: Scheduled OCCASION:demo0:2026-10-22 at 2026-10-22T06:00:00Z exact=true alarmClock=false epochMs=1792648800000
+10-20 19:18:16.380 10945 10967 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:18:20.228 11084 11107 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:18:20.277 11084 11107 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:18:20.288 11084 11107 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:18:20.348 11084 11100 I SakinaAlerts: Scheduled OCCASION:demo0:2026-10-22 at 2026-10-22T06:00:00Z exact=true alarmClock=false epochMs=1792648800000
+10-20 19:18:20.350 11084 11100 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:18:20.394 11084 11101 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:18:20.416 11084 11084 I SakinaDemo: applied tab=null routes=[HijriCalendar(focusEpochDay=-9223372036854775808)] view=null
+10-20 19:18:20.416 11084 11109 I SakinaAlerts: Scheduled OCCASION:demo0:2026-10-22 at 2026-10-22T06:00:00Z exact=true alarmClock=false epochMs=1792648800000
+10-20 19:18:20.419 11084 11109 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:18:33.091 11183 11201 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:18:33.231 11183 11183 I SakinaDemo: applied tab=null routes=[HijriCalendar(focusEpochDay=-9223372036854775808)] view=null
+10-20 19:18:33.259 11183 11204 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:18:33.300 11183 11204 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:18:33.330 11183 11204 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:18:33.357 11183 11201 I SakinaAlerts: Scheduled OCCASION:demo0:2026-10-22 at 2026-10-22T06:00:00Z exact=true alarmClock=false epochMs=1792648800000
+10-20 19:18:33.361 11183 11201 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:18:33.448 11183 11201 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:18:46.328 11277 11302 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:18:46.444 11277 11296 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:18:46.458 11277 11296 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:18:46.534 11277 11302 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:18:46.575 11277 11277 I SakinaDemo: applied tab=null routes=[HijriCalendar(focusEpochDay=20740)] view=null
+10-20 19:18:59.038 11355 11373 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:18:59.127 11355 11381 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:18:59.147 11355 11378 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:18:59.172 11355 11355 I SakinaDemo: applied tab=null routes=[HijriCalendar(focusEpochDay=20740)] view=null
+10-20 19:18:59.176 11355 11379 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:18:59.244 11355 11380 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:18:59.286 11355 11380 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:19:10.386 11419 11439 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:19:10.496 11419 11438 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:19:10.509 11419 11438 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:19:10.563 11419 11441 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:19:10.596 11419 11419 I SakinaDemo: applied tab=null routes=[CalendarTools] view=null
+10-20 19:19:10.611 11419 11441 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:19:10.612 11419 11438 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:19:44.489 11841 11858 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:19:44.557 11841 11864 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:19:44.574 11841 11864 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:19:44.628 11841 11858 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:19:44.648 11841 11841 I SakinaDemo: AlarmState scheduled=null at=null epochMs=null exact=null
+10-20 19:19:44.648 11841 11841 I SakinaDemo: applied tab=null routes=[HijriCalendar(focusEpochDay=-9223372036854775808)] view=null
+10-20 19:19:44.675 11841 11858 I SakinaAlerts: Scheduled FASTING:2026-10-22:2026-10-21 at 2026-10-21T18:00:00Z exact=true alarmClock=false epochMs=1792605600000
+10-20 19:19:44.677 11841 11858 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:19:44.690 11841 11865 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:19:54.780 11888 11910 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:19:54.877 11888 11904 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:19:54.890 11888 11911 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:19:54.941 11888 11910 I SakinaAlerts: Scheduled FASTING:2026-10-22:2026-10-21 at 2026-10-21T18:00:00Z exact=true alarmClock=false epochMs=1792605600000
+10-20 19:19:54.947 11888 11910 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:19:54.992 11888 11888 I SakinaDemo: applied tab=null routes=[] view=null
+10-20 19:19:54.993 11888 11904 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:19:55.026 11888 11911 I SakinaAlerts: Scheduled OCCASION:demo0:2026-10-20 at 2026-10-20T19:21:00Z exact=true alarmClock=false epochMs=1792524060000
+10-20 19:19:55.028 11888 11911 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:21:00.031 11888 12125 I SakinaAlerts: Event OCCASION:demo0:2026-10-20 at 2026-10-20T19:21:00Z: FIRE
+10-20 19:21:00.046 11888 12125 I SakinaAlerts: Run ALARM (alarm) handled=1
+10-20 19:21:04.570 11888 11888 I SakinaDemo: applied on new intent: []
+10-20 19:21:04.570 11888 11888 I SakinaOpen: open calendar:2026-10-20
+10-20 19:21:14.897 12205 12229 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:21:14.951 12205 12227 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:21:14.967 12205 12229 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:21:14.974 12205 12205 I SakinaDemo: applied tab=null routes=[Ramadan] view=null
+10-20 19:21:14.991 12205 12225 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:21:15.024 12205 12223 I SakinaAlerts: Run REFRESH (settings) handled=1
+10-20 19:21:15.119 12205 12223 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:21:51.748 12475 12496 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:21:51.793 12475 12497 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:21:51.818 12475 12494 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:21:51.873 12475 12495 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:21:51.906 12475 12475 I SakinaDemo: applied tab=null routes=[Ramadan] view=null
+10-20 19:22:06.717 12558 12582 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:22:06.799 12558 12558 I SakinaDemo: applied tab=null routes=[Ramadan] view=null
+10-20 19:22:06.824 12558 12582 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:22:06.856 12558 12581 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:22:06.898 12558 12577 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:22:17.179 12621 12639 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:22:17.206 12621 12639 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:22:17.216 12621 12639 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:22:17.280 12621 12640 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:22:17.290 12621 12621 I SakinaDemo: applied tab=null routes=[Night] view=null
+10-20 19:22:36.126 12771 12792 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:22:36.185 12771 12795 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:22:36.203 12771 12795 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:22:36.207 12771 12771 I SakinaDemo: applied tab=null routes=[Night] view=null
+10-20 19:22:36.267 12771 12794 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:22:47.145 12771 12793 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:22:50.972 12868 12886 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:22:50.999 12868 12886 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:22:51.014 12868 12886 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:22:51.077 12868 12890 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:22:51.101 12868 12886 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:22:51.109 12868 12868 I SakinaDemo: applied tab=null routes=[Friday] view=null
+10-20 19:23:07.955 12958 12983 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:23:07.994 12958 12983 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:23:08.014 12958 12983 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:23:08.052 12958 12977 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:23:08.109 12958 12958 I SakinaDemo: applied tab=null routes=[Friday] view=null
+10-20 19:23:22.528 13039 13058 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:23:22.606 13039 13063 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:23:22.618 13039 13065 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:23:22.634 13039 13039 I SakinaDemo: applied tab=null routes=[] view=null
+10-20 19:23:22.677 13039 13058 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:23:41.976 13154 13171 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:23:42.071 13154 13172 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:23:42.075 13154 13154 I SakinaDemo: applied tab=null routes=[] view=null
+10-20 19:23:42.086 13154 13176 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null
+10-20 19:23:42.153 13154 13177 I SakinaAlerts: Run REFRESH (settings) handled=0
+10-20 19:24:02.085 13289 13307 I SakinaShortcuts: published 4 shortcuts (AR), pinned adhkar=0
+10-20 19:24:02.141 13289 13289 I SakinaDemo: applied tab=MORE routes=[] view=null
+10-20 19:24:02.151 13289 13311 I SakinaWidgets: update (quran) widgets=0 pushed=0 next=null
+10-20 19:24:02.164 13289 13306 I SakinaWidgets: update (settings) widgets=0 pushed=0 next=null

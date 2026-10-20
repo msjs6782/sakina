@@ -1,0 +1,33 @@
+      window=0 repeatInterval=0 count=0 flags=0x1
+      operation=PendingIntent{6bcdbc5: PendingIntentRecord{8bdc91a android broadcastIntent}}
+Batch{30bc4b num=1 start=3061388 end=3061388 flgs=0x1}:
+    RTC #0: Alarm{b213628 type 1 when 1792525561083 com.sakina.app.debug}
+      tag=*alarm*:com.sakina.app.widget.TICK
+      type=1 whenElapsed=+54s348ms when=2026-10-20 19:46:01
+      window=0 repeatInterval=0 count=0 flags=0x1
+      operation=PendingIntent{6946f41: PendingIntentRecord{45f5ce6 com.sakina.app.debug broadcastIntent}}
+Batch{accd227 num=1 start=3108150 end=3228150 flgs=0x8}:
+    ELAPSED_WAKEUP #0: Alarm{2678cd4 type 2 when 3108150 android}
+      tag=*walarm*:WifiConnectivityManager Schedule Periodic Scan Timer
+      type=2 whenElapsed=+1m41s110ms when=+1m41s110ms
+      window=+2m0s0ms repeatInterval=0 count=0 flags=0x8
+      operation=null
+      listener=android.app.AlarmManager$ListenerWrapper@2f7be7d
+Batch{1346172 num=1 start=3628141 end=4978141 flgs=0x8}:
+--
+      window=0 repeatInterval=0 count=0 flags=0x1
+      operation=PendingIntent{17bb76e: PendingIntentRecord{a4ce0f android broadcastIntent}}
+Batch{b8e7e9c num=1 start=24000305 end=24000305 flgs=0x5}:
+    RTC_WAKEUP #0: Alarm{ee7a0a5 type 0 when 1792546500000 com.sakina.app.debug}
+      tag=*walarm*:com.sakina.app.ALERT_FIRE
+      type=0 whenElapsed=+5h49m53s265ms when=2026-10-21 01:35:00
+      window=0 repeatInterval=0 count=0 flags=0x5
+      operation=PendingIntent{2fdc7a: PendingIntentRecord{9ea3c2b com.sakina.app.debug broadcastIntent}}
+Batch{b52e888 num=1 start=44760328 end=44760328 flgs=0x9}:
+    ELAPSED_WAKEUP #0: Alarm{656a221 type 2 when 44760328 android}
+      tag=*walarm*:NotificationManagerService.TIMEOUT
+      type=2 whenElapsed=+11h35m53s288ms when=+11h35m53s288ms
+      window=0 repeatInterval=0 count=0 flags=0x9
+      operation=PendingIntent{ecf4646: PendingIntentRecord{5ce7007 android broadcastIntent}}
+Batch{b720534 num=1 start=86449310 end=86449310 flgs=0x9}:
+    RTC_WAKEUP #0: Alarm{75a3f5d type 0 when 1792608949005 android}
