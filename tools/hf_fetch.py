@@ -3,6 +3,14 @@ import pathlib, sys, urllib.request
 
 BASE = "https://d8j0ntlcm91z4.cloudfront.net/user_33nCCU5zdhBp1P3AToFhR3jJqvD/"
 FILES = [
+    "hf_20261020_095710_dad3adfa-c276-40d3-bd68-155a6cbdde08.png",
+    "hf_20261020_095709_14f161dc-1ac6-4886-a28a-8fd74d843719.png",
+    "hf_20261020_095708_f15ac0f4-26fc-499d-b4e6-b6cbae3db4c1.png",
+    "hf_20261020_095710_3c0f19d9-3ef8-42c9-ac85-96cfe87f568a.png",
+    "hf_20261020_095710_efd5758d-c28c-4144-bdfd-091f79e49bcc.png",
+    "hf_20261020_095709_833446bf-582f-4738-b9e7-f418a59d4157.png",
+    "hf_20261020_095709_770cdb8e-2eb4-489f-b66e-2dbb76a2c334.png",
+    "hf_20261020_095709_6b9d2b74-27c0-4bd8-9612-2781e6ec40cc.png",
     "hf_20261019_153039_59863dcf-eec3-4ad9-95a3-4cd0345f129b.png",
     "hf_20261019_153040_6d8e60a5-4342-4082-8574-6e0597dabf2a.png",
     "hf_20261019_153000_d26f7d56-88bb-4e12-ba3f-aa63f4d1dfb0.png",
