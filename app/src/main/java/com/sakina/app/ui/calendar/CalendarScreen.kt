@@ -37,6 +37,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -182,12 +185,12 @@ fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long, tabPa
                     onPick = { picker = true },
                 )
                 Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    androidx.compose.material3.SingleChoiceSegmentedButtonRow(Modifier.weight(1f)) {
+                    SingleChoiceSegmentedButtonRow(Modifier.weight(1f)) {
                         listOf(CalendarKind.HIJRI to str.hijriLabel, CalendarKind.GREGORIAN to str.gregorianLabel).forEachIndexed { i, (k, label) ->
-                            androidx.compose.material3.SegmentedButton(
+                            SegmentedButton(
                                 selected = kind == k,
                                 onClick = { vm.update { it.copy(calendar = it.calendar.copy(kind = k)) } },
-                                shape = androidx.compose.material3.SegmentedButtonDefaults.itemShape(i, 2),
+                                shape = SegmentedButtonDefaults.itemShape(i, 2),
                                 icon = {},
                                 modifier = Modifier.testTag(if (k == CalendarKind.HIJRI) "cal_kind_hijri" else "cal_kind_gregorian"),
                             ) { Text(label, style = MaterialTheme.typography.labelLarge) }
