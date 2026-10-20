@@ -1,0 +1,72 @@
+CHECK widget_preview_next: PASS المغرب · بعد ١ س ٧ د · حُدّث ٤:٢٠ م
+CHECK widget_preview_countdown: PASS ١ س ٧ د
+CHECK widget_preview_strip: PASS الفجر
+CHECK widget_preview_content: PASS جامع الترمذي ٣٥٠٥ · صحيح
+CHECK widget_preview_ramadan: PASS رمضان بعد ١١٧ يومًا
+CHECK widget_previews_render: PASS all ten rendered
+CHECK widget_pinned_next: PASS placed by the launcher
+CHECK widget_home_next: PASS المغرب · بعد ١ س ٧ د حُدّث ٤:٢٠ م
+CHECK widget_pinned_analog: PASS placed by the launcher
+CHECK widget_pinned_strip: PASS placed by the launcher
+CHECK widget_pinned_digital: PASS placed by the launcher
+CHECK widget_analog_label: PASS the place's own clock (device +0000)
+CHECK widget_home_strip: PASS الفجر
+CHECK widget_refresh: PASS update (manual:next)
+CHECK widget_opens_times: PASS opens the app on Home
+CHECK widget_placed_preview: PASS placed widget shown as it looks
+CHECK widget_list: PASS placed widgets listed
+CHECK widget_config_saved: PASS saved on the device
+CHECK widget_config_applied: PASS Jeddah · Maghrib, in English
+CHECK widget_fixed_place: PASS kept Jeddah after the app moved to Makkah
+CHECK widget_follows_app: PASS strip follows the app language
+CHECK widget_tick: PASS in 6 h 58 min → in 6 h 57 min
+CHECK shortcuts_published: PASS times, qibla, quran, ramadan
+CHECK shortcut_pinned: PASS adhkar shortcut pinned
+CHECK shortcut_adhkar_opens: PASS opens the morning adhkar
+CHECK tile_request: PASS add tile QiblaTileService result=2
+CHECK tile_times: PASS opens the prayer times
+CHECK hero_sky_fajr: PASS painting for fajr
+CHECK hero_sky_morning: PASS painting for morning
+CHECK hero_sky_noon: PASS painting for noon
+CHECK hero_sky_asr: PASS painting for asr
+CHECK hero_sky_maghrib: PASS painting for maghrib
+CHECK hero_sky_night: PASS painting for night
+CHECK hero_sky_raml: PASS painting over the sand style
+CHECK hero_art_off: PASS style colours when turned off
+CHECK hero_art_switch: PASS turned off from Appearance
+CHECK widget_sky_previews: PASS previews rendered on the sky
+CHECK widget_pinned_next: PASS placed by the launcher
+CHECK widget_pinned_strip: PASS placed by the launcher
+CHECK widget_sky_saved: PASS two widgets on the painted sky
+CHECK widget_sky_home: PASS painted sky on the home screen
+CHECK no_times_tab: PASS four tabs
+CHECK times_from_home: PASS tables open from Home
+CHECK mushaf_trim: PASS crop page 1: 80,120 223x307
+CHECK home_quick: PASS quick access on Home
+CHECK quick_opens: PASS tasbih opened from Home
+CHECK calendar_tab: PASS جمادى الأولى ١٤٤٨ هـ
+CHECK calendar_upcoming: PASS coming up listed
+CHECK more_tools: PASS tools in groups
+CHECK more_settings: PASS settings in More
+CHECK dayname_preview: PASS الأربعـــــــــــــــــــــــــــــاء
+CHECK widget_pinned_dayname: PASS placed by the launcher
+CHECK dayname_home: PASS الأربعــــــــــــــــــــــاء
+CHECK widget_options_saved: PASS font, highlight, sunrise and update time saved
+CHECK widget_sunrise_shown: PASS sunrise column back
+CHECK widgets_load: PASS widgets load
+CHECK widget_previews_r10: PASS previews rendered
+CHECK mushaf_arabic_locale: PASS opened surah 2; page 001.pdf in place (393966 bytes)
+CHECK quran_art: PASS painted Quran header
+CHECK adhkar_art: PASS painted adhkar header
+CHECK calendar_art: PASS month on the night sky
+CHECK welcome_art: PASS welcome painting
+CHECK art_off: PASS plain header when the paintings are off
+CHECK khatma_preview: PASS لا صفحات مقررة اليوم.
+CHECK dhikr_preview: PASS لا حول ولا قوة إلا بالله
+CHECK r11_previews: PASS previews rendered
+CHECK widget_pinned_khatma: PASS placed by the launcher
+CHECK widget_pinned_dhikr: PASS placed by the launcher
+CHECK khatma_home: PASS khatma on the home screen
+CHECK texture_saved: PASS night lattice saved
+CHECK lock_note_saved: PASS turned on
+CHECK lock_note_posted: PASS next prayer notification posted
