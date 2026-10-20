@@ -107,6 +107,9 @@ jobs:
           - api: 34
             target: google_apis
             suite: full
+          - api: 34
+            target: google_apis
+            suite: extras
           - api: 26
             target: default
             suite: smoke
@@ -133,21 +136,21 @@ jobs:
           profile: pixel_6
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
           disable-animations: true
-          script: ONLY=${{ contains(github.event.head_commit.message, '[ci:widgets]') && 'widgets' || (contains(github.event.head_commit.message, '[ci:visual]') && 'visual' || (contains(github.event.head_commit.message, '[ci:r10]') && 'r10' || (contains(github.event.head_commit.message, '[ci:r11]') && 'r11' || 'all'))) }} bash ci/screenshots.sh out/sakina-debug.apk screenshots-${{ matrix.api }} ${{ matrix.suite }}
+          script: ONLY=${{ contains(github.event.head_commit.message, '[ci:widgets]') && 'widgets' || (contains(github.event.head_commit.message, '[ci:visual]') && 'visual' || (contains(github.event.head_commit.message, '[ci:r10]') && 'r10' || (contains(github.event.head_commit.message, '[ci:r11]') && 'r11' || 'all'))) }} bash ci/screenshots.sh out/sakina-debug.apk screenshots-${{ matrix.api }}-${{ matrix.suite }} ${{ matrix.suite }}
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: screenshots-${{ matrix.api }}
-          path: screenshots-${{ matrix.api }}/
+          name: screenshots-${{ matrix.api }}-${{ matrix.suite }}
+          path: screenshots-${{ matrix.api }}-${{ matrix.suite }}/
 
       - name: Publish screenshots to the ci-results branch
         if: always()
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          mkdir -p screenshots-${{ matrix.api }}
-          bash ci/publish_results.sh screenshots-${{ matrix.api }} ui-${{ matrix.api }}
+          mkdir -p screenshots-${{ matrix.api }}-${{ matrix.suite }}
+          bash ci/publish_results.sh screenshots-${{ matrix.api }}-${{ matrix.suite }} ui-${{ matrix.api }}-${{ matrix.suite }}
 
   release:
     needs: [build, ui-check]
