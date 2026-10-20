@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.core.QuranTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-20T18:49:18.461Z" hostname="runnervmxehtw" time="0.451">
+  <properties/>
+  <testcase name="structureMatchesTheMushaf" classname="com.sakina.app.core.QuranTest" time="0.13"/>
+  <testcase name="dailyVersesAreValidReferences" classname="com.sakina.app.core.QuranTest" time="0.001"/>
+  <testcase name="khatmaScheduleAndProgress" classname="com.sakina.app.core.QuranTest" time="0.003"/>
+  <testcase name="searchArabicEnglishAndReferences" classname="com.sakina.app.core.QuranTest" time="0.22"/>
+  <testcase name="shippedFilesAreTheVerbatimTanzilDownloads" classname="com.sakina.app.core.QuranTest" time="0.03"/>
+  <testcase name="translationAndTafsirCoverEveryAyah" classname="com.sakina.app.core.QuranTest" time="0.065"/>
+  <testcase name="basmalasAreSeparateAndCorrect" classname="com.sakina.app.core.QuranTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

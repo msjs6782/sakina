@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.core.CalendarTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-20T18:49:17.652Z" hostname="runnervmxehtw" time="0.052">
+  <properties/>
+  <testcase name="nightMidnightAndLastThird" classname="com.sakina.app.core.CalendarTest" time="0.002"/>
+  <testcase name="ramadanImsakiyaAndLastTen" classname="com.sakina.app.core.CalendarTest" time="0.008"/>
+  <testcase name="hijriMonthGridHasSixWeeksAndTheWholeMonth" classname="com.sakina.app.core.CalendarTest" time="0.017"/>
+  <testcase name="conversionRoundTripsAndRejectsMissingDays" classname="com.sakina.app.core.CalendarTest" time="0.011"/>
+  <testcase name="duhaWindow" classname="com.sakina.app.core.CalendarTest" time="0.001"/>
+  <testcase name="intervals" classname="com.sakina.app.core.CalendarTest" time="0.002"/>
+  <testcase name="personalOccasionsRepeat" classname="com.sakina.app.core.CalendarTest" time="0.002"/>
+  <testcase name="fastingDaysAndForbiddenDays" classname="com.sakina.app.core.CalendarTest" time="0.001"/>
+  <testcase name="calendarAlertsInThePlan" classname="com.sakina.app.core.CalendarTest" time="0.007"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

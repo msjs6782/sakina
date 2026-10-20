@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.core.FormatAndCitiesTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-20T18:49:17.706Z" hostname="runnervmxehtw" time="0.198">
+  <properties/>
+  <testcase name="occasions" classname="com.sakina.app.core.FormatAndCitiesTest" time="0.002"/>
+  <testcase name="citiesLoadAndSearch" classname="com.sakina.app.core.FormatAndCitiesTest" time="0.183"/>
+  <testcase name="timesAndDigits" classname="com.sakina.app.core.FormatAndCitiesTest" time="0.013"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

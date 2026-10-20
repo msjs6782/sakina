@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.core.AlertPlannerTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-20T18:49:17.583Z" hostname="runnervmxehtw" time="0.065">
+  <properties/>
+  <testcase name="everythingIsOffByDefault" classname="com.sakina.app.core.AlertPlannerTest" time="0.044"/>
+  <testcase name="dueWindowAndNextAlarm" classname="com.sakina.app.core.AlertPlannerTest" time="0.003"/>
+  <testcase name="reminderInDaylightSavingGapMovesForward" classname="com.sakina.app.core.AlertPlannerTest" time="0.003"/>
+  <testcase name="suhoorOnlyInRamadanUnlessAskedForEveryDay" classname="com.sakina.app.core.AlertPlannerTest" time="0.003"/>
+  <testcase name="decisionsForLateDuplicateAndQuiet" classname="com.sakina.app.core.AlertPlannerTest" time="0.006"/>
+  <testcase name="remindersFollowDaysAndCivilTime" classname="com.sakina.app.core.AlertPlannerTest" time="0.001"/>
+  <testcase name="soundAndOffsetsInheritance" classname="com.sakina.app.core.AlertPlannerTest" time="0.0"/>
+  <testcase name="prayerPreAndIqamaEvents" classname="com.sakina.app.core.AlertPlannerTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

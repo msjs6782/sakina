@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.data.WidgetAssetTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-20T18:49:19.157Z" hostname="runnervmxehtw" time="0.08">
+  <properties/>
+  <testcase name="widgetSettingsRoundTripAndResolve" classname="com.sakina.app.data.WidgetAssetTest" time="0.019"/>
+  <testcase name="adhkarMatchTheLibraryAndAreNotTiedToATime" classname="com.sakina.app.data.WidgetAssetTest" time="0.004"/>
+  <testcase name="versesMatchTheBundledTanzilText" classname="com.sakina.app.data.WidgetAssetTest" time="0.057"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

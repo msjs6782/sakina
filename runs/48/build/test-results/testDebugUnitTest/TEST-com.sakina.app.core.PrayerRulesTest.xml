@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.core.PrayerRulesTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-20T18:49:18.372Z" hostname="runnervmxehtw" time="0.036">
+  <properties/>
+  <testcase name="offsetsMoveOnlyTheirPrayerAndAreClamped" classname="com.sakina.app.core.PrayerRulesTest" time="0.002"/>
+  <testcase name="timesAreInOrderAndLocalHoursAreSensibleAroundTheWorld" classname="com.sakina.app.core.PrayerRulesTest" time="0.028"/>
+  <testcase name="ummAlQuraIshaIs120InRamadanAnd90Outside" classname="com.sakina.app.core.PrayerRulesTest" time="0.001"/>
+  <testcase name="ummAlQuraCalendarKnownDates" classname="com.sakina.app.core.PrayerRulesTest" time="0.001"/>
+  <testcase name="highLatitudeRuleIsMarkedAndPolarDaysAreWithheld" classname="com.sakina.app.core.PrayerRulesTest" time="0.001"/>
+  <testcase name="scheduleFindsNextAndPreviousAcrossMidnight" classname="com.sakina.app.core.PrayerRulesTest" time="0.001"/>
+  <testcase name="daylightSavingIsFollowed" classname="com.sakina.app.core.PrayerRulesTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
