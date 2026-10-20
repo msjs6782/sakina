@@ -1,0 +1,6 @@
+--------- beginning of main
+10-20 19:44:37.220  3440  3440 I SakinaAlerts: System event android.intent.action.BOOT_COMPLETED
+10-20 19:44:37.890  3440  3560 I SakinaAlerts: Scheduled ADHAN:FAJR:2026-10-21 at 2026-10-21T01:35:00Z exact=true alarmClock=false epochMs=1792546500000
+10-20 19:44:37.902  3440  3560 I SakinaAlerts: Run CATCH_UP (android.intent.action.BOOT_COMPLETED) handled=0
+10-20 19:44:37.983  3440  3561 I SakinaAlerts: Scheduled ADHAN:FAJR:2026-10-21 at 2026-10-21T01:35:00Z exact=true alarmClock=false epochMs=1792546500000
+10-20 19:44:37.994  3440  3561 I SakinaAlerts: Run REFRESH (settings) handled=0

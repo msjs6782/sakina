@@ -1,0 +1,17 @@
+      whenElapsed=+4h15m20s54ms maxWhenElapsed=+4h15m20s54ms
+      listener=android.app.AlarmManager$ListenerWrapper@8bf5edd
+      idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=false, android:broadcast.temporaryAppAllowlistReasonCode=302, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=0, android:broadcast.flags=8}]
+    RTC_WAKEUP #19: Alarm{450ea52 type 0 origWhen 1792546500000 whenElapsed 21069488 com.sakina.app.debug}
+      tag=*walarm*:com.sakina.app.ALERT_FIRE
+      type=RTC_WAKEUP origWhen=2026-10-21 01:35:00.000 window=0 exactAllowReason=permission repeatInterval=0 count=0 flags=0x5
+      policyWhenElapsed: requester=+5h50m20s53ms app_standby=-1s976ms device_idle=-- battery_saver=-1s977ms tare=-1s976ms
+      whenElapsed=+5h50m20s53ms maxWhenElapsed=+5h50m20s53ms
+      operation=PendingIntent{b44f123: PendingIntentRecord{1e58620 com.sakina.app.debug broadcastIntent}}
+      idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=false, android:broadcast.temporaryAppAllowlistReasonCode=302, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=0, android:broadcast.flags=8}]
+    ELAPSED_WAKEUP #20: Alarm{a580bd9 type 2 origWhen 21600000 whenElapsed 21600000 com.android.providers.calendar}
+      tag=*walarm*:com.android.providers.calendar.intent.CalendarProvider2
+      type=ELAPSED_WAKEUP origWhen=+5h59m10s565ms window=+4h30m0s0ms repeatInterval=21600000 count=0 flags=0x0
+      policyWhenElapsed: requester=+5h59m10s565ms app_standby=-1s915ms device_idle=-- battery_saver=-6s944ms tare=-6s944ms
+      whenElapsed=+5h59m10s565ms maxWhenElapsed=+10h29m10s565ms
+      operation=PendingIntent{def599e: PendingIntentRecord{a6b7c7f com.android.providers.calendar broadcastIntent}}
+    ELAPSED_WAKEUP #21: Alarm{8ece44c type 2 origWhen 21618218 whenElapsed 21618218 com.google.android.bluetooth}

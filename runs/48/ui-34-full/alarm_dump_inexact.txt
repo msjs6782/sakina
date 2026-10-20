@@ -1,0 +1,23 @@
+      policyWhenElapsed: requester=+5h17m23s876ms app_standby=-12s0ms device_idle=-- battery_saver=-26m40s248ms tare=-26m40s248ms
+      whenElapsed=+5h17m23s876ms maxWhenElapsed=+6h8m33s494ms
+      listener=android.os.BinderProxy@672ea9c
+    RTC_WAKEUP #23: Alarm{3119ca5 type 0 origWhen 1792546500000 whenElapsed 23994310 com.sakina.app.debug}
+      tag=*walarm*:com.sakina.app.ALERT_FIRE
+      type=RTC_WAKEUP origWhen=2026-10-21 01:35:00.000 window=+10m0s0ms repeatInterval=0 count=0 flags=0x0
+      policyWhenElapsed: requester=+5h55m16s26ms app_standby=-6s339ms device_idle=-- battery_saver=-6s339ms tare=-6s339ms
+      whenElapsed=+5h55m16s26ms maxWhenElapsed=+6h5m16s26ms
+      operation=PendingIntent{8d8287a: PendingIntentRecord{8ba982b com.sakina.app.debug broadcastIntent}}
+    RTC_WAKEUP #24: Alarm{e121488 type 0 origWhen 1792546500000 whenElapsed 23994311 com.sakina.app.debug}
+      tag=*walarm*:com.sakina.app.ALERT_FIRE
+      type=RTC_WAKEUP origWhen=2026-10-21 01:35:00.000 window=+1h0m0s0ms repeatInterval=0 count=0 flags=0x20
+      policyWhenElapsed: requester=+5h55m16s27ms app_standby=-6s339ms device_idle=-- battery_saver=-6s339ms tare=-6s339ms
+      whenElapsed=+5h55m16s27ms maxWhenElapsed=+6h55m16s27ms
+      operation=PendingIntent{9245e21: PendingIntentRecord{7b05246 com.sakina.app.debug broadcastIntent}}
+      idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=false, android:broadcast.temporaryAppAllowlistReasonCode=-1, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=1, android:broadcast.flags=8}]
+    ELAPSED #25: Alarm{7488c07 type 3 origWhen 42594310 whenElapsed 42594310 com.google.android.gms}
+      tag=*alarm*:com.google.android.location.ALARM_WAKEUP_BURST_COLLECTION_TRIGGER
+      type=ELAPSED origWhen=+11h5m16s26ms window=+1h0m0s0ms repeatInterval=0 count=0 flags=0x0
+      policyWhenElapsed: requester=+11h5m16s26ms app_standby=-12s0ms device_idle=-- battery_saver=-39m13s734ms tare=-39m13s734ms
+      whenElapsed=+11h5m16s26ms maxWhenElapsed=+12h5m16s26ms
+      operation=PendingIntent{8f7f134: PendingIntentRecord{f47bb5d com.google.android.gms/com.google.android.gms.location_base broadcastIntent}}
+    ELAPSED #26: Alarm{38f4cd2 type 3 origWhen 42790975 whenElapsed 42790975 com.google.android.gms}

@@ -1,0 +1,15 @@
+      package=com.sakina.app.debug
+      launchIntent=PendingIntent{cab5609: PendingIntentRecord{e2c0f7c com.sakina.app.debug startActivity (allowlist: d0b001f:+30s0ms/0/NOTIFICATION_SERVICE/NotificationManagerService)}}
+      mediaButtonReceiver=null
+      active=true
+      flags=7
+      rating type=0
+      controllers: 8
+      state=PlaybackState {state=PLAYING(3), position=3096, buffered position=65097, speed=1.0, updated=1116464, actions=7339983, custom actions=[], active item id=0, error=null}
+      audioAttrs=AudioAttributes: usage=USAGE_MEDIA content=CONTENT_TYPE_MUSIC flags=0x800 tags= bundle=null
+      volumeType=LOCAL, controlType=ABSOLUTE, max=0, current=0, volumeControlId=null
+      metadata: size=10, description=سورة البقرة, null, null
+      queueTitle=null, size=1
+    BluetoothMediaBrowserService com.google.android.bluetooth/BluetoothMediaBrowserService (userId=0)
+      ownerPid=1025, ownerUid=1002, userId=0
+      package=com.google.android.bluetooth
