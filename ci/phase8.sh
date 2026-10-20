@@ -134,7 +134,7 @@ if home_find id w_name; then
   tap id w_refresh && sleep 3
   wlog | grep -q "update (manual:" && check widget_refresh PASS "$(wlog | grep -o 'update (manual:[a-z_]*)' | tail -1)" || check widget_refresh FAIL "$(wlog | grep 'update (' | tail -1)"
   home_find id w_name && tap id w_name && sleep 4
-  wlog | grep -q "open times" && ui_has id tab_times && check widget_opens_times PASS "opens the times tab" || check widget_opens_times FAIL "$(wlog | grep SakinaOpen | tail -1)"
+  wlog | grep -q "open times" && ui_has id tab_home && check widget_opens_times PASS "opens the app on Home" || check widget_opens_times FAIL "$(wlog | grep SakinaOpen | tail -1)"
   cap 260_widget_opened_times
 fi
 if [ "$SUITE" = "full" ]; then

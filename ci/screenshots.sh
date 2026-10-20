@@ -217,8 +217,10 @@ tap exact "ابدأ" && sleep 1 && cap 05_home_no_location
 tap exact "اختيار مدينة" && sleep 1.5 && cap 06_city_picker
 tap id city_search && adb shell input text "Jeddah" && sleep 2 && cap 07_city_search
 tap exact "جدة" && sleep 2 && cap 08_home_jeddah_after_tap
-tap id tab_times && sleep 1.5 && cap 09_times_day
+# The tables open from today's times on Home (no longer a tab).
+tap_scroll id home_open_times && sleep 1.5 && tap exact "اليوم" && sleep 1 && cap 09_times_day
 tap exact "الأسبوع" && sleep 1.5 && cap 10_times_week
+adb shell input keyevent 4; sleep 1.5
 tap id tab_more && sleep 1.5 && cap 11a_more
 scroll_to exact "المظهر واللغة" 6 && cap 11_settings
 tap exact "المظهر واللغة" && sleep 1.5 && tap exact "English" && sleep 2 && cap 11b_switched_to_english

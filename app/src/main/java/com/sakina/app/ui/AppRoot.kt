@@ -128,6 +128,7 @@ fun SakinaRoot(vm: MainViewModel, startTimesView: TimesView = TimesView.DAY) {
 @Composable
 private fun RouteScreen(route: Route, vm: MainViewModel, s: AppSettings) {
     when (route) {
+        is Route.Times -> com.sakina.app.ui.times.TimesRouteScreen(vm, s, route.view)
         Route.Locations -> LocationsScreen(vm, s)
         Route.Calc -> CalcScreen(vm, s)
         Route.Appearance -> AppearanceScreen(vm, s)
@@ -170,7 +171,6 @@ private fun MainTabs(vm: MainViewModel, s: AppSettings, startTimesView: TimesVie
     val str = LocalStrings.current
     val tabs = listOf(
         Tab.HOME to (SakinaIcons.Home to str.tabHome),
-        Tab.TIMES to (SakinaIcons.Clock to str.tabTimes),
         Tab.QURAN to (SakinaIcons.Book to str.tabQuran),
         Tab.CALENDAR to (SakinaIcons.Calendar to str.tabCalendar),
         Tab.MORE to (SakinaIcons.Grid to str.tabMore),
@@ -194,7 +194,6 @@ private fun MainTabs(vm: MainViewModel, s: AppSettings, startTimesView: TimesVie
         Box(Modifier.fillMaxSize()) {
             when (vm.tab) {
                 Tab.HOME -> HomeScreen(vm, s, padding)
-                Tab.TIMES -> TimesScreen(vm, s, padding, startTimesView)
                 Tab.QURAN -> QuranHome(vm, padding)
                 Tab.CALENDAR -> androidx.compose.runtime.key(vm.calendarFocus) {
                     com.sakina.app.ui.calendar.CalendarScreen(vm, s, vm.calendarFocus, tabPadding = padding)

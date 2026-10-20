@@ -67,6 +67,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.sakina.app.core.calendar.CalendarKind
 import com.sakina.app.core.calendar.FastingDays
 import com.sakina.app.core.calendar.FastingKind
@@ -115,7 +116,8 @@ private fun marks(d: LocalDate, s: AppSettings): DayMarks {
     val f = FastingDays.on(d, s.hijriOffset)
     return DayMarks(
         occasions = Occasions.on(d, s.hijriOffset).isNotEmpty(),
-        fasting = f.isNotEmpty() && !FastingDays.isForbidden(f),
+        // Monday/Thursday fasts and Ramadan's days would mark half the month; the day's details still list them.
+        fasting = f.any { it != FastingKind.MONDAY && it != FastingKind.THURSDAY && it != FastingKind.RAMADAN } && !FastingDays.isForbidden(f),
         forbidden = FastingDays.isForbidden(f),
         personal = PersonalOccasionOps.on(s.calendar.occasions, d, s.hijriOffset).isNotEmpty(),
     )
@@ -173,28 +175,28 @@ fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long, tabPa
             },
         ) { pad ->
             Column(Modifier.fillMaxSize().padding(pad)) {
-                Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(onClick = { scope.launch { pager.animateScrollToPage((pager.currentPage - 1).coerceAtLeast(0)) } }, modifier = Modifier.testTag("cal_prev")) {
-                        DirectionalIcon(SakinaIcons.ChevronStart, str.prevMonth)
+                MonthHeader(
+                    str = str, fmt = fmt, kind = kind, current = current, offset = s.hijriOffset,
+                    onPrev = { scope.launch { pager.animateScrollToPage((pager.currentPage - 1).coerceAtLeast(0)) } },
+                    onNext = { scope.launch { pager.animateScrollToPage((pager.currentPage + 1).coerceAtMost(PAGES - 1)) } },
+                    onPick = { picker = true },
+                )
+                Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    androidx.compose.material3.SingleChoiceSegmentedButtonRow(Modifier.weight(1f)) {
+                        listOf(CalendarKind.HIJRI to str.hijriLabel, CalendarKind.GREGORIAN to str.gregorianLabel).forEachIndexed { i, (k, label) ->
+                            androidx.compose.material3.SegmentedButton(
+                                selected = kind == k,
+                                onClick = { vm.update { it.copy(calendar = it.calendar.copy(kind = k)) } },
+                                shape = androidx.compose.material3.SegmentedButtonDefaults.itemShape(i, 2),
+                                icon = {},
+                                modifier = Modifier.testTag(if (k == CalendarKind.HIJRI) "cal_kind_hijri" else "cal_kind_gregorian"),
+                            ) { Text(label, style = MaterialTheme.typography.labelLarge) }
+                        }
                     }
-                    Text(
-                        monthName(str, kind, current.month) + " " + fmt.num(current.year) + if (kind == CalendarKind.HIJRI && str.isAr) " هـ" else "",
-                        style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center,
-                        modifier = Modifier.weight(1f).clip(RoundedCornerShape(12.dp)).clickable { picker = true }.padding(vertical = 6.dp).testTag("cal_title"),
-                    )
-                    IconButton(onClick = { scope.launch { pager.animateScrollToPage((pager.currentPage + 1).coerceAtMost(PAGES - 1)) } }, modifier = Modifier.testTag("cal_next")) {
-                        DirectionalIcon(SakinaIcons.ChevronEnd, str.nextMonth)
+                    Spacer(Modifier.width(10.dp))
+                    FilledTonalButton(onClick = { scope.launch { pager.animateScrollToPage(SPAN) } }, modifier = Modifier.testTag("cal_today")) {
+                        Text(str.todayButton, style = MaterialTheme.typography.labelLarge)
                     }
-                }
-                Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(selected = kind == CalendarKind.HIJRI, onClick = { vm.update { it.copy(calendar = it.calendar.copy(kind = CalendarKind.HIJRI)) } },
-                        label = { Text(str.hijriLabel) }, modifier = Modifier.testTag("cal_kind_hijri"))
-                    FilterChip(selected = kind == CalendarKind.GREGORIAN, onClick = { vm.update { it.copy(calendar = it.calendar.copy(kind = CalendarKind.GREGORIAN)) } },
-                        label = { Text(str.gregorianLabel) }, modifier = Modifier.testTag("cal_kind_gregorian"))
-                    Spacer(Modifier.weight(1f))
-                    OutlinedButton(onClick = {
-                        scope.launch { pager.animateScrollToPage(SPAN) }
-                    }, modifier = Modifier.testTag("cal_today")) { Text(str.todayButton) }
                 }
                 HorizontalPager(pager, modifier = Modifier.fillMaxSize(), beyondViewportPageCount = 0, verticalAlignment = Alignment.Top) { page ->
                     val month = monthAt(page, base)
@@ -215,6 +217,50 @@ fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long, tabPa
     }
 }
 
+/**
+ * The month on screen: its name large (tap for the month picker), the other calendar's months beneath it, and the
+ * arrows either side.
+ */
+@Composable
+private fun MonthHeader(str: com.sakina.app.ui.Strings, fmt: com.sakina.app.core.format.Fmt, kind: CalendarKind, current: MonthRef, offset: Int, onPrev: () -> Unit, onNext: () -> Unit, onPick: () -> Unit) {
+    val range = remember(current, offset) { MonthGrid.range(current, offset) }
+    val other = range?.let { r ->
+        if (kind == CalendarKind.HIJRI) {
+            val a = r.start; val b = r.endInclusive
+            if (a.monthValue == b.monthValue) monthName(str, CalendarKind.GREGORIAN, a.monthValue) + " " + fmt.num(a.year)
+            else monthName(str, CalendarKind.GREGORIAN, a.monthValue) + (if (a.year != b.year) " " + fmt.num(a.year) else "") + " – " +
+                monthName(str, CalendarKind.GREGORIAN, b.monthValue) + " " + fmt.num(b.year)
+        } else {
+            val a = UmmAlQura.displayed(r.start, offset); val b = UmmAlQura.displayed(r.endInclusive, offset)
+            if (a == null || b == null) null
+            else if (a.month == b.month) monthName(str, CalendarKind.HIJRI, a.month) + " " + fmt.num(a.year)
+            else monthName(str, CalendarKind.HIJRI, a.month) + (if (a.year != b.year) " " + fmt.num(a.year) else "") + " – " +
+                monthName(str, CalendarKind.HIJRI, b.month) + " " + fmt.num(b.year) + (if (str.isAr) " هـ" else " AH")
+        }
+    }
+    Surface(
+        shape = RoundedCornerShape(26.dp), color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+    ) {
+        Row(Modifier.padding(horizontal = 4.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = onPrev, modifier = Modifier.testTag("cal_prev")) { DirectionalIcon(SakinaIcons.ChevronStart, str.prevMonth) }
+            Column(
+                Modifier.weight(1f).clip(RoundedCornerShape(14.dp)).clickable(onClick = onPick).padding(vertical = 4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    monthName(str, kind, current.month) + " " + fmt.num(current.year) + if (kind == CalendarKind.HIJRI && str.isAr) " هـ" else "",
+                    style = MaterialTheme.typography.headlineSmall.copy(fontFamily = com.sakina.app.ui.theme.Amiri, fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer, textAlign = TextAlign.Center,
+                    modifier = Modifier.testTag("cal_title"),
+                )
+                if (other != null) Text(other, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75f), textAlign = TextAlign.Center)
+            }
+            IconButton(onClick = onNext, modifier = Modifier.testTag("cal_next")) { DirectionalIcon(SakinaIcons.ChevronEnd, str.nextMonth) }
+        }
+    }
+}
+
 @Composable
 private fun MonthPage(month: MonthRef, s: AppSettings, today: LocalDate, selected: Long, coming: List<Pair<LocalDate, String>>, onDay: (LocalDate) -> Unit) {
     val str = LocalStrings.current
@@ -226,15 +272,22 @@ private fun MonthPage(month: MonthRef, s: AppSettings, today: LocalDate, selecte
             NoteText(str.outOfRange, Modifier.padding(16.dp))
             return@Column
         }
-        Row(Modifier.fillMaxWidth()) {
-            MonthGrid.weekdays(weekStart).forEach { d ->
-                Text(fmt.weekday(d, short = true), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center, modifier = Modifier.weight(1f).padding(vertical = 4.dp))
-            }
-        }
-        grid.chunked(7).forEach { week ->
-            Row(Modifier.fillMaxWidth()) {
-                week.forEach { day -> DayCell(day, month.kind, s, today, day.date.toEpochDay() == selected, Modifier.weight(1f)) { onDay(day.date) } }
+        Surface(shape = RoundedCornerShape(24.dp), color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(horizontal = 4.dp, vertical = 8.dp)) {
+                Row(Modifier.fillMaxWidth()) {
+                    MonthGrid.weekdays(weekStart).forEach { d ->
+                        // Friday stands out, as it does in printed calendars here.
+                        Text(fmt.weekday(d, short = true), style = MaterialTheme.typography.labelSmall,
+                            fontWeight = if (d == DayOfWeek.FRIDAY) FontWeight.SemiBold else FontWeight.Normal,
+                            color = if (d == DayOfWeek.FRIDAY) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center, maxLines = 1, modifier = Modifier.weight(1f).padding(vertical = 6.dp))
+                    }
+                }
+                grid.chunked(7).forEach { week ->
+                    Row(Modifier.fillMaxWidth()) {
+                        week.forEach { day -> DayCell(day, month.kind, s, today, day.date.toEpochDay() == selected, Modifier.weight(1f)) { onDay(day.date) } }
+                    }
+                }
             }
         }
         Spacer(Modifier.height(10.dp))
@@ -254,32 +307,35 @@ private fun DayCell(day: GridDay, kind: CalendarKind, s: AppSettings, today: Loc
     val isToday = day.date == today
     val primary = if (kind == CalendarKind.HIJRI) day.hijri?.day else day.date.dayOfMonth
     val secondary = if (kind == CalendarKind.HIJRI) day.date.dayOfMonth else day.hijri?.day
+    val cs = MaterialTheme.colorScheme
     val bg = when {
-        selected -> MaterialTheme.colorScheme.primaryContainer
-        m.forbidden -> MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.35f)
+        isToday -> cs.primary
+        selected -> cs.secondaryContainer
+        m.forbidden -> cs.errorContainer.copy(alpha = 0.45f)
         else -> Color.Transparent
     }
+    val ink = if (isToday) cs.onPrimary else cs.onSurface
+    val sub = if (isToday) cs.onPrimary.copy(alpha = 0.8f) else cs.onSurfaceVariant
     Box(
         modifier
-            .aspectRatio(0.82f)
-            .padding(2.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .aspectRatio(0.86f)
+            .padding(3.dp)
+            .clip(RoundedCornerShape(14.dp))
             .background(bg)
-            .then(if (isToday) Modifier.border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp)) else Modifier)
+            .then(if (selected && !isToday) Modifier.border(1.5.dp, cs.secondary, RoundedCornerShape(14.dp)) else Modifier)
             .clickable(onClick = onClick)
-            .alpha(if (day.inMonth) 1f else 0.38f)
+            .alpha(if (day.inMonth) 1f else 0.32f)
             .testTag("cal_day_${day.date}"),
         contentAlignment = Alignment.Center,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(primary?.let { fmt.num(it) } ?: "–", style = MaterialTheme.typography.titleLarge,
-                fontWeight = if (isToday) FontWeight.Bold else FontWeight.Medium,
-                color = if (isToday) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface)
-            Text(secondary?.let { fmt.num(it) } ?: "", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Row(horizontalArrangement = Arrangement.spacedBy(3.dp), modifier = Modifier.height(6.dp)) {
-                if (m.occasions) Dot(MaterialTheme.colorScheme.primary)
-                if (m.fasting) Dot(MaterialTheme.colorScheme.tertiary, hollow = true)
-                if (m.personal) Dot(MaterialTheme.colorScheme.secondary)
+            Text(primary?.let { fmt.num(it) } ?: "–", style = MaterialTheme.typography.titleMedium,
+                fontWeight = if (isToday) FontWeight.Bold else FontWeight.Medium, color = ink, maxLines = 1)
+            Text(secondary?.let { fmt.num(it) } ?: "", style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp), color = sub, maxLines = 1)
+            Row(horizontalArrangement = Arrangement.spacedBy(3.dp), modifier = Modifier.padding(top = 2.dp).height(5.dp)) {
+                if (m.occasions) Dot(if (isToday) cs.onPrimary else cs.primary)
+                if (m.fasting) Dot(if (isToday) cs.onPrimary else cs.tertiary, hollow = true)
+                if (m.personal) Dot(if (isToday) cs.onPrimary else cs.secondary)
             }
         }
     }
@@ -331,7 +387,7 @@ private fun Upcoming(items: List<Pair<LocalDate, String>>, today: LocalDate, onD
 @Composable
 private fun Dot(color: Color, hollow: Boolean = false) =
     // A ring for fasting days, so the markers differ in shape as well as colour.
-    Box(Modifier.size(if (hollow) 6.dp else 5.dp).clip(CircleShape).then(if (hollow) Modifier.border(1.5.dp, color, CircleShape) else Modifier.background(color)))
+    Box(Modifier.size(5.dp).clip(CircleShape).then(if (hollow) Modifier.border(1.5.dp, color, CircleShape) else Modifier.background(color)))
 
 @Composable
 private fun Legend() {

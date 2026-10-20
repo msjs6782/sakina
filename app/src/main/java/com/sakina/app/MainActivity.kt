@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
             route?.let { vm.push(it) }
         }
         when {
-            open == "times" -> fresh(com.sakina.app.ui.Tab.TIMES)
+            open == "times" -> fresh(com.sakina.app.ui.Tab.HOME)
             open == "home" -> fresh(com.sakina.app.ui.Tab.HOME)
             open == "quran" -> fresh(com.sakina.app.ui.Tab.QURAN)
             open == "discover" -> fresh(com.sakina.app.ui.Tab.MORE)

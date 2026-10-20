@@ -6,6 +6,15 @@ save_log
 adb shell svc power stayon true >/dev/null 2>&1
 R=(--ez demo_reset true --ez demo_onboarded true --es demo_cities riyadh,jeddah --es demo_active riyadh --es demo_now "$T_AFTERNOON" "${FREEZE[@]}")
 
+# Four tabs (the times tables open from Home); the Mushaf page without its white paper.
+shot 398_tabs 7 "${R[@]}"
+ui_has id tab_times && check no_times_tab FAIL "times tab still there" || check no_times_tab PASS "four tabs"
+tap_scroll id home_open_times && sleep 2 && cap 399_times_from_home
+ui_has exact "الأسبوع" && check times_from_home PASS "tables open from Home" || check times_from_home FAIL "times screen not opened"
+adb logcat -c
+shot 397_mushaf_trimmed 9 "${R[@]}" --es demo_route mushaf:1
+mlog | grep -q "crop page 1:" && check mushaf_trim PASS "$(mlog | grep -o 'crop page 1: [0-9, x]*' | head -1)" || check mushaf_trim FAIL "no crop logged"
+
 # Home: quick access to the most used tools.
 shot 400_home_quick 7 "${R[@]}"
 scroll_to id home_quick 4 && cap 401_home_quick_card && check home_quick PASS "quick access on Home" || check home_quick FAIL "no quick access card"

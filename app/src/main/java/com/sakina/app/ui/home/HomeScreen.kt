@@ -391,6 +391,12 @@ private fun TodayList(m: HomeModel, s: AppSettings) {
             val passed = t.instant != null && !t.instant.isAfter(m.now)
             TimeRow(t.key, t.instant, t.status, m.zone, isNext, passed, offsets[t.key])
         }
+        // The week and month tables (they used to be a tab of their own).
+        LocalMainVm.current?.let { vm ->
+            TextButton(onClick = { vm.push(com.sakina.app.ui.Route.Times(com.sakina.app.ui.times.TimesView.WEEK)) }, modifier = Modifier.padding(start = 4.dp).testTag("home_open_times")) {
+                Text(str.weekAndMonth)
+            }
+        }
     }
 }
 

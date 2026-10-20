@@ -62,6 +62,7 @@ fun MoreScreen(vm: MainViewModel, s: AppSettings, contentPadding: PaddingValues)
             Tool(SakinaIcons.Beads, str.toolsTasbih, str.toolsTasbihShort, "tool_tasbih") { vm.push(Route.Tasbih) },
             Tool(SakinaIcons.Kaaba, str.toolsQibla, str.toolsQiblaShort, "tool_qibla") { vm.push(Route.Qibla) },
         ))
+        WideTool(Tool(SakinaIcons.Clock, str.tabTimes, str.toolsTimesBody, "tool_times") { vm.push(Route.Times()) })
         GroupTitle(str.groupSeasons)
         Tiles(listOf(
             Tool(SakinaIcons.Moon, str.ramadanTitle, str.toolsRamadanShort, "tool_ramadan") { vm.push(Route.Ramadan) },

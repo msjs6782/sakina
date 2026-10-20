@@ -227,7 +227,8 @@ object Demo {
             val sc = app.alertState.scheduled()
             Log.i(TAG, "AlarmState scheduled=${sc?.ids} at=${sc?.at} epochMs=${sc?.at?.toEpochMilli()} exact=${sc?.exact}")
         }
-        val tab = e.getString("demo_tab")?.let { when (it.lowercase()) { "discover", "settings" -> Tab.MORE; else -> Tab.valueOf(it.uppercase()) } }
+        val tabName = e.getString("demo_tab")?.lowercase()
+        val tab = tabName?.let { when (it) { "discover", "settings" -> Tab.MORE; "times" -> Tab.HOME; else -> Tab.valueOf(it.uppercase()) } }
         val routes = e.getString("demo_route")?.split(',')?.mapNotNull { r ->
             when {
                 r.startsWith("quran_reader:") -> {
@@ -252,8 +253,10 @@ object Demo {
             }
         } ?: emptyList()
         val view = e.getString("demo_view")?.let { TimesView.valueOf(it.uppercase()) }
-        Log.i(TAG, "applied tab=$tab routes=$routes view=$view")
-        return DemoStart(tab, routes, view)
+        // The times tables are a screen now: the old "times" tab opens it over Home.
+        val all = if (tabName == "times") listOf(Route.Times(view ?: TimesView.DAY)) + routes else routes
+        Log.i(TAG, "applied tab=$tab routes=$all view=$view")
+        return DemoStart(tab, all, view)
     }
 
     /**

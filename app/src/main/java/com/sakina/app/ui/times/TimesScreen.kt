@@ -69,7 +69,17 @@ import java.time.ZoneId
 enum class TimesView { DAY, WEEK, MONTH }
 
 @Composable
-fun TimesScreen(vm: MainViewModel, s: AppSettings, contentPadding: PaddingValues, initialView: TimesView = TimesView.DAY) {
+fun TimesRouteScreen(vm: MainViewModel, s: AppSettings, initialView: TimesView) {
+    com.sakina.app.ui.location.FullScreen {
+        Column(Modifier.fillMaxSize()) {
+            com.sakina.app.ui.components.ScreenBar(LocalStrings.current.tabTimes, onBack = { vm.pop() })
+            TimesScreen(vm, s, PaddingValues(0.dp), initialView, withTitle = false)
+        }
+    }
+}
+
+@Composable
+fun TimesScreen(vm: MainViewModel, s: AppSettings, contentPadding: PaddingValues, initialView: TimesView = TimesView.DAY, withTitle: Boolean = true) {
     val str = LocalStrings.current
     val loc = s.activeLocation
     val zone = loc?.zoneId
@@ -79,7 +89,7 @@ fun TimesScreen(vm: MainViewModel, s: AppSettings, contentPadding: PaddingValues
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(contentPadding).padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
-        Text(str.tabTimes, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 8.dp))
+        if (withTitle) Text(str.tabTimes, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 8.dp))
         if (loc == null || zone == null) {
             Banner(str.chooseLocationBody, SakinaIcons.Pin)
             TextButton(onClick = { vm.push(Route.CityPicker(PlacePurpose.ADD)) }) { Text(str.pickCity) }

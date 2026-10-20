@@ -1321,6 +1321,12 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val wPreviewOnWallpaper get() = t("المعاينة فوق ألوان خلفية جهازك وبمقاس الويدجت الفعلي.", "Previews sit on your wallpaper's colours, at the widget's real size.")
     val wPlacedPreview get() = t("كما يظهر الآن", "As it looks now")
 
+
+    // Round 11: the times tables as a screen, the Mushaf trim, the calendar's look.
+    val weekAndMonth get() = t("مواقيت الأسبوع والشهر", "Week and month")
+    val toolsTimesBody get() = t("مواقيت اليوم والأسبوع والشهر في جدول.", "Prayer times for the day, week and month in tables.")
+    val mushafTrim get() = t("الصفحة بعرض الشاشة (دون الهوامش)", "Page fills the screen (no margins)")
+
 }
 
 val LocalStrings = staticCompositionLocalOf { Strings(Lang.AR) }

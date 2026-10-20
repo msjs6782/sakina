@@ -76,6 +76,8 @@ data class ReaderPrefs(
     val showTafsir: Boolean = false,
     val view: QuranView = QuranView.PRINTED,
     val mushafNight: MushafNight = MushafNight.OFF,
+    /** Trim the white paper around the printed frame, so the page fills the screen. */
+    val mushafTrim: Boolean = true,
     /** Fetch a printed page when it is opened, without asking each time. Off unless the user turns it on. */
     val autoDownload: Boolean = false,
 ) {

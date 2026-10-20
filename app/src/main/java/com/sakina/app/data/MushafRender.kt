@@ -30,13 +30,59 @@ object MushafRender {
         override fun sizeOf(key: String, value: Bitmap) = value.allocationByteCount
     }
 
-    fun cached(page: Int, width: Int): Bitmap? = cache.get("$page@$width")
+    /** The part of a page that is drawn, in PDF points (the whole page, or the printed frame without the white paper). */
+    data class Crop(val x: Float, val y: Float, val w: Float, val h: Float) {
+        val ratio: Float get() = w / h
+        companion object { val FULL = Crop(0f, 0f, PAGE_W, PAGE_H) }
+    }
 
-    /** The whole page at [width] pixels wide. */
-    suspend fun page(file: File, page: Int, width: Int): Bitmap? {
-        cached(page, width)?.let { return it }
-        val bmp = draw(file, width, (width * PAGE_H / PAGE_W).roundToInt(), null) ?: return null
-        cache.put("$page@$width", bmp)
+    private val crops = java.util.concurrent.ConcurrentHashMap<Int, Crop>()
+
+    fun cachedCrop(page: Int): Crop? = crops[page]
+
+    /**
+     * The printed part of a page: everything that is not white paper (frame, header, page number), with a small
+     * margin. Found once per page from a small rendering and kept for the session.
+     */
+    suspend fun crop(file: File, page: Int): Crop {
+        crops[page]?.let { return it }
+        val w = 240
+        val h = (w * PAGE_H / PAGE_W).roundToInt()
+        val bmp = draw(file, w, h, null) ?: return Crop.FULL
+        val px = IntArray(w * h)
+        bmp.getPixels(px, 0, w, 0, 0, w, h)
+        bmp.recycle()
+        fun ink(c: Int) = ((c shr 16) and 0xFF) < 228 || ((c shr 8) and 0xFF) < 228 || (c and 0xFF) < 228
+        var minX = w; var maxX = -1; var minY = h; var maxY = -1
+        for (y in 0 until h) for (x in 0 until w) if (ink(px[y * w + x])) {
+            if (x < minX) minX = x; if (x > maxX) maxX = x
+            if (y < minY) minY = y; if (y > maxY) maxY = y
+        }
+        val c = if (maxX < minX || maxY < minY || (maxX - minX) < w / 3) Crop.FULL else {
+            val k = PAGE_W / w
+            val pad = PAGE_W * 0.012f
+            val x0 = (minX * k - pad).coerceAtLeast(0f)
+            val y0 = (minY * k - pad).coerceAtLeast(0f)
+            val x1 = ((maxX + 1) * k + pad).coerceAtMost(PAGE_W)
+            val y1 = ((maxY + 1) * k + pad).coerceAtMost(PAGE_H)
+            Crop(x0, y0, x1 - x0, y1 - y0)
+        }
+        crops[page] = c
+        Log.d(MushafRepository.TAG, "crop page $page: ${c.x.roundToInt()},${c.y.roundToInt()} ${c.w.roundToInt()}x${c.h.roundToInt()}")
+        return c
+    }
+
+    private fun key(page: Int, width: Int, c: Crop) = "$page@$width@${c.x.roundToInt()},${c.y.roundToInt()},${c.w.roundToInt()}"
+
+    fun cached(page: Int, width: Int, c: Crop = Crop.FULL): Bitmap? = cache.get(key(page, width, c))
+
+    /** The page (or its [c] part) at [width] pixels wide. */
+    suspend fun page(file: File, page: Int, width: Int, c: Crop = Crop.FULL): Bitmap? {
+        cached(page, width, c)?.let { return it }
+        val k = width / c.w
+        val m = Matrix().apply { setTranslate(-c.x, -c.y); postScale(k, k) }
+        val bmp = draw(file, width, (width / c.ratio).roundToInt(), m) ?: return null
+        cache.put(key(page, width, c), bmp)
         return bmp
     }
 

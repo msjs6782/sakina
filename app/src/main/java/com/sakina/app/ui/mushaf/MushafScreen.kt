@@ -197,7 +197,7 @@ private fun MushafViewer(vm: MainViewModel, d: QuranData, startPage: Int, focus:
                     val p = index + 1
                     if (p in available) {
                         PageImage(
-                            file = repo.file(p), page = p, night = prefs.mushafNight,
+                            file = repo.file(p), page = p, night = prefs.mushafNight, trim = prefs.mushafTrim,
                             initialZoom = if (p == startPage) MushafDebug.initialZoom else 1f,
                             onZoomed = { z -> zoomedPage = if (z) p else if (zoomedPage == p) 0 else zoomedPage },
                             onTap = { barsVisible = !barsVisible },
@@ -298,6 +298,12 @@ private fun TopBar(vm: MainViewModel, d: QuranData, page: Int, a: MenuActions, o
                         )
                     }
                     androidx.compose.material3.HorizontalDivider()
+                    DropdownMenuItem(
+                        text = { Text((if (qs.reader.mushafTrim) "✓ " else "    ") + str.mushafTrim) },
+                        onClick = { vm.updateQuran { it.copy(reader = it.reader.copy(mushafTrim = !it.reader.mushafTrim)) }; onMenuClose() },
+                        modifier = Modifier.testTag("mushaf_trim"),
+                    )
+                    androidx.compose.material3.HorizontalDivider()
                     DropdownMenuItem(text = { Text(if (a.bookmarked) str.unbookmarkPage else str.bookmarkPage) }, leadingIcon = { Icon(SakinaIcons.Bookmark, null) },
                         onClick = { a.bookmark(); onMenuClose() }, modifier = Modifier.testTag("mushaf_bookmark"))
                     a.khatma?.let { k ->
@@ -374,19 +380,24 @@ private class ZoomState {
 private class Detail(val bitmap: Bitmap, val scale: Float, val tx: Float, val ty: Float)
 
 @Composable
-private fun PageImage(file: File, page: Int, night: MushafNight, initialZoom: Float, onZoomed: (Boolean) -> Unit, onTap: () -> Unit) {
+private fun PageImage(file: File, page: Int, night: MushafNight, trim: Boolean, initialZoom: Float, onZoomed: (Boolean) -> Unit, onTap: () -> Unit) {
     val zoom = remember(page) { ZoomState() }
     val scope = rememberCoroutineScope()
     val filter = remember(night) { nightFilter(night) }
+    // The printed frame without the white paper around it (found once per page), or the whole page.
+    val crop by produceState(if (trim) MushafRender.cachedCrop(page) else MushafRender.Crop.FULL, file, trim) {
+        value = if (trim) MushafRender.crop(file, page) else MushafRender.Crop.FULL
+    }
+    val c = crop ?: return
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val cw = constraints.maxWidth.toFloat()
         val ch = constraints.maxHeight.toFloat()
-        val ratio = MushafRender.PAGE_W / MushafRender.PAGE_H
+        val ratio = c.ratio
         val fw = if (cw / ch < ratio) cw else ch * ratio
         val fh = fw / ratio
         zoom.cw = cw; zoom.ch = ch; zoom.fw = fw; zoom.fh = fh
-        val base by produceState<Bitmap?>(MushafRender.cached(page, fw.roundToInt()), file, fw) {
-            value = MushafRender.page(file, page, fw.roundToInt())
+        val base by produceState<Bitmap?>(MushafRender.cached(page, fw.roundToInt(), c), file, fw, c) {
+            value = MushafRender.page(file, page, fw.roundToInt(), c)
         }
         LaunchedEffect(initialZoom, fw) {
             if (initialZoom > 1f && fw > 0) zoom.set(initialZoom, 0f, -fh * 0.25f)
@@ -394,12 +405,13 @@ private fun PageImage(file: File, page: Int, night: MushafNight, initialZoom: Fl
         LaunchedEffect(zoom.zoomed) { onZoomed(zoom.zoomed) }
         // When the zoom settles, draw the visible part again at full sharpness.
         var detail by remember { mutableStateOf<Detail?>(null) }
-        LaunchedEffect(zoom.scale, zoom.tx, zoom.ty, fw) {
+        LaunchedEffect(zoom.scale, zoom.tx, zoom.ty, fw, c) {
             if (!zoom.zoomed) { detail = null; return@LaunchedEffect }
             delay(180)
             val s = zoom.scale; val x = zoom.tx; val y = zoom.ty
-            val k = fw / MushafRender.PAGE_W
+            val k = fw / c.w
             val m = Matrix().apply {
+                setTranslate(-c.x, -c.y)
                 postScale(k * s, k * s)
                 postTranslate((cw - fw) / 2 + fw / 2 * (1 - s) + x, (ch - fh) / 2 + fh / 2 * (1 - s) + y)
             }

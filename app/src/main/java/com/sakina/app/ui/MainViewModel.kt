@@ -24,11 +24,13 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.Instant
 
-enum class Tab { HOME, TIMES, QURAN, CALENDAR, MORE }
+enum class Tab { HOME, QURAN, CALENDAR, MORE }
 
 enum class PlacePurpose { ADD, TRAVEL }
 
 sealed interface Route {
+    /** The day, week and month tables of prayer times (no longer a tab). */
+    data class Times(val view: com.sakina.app.ui.times.TimesView = com.sakina.app.ui.times.TimesView.DAY) : Route
     data object Locations : Route
     data object Calc : Route
     data object Appearance : Route
