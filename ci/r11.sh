@@ -29,9 +29,10 @@ K=$(ui_text w_big); [ -n "$K" ] && check khatma_preview PASS "$K" || check khatm
 scroll_to id gallery_dhikr 40; into_view gallery_dhikr; cap 511_gallery_dhikr
 D=$(ui_text w_dayname); [ -n "$D" ] && check dhikr_preview PASS "$D" || check dhikr_preview FAIL "empty"
 scroll_top
-tap id gallery_bg_geometric && sleep 2 && scroll_to id gallery_day 10; into_view gallery_day; cap 512_gallery_geometric
-tap id gallery_bg_paper 2>/dev/null; scroll_top; tap id gallery_bg_paper && sleep 2 && scroll_to id gallery_next 6; cap 513_gallery_paper
-scroll_top; tap id gallery_bg_night && sleep 2 && scroll_to id gallery_day 10; into_view gallery_day; cap 514_gallery_night
+for bg in geometric paper night; do
+  scroll_top; scroll_to id "gallery_bg_$bg" 40; into_view "gallery_bg_$bg"; tap id "gallery_bg_$bg" && sleep 2
+  scroll_to id gallery_day 10; into_view gallery_day; cap "512_gallery_$bg"
+done
 wlog | grep -q "preview failed\|render failed" && check r11_previews FAIL "$(wlog | grep failed | head -2)" || check r11_previews PASS "previews rendered"
 
 # On the home screen.
