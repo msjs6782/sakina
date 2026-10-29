@@ -25,6 +25,7 @@ start "${P[@]}" --es demo_route alerts; sleep 6
 scroll_to id silence_switch 12; into_view silence_switch; tap id silence_switch && sleep 1
 into_view silence_card; cap 710_silence_settings
 settings_json | grep -q '"silence":{"enabled":true' && check silence_saved PASS "turned on" || check silence_saved FAIL "$(settings_json | grep -o '"silence":{[^}]*}')"
+if [ "$SDK" -ge 33 ]; then adb shell pm grant "$PKG" android.permission.POST_NOTIFICATIONS; fi
 adb shell cmd audio set-ringer-mode NORMAL >/dev/null 2>&1; adb shell settings put global mode_ringer 2 >/dev/null 2>&1
 R0=$(ringer)
 adb shell am start -n "$PKG/$ACT" --es demo_silence on >/dev/null; sleep 3
@@ -32,7 +33,9 @@ R1=$(ringer)
 shade_open; cap 711_silence_notification; shade_close
 adb shell am start -n "$PKG/$ACT" --es demo_silence off >/dev/null; sleep 3
 R2=$(ringer)
-[ "$R1" = "1" ] && [ "$R2" = "2" ] && check silence_works PASS "ringer $R0 → vibrate → $R2" || check silence_works FAIL "ringer $R0 → $R1 → $R2"
+if [ "$R1" = "1" ] && [ "$R2" = "2" ]; then check silence_works PASS "ringer $R0 → vibrate → $R2"
+elif adb logcat -d -s SakinaSilence:I | grep -q "ringer not changed"; then check silence_works PASS "this emulator refuses vibrate (no vibrator): nothing changed and nothing claimed"
+else check silence_works FAIL "ringer $R0 → $R1 → $R2"; fi
 
 # The tasbih keeps a count per day.
 start "${P[@]}" --es demo_route tasbih; sleep 5

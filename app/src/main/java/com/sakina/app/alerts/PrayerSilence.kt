@@ -47,6 +47,8 @@ object PrayerSilence {
             } else {
                 if (am.ringerMode != AudioManager.RINGER_MODE_NORMAL) { Log.i(TAG, "ringer already ${am.ringerMode}; left as is"); return }
                 am.ringerMode = AudioManager.RINGER_MODE_VIBRATE
+                // Some phones (without a vibrator) refuse it quietly: then nothing is claimed or restored.
+                if (am.ringerMode != AudioManager.RINGER_MODE_VIBRATE) { Log.i(TAG, "ringer not changed (the phone kept ${am.ringerMode})"); return }
                 "vibrate"
             }
         } catch (x: SecurityException) {
