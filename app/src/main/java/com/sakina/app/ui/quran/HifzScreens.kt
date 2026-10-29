@@ -42,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -273,15 +274,17 @@ private fun HifzPractice(vm: MainViewModel, d: QuranData, sura: Int, from: Int, 
                 val text = d.text.ayahs[g]
                 val open = aya in revealed
                 val hidden = if (open) emptyList() else Hifz.hidden(text, mask)
-                val blank = MaterialTheme.colorScheme.surfaceContainerHighest
-                val annotated = remember(text, hidden, blank) {
+                val blank = MaterialTheme.colorScheme.outlineVariant
+                val annotated = remember(text, hidden) {
                     buildAnnotatedString {
                         append(text)
-                        for (r in hidden) addStyle(SpanStyle(color = Color.Transparent, background = blank), r.first, r.last + 1)
+                        for (r in hidden) addStyle(SpanStyle(color = Color.Transparent), r.first, r.last + 1)
                         append(" ")
                         append(ayahEnd(aya))
                     }
                 }
+                // Each hidden word becomes a soft rounded bar where the word sits, as wide as the word.
+                var layout by remember { mutableStateOf<androidx.compose.ui.text.TextLayoutResult?>(null) }
                 val bg = if (g == recited) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.surfaceContainerLow
                 Box(
                     Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(bg)
@@ -291,7 +294,20 @@ private fun HifzPractice(vm: MainViewModel, d: QuranData, sura: Int, from: Int, 
                     Text(
                         annotated,
                         style = MaterialTheme.typography.bodyLarge.copy(fontFamily = AmiriQuran, fontSize = 24.sp, lineHeight = 50.sp, textAlign = TextAlign.Justify),
-                        modifier = Modifier.fillMaxWidth().testTag(if (hidden.isEmpty()) "hifz_shown_$aya" else "hifz_masked_$aya"),
+                        onTextLayout = { layout = it },
+                        modifier = Modifier.fillMaxWidth().drawBehind {
+                            val l = layout ?: return@drawBehind
+                            for (r in hidden) {
+                                if (r.last + 1 > l.layoutInput.text.length) continue
+                                val box = l.getPathForRange(r.first, r.last + 1).getBounds()
+                                val h = box.height * 0.32f
+                                drawRoundRect(
+                                    blank, topLeft = androidx.compose.ui.geometry.Offset(box.left + 2f, box.top + box.height * 0.42f),
+                                    size = androidx.compose.ui.geometry.Size((box.width - 4f).coerceAtLeast(4f), h),
+                                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(h / 2, h / 2),
+                                )
+                            }
+                        }.testTag(if (hidden.isEmpty()) "hifz_shown_$aya" else "hifz_masked_$aya"),
                     )
                 }
             }
