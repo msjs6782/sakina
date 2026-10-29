@@ -253,8 +253,11 @@ if [ "$SDK" -ge 33 ]; then
   adb shell cmd statusbar collapse >/dev/null 2>&1; sleep 1
   save_log
   adb shell input keyevent 3; sleep 1
-  adb shell cmd statusbar click-tile "$PKG/com.sakina.app.widgets.TimesTileService" >/dev/null 2>&1
-  # The tile's process may start cold: wait for the click to reach the app.
+  # The tile's process may start cold: click again until the click reaches the app.
+  for _ in 1 2 3; do
+    adb shell cmd statusbar click-tile "$PKG/com.sakina.app.widgets.TimesTileService" >/dev/null 2>&1
+    wait_wlog "tile clicked: times" 10 && break
+  done
   wait_wlog "open times" 15 && wlog | grep -q "tile clicked: times" && check tile_times PASS "opens the prayer times" || check tile_times FAIL "$(wlog | grep -E 'Tiles|Open' | tail -2 | tr '\n' ' ')"
   cap 277_tile_opened_times
 fi

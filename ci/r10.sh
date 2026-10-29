@@ -82,7 +82,7 @@ if [ "$SDK" -ge 33 ]; then
   adb shell cmd locale set-app-locales "$PKG" --locales ar-SA >/dev/null 2>&1
   adb logcat -c
   shot 420_quran_arabic_locale 8 "${R[@]}" --es demo_tab quran
-  tap id surah_2 && sleep 5 && cap 421_mushaf_arabic_locale
+  scroll_to id surah_2 8; into_view surah_2; tap id surah_2 && sleep 5 && cap 421_mushaf_arabic_locale
   S1=$(stored_size 001)
   if ui_has id mushaf_viewer && [ "$S1" = "393966" ] && ! adb logcat -d | grep -q "FATAL EXCEPTION"; then
     check mushaf_arabic_locale PASS "opened surah 2; page 001.pdf in place ($S1 bytes)" critical

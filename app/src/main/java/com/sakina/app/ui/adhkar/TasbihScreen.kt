@@ -130,7 +130,6 @@ fun TasbihScreen(vm: MainViewModel) {
                     }
                 }
                 NoteText(str.tasbihUndoNote, Modifier.fillMaxWidth())
-                TasbihWeek(tools.tasbihDays)
                 SectionCard(title = str.tasbihTarget, icon = SakinaIcons.Check) {
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         FilterChip(selected = t.target == 0, onClick = { vm.updateTools { s -> s.withTasbih(s.tasbihOps().setTarget(0)) } },
@@ -146,6 +145,7 @@ fun TasbihScreen(vm: MainViewModel) {
                     Spacer(Modifier.height(6.dp))
                     SwitchRow(t.vibrate, str.tasbihVibrate) { on -> vm.updateTools { s -> s.withTasbih(s.tasbihOps().setVibrate(on)) } }
                 }
+                TasbihWeek(tools.tasbihDays)
             }
         }
     }
