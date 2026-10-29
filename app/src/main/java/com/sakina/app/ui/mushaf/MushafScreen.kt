@@ -109,6 +109,7 @@ import com.sakina.app.ui.components.DirectionalIcon
 import com.sakina.app.ui.components.SakinaIcons
 import com.sakina.app.ui.components.SwitchRow
 import com.sakina.app.ui.quran.WithQuran
+import com.sakina.app.ui.listen.toggle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
@@ -154,6 +155,22 @@ private fun MushafViewer(vm: MainViewModel, d: QuranData, startPage: Int, focus:
     var menu by remember { mutableStateOf(false) }
     var focusDismissed by remember { mutableStateOf(false) }
     val page = pager.currentPage + 1
+    // The recitation, followed while it plays: the page turns to the recited ayah's page.
+    val controller = com.sakina.app.ui.listen.rememberRecitationController()
+    val follow = com.sakina.app.ui.listen.rememberFollow(vm, controller)
+    var following by remember { mutableStateOf(true) }
+    val recitedPage = follow.global(d)?.let { d.meta.pageOf(it) }
+    LaunchedEffect(recitedPage, following, follow.playing) {
+        val p = recitedPage ?: return@LaunchedEffect
+        if (following && follow.playing && p != pager.currentPage + 1 && zoomedPage == 0) pager.animateScrollToPage(p - 1)
+    }
+    val listenHere: () -> Unit = {
+        controller?.let { c ->
+            val first = d.meta.ref(d.meta.pageRange(page).first)
+            if (follow.recording?.sura == first.sura && follow.recording != null) c.toggle()
+            else com.sakina.app.ui.listen.startRecitation(vm, c, d, str, first.sura, first.aya)
+        }
+    }
 
     // Reading position and the automatic download, once a page has settled.
     LaunchedEffect(pager.settledPage) {
@@ -229,8 +246,11 @@ private fun MushafViewer(vm: MainViewModel, d: QuranData, startPage: Int, focus:
                     }
                 }
             }
+            if (controller != null && follow.recording != null && (barsVisible || follow.playing)) {
+                com.sakina.app.ui.listen.FollowBar(vm, d, controller, follow, following, onFollow = { following = it })
+            }
             AnimatedVisibility(barsVisible, enter = fadeIn(), exit = fadeOut()) {
-                BottomBar(vm, page, page in available)
+                BottomBar(vm, page, page in available, playing = follow.playing && follow.recording != null, onListen = listenHere)
             }
         }
     }
@@ -320,7 +340,7 @@ private fun TopBar(vm: MainViewModel, d: QuranData, page: Int, a: MenuActions, o
 }
 
 @Composable
-private fun BottomBar(vm: MainViewModel, page: Int, here: Boolean) {
+private fun BottomBar(vm: MainViewModel, page: Int, here: Boolean, playing: Boolean, onListen: () -> Unit) {
     val str = LocalStrings.current
     val fmt = LocalFmt.current
     Surface(color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f), tonalElevation = 2.dp, modifier = Modifier.fillMaxWidth()) {
@@ -330,6 +350,9 @@ private fun BottomBar(vm: MainViewModel, page: Int, here: Boolean) {
         ) {
             Text(str.pageOfTotal(fmt.num(page), fmt.num(MushafManifest.PAGES)), style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f).testTag("mushaf_page_label"))
             if (here) Text(str.downloadedMark, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+            IconButton(onClick = onListen, modifier = Modifier.testTag("mushaf_listen_here")) {
+                Icon(if (playing) SakinaIcons.Pause else SakinaIcons.Headphones, str.listenHere)
+            }
             IconButton(onClick = { vm.push(Route.MushafDownloads) }) { Icon(SakinaIcons.Download, str.dlTitle) }
         }
     }

@@ -74,6 +74,7 @@ import com.sakina.app.ui.components.SakinaIcons
 import com.sakina.app.ui.components.SwitchRow
 import com.sakina.app.ui.components.exposeTestTags
 import com.sakina.app.ui.location.FullScreen
+import com.sakina.app.ui.listen.toggle
 import com.sakina.app.ui.settings.Segmented
 import com.sakina.app.ui.theme.AmiriQuran
 import kotlinx.coroutines.delay
@@ -107,6 +108,11 @@ private fun Reader(vm: MainViewModel, d: QuranData, startGlobal: Int, highlight:
     var selected by remember { mutableStateOf<Int?>(null) }
     val marked = remember { if (highlight) startGlobal else -1 }
     var showSettings by remember { mutableStateOf(false) }
+    // The recitation, followed while it plays: the recited ayah is highlighted and kept in view.
+    val controller = com.sakina.app.ui.listen.rememberRecitationController()
+    val follow = com.sakina.app.ui.listen.rememberFollow(vm, controller)
+    val playing = follow.global(d)
+    var following by remember { mutableStateOf(true) }
 
     // Remember the reading position (a short pause first, so fast scrolling does not write constantly).
     LaunchedEffect(current) {
@@ -129,16 +135,29 @@ private fun Reader(vm: MainViewModel, d: QuranData, startGlobal: Int, highlight:
             IconButton(onClick = { vm.switchView(com.sakina.app.data.QuranView.PRINTED, Route.Mushaf(d.meta.pageOf(current))) }, modifier = Modifier.testTag("reader_to_printed")) {
                 Icon(SakinaIcons.Page, str.printedView)
             }
+            IconButton(onClick = {
+                val c = controller ?: return@IconButton
+                if (follow.recording?.sura == r.sura) c.toggle()
+                else com.sakina.app.ui.listen.startRecitation(vm, c, d, str, r.sura, r.aya)
+            }, modifier = Modifier.testTag("reader_listen")) {
+                Icon(if (follow.playing && follow.recording?.sura == r.sura) SakinaIcons.Pause else SakinaIcons.Headphones, str.listenHere)
+            }
             IconButton(onClick = { vm.push(Route.QuranSearch()) }) { Icon(SakinaIcons.Search, str.search) }
             IconButton(onClick = { showSettings = true }, modifier = Modifier.testTag("reader_settings")) { Icon(SakinaIcons.Sliders, str.readerSettings) }
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-        key(prefs.mode) {
-            val onAyah: (Int) -> Unit = { selected = it }
-            when (prefs.mode) {
-                ReaderMode.PAGES -> PagesView(d, prefs, start = current, selected = selected, marked = marked, onAyah = onAyah) { current = it }
-                ReaderMode.AYAHS -> AyahsView(d, prefs, start = current, selected = selected, marked = marked, onAyah = onAyah) { current = it }
+        androidx.compose.foundation.layout.Box(Modifier.weight(1f)) {
+            key(prefs.mode) {
+                val onAyah: (Int) -> Unit = { selected = it }
+                val keep = if (following && follow.playing) playing else null
+                when (prefs.mode) {
+                    ReaderMode.PAGES -> PagesView(d, prefs, start = current, selected = selected, marked = marked, playing = playing, keepInView = keep, onAyah = onAyah) { current = it }
+                    ReaderMode.AYAHS -> AyahsView(d, prefs, start = current, selected = selected, marked = marked, playing = playing, keepInView = keep, onAyah = onAyah) { current = it }
+                }
             }
+        }
+        if (controller != null && follow.recording != null) {
+            com.sakina.app.ui.listen.FollowBar(vm, d, controller, follow, following, onFollow = { following = it })
         }
     }
     selected?.let { g -> AyahSheet(vm, d, qs, g) { selected = null } }
@@ -146,8 +165,16 @@ private fun Reader(vm: MainViewModel, d: QuranData, startGlobal: Int, highlight:
 }
 
 @Composable
-private fun PagesView(d: QuranData, prefs: ReaderPrefs, start: Int, selected: Int?, marked: Int, onAyah: (Int) -> Unit, onVisible: (Int) -> Unit) {
+private fun PagesView(d: QuranData, prefs: ReaderPrefs, start: Int, selected: Int?, marked: Int, playing: Int?, keepInView: Int?, onAyah: (Int) -> Unit, onVisible: (Int) -> Unit) {
     val state = rememberLazyListState(initialFirstVisibleItemIndex = d.meta.pageOf(start) - 1)
+    // Following the recitation: bring the recited ayah's page into view when it moves to another page.
+    LaunchedEffect(keepInView?.let { d.meta.pageOf(it) }) {
+        val page = keepInView?.let { d.meta.pageOf(it) } ?: return@LaunchedEffect
+        val visible = state.layoutInfo.visibleItemsInfo.map { it.index + 1 }
+        if (page !in visible || (visible.size > 1 && page == visible.last() && state.layoutInfo.visibleItemsInfo.last().offset > state.layoutInfo.viewportEndOffset / 2)) {
+            state.animateScrollToItem(page - 1)
+        }
+    }
     LaunchedEffect(state) {
         // The first value is the page that was opened: keep the ayah it was opened at (say Ya-Sin 1,
         // not the end of Fatir on the same page) until the reader moves to another page.
@@ -166,18 +193,19 @@ private fun PagesView(d: QuranData, prefs: ReaderPrefs, start: Int, selected: In
         }
     }
     LazyColumn(state = state, modifier = Modifier.fillMaxSize().testTag("quran_pages")) {
-        items(d.meta.pageCount, key = { it }) { i -> PageBlock(d, i + 1, prefs, selected, marked, onAyah, if (aligned) null else onMarkedY) }
+        items(d.meta.pageCount, key = { it }) { i -> PageBlock(d, i + 1, prefs, selected, marked, playing, onAyah, if (aligned) null else onMarkedY) }
     }
 }
 
 @Composable
-private fun PageBlock(d: QuranData, page: Int, prefs: ReaderPrefs, selected: Int?, marked: Int, onAyah: (Int) -> Unit, onMarkedY: ((Float) -> Unit)? = null) {
+private fun PageBlock(d: QuranData, page: Int, prefs: ReaderPrefs, selected: Int?, marked: Int, playing: Int?, onAyah: (Int) -> Unit, onMarkedY: ((Float) -> Unit)? = null) {
     val str = LocalStrings.current
     val fmt = LocalFmt.current
     val range = d.meta.pageRange(page)
     val ink = MaterialTheme.colorScheme.onSurface
     val hl = MaterialTheme.colorScheme.primaryContainer
     val mk = MaterialTheme.colorScheme.secondaryContainer
+    val pl = MaterialTheme.colorScheme.tertiaryContainer
     val style = quranStyle(prefs, ink)
     Column(Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 10.dp)) {
         Row(Modifier.fillMaxWidth()) {
@@ -195,13 +223,15 @@ private fun PageBlock(d: QuranData, page: Int, prefs: ReaderPrefs, selected: Int
                 SurahBanner(d.meta.surah(sura))
                 d.text.basmala[sura]?.let { BasmalaLine(it, prefs.fontSize) }
             }
-            val (text, markStart) = remember(ayahs.first(), selected, marked, ink, hl, mk) {
+            val play = playing?.takeIf { it in ayahs }
+            val (text, markStart) = remember(ayahs.first(), selected, marked, play, ink, hl, mk, pl) {
                 var at = -1
                 val t = buildAnnotatedString {
                     for (g in ayahs) {
                         if (g == marked) at = length
                         val bg = when (g) {
                             selected -> SpanStyle(background = hl)
+                            play -> SpanStyle(background = pl)
                             marked -> SpanStyle(background = mk)
                             else -> SpanStyle()
                         }
@@ -220,7 +250,7 @@ private fun PageBlock(d: QuranData, page: Int, prefs: ReaderPrefs, selected: Int
             Text(
                 text, style = style,
                 onTextLayout = { layout[0] = it },
-                modifier = Modifier.fillMaxWidth().onPlaced { coords ->
+                modifier = Modifier.fillMaxWidth().then(if (play != null) Modifier.testTag("reader_playing") else Modifier).onPlaced { coords ->
                     val l = layout[0]
                     if (markStart >= 0 && onMarkedY != null && l != null) {
                         onMarkedY(coords.positionInParent().y + l.getLineTop(l.getLineForOffset(markStart.coerceAtMost(text.length))))
@@ -244,7 +274,7 @@ private sealed interface Entry {
 }
 
 @Composable
-private fun AyahsView(d: QuranData, prefs: ReaderPrefs, start: Int, selected: Int?, marked: Int, onAyah: (Int) -> Unit, onVisible: (Int) -> Unit) {
+private fun AyahsView(d: QuranData, prefs: ReaderPrefs, start: Int, selected: Int?, marked: Int, playing: Int?, keepInView: Int?, onAyah: (Int) -> Unit, onVisible: (Int) -> Unit) {
     val entries = remember(d) {
         buildList {
             for (s in d.meta.suras) {
@@ -256,6 +286,14 @@ private fun AyahsView(d: QuranData, prefs: ReaderPrefs, start: Int, selected: In
     // Index of an ayah in [entries]: its global index plus one banner per surah up to and including its own.
     val startIndex = start + d.meta.ref(start).sura
     val state = rememberLazyListState(initialFirstVisibleItemIndex = startIndex)
+    // Following the recitation: keep the recited ayah in view, a little below the top.
+    LaunchedEffect(keepInView) {
+        val g = keepInView ?: return@LaunchedEffect
+        val idx = g + d.meta.ref(g).sura
+        val info = state.layoutInfo.visibleItemsInfo.firstOrNull { it.index == idx }
+        val end = state.layoutInfo.viewportEndOffset
+        if (info == null || info.offset + info.size > end || info.offset < 0) state.animateScrollToItem(idx, -end / 6)
+    }
     LaunchedEffect(state) {
         snapshotFlow { state.firstVisibleItemIndex }.collect { idx ->
             when (val e = entries.getOrNull(idx)) {
@@ -278,11 +316,13 @@ private fun AyahsView(d: QuranData, prefs: ReaderPrefs, start: Int, selected: In
                     val g = e.global
                     val bg = when (g) {
                         selected -> MaterialTheme.colorScheme.primaryContainer
+                        playing -> MaterialTheme.colorScheme.tertiaryContainer
                         marked -> MaterialTheme.colorScheme.secondaryContainer
                         else -> Color.Transparent
                     }
                     Column(
                         Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 2.dp).clip(RoundedCornerShape(14.dp)).background(bg)
+                            .then(if (g == playing) Modifier.testTag("reader_playing") else Modifier)
                             .clickable { onAyah(g) }.padding(horizontal = 10.dp, vertical = 8.dp),
                     ) {
                         Text(d.text.ayahs[g] + " " + ayahEnd(d.meta.ref(g).aya), style = quranStyle(prefs, ink), modifier = Modifier.fillMaxWidth())

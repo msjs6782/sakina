@@ -241,6 +241,7 @@ object Demo {
                 r.startsWith("adhkar_cat:") -> Route.AdhkarCategory(r.removePrefix("adhkar_cat:"))
                 r.startsWith("calendar_day:") -> Route.HijriCalendar(LocalDate.parse(r.removePrefix("calendar_day:")).toEpochDay())
                 r.startsWith("occasion_new:") -> Route.OccasionEdit("", LocalDate.parse(r.removePrefix("occasion_new:")).toEpochDay())
+                r.startsWith("hifz_practice:") -> r.removePrefix("hifz_practice:").split(':').map { it.toInt() }.let { Route.HifzPractice(it[0], it[1], it[2]) }
                 r.startsWith("adhkar_search:") -> Route.Adhkar(r.removePrefix("adhkar_search:"))
                 r.startsWith("adhkar_item:") -> Route.AdhkarItem(r.removePrefix("adhkar_item:"))
                 r.startsWith("wird:") -> r.removePrefix("wird:").split(':').let { Route.Wird(it[0], it.getOrElse(1) { "" }) }
@@ -295,6 +296,7 @@ object Demo {
         "prayer_fajr" -> Route.PrayerAlert(PrayerKey.FAJR)
         "quran_search" -> Route.QuranSearch()
         "khatma" -> Route.Khatma
+        "hifz" -> Route.Hifz
         "quran_sources" -> Route.QuranSources
         "mushaf_downloads" -> Route.MushafDownloads
         "listen" -> Route.Listen()

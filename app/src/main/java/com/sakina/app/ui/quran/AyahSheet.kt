@@ -100,6 +100,15 @@ fun AyahSheet(vm: MainViewModel, d: QuranData, qs: QuranState, global: Int, onDi
                     modifier = Modifier.testTag("ayah_share_text"))
                 AssistChip(onClick = { AyahShare.shareImage(context, d, ref, str, showTranslation) }, label = { Text(str.shareImage) },
                     modifier = Modifier.testTag("ayah_share_image"))
+                AssistChip(
+                    onClick = {
+                        onDismiss()
+                        vm.push(com.sakina.app.ui.Route.HifzPractice(ref.sura, ref.aya, minOf(ref.aya + 4, surah.ayahCount)))
+                    },
+                    label = { Text(str.hifzFromHere) },
+                    leadingIcon = { Icon(SakinaIcons.Repeat, null, Modifier.size(18.dp)) },
+                    modifier = Modifier.testTag("ayah_hifz"),
+                )
                 if (qs.khatma != null) {
                     AssistChip(onClick = {
                         vm.updateQuran { s -> s.copy(khatma = s.khatma?.let { Khatma.record(it, page, LocalDate.now()) }) }

@@ -146,6 +146,8 @@ private fun RouteScreen(route: Route, vm: MainViewModel, s: AppSettings) {
         is Route.QuranReader -> QuranReaderScreen(vm, route.global, route.highlight)
         is Route.QuranSearch -> QuranSearchScreen(vm, route.query)
         Route.Khatma -> KhatmaScreen(vm)
+        Route.Hifz -> com.sakina.app.ui.quran.HifzScreen(vm)
+        is Route.HifzPractice -> com.sakina.app.ui.quran.HifzPracticeScreen(vm, route.sura, route.from, route.to)
         Route.QuranSources -> QuranSourcesScreen(vm)
         is Route.Mushaf -> MushafScreen(vm, route.page, route.focus)
         Route.MushafDownloads -> MushafDownloadsScreen(vm)

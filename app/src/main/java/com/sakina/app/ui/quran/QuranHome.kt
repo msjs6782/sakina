@@ -141,6 +141,7 @@ private fun QuranHomeContent(vm: MainViewModel, d: QuranData) {
                 }
             }
             item { KhatmaCard(vm, qs) }
+            item { HifzCard(vm, qs) }
             item {
                 Segmented(listOf(str.tabSurahs, str.tabJuz, str.tabBookmarks), tab) { tab = it }
             }
@@ -248,6 +249,32 @@ private fun KhatmaCard(vm: MainViewModel, qs: QuranState) {
                 val st = Khatma.status(plan, LocalDate.now())
                 LinearProgressIndicator(progress = { st.percent / 100f }, modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp))
                 Text(khatmaLine(str, fmt, st), style = MaterialTheme.typography.bodyMedium)
+            }
+        }
+    }
+}
+
+@Composable
+private fun HifzCard(vm: MainViewModel, qs: QuranState) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    val today = com.sakina.app.data.AppClock.now().atZone(java.time.ZoneId.systemDefault()).toLocalDate().toEpochDay()
+    val due = com.sakina.app.core.quran.Hifz.due(qs.hifz, today).size
+    Surface(
+        onClick = { vm.push(Route.Hifz) },
+        shape = RoundedCornerShape(22.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        modifier = Modifier.fillMaxWidth().testTag("hifz_card"),
+    ) {
+        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(SakinaIcons.Repeat, null, Modifier.size(28.dp), tint = MaterialTheme.colorScheme.primary)
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                Text(str.hifzTitle, style = MaterialTheme.typography.titleMedium)
+                Text(
+                    if (qs.hifz.isEmpty()) str.hifzEntry else str.hifzSummary(fmt.num(due), fmt.num(com.sakina.app.core.quran.Hifz.ayahCount(qs.hifz))),
+                    style = MaterialTheme.typography.bodySmall, color = if (due > 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
         }
     }

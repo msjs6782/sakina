@@ -108,6 +108,10 @@ data class QuranState(
     val bookmarks: List<Bookmark> = emptyList(),
     val khatma: KhatmaPlan? = null,
     val listen: ListenPrefs = ListenPrefs(),
+    /** Passages being memorised, with their next review. */
+    val hifz: List<com.sakina.app.core.quran.HifzItem> = emptyList(),
+    /** How the last memorisation session showed the text. */
+    val hifzMask: com.sakina.app.core.quran.HifzMask = com.sakina.app.core.quran.HifzMask.FIRST_WORD,
 )
 
 private object QuranStateSerializer : Serializer<QuranState> {

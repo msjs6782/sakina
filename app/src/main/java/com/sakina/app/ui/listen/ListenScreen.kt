@@ -104,32 +104,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Duration
 
-/** Connects to the recitation service while the screen is shown. */
-@Composable
-private fun rememberController(): MediaController? {
-    val context = LocalContext.current
-    var controller by remember { mutableStateOf<MediaController?>(null) }
-    var attempt by remember { mutableIntStateOf(0) }
-    DisposableEffect(attempt) {
-        val token = SessionToken(context, ComponentName(context, RecitationService::class.java))
-        val future = MediaController.Builder(context, token)
-            .setListener(object : MediaController.Listener {
-                // If the session goes away (the service ended), connect again so the screen stays live.
-                override fun onDisconnected(controller: MediaController) {
-                    PlaybackDiagnostics.log(context, "screen controller disconnected; reconnecting")
-                    attempt++
-                }
-            })
-            .buildAsync()
-        future.addListener({ controller = runCatching { future.get() }.getOrNull() }, MoreExecutors.directExecutor())
-        onDispose {
-            MediaController.releaseFuture(future)
-            controller = null
-        }
-    }
-    return controller
-}
-
 /** A snapshot of the player, refreshed a few times a second. */
 private data class PlayerView(
     val recording: Recording? = null,
@@ -174,7 +148,7 @@ private fun ListenBody(vm: MainViewModel, d: QuranData, focusSura: Int) {
     val downloads by repo.downloads.collectAsStateWithLifecycle()
     val timing by repo.timing.collectAsStateWithLifecycle()
     val reciter = Reciter.byKey(qs.listen.reciter) ?: Reciter.ALAFASY
-    val controller = rememberController()
+    val controller = rememberRecitationController()
     var pv by remember { mutableStateOf(PlayerView()) }
     LaunchedEffect(controller) {
         while (controller != null) {

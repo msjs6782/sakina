@@ -48,6 +48,9 @@ sealed interface Route {
     data class QuranReader(val global: Int, val highlight: Boolean = false) : Route
     data class QuranSearch(val query: String = "") : Route
     data object Khatma : Route
+    /** Memorisation: due reviews, passages and a new passage. */
+    data object Hifz : Route
+    data class HifzPractice(val sura: Int, val from: Int, val to: Int) : Route
     data object QuranSources : Route
     /** The printed Mushaf at [page]; [focus] is an ayah (global index) to point out, or -1. */
     data class Mushaf(val page: Int, val focus: Int = -1) : Route
