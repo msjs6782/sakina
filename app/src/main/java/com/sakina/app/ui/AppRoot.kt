@@ -116,9 +116,12 @@ fun SakinaRoot(vm: MainViewModel, startTimesView: TimesView = TimesView.DAY) {
                 BackHandler(enabled = vm.stack.isNotEmpty() || (s.onboardingDone && vm.tab != Tab.HOME)) {
                     if (!vm.pop()) vm.tab = Tab.HOME
                 }
-                when (val top = vm.stack.lastOrNull()) {
-                    null -> if (!s.onboardingDone) OnboardingScreen(vm, s) else MainTabs(vm, s, startTimesView)
-                    else -> RouteScreen(top, vm, s)
+                // A short cross-fade between screens (Android's animation scale applies; off in the emulator checks).
+                androidx.compose.animation.Crossfade(targetState = vm.stack.lastOrNull(), animationSpec = androidx.compose.animation.core.tween(170), label = "route") { top ->
+                    when (top) {
+                        null -> if (!s.onboardingDone) OnboardingScreen(vm, s) else MainTabs(vm, s, startTimesView)
+                        else -> RouteScreen(top, vm, s)
+                    }
                 }
             }
         }
@@ -147,6 +150,8 @@ private fun RouteScreen(route: Route, vm: MainViewModel, s: AppSettings) {
         is Route.QuranSearch -> QuranSearchScreen(vm, route.query)
         Route.Khatma -> KhatmaScreen(vm)
         Route.Hifz -> com.sakina.app.ui.quran.HifzScreen(vm)
+        Route.PrayerLog -> com.sakina.app.ui.home.PrayerLogScreen(vm, s)
+        Route.Backup -> com.sakina.app.ui.settings.BackupScreen(vm)
         is Route.HifzPractice -> com.sakina.app.ui.quran.HifzPracticeScreen(vm, route.sura, route.from, route.to)
         Route.QuranSources -> QuranSourcesScreen(vm)
         is Route.Mushaf -> MushafScreen(vm, route.page, route.focus)
@@ -193,8 +198,8 @@ private fun MainTabs(vm: MainViewModel, s: AppSettings, startTimesView: TimesVie
             }
         },
     ) { padding ->
-        Box(Modifier.fillMaxSize()) {
-            when (vm.tab) {
+        androidx.compose.animation.Crossfade(targetState = vm.tab, animationSpec = androidx.compose.animation.core.tween(150), label = "tab", modifier = Modifier.fillMaxSize()) { tab ->
+            when (tab) {
                 Tab.HOME -> HomeScreen(vm, s, padding)
                 Tab.QURAN -> QuranHome(vm, padding)
                 Tab.CALENDAR -> androidx.compose.runtime.key(vm.calendarFocus) {

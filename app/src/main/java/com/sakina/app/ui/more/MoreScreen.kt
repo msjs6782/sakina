@@ -63,6 +63,7 @@ fun MoreScreen(vm: MainViewModel, s: AppSettings, contentPadding: PaddingValues)
             Tool(SakinaIcons.Kaaba, str.toolsQibla, str.toolsQiblaShort, "tool_qibla") { vm.push(Route.Qibla) },
         ))
         WideTool(Tool(SakinaIcons.Clock, str.tabTimes, str.toolsTimesBody, "tool_times") { vm.push(Route.Times()) })
+        if (s.prayerLog) WideTool(Tool(SakinaIcons.Check, str.prayerLogTitle, str.prayerLogNote, "tool_prayer_log") { vm.push(Route.PrayerLog) })
         GroupTitle(str.groupSeasons)
         Tiles(listOf(
             Tool(SakinaIcons.Moon, str.ramadanTitle, str.toolsRamadanShort, "tool_ramadan") { vm.push(Route.Ramadan) },

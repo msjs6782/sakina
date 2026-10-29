@@ -252,3 +252,19 @@ data class Tasbih(val state: TasbihState = TasbihState(), val undo: TasbihState?
     /** True when this tap just completed a round of the target. */
     fun reachedTarget(): Boolean = state.target > 0 && state.count > 0 && state.count % state.target == 0
 }
+
+/** Taps per civil day (ISO date → count), for the tasbih's week; about two months kept. */
+object TasbihLog {
+    const val KEEP_DAYS = 62L
+
+    fun bump(log: Map<String, Int>, today: java.time.LocalDate): Map<String, Int> {
+        val oldest = today.minusDays(KEEP_DAYS)
+        val kept = log.filterKeys { runCatching { !java.time.LocalDate.parse(it).isBefore(oldest) }.getOrDefault(false) }
+        val k = today.toString()
+        return kept + (k to minOf(TasbihState.MAX_COUNT, (kept[k] ?: 0) + 1))
+    }
+
+    /** The last seven days, oldest first, with their counts. */
+    fun week(log: Map<String, Int>, today: java.time.LocalDate): List<Pair<java.time.LocalDate, Int>> =
+        (6 downTo 0).map { today.minusDays(it.toLong()) }.map { it to (log[it.toString()] ?: 0) }
+}

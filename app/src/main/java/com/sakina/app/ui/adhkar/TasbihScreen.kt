@@ -39,6 +39,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -107,7 +109,8 @@ fun TasbihScreen(vm: MainViewModel) {
                 }
                 TapDial(t, fmt.num(t.inRound), str.tasbihTap) {
                     val next = t.count + 1
-                    vm.updateTools { s -> s.withTasbih(s.tasbihOps().tap()) }
+                    val today = com.sakina.app.data.AppClock.now().atZone(java.time.ZoneId.systemDefault()).toLocalDate()
+                    vm.updateTools { s -> s.withTasbih(s.tasbihOps().tap()).copy(tasbihDays = com.sakina.app.core.adhkar.TasbihLog.bump(s.tasbihDays, today)) }
                     if (t.vibrate) vibrate(context, long = t.target > 0 && next % t.target == 0)
                 }
                 if (t.target > 0) {
@@ -127,6 +130,7 @@ fun TasbihScreen(vm: MainViewModel) {
                     }
                 }
                 NoteText(str.tasbihUndoNote, Modifier.fillMaxWidth())
+                TasbihWeek(tools.tasbihDays)
                 SectionCard(title = str.tasbihTarget, icon = SakinaIcons.Check) {
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         FilterChip(selected = t.target == 0, onClick = { vm.updateTools { s -> s.withTasbih(s.tasbihOps().setTarget(0)) } },
@@ -182,6 +186,34 @@ fun TasbihScreen(vm: MainViewModel) {
             dismissButton = { TextButton(onClick = { labelOpen = false }) { Text(str.cancel) } },
             modifier = Modifier.exposeTestTags(),
         )
+    }
+}
+
+/** Today's taps and the last seven days as small bars. */
+@Composable
+private fun TasbihWeek(days: Map<String, Int>) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    val today = com.sakina.app.data.AppClock.now().atZone(java.time.ZoneId.systemDefault()).toLocalDate()
+    val week = com.sakina.app.core.adhkar.TasbihLog.week(days, today)
+    val max = week.maxOf { it.second }.coerceAtLeast(1)
+    val bar = MaterialTheme.colorScheme.primary
+    val track = MaterialTheme.colorScheme.surfaceContainerHighest
+    SectionCard(title = str.tasbihWeekTitle, icon = SakinaIcons.Beads, modifier = Modifier.testTag("tasbih_week")) {
+        Text(str.tasbihToday(fmt.num(week.last().second)) + " · " + str.tasbihWeek(fmt.num(week.sumOf { it.second })),
+            style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("tasbih_today"))
+        Spacer(Modifier.height(10.dp))
+        Row(Modifier.fillMaxWidth().height(90.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Bottom) {
+            week.forEach { (d, n) ->
+                Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Box(Modifier.fillMaxWidth().height(64.dp), contentAlignment = Alignment.BottomCenter) {
+                        Box(Modifier.fillMaxWidth().fillMaxHeight().background(track, androidx.compose.foundation.shape.RoundedCornerShape(6.dp)))
+                        if (n > 0) Box(Modifier.fillMaxWidth().fillMaxHeight(n.toFloat() / max).background(bar, androidx.compose.foundation.shape.RoundedCornerShape(6.dp)))
+                    }
+                    Text(fmt.weekday(d.dayOfWeek, short = true), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+                }
+            }
+        }
     }
 }
 

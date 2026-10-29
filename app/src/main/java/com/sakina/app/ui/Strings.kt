@@ -1381,6 +1381,56 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val hifzDelete get() = t("حذف المقطع", "Remove passage")
     val hifzTimingNote get() = t("تكرار الصوت يحتاج خريطة توقيت السورة (تُنزَّل مرة واحدة).", "Repeating the audio needs the surah's timing map (downloaded once).")
 
+
+    // Round 13: prayer log, silent at prayer.
+    val iPrayed get() = t("صلّيت", "I prayed")
+    val prayerLogTitle get() = t("سجل الصلوات", "Prayer log")
+    val prayerLogSetting get() = t("سجل الصلوات", "Prayer log")
+    val prayerLogNote get() = t("علامة «صلّيت» بجانب كل صلاة مضى وقتها في الرئيسية وفي إشعار الصلاة. السجل على جهازك فقط.", "An “I prayed” mark next to each prayer whose time has come, on Home and in the prayer notification. Kept on your device only.")
+    fun prayedToday(n: String) = t("صلّيت اليوم $n من ٥", "Prayed today: $n of 5")
+    fun prayerStreak(n: String) = t("أيام متتالية كاملة: $n", "Full days in a row: $n")
+    fun prayerWeekPercent(n: String) = t("هذا الأسبوع: $n٪", "This week: $n%")
+    fun prayerMonthPercent(n: String) = t("آخر ٣٠ يومًا: $n٪", "Last 30 days: $n%")
+    val prayerLogEmpty get() = t("اضغط على علامة الصلاة في مواقيت اليوم لتسجيلها. لا لوم هنا؛ فقط تذكير لطيف.", "Tap a prayer's mark in today's times to log it. No blame here, just a gentle record.")
+    fun markPrayed(name: String) = t("سجّل $name", "Mark $name")
+    val silenceTitle get() = t("الصامت وقت الصلاة", "Silent at prayer time")
+    val silenceNote get() = t("يضع الهاتف على الاهتزاز بعد الأذان بمدة تختارها، ثم يعيد الصوت كما كان. إن كان الهاتف صامتًا من قبلك لا يغيّر شيئًا.", "Puts the phone on vibrate a little after the adhan, then gives the sound back as it was. If you had already silenced it, nothing changes.")
+    fun silenceAfter(n: String) = t("يبدأ بعد الأذان بـ $n د", "Starts $n min after the adhan")
+    fun silenceLength(n: String) = t("المدة $n د", "Lasts $n min")
+    val silenceDnd get() = t("عدم الإزعاج بدل الاهتزاز", "Do Not Disturb instead of vibrate")
+    val silenceDndNote get() = t("يحتاج إذن «عدم الإزعاج» مرة واحدة.", "Needs Do Not Disturb access once.")
+    val silenceGrant get() = t("منح الإذن", "Grant access")
+    val silenceChannel get() = t("الصامت وقت الصلاة", "Silent at prayer time")
+    val silenceOnVibrate get() = t("الهاتف على الاهتزاز للصلاة", "Phone on vibrate for the prayer")
+    val silenceOnDnd get() = t("عدم الإزعاج للصلاة", "Do Not Disturb for the prayer")
+    fun silenceUntil(t0: String) = t("يعود الصوت $t0", "Sound back at $t0")
+    val silenceEndNow get() = t("أعد الصوت الآن", "Sound back now")
+    val tasbihWeekTitle get() = t("سجل التسبيح", "Tasbih log")
+    fun tasbihToday(n: String) = t("اليوم $n", "Today $n")
+    fun tasbihWeek(n: String) = t("الأسبوع $n", "This week $n")
+    val backupTitle get() = t("النسخ الاحتياطي", "Backup")
+    val backupEntry get() = t("احفظ إعداداتك وسجلاتك في ملف، واستعدها على هذا الهاتف أو غيره", "Save your settings and records to a file, and restore them here or on another phone")
+    val backupSaveTitle get() = t("حفظ نسخة", "Save a copy")
+    val backupSaveNote get() = t("ملف واحد فيه: المدن، والتنبيهات، والمظهر، والتقويم ومناسباتك، والعلامات وموضع القراءة، والختمة، ومقاطع الحفظ، وسجل الصلوات والتسبيح.", "One file with your places, alerts, look, calendar and occasions, bookmarks and reading position, khatma, memorisation, and the prayer and tasbih logs.")
+    val backupSave get() = t("حفظ في ملف", "Save to a file")
+    val backupRestoreTitle get() = t("استعادة نسخة", "Restore a copy")
+    val backupRestoreNote get() = t("تستبدل الاستعادة ما على الهاتف الآن بما في الملف، بعد أن ترى ما فيه.", "Restoring replaces what is on the phone now with the file's contents, after you see what it holds.")
+    val backupRestore get() = t("استعادة من ملف", "Restore from a file")
+    val backupNotIncluded get() = t("لا يدخل في النسخة: صفحات المصحف والتلاوات المنزّلة (تُنزَّل من جديد)، وإعدادات الويدجت.", "Not in the copy: downloaded Mushaf pages and recordings (download them again) and widget settings.")
+    val backupSaved get() = t("حُفظت النسخة.", "Backup saved.")
+    val backupFailed get() = t("تعذّر حفظ الملف.", "Could not save the file.")
+    val backupRestored get() = t("استُعيدت النسخة.", "Backup restored.")
+    val backupConfirmTitle get() = t("استعادة هذه النسخة؟", "Restore this backup?")
+    fun backupConfirmBody(date: String, places: String, marks: String, hifz: String, days: String) =
+        t("نسخة $date: مدن $places، علامات $marks، مقاطع حفظ $hifz، أيام في سجل الصلوات $days. تستبدل ما على الهاتف الآن.", "Backup of $date: $places places, $marks bookmarks, $hifz memorisation passages, $days days in the prayer log. It replaces what is on the phone now.")
+    fun backupBad(r: com.sakina.app.data.Backup.Reason) = when (r) {
+        com.sakina.app.data.Backup.Reason.TOO_LARGE -> t("الملف أكبر من نسخة سكينة.", "The file is too large to be a Sakina backup.")
+        com.sakina.app.data.Backup.Reason.NOT_JSON -> t("الملف غير مقروء.", "The file cannot be read.")
+        com.sakina.app.data.Backup.Reason.NOT_SAKINA -> t("هذا ليس ملف نسخة من سكينة.", "This is not a Sakina backup.")
+        com.sakina.app.data.Backup.Reason.NEWER_VERSION -> t("النسخة من إصدار أحدث من التطبيق؛ حدّث التطبيق أولًا.", "The backup is from a newer version of the app; update the app first.")
+    }
+    val silencePrayers get() = t("الصلوات", "Prayers")
+
 }
 
 val LocalStrings = staticCompositionLocalOf { Strings(Lang.AR) }

@@ -256,6 +256,7 @@ private fun HifzPractice(vm: MainViewModel, d: QuranData, sura: Int, from: Int, 
         }
     }
     val existing = qs.hifz.firstOrNull { it.sura == sura && it.from == from && it.to == to }
+    val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
     Column(Modifier.fillMaxSize()) {
         LazyColumn(Modifier.weight(1f).fillMaxWidth().testTag("hifz_practice"), contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             item {
@@ -320,6 +321,7 @@ private fun HifzPractice(vm: MainViewModel, d: QuranData, sura: Int, from: Int, 
                 vm.pop()
             }, modifier = Modifier.weight(1f).testTag("hifz_again")) { Text(str.hifzAgain) }
             Button(onClick = {
+                haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
                 record(vm, sura, from, to, existing, remembered = true)
                 Toast.makeText(context, if (existing == null) str.hifzAdded else str.hifzSaved, Toast.LENGTH_SHORT).show()
                 vm.pop()

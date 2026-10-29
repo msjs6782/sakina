@@ -11,7 +11,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 
-enum class EventKind { ADHAN, PRE, IQAMA, SUHOOR, REMINDER, OCCASION, FASTING, TEST }
+enum class EventKind { ADHAN, PRE, IQAMA, SUHOOR, REMINDER, OCCASION, FASTING, TEST, SILENCE_ON, SILENCE_OFF }
 
 data class AlertEvent(
     /** Unique per kind, subject and civil date; used to prevent repeats. */
@@ -89,6 +89,13 @@ object AlertPlanner {
                         out += AlertEvent(eventId(EventKind.PRE, key.name, date), EventKind.PRE, t.minusSeconds(pre * 60L), date, key, t,
                             style = alerts.preStyle, minutes = pre)
                     }
+                    val sl = alerts.silence
+                    if (sl.enabled && key in sl.prayers) {
+                        val on = t.plusSeconds(sl.afterMinutes.coerceIn(SilencePrefs.AFTER) * 60L)
+                        val len = sl.minutes.coerceIn(SilencePrefs.LENGTH)
+                        out += AlertEvent(eventId(EventKind.SILENCE_ON, key.name, date), EventKind.SILENCE_ON, on, date, key, t, minutes = len)
+                        out += AlertEvent(eventId(EventKind.SILENCE_OFF, key.name, date), EventKind.SILENCE_OFF, on.plusSeconds(len * 60L), date, key, t, minutes = len)
+                    }
                     val iq = alerts.iqamaFor(key)
                     if (iq > 0) {
                         out += AlertEvent(eventId(EventKind.IQAMA, key.name, date), EventKind.IQAMA, t.plusSeconds(iq * 60L), date, key, t,
@@ -141,6 +148,8 @@ object AlertPlanner {
     fun decide(event: AlertEvent, now: Instant, fired: Set<String>, quietUntil: Instant?): Decision {
         if (event.at.isAfter(now.plus(LOOKAHEAD))) return Decision.NOT_DUE
         if (event.id in fired) return Decision.SKIP_DUPLICATE
+        // Giving the phone its sound back is never skipped, whatever happened meanwhile.
+        if (event.kind == EventKind.SILENCE_OFF) return if (Duration.between(event.at, now) <= Duration.ofHours(12)) Decision.FIRE else Decision.SKIP_LATE
         if (quietUntil != null && now.isBefore(quietUntil)) return Decision.SKIP_QUIET
         val late = Duration.between(event.at, now)
         return when (event.kind) {
@@ -153,6 +162,9 @@ object AlertPlanner {
             EventKind.PRE, EventKind.SUHOOR -> if (event.prayerAt != null && now.isBefore(event.prayerAt)) Decision.FIRE else Decision.SKIP_LATE
             EventKind.IQAMA -> if (late <= IQAMA_LATE_LIMIT) Decision.FIRE else Decision.SKIP_LATE
             EventKind.REMINDER, EventKind.OCCASION, EventKind.FASTING -> if (late <= REMINDER_LATE_LIMIT) Decision.FIRE else Decision.SKIP_LATE
+            // Silencing late is fine while the silent time has not passed.
+            EventKind.SILENCE_ON -> if (late < Duration.ofMinutes(event.minutes.toLong())) Decision.FIRE else Decision.SKIP_LATE
+            EventKind.SILENCE_OFF -> Decision.FIRE
         }
     }
 }

@@ -84,6 +84,17 @@ class Notifier(private val context: Context, private val s: AppSettings) {
         .setContentIntent(openApp())
         .setAutoCancel(true)
 
+    /** "I prayed": marks the prayer in the log (when the log is on) and clears the notification. */
+    private fun prayedAction(k: com.sakina.app.core.prayer.PrayerKey, date: java.time.LocalDate, noteId: Int): PendingIntent? {
+        if (!s.prayerLog) return null
+        return PendingIntent.getBroadcast(
+            context, 4400 + k.ordinal,
+            Intent(context, AlarmReceiver::class.java).setAction(AlarmReceiver.ACTION_PRAYED)
+                .putExtra(AlarmReceiver.EXTRA_PRAYER, k.name).putExtra(AlarmReceiver.EXTRA_DATE, date.toString()).putExtra(AlarmReceiver.EXTRA_NOTE, noteId),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+    }
+
     private fun withPlace(text: String) = if (place != null) "$text · $place" else text
 
     /** Posts the notification for an event. [late] adds a note that Android delivered it late. */
@@ -98,12 +109,13 @@ class Notifier(private val context: Context, private val s: AppSettings) {
         when (e.kind) {
             EventKind.ADHAN -> {
                 val mode = if (late) AlertMode.SILENT else (overrideMode ?: e.mode ?: AlertMode.NOTIFY)
+                id = ID_PRAYER + (e.prayer?.ordinal ?: 0)
                 b = base(Channels.forPrayer(if (mode == AlertMode.ADHAN || mode == AlertMode.EXCERPT) AlertMode.NOTIFY else mode))
                     .setContentTitle(str.prayerTimeTitle(prayerName))
                     .setContentText(withPlace(prayerTime) + lateNote)
                     .setCategory(NotificationCompat.CATEGORY_REMINDER)
                     .setTimeoutAfter(Duration.ofMinutes(90).toMillis())
-                id = ID_PRAYER + (e.prayer?.ordinal ?: 0)
+                e.prayer?.let { k -> prayedAction(k, e.date, id)?.let { b.addAction(0, str.iPrayed, it) } }
             }
             EventKind.PRE -> {
                 b = base(Channels.forReminder(if (late) NotifyStyle.SILENT else e.style ?: NotifyStyle.NORMAL))
@@ -172,6 +184,7 @@ class Notifier(private val context: Context, private val s: AppSettings) {
                     .setCategory(NotificationCompat.CATEGORY_REMINDER)
                 id = ID_TEST
             }
+            EventKind.SILENCE_ON, EventKind.SILENCE_OFF -> return true
         }
         nm.notify(id, b.build())
         return true

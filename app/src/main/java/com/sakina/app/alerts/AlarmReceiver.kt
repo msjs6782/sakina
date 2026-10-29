@@ -41,6 +41,16 @@ class AlarmReceiver : BroadcastReceiver() {
                 AlertScheduler.fireTest(context, mode, at)
             }
             ACTION_STOP_ADHAN -> AdhanService.stop(context)
+            ACTION_UNSILENCE -> PrayerSilence.end(context, "user")
+            ACTION_PRAYED -> async {
+                // "I prayed" from a prayer notification: marked in the prayer log, and the notification goes.
+                val key = intent.getStringExtra(EXTRA_PRAYER)?.let { runCatching { com.sakina.app.core.prayer.PrayerKey.valueOf(it) }.getOrNull() } ?: return@async
+                val date = intent.getStringExtra(EXTRA_DATE)?.let { runCatching { java.time.LocalDate.parse(it) }.getOrNull() } ?: return@async
+                val app = context.applicationContext as com.sakina.app.SakinaApp
+                app.tools.update { t -> t.copy(prayed = com.sakina.app.core.prayer.PrayerLog.set(t.prayed, date, key, true, java.time.LocalDate.now())) }
+                androidx.core.app.NotificationManagerCompat.from(context).cancel(intent.getIntExtra(EXTRA_NOTE, 0))
+                Log.i("SakinaAlerts", "prayed $key $date (from the notification)")
+            }
         }
     }
 
@@ -49,6 +59,11 @@ class AlarmReceiver : BroadcastReceiver() {
         const val ACTION_CARD = "com.sakina.app.CARD_REFRESH"
         const val ACTION_TEST = "com.sakina.app.ALERT_TEST"
         const val ACTION_STOP_ADHAN = "com.sakina.app.ADHAN_STOP"
+        const val ACTION_UNSILENCE = "com.sakina.app.UNSILENCE"
+        const val ACTION_PRAYED = "com.sakina.app.PRAYED"
+        const val EXTRA_PRAYER = "prayer"
+        const val EXTRA_DATE = "date"
+        const val EXTRA_NOTE = "note"
         const val EXTRA_MODE = "mode"
         const val EXTRA_AT = "at"
     }

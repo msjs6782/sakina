@@ -104,6 +104,7 @@ fun SettingsGroups(vm: MainViewModel, s: AppSettings) {
             NavRow(SakinaIcons.Calendar, str.settingsCalendar, str.hijriOffsetTitle + ": " + fmt.signed(s.hijriOffset), onClick = { vm.push(Route.Calendar) }, modifier = Modifier.testTag("nav_calendar_settings"))
         }
         SectionCard(padding = PaddingValues(6.dp)) {
+            NavRow(SakinaIcons.Download, str.backupTitle, str.backupEntry, onClick = { vm.push(Route.Backup) }, modifier = Modifier.testTag("nav_backup"))
             NavRow(SakinaIcons.Info, str.settingsAbout, str.aboutVersion + " " + BuildConfig.VERSION_NAME, onClick = { vm.push(Route.About) })
         }
     }
@@ -303,6 +304,11 @@ fun HomeSetupScreen(vm: MainViewModel, s: AppSettings) {
             }
             Spacer(Modifier.height(8.dp))
             NoteText(str.laterCards)
+        }
+        SectionCard(title = str.prayerLogTitle, icon = SakinaIcons.Check) {
+            Box(Modifier.testTag("prayer_log_switch")) {
+                SwitchRow(s.prayerLog, str.prayerLogSetting, str.prayerLogNote) { v -> vm.update { it.copy(prayerLog = v) } }
+            }
         }
     }
 }

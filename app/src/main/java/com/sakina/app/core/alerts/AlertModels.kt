@@ -69,6 +69,25 @@ data class SuhoorPref(
     val style: NotifyStyle = NotifyStyle.NORMAL,
 )
 
+/**
+ * The phone set to vibrate (or Do Not Disturb, with the user's permission) for the prayer: from [afterMinutes]
+ * after the adhan, for [minutes], then back to how it was.
+ */
+@Serializable
+data class SilencePrefs(
+    val enabled: Boolean = false,
+    val afterMinutes: Int = 5,
+    val minutes: Int = 25,
+    val prayers: Set<PrayerKey> = PrayerKey.prayers.toSet(),
+    /** Do Not Disturb instead of vibrate (needs the user's Do Not Disturb access). */
+    val dnd: Boolean = false,
+) {
+    companion object {
+        val AFTER = 0..30
+        val LENGTH = 10..90
+    }
+}
+
 @Serializable
 data class AlertSettings(
     val prayers: Map<PrayerKey, PrayerAlert> = emptyMap(),
@@ -84,6 +103,7 @@ data class AlertSettings(
     val ongoingCard: Boolean = false,
     val suhoor: SuhoorPref = SuhoorPref(),
     val reminders: List<Reminder> = defaultReminders(),
+    val silence: SilencePrefs = SilencePrefs(),
 ) {
     fun prayer(key: PrayerKey): PrayerAlert = prayers[key] ?: PrayerAlert()
 

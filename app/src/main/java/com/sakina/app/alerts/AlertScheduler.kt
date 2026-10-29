@@ -100,6 +100,8 @@ object AlertScheduler {
 
     private fun execute(app: SakinaApp, notifier: Notifier, s: AppSettings, e: AlertEvent, d: Decision, now: Instant) {
         if (d != Decision.FIRE && d != Decision.FIRE_LATE_SILENT) return
+        if (e.kind == EventKind.SILENCE_ON) { PrayerSilence.begin(app, s, e); return }
+        if (e.kind == EventKind.SILENCE_OFF) { PrayerSilence.end(app, "after ${e.prayer}"); return }
         val late = d == Decision.FIRE_LATE_SILENT
         if (e.kind == EventKind.ADHAN && !late && (e.mode == AlertMode.ADHAN || e.mode == AlertMode.EXCERPT)) {
             val key = e.prayer ?: PrayerKey.DHUHR

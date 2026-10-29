@@ -275,6 +275,14 @@ object Demo {
             AlertsCenter.test(app, AlertMode.valueOf(f[0].uppercase()), f.getOrNull(1)?.toLongOrNull() ?: 5)
         }
         if (e.getBoolean("demo_adhan_stop")) com.sakina.app.alerts.AdhanService.stop(app)
+        // Silent at prayer time, without waiting for a prayer: "on" silences for two minutes, "off" gives the sound back.
+        e.getString("demo_silence")?.let { v ->
+            val st = kotlinx.coroutines.runBlocking { app.settings.current() }
+            if (v == "on") com.sakina.app.alerts.PrayerSilence.begin(app, st,
+                com.sakina.app.core.alerts.AlertEvent("SILENCE_ON:TEST", com.sakina.app.core.alerts.EventKind.SILENCE_ON, java.time.Instant.now(), java.time.LocalDate.now(),
+                    com.sakina.app.core.prayer.PrayerKey.DHUHR, minutes = 2))
+            else com.sakina.app.alerts.PrayerSilence.end(app, "demo")
+        }
         Log.i(TAG, "applied on new intent: ${e.keySet().filter { it.startsWith("demo_") }}")
     }
 
@@ -297,6 +305,8 @@ object Demo {
         "quran_search" -> Route.QuranSearch()
         "khatma" -> Route.Khatma
         "hifz" -> Route.Hifz
+        "prayer_log" -> Route.PrayerLog
+        "backup" -> Route.Backup
         "quran_sources" -> Route.QuranSources
         "mushaf_downloads" -> Route.MushafDownloads
         "listen" -> Route.Listen()

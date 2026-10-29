@@ -50,6 +50,8 @@ sealed interface Route {
     data object Khatma : Route
     /** Memorisation: due reviews, passages and a new passage. */
     data object Hifz : Route
+    data object PrayerLog : Route
+    data object Backup : Route
     data class HifzPractice(val sura: Int, val from: Int, val to: Int) : Route
     data object QuranSources : Route
     /** The printed Mushaf at [page]; [focus] is an ayah (global index) to point out, or -1. */

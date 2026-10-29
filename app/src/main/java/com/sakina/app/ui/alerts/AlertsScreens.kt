@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
@@ -225,6 +226,8 @@ fun AlertsScreen(vm: MainViewModel, s: AppSettings) {
                 StyleSelector(su.style) { st -> updateAlerts(vm) { it.copy(suhoor = su.copy(style = st)) } }
             }
         }
+
+        SilenceCard(vm, s)
 
         SectionCard(padding = PaddingValues(6.dp)) {
             val on = s.alerts.allReminders.count { it.enabled }
@@ -493,5 +496,44 @@ private fun SoundEditorPreviewOnly(id: String) {
         Icon(if (isPlaying) SakinaIcons.StopSq else SakinaIcons.Play, null, Modifier.size(18.dp))
         Spacer(Modifier.width(8.dp))
         Text(if (isPlaying) str.stopPreview else str.preview)
+    }
+}
+
+/** Silent at prayer time: on/off, when it starts and how long, which prayers, and vibrate or Do Not Disturb. */
+@Composable
+private fun SilenceCard(vm: MainViewModel, s: AppSettings) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    val context = LocalContext.current
+    val sl = s.alerts.silence
+    var access by remember { mutableStateOf(com.sakina.app.alerts.PrayerSilence.hasDndAccess(context)) }
+    androidx.lifecycle.compose.LifecycleResumeEffect(Unit) { access = com.sakina.app.alerts.PrayerSilence.hasDndAccess(context); onPauseOrDispose { } }
+    SectionCard(title = str.silenceTitle, icon = SakinaIcons.BellOff, modifier = Modifier.testTag("silence_card")) {
+        Box(Modifier.testTag("silence_switch")) {
+            SwitchRow(sl.enabled, str.silenceTitle, str.silenceNote) { v -> updateAlerts(vm) { it.copy(silence = sl.copy(enabled = v)) } }
+        }
+        if (sl.enabled) {
+            com.sakina.app.ui.components.Stepper(sl.afterMinutes, str.silenceAfter(fmt.num(sl.afterMinutes)), com.sakina.app.core.alerts.SilencePrefs.AFTER.first, com.sakina.app.core.alerts.SilencePrefs.AFTER.last, fmt.num(sl.afterMinutes)) { v ->
+                updateAlerts(vm) { it.copy(silence = sl.copy(afterMinutes = v)) }
+            }
+            com.sakina.app.ui.components.Stepper(sl.minutes, str.silenceLength(fmt.num(sl.minutes)), com.sakina.app.core.alerts.SilencePrefs.LENGTH.first, com.sakina.app.core.alerts.SilencePrefs.LENGTH.last, fmt.num(sl.minutes)) { v ->
+                updateAlerts(vm) { it.copy(silence = sl.copy(minutes = v)) }
+            }
+            Text(str.silencePrayers, style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 6.dp))
+            androidx.compose.foundation.layout.FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                com.sakina.app.core.prayer.PrayerKey.prayers.forEach { k ->
+                    androidx.compose.material3.FilterChip(
+                        selected = k in sl.prayers,
+                        onClick = { updateAlerts(vm) { it.copy(silence = sl.copy(prayers = if (k in sl.prayers) sl.prayers - k else sl.prayers + k)) } },
+                        label = { Text(str.prayer(k)) },
+                        modifier = Modifier.testTag("silence_${k.name.lowercase()}"),
+                    )
+                }
+            }
+            SwitchRow(sl.dnd && access, str.silenceDnd, str.silenceDndNote, enabled = access) { v -> updateAlerts(vm) { it.copy(silence = sl.copy(dnd = v)) } }
+            if (!access) TextButton(onClick = {
+                runCatching { context.startActivity(android.content.Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)) }
+            }) { Text(str.silenceGrant) }
+        }
     }
 }

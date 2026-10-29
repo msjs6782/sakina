@@ -45,6 +45,10 @@ data class ToolsState(
     val tasbih: TasbihState = TasbihState(),
     val tasbihUndo: TasbihState? = null,
     val qibla: QiblaPrefs = QiblaPrefs(),
+    /** The prayer log: civil date (ISO) → a bit per prayer marked as prayed (core/prayer/PrayerLog). */
+    val prayed: Map<String, Int> = emptyMap(),
+    /** Tasbih taps per day (core/adhkar/TasbihLog). */
+    val tasbihDays: Map<String, Int> = emptyMap(),
 ) {
     companion object {
         /** Days of wird progress kept (today included). */

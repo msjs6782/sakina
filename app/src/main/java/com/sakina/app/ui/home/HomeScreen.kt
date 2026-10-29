@@ -3,6 +3,10 @@ package com.sakina.app.ui.home
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -345,6 +349,7 @@ fun TimeRow(
     highlighted: Boolean,
     passed: Boolean,
     offset: Int,
+    trailing: (@Composable () -> Unit)? = null,
 ) {
     val str = LocalStrings.current
     val fmt = LocalFmt.current
@@ -378,6 +383,28 @@ fun TimeRow(
                 Text(str.unavailable, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.error)
             }
         }
+        if (trailing != null) { Spacer(Modifier.width(6.dp)); trailing() }
+    }
+}
+
+/** The "I prayed" mark: a ring, filled with a check once marked. */
+@Composable
+fun PrayedMark(done: Boolean, label: String, tag: String, onClick: () -> Unit) {
+    val cs = MaterialTheme.colorScheme
+    val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
+    Box(
+        Modifier.size(32.dp).clip(androidx.compose.foundation.shape.CircleShape)
+            .background(if (done) cs.primary else Color.Transparent)
+            .border(1.5.dp, if (done) cs.primary else cs.outline, androidx.compose.foundation.shape.CircleShape)
+            .clickable(onClickLabel = label) {
+                haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.TextHandleMove)
+                onClick()
+            }
+            .semantics { contentDescription = label; stateDescription = if (done) "✓" else "" }
+            .testTag(tag),
+        contentAlignment = Alignment.Center,
+    ) {
+        if (done) Icon(SakinaIcons.Check, null, Modifier.size(18.dp), tint = cs.onPrimary)
     }
 }
 
@@ -386,15 +413,28 @@ private fun TodayList(m: HomeModel, s: AppSettings) {
     val str = LocalStrings.current
     SectionCard(title = str.todayTimes, icon = SakinaIcons.Clock, padding = PaddingValues(start = 8.dp, end = 8.dp, top = 14.dp, bottom = 8.dp)) {
         val offsets = s.calcConfig.offsets
+        val vm = LocalMainVm.current
+        val tools = vm?.tools?.collectAsStateWithLifecycle()?.value
         m.day.times.forEach { t ->
             val isNext = m.next?.let { it.key == t.key && it.date == m.today } ?: false
             val passed = t.instant != null && !t.instant.isAfter(m.now)
-            TimeRow(t.key, t.instant, t.status, m.zone, isNext, passed, offsets[t.key])
+            // The prayer log: a mark beside each prayer whose time has come.
+            val mark: (@Composable () -> Unit)? = if (s.prayerLog && vm != null && tools != null && passed && t.key in PrayerKey.prayers) ({
+                val done = com.sakina.app.core.prayer.PrayerLog.isDone(tools.prayed, m.today, t.key)
+                PrayedMark(done, str.markPrayed(str.prayer(t.key)), "prayed_${t.key.name.lowercase()}") {
+                    vm.updateTools { it.copy(prayed = com.sakina.app.core.prayer.PrayerLog.toggle(it.prayed, m.today, t.key, m.today)) }
+                }
+            }) else null
+            TimeRow(t.key, t.instant, t.status, m.zone, isNext, passed, offsets[t.key], mark)
         }
-        // The week and month tables (they used to be a tab of their own).
-        LocalMainVm.current?.let { vm ->
+        // The week and month tables (they used to be a tab of their own), and the prayer log.
+        if (vm != null) Row(Modifier.fillMaxWidth()) {
             TextButton(onClick = { vm.push(com.sakina.app.ui.Route.Times(com.sakina.app.ui.times.TimesView.WEEK)) }, modifier = Modifier.padding(start = 4.dp).testTag("home_open_times")) {
                 Text(str.weekAndMonth)
+            }
+            Spacer(Modifier.weight(1f))
+            if (s.prayerLog && tools != null) TextButton(onClick = { vm.push(com.sakina.app.ui.Route.PrayerLog) }, modifier = Modifier.testTag("home_open_prayer_log")) {
+                Text(str.prayedToday(LocalFmt.current.num(com.sakina.app.core.prayer.PrayerLog.count(tools.prayed, m.today))))
             }
         }
     }
