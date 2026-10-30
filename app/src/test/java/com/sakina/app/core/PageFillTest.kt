@@ -18,11 +18,16 @@ class PageFillTest {
 
     private class Img(val px: IntArray, val w: Int, val h: Int)
 
+    /** Pages stored as "w h\n" and RGB bytes, gzipped (no image decoder in Android unit tests). */
     private fun load(page: Int): Img {
-        val img = javax.imageio.ImageIO.read(javaClass.getResourceAsStream("/mushaf/page$page.png") ?: error("missing page $page"))
-        val px = IntArray(img.width * img.height)
-        img.getRGB(0, 0, img.width, img.height, px, 0, img.width)
-        return Img(px, img.width, img.height)
+        val bytes = java.util.zip.GZIPInputStream(javaClass.getResourceAsStream("/mushaf/page$page.rgb.gz") ?: error("missing page $page")).use { it.readBytes() }
+        val nl = bytes.indexOf('\n'.code.toByte())
+        val (w, h) = String(bytes, 0, nl).trim().split(' ').map { it.toInt() }
+        val px = IntArray(w * h) { i ->
+            val o = nl + 1 + i * 3
+            (0xFF shl 24) or ((bytes[o].toInt() and 255) shl 16) or ((bytes[o + 1].toInt() and 255) shl 8) or (bytes[o + 2].toInt() and 255)
+        }
+        return Img(px, w, h)
     }
 
     private fun lum(c: Int) = (((c shr 16) and 255) + ((c shr 8) and 255) + (c and 255)) / 3

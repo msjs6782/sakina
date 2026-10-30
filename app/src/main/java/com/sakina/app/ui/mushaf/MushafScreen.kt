@@ -427,7 +427,7 @@ private fun cachedLook(page: Int, fill: Boolean, trim: Boolean, cw: Int, ch: Int
         if (f == null && !MushafFill.knownWithout(page)) return null
         if (f != null && com.sakina.app.core.mushaf.PageFill.plan(f, cw, ch) != null) return null
     }
-    val c = if (trim || fill) MushafRender.cachedCrop(page) ?: return null else MushafRender.Crop.FULL
+    val c = if (trim || fill) (MushafRender.cachedCrop(page) ?: return null) else MushafRender.Crop.FULL
     val (fw, fh) = fitted(c, cw, ch)
     val b = MushafRender.cached(page, fw.roundToInt(), c) ?: return null
     return Look(b, fw, fh, c, null)
