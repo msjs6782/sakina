@@ -1,0 +1,33 @@
+      window=0 repeatInterval=0 count=0 flags=0x1
+      operation=PendingIntent{b3b4d72: PendingIntentRecord{204e5c3 android broadcastIntent}}
+Batch{1e96e40 num=1 start=2896296 end=2896296 flgs=0x1}:
+    RTC #0: Alarm{57ba179 type 1 when 1793386381091 com.sakina.app.debug}
+      tag=*alarm*:com.sakina.app.widget.TICK
+      type=1 whenElapsed=+25s443ms when=2026-10-30 18:53:01
+      window=0 repeatInterval=0 count=0 flags=0x1
+      operation=PendingIntent{d6ccebe: PendingIntentRecord{3461b1f com.sakina.app.debug broadcastIntent}}
+Batch{a172e6c num=2 start=2943158 end=2948162 flgs=0x8}:
+    ELAPSED_WAKEUP #1: Alarm{f8bdc35 type 2 when 2943158 android}
+      tag=*walarm*:WifiConnectivityManager Schedule Periodic Scan Timer
+      type=2 whenElapsed=+1m12s305ms when=+1m12s305ms
+      window=+2m0s0ms repeatInterval=0 count=0 flags=0x8
+      operation=null
+      listener=android.app.AlarmManager$ListenerWrapper@1a318ca
+    ELAPSED #0: Alarm{a3b4a3b type 3 when 2903162 com.android.phone}
+--
+      window=0 repeatInterval=0 count=0 flags=0x1
+      operation=PendingIntent{f966cd2: PendingIntentRecord{4a081a3 android broadcastIntent}}
+Batch{6e90ca0 num=1 start=27315205 end=27315205 flgs=0x5}:
+    RTC_WAKEUP #0: Alarm{6d35059 type 0 when 1793410800000 com.sakina.app.debug}
+      tag=*walarm*:com.sakina.app.ALERT_FIRE
+      type=0 whenElapsed=+6h47m24s352ms when=2026-10-31 01:40:00
+      window=0 repeatInterval=0 count=0 flags=0x5
+      operation=PendingIntent{84a841e: PendingIntentRecord{92f94ff com.sakina.app.debug broadcastIntent}}
+Batch{4e252cc num=1 start=44715226 end=44715226 flgs=0x9}:
+    ELAPSED_WAKEUP #0: Alarm{f5f9915 type 2 when 44715226 android}
+      tag=*walarm*:NotificationManagerService.TIMEOUT
+      type=2 whenElapsed=+11h37m24s373ms when=+11h37m24s373ms
+      window=0 repeatInterval=0 count=0 flags=0x9
+      operation=PendingIntent{796c42a: PendingIntentRecord{d72821b android broadcastIntent}}
+Batch{947cfb8 num=1 start=86444210 end=86444210 flgs=0x9}:
+    RTC_WAKEUP #0: Alarm{52db191 type 0 when 1793469929005 android}

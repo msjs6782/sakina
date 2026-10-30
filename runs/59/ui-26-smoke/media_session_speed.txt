@@ -1,0 +1,15 @@
+      package=com.sakina.app.debug
+      launchIntent=PendingIntent{1c2af19: PendingIntentRecord{e7ab6cf com.sakina.app.debug startActivity (whitelist: 815f0eb:+30s0ms)}}
+      mediaButtonReceiver=PendingIntent{4ad9263: PendingIntentRecord{c13ae60 com.sakina.app.debug startForegroundService}}
+      active=true
+      flags=7
+      rating type=0
+      controllers: 2
+      state=PlaybackState {state=3, position=11207, buffered position=65097, speed=1.25, updated=549399, actions=7339983, custom actions=[], active item id=0, error=null}
+      audioAttrs=AudioAttributes: usage=1 content=2 flags=0x0 tags= bundle=null
+      volumeType=1, controlType=2, max=0, current=0
+      metadata:size=10, description=سورة البقرة, null, null
+      queueTitle=null, size=1
+
+    HeadsetMediaButton com.android.server.telecom/HeadsetMediaButton (userId=0)
+      ownerPid=1603, ownerUid=1000, userId=0

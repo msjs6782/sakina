@@ -1,0 +1,228 @@
+CHECK quran_load: PASS in 718 ms
+CHECK bookmark_saved: PASS "bookmarks":[{"sura":1,"aya":6,"createdEpochMs":1793383694435,"note":""}]
+CHECK last_read_saved: PASS "lastRead":{"sura":1,"aya":1,"page":1,"atEpochMs":1793383687484}
+CHECK mushaf_bundled: PASS pages 1-2 in place (393966, 469559 bytes); rendered 001.pdf 480x686 in 58 ms
+CHECK mushaf_swipe: PASS page 2 after a right swipe
+CHECK mushaf_missing: PASS page 3 offers a download
+CHECK mushaf_download: PASS page 3 verified: 1214516 bytes, crc32+sha256 ok, 712151 bytes in from dn720309.ca.archive.org in 2703 ms; stored 1214516 bytes
+CHECK mushaf_render_downloaded: PASS rendered 003.pdf 480x686 in 22 ms
+CHECK mushaf_tap_hide: PASS controls hidden
+CHECK mushaf_zoom_render: PASS 
+CHECK mushaf_goto: PASS page 50 opened from the index
+CHECK mushaf_auto: PASS page 50 fetched on opening with the option on
+CHECK view_switch: PASS printed -> text -> printed
+CHECK full_bg_stop: PASS stopped in the background; pages 4 -> 50, 44 verified while running, no partial files
+CHECK full_leave_stop: PASS stopped on leaving the screen
+CHECK verify_corrupt: PASS verify: checked 86, removed 1 [3]
+CHECK delete_juz: PASS deleted 18 pages; pages on device 67
+CHECK stream_play: PASS load alafasy:2 from https://cdn.mp3quran.net/audio/mishary-alafasy/r1/002.mp3
+CHECK media_session: PASS MediaSession is playing
+CHECK media_notification: PASS notification posted
+CHECK media_key_pause: PASS paused by the media pause key
+CHECK media_key_play: PASS played by the media play key
+CHECK speed: PASS speed 1.25 in the session
+CHECK focus_no_resume: PASS paused for the adhan; focus came back and playback stayed paused
+CHECK quiet_stops: PASS quiet mode ended the session
+CHECK quiet_blocks: PASS play refused during quiet
+CHECK download_recording: PASS downloaded alafasy:112: 354155 bytes; library 354155 bytes
+CHECK timing_valid: PASS Al-Ikhlas timing map checked: 4 ayahs
+CHECK play_downloaded: PASS played from the device
+CHECK repeat_range: PASS ayahs 1-2 played 3 times, then paused
+CHECK timing_invalid: PASS Husary Al-Fatiha map rejected; repeat disabled
+CHECK download_cancel: PASS cancelled, no partial file
+CHECK leave_screen: PASS still playing after leaving the screen
+CHECK idle_end: PASS paused session ended; notification removed
+CHECK delete_recording: PASS deleted
+CHECK diagnostics: PASS report shown on the device
+CHECK adhkar_quran_text: PASS ayat al-kursi from the bundled Tanzil text
+CHECK adhkar_source: PASS صحيح البخاري ٢٣١١
+CHECK adhkar_favorite: PASS favourite stored
+CHECK adhkar_search_ar: PASS found by Arabic text
+CHECK adhkar_search_en: PASS found by English title
+CHECK item_counter: PASS 3 taps in the item counter
+CHECK wird_complete: PASS done after 3 taps (4th ignored)
+CHECK wird_saved: PASS morning progress saved per day and set
+CHECK wird_no_mixing: PASS evening set untouched
+CHECK wird_evening_separate: PASS أنجزت ٠ من ٨
+CHECK wird_evening_wording: PASS evening wording shown
+CHECK wird_session: PASS counted in the Asr session
+CHECK wird_reminder: PASS مفعّل يوميًا عند ٦:٣٠ ص
+CHECK reminder_to_wird: PASS reminders link back to the set
+CHECK wird_persisted: PASS still done after restart
+CHECK tasbih_count: PASS 5
+CHECK tasbih_undo: PASS reset undone
+CHECK tasbih_target: PASS بلغت الهدف، الدورات المكتملة: ١، المجموع ٣٣
+CHECK tasbih_custom: PASS custom target saved
+CHECK qibla_bearing: PASS ٢٤٤٫٢° · نحو ٧٩٥ كم
+CHECK qibla_sensor: PASS 10-30 18:22:21.523  9503  9503 I SakinaQibla: sensors start source=ROTATION_VECTOR
+CHECK compass_aligned: PASS الهاتف متجه نحو القبلة (اتجاه أعلى الهاتف: ٢٤٤° غرب جنوب غرب)
+CHECK compass_turn: PASS استدر يمينًا ٣٠°
+CHECK compass_tilt: PASS tilt warning at 45°
+CHECK compass_interference: PASS field 89 µT vs 43 µT expected
+CHECK qibla_stop_back: PASS stopped on leaving
+CHECK qibla_stop_home: PASS stopped in the background
+CHECK compass_align_event: PASS 10-30 18:23:37.126  9850  9850 I SakinaQibla: aligned offset=1.5696328178417218
+CHECK compass_vibrate_option: PASS option saved
+CHECK compass_accelmag: PASS الهاتف متجه نحو القبلة
+CHECK compass_none: PASS no-sensor warning
+CHECK qibla_map: PASS centred map drawn
+CHECK qibla_newyork: PASS ٥٨٫٥°
+CHECK cal_tab: PASS calendar opens as a tab
+CHECK cal_grid: PASS جمادى الأولى ١٤٤٨ هـ
+CHECK cal_next: PASS جمادى الآخرة ١٤٤٨ هـ
+CHECK cal_swipe: PASS back to جمادى الأولى ١٤٤٨ هـ by swiping
+CHECK cal_gregorian: PASS أكتوبر ٢٠٢٦
+CHECK cal_picker: PASS مارس ٢٠٢٥
+CHECK cal_today: PASS أكتوبر ٢٠٢٦
+CHECK cal_kind_saved: PASS calendar choice saved
+CHECK cal_adjacent_day: PASS 2 Nov (next month) opens; Monday fast
+CHECK occ_saved: PASS saved with yearly Hijri repeat and alert
+CHECK occ_back: PASS day details list the new occasion
+CHECK occ_delete: PASS deleted
+CHECK occ_undo: PASS delete undone
+CHECK cal_list: PASS list rows
+CHECK cal_font_grid: PASS grid kept at 130% font
+CHECK cal_offset: PASS ٣ جمادى الأولى ١٤٤٨ هـ → ٤ جمادى الأولى ١٤٤٨ هـ (١٤ أكتوبر ٢٠٢٦)
+CHECK cal_convert: PASS ١ رمضان ١٤٤٨ هـ · الاثنين، ٨ فبراير ٢٠٢٧
+CHECK cal_interval: PASS ٣٠ يومًا
+CHECK fasting_scheduled: PASS 10-30 18:28:06.932 11942 11964 I SakinaAlerts: Scheduled FASTING:2026-11-02:2026-11-01 at 2026-11-01T18:00:00Z exact=true alarmClock=false epochMs=1793556000000
+CHECK occ_notification: PASS posted at its time (2026-10-30, minute 1290)
+CHECK occ_notif_opens: PASS opens the calendar on its day
+CHECK ramadan_status: PASS حتى الإفطار ٠٠:٢٥:٠٠ · ٣٠ يومًا في أم القرى غير المعدّل
+CHECK ramadan_imsakiya: PASS imsakiya rows
+CHECK ramadan_last_ten: PASS last ten nights listed
+CHECK ramadan_khatma: PASS khatma linked
+CHECK ramadan_ahead: PASS يبدأ بعد ١١٧ يومًا، الاثنين، ٨ فبراير ٢٠٢٧
+CHECK night_times: PASS maghrib 1047, midnight 1380, last third 51, fajr 273 (minutes)
+CHECK night_current: PASS countdown to the last third
+CHECK duha_margin: PASS من ٦:٠٦ ص إلى ١١:٢٩ ص → من ٦:٠٧ ص إلى ١١:٢٩ ص
+CHECK friday_kahf: PASS al-Kahf opened
+CHECK friday_salawat: PASS blessing opened
+CHECK friday_home: PASS card on Friday morning
+CHECK friday_home_hidden: PASS hidden on Wednesday
+CHECK widget_preview_next: PASS المغرب · بعد ١ س ٧ د · حُدّث ٤:٢٠ م
+CHECK widget_preview_countdown: PASS ١ س ٧ د
+CHECK widget_preview_strip: PASS الفجر
+CHECK widget_preview_content: PASS جامع الترمذي ٣٥٠٥ · صحيح
+CHECK widget_preview_ramadan: PASS رمضان بعد ١١٧ يومًا
+CHECK widget_previews_render: PASS all ten rendered
+CHECK widget_pinned_next: PASS placed by the launcher
+CHECK widget_home_next: PASS المغرب · بعد ١ س ٧ د حُدّث ٤:٢٠ م
+CHECK widget_pinned_analog: PASS placed by the launcher
+CHECK widget_pinned_strip: PASS placed by the launcher
+CHECK widget_pinned_digital: PASS placed by the launcher
+CHECK widget_analog_label: PASS device clock labelled (device +0000)
+CHECK widget_home_strip: PASS الفجر
+CHECK widget_refresh: PASS update (manual:next)
+CHECK widget_opens_times: PASS opens the app on Home
+CHECK widget_placed_preview: PASS placed widget shown as it looks
+CHECK widget_list: PASS placed widgets listed
+CHECK widget_config_saved: PASS saved on the device
+CHECK widget_config_applied: PASS Jeddah · Maghrib, in English
+CHECK widget_fixed_place: PASS kept Jeddah after the app moved to Makkah
+CHECK widget_follows_app: PASS strip follows the app language
+CHECK widget_tick: PASS in 7 h 27 min → in 7 h 26 min
+CHECK shortcuts_published: PASS times, qibla, quran, ramadan
+CHECK shortcut_pinned: PASS adhkar shortcut pinned
+CHECK shortcut_adhkar_opens: PASS opens the morning adhkar
+CHECK hero_sky_fajr: PASS painting for fajr
+CHECK hero_sky_morning: PASS painting for morning
+CHECK hero_sky_noon: PASS painting for noon
+CHECK hero_sky_asr: PASS painting for asr
+CHECK hero_sky_maghrib: PASS painting for maghrib
+CHECK hero_sky_night: PASS painting for night
+CHECK hero_sky_raml: PASS painting over the sand style
+CHECK hero_art_off: PASS style colours when turned off
+CHECK hero_art_switch: PASS turned off from Appearance
+CHECK widget_sky_previews: PASS previews rendered on the sky
+CHECK widget_pinned_next: PASS placed by the launcher
+CHECK widget_pinned_strip: PASS placed by the launcher
+CHECK widget_sky_saved: PASS two widgets on the painted sky
+CHECK widget_sky_home: PASS painted sky on the home screen
+CHECK alarm_set: PASS Scheduled ADHAN:FAJR:2026-10-31 at 2026-10-31T01:40:00Z exact=true alarmClock=false epochMs=1793410800000
+CHECK alarm_exact: PASS window=0 
+CHECK test_notification: PASS posted
+10-30 18:52:39.100 21863 21863 I SakinaAlerts: Test alert NOTIFY scheduled at 2026-10-30T18:52:44.099Z
+10-30 18:52:44.105 21863 21884 I SakinaAlerts: Test alert NOTIFY delivered 3 ms after its time: FIRE
+CHECK adhan_service: PASS running, focus=yes
+--------- beginning of main
+--------- beginning of system
+10-30 18:52:55.985 21931 21931 I SakinaAdhan: AdhanPlayback started excerpt=false route=NOTIFICATION volume=0.8
+CHECK adhan_stop: PASS stopped from notification
+10-30 18:53:05.431 21931 21931 I SakinaAdhan: AdhanPlayback finished STOPPED_BY_USER
+CHECK excerpt: PASS ran then ended after 20 s
+CHECK quiet: PASS test alert skipped during quiet
+CHECK no_times_tab: PASS four tabs
+CHECK times_from_home: PASS tables open from Home
+CHECK mushaf_trim: PASS crop page 1: 80,120 223x307
+CHECK home_quick: PASS quick access on Home
+CHECK quick_opens: PASS tasbih opened from Home
+CHECK calendar_tab: PASS جمادى الأولى ١٤٤٨ هـ
+CHECK calendar_upcoming: PASS coming up listed
+CHECK more_tools: PASS tools in groups
+CHECK more_settings: PASS settings in More
+CHECK dayname_preview: PASS الأربعـــــــــــــــــــــــــــــاء
+CHECK widget_pinned_dayname: PASS placed by the launcher
+CHECK dayname_home: PASS الأربعـــــــاء
+CHECK widget_options_saved: PASS font, highlight, sunrise and update time saved
+CHECK widget_sunrise_shown: PASS sunrise column back
+CHECK widgets_load: PASS widgets load
+CHECK widget_previews_r10: PASS previews rendered
+CHECK quran_art: PASS painted Quran header
+CHECK adhkar_art: PASS painted adhkar header
+CHECK calendar_art: PASS month on the night sky
+CHECK welcome_art: PASS welcome painting
+CHECK art_off: PASS plain header when the paintings are off
+CHECK khatma_preview: PASS لا صفحات مقررة اليوم.
+CHECK dhikr_preview: PASS لا حول ولا قوة إلا بالله
+CHECK r11_previews: PASS previews rendered
+CHECK widget_pinned_khatma: PASS placed by the launcher
+CHECK widget_pinned_dhikr: PASS placed by the launcher
+CHECK khatma_home: PASS khatma on the home screen
+CHECK texture_saved: PASS night lattice saved
+CHECK lock_note_saved: PASS turned on
+CHECK lock_note_posted: PASS next prayer notification posted
+CHECK follow_bar: PASS small player under the reader
+CHECK follow_ayah: PASS سورة الفاتحة
+CHECK reader_highlight: PASS recited ayah highlighted
+CHECK mushaf_follow: PASS سورة الفاتحة · الآية ١
+CHECK hifz_home: PASS memorisation home
+CHECK hifz_mask: PASS words hidden after the first
+CHECK hifz_reveal: PASS tap shows the ayah
+CHECK hifz_audio: PASS passage playing
+CHECK hifz_saved: PASS passage saved, first review tomorrow
+CHECK hifz_listed: PASS listed with its next review
+CHECK prayed_marks: PASS marks beside the passed prayers
+CHECK prayed_future: PASS no mark before its time
+CHECK prayed_saved: PASS Fajr and Dhuhr logged
+CHECK prayer_log_today: PASS صلّيت اليوم ٢ من ٥
+CHECK prayer_log_fix: PASS a past day corrected from the log
+CHECK silence_saved: PASS turned on
+CHECK silence_works: PASS this emulator refuses vibrate (no vibrator): nothing changed and nothing claimed
+CHECK tasbih_day: PASS اليوم ٣ · الأسبوع ٣
+CHECK backup_dialog: PASS save dialog with the file name
+CHECK prayer_chips: PASS منذ ١١ س ٤٨ د / باقي ١ س ٧ د / باقي ٢ س ٣٧ د
+CHECK prayer_chip_value: PASS باقي ١ س ٧ د
+CHECK prayer_chips_en: PASS 11 h 48 min ago / in 1 h 7 min
+CHECK prayer_chips_setting: PASS turned off
+CHECK prayer_chips_hidden: PASS no chips when turned off
+CHECK cal_raised: PASS جمادى الأولى ١٤٤٨ هـ
+CHECK cal_plain: PASS plain header without the painting
+CHECK cal_switch: PASS أكتوبر ٢٠٢٦
+CHECK day_moon: PASS moon beside the dates
+CHECK mushaf_fill: PASS filled page 295: lines 1.28× apart, 0 rows above
+CHECK mushaf_filled_view: PASS page drawn to fill the screen
+CHECK mushaf_hizb_mark: PASS ربع الحزب ٣٠
+CHECK mushaf_fill_left: PASS filled page 296: lines 1.28× apart, 0 rows above
+CHECK mushaf_fill_zoom: PASS rendered 295.pdf 1080x2211 fill region in 184 ms
+CHECK mushaf_fill_dark: PASS drawn under the night filter
+CHECK mushaf_fill_off: PASS as printed when turned off
+CHECK mushaf_opening_printed: PASS page 1 as printed
+CHECK mushaf_fill_option: PASS option in the menu
+CHECK widget_calendar_preview: PASS جمادى الأولى ١٤٤٨ هـ، اليوم ٣ جمادى الأولى ١٤٤٨ هـ، بداية رمضان · بعد ١١٧ يومًا
+CHECK widget_previews_r15: PASS all rendered
+CHECK widget_pinned_calendar: PASS placed by the launcher
+CHECK widget_home_calendar: PASS on the home screen
+CHECK widget_pinned_day: PASS placed by the launcher
+CHECK widget_home_day: PASS Maghrib 5:27
+CHECK widget_look_setting: PASS raised look setting

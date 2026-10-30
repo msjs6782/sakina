@@ -1,0 +1,120 @@
+
+MediaFocusControl dump time: 6:53:01 PM
+
+Audio Focus stack entries (last is top of stack):
+  source:android.os.BinderProxy@dad7053 -- pack: com.sakina.app.debug -- client: android.media.AudioManager@df20057com.sakina.app.alerts.AdhanService$$ExternalSyntheticLambda7@66ed744 -- gain: GAIN_TRANSIENT -- flags: PAUSES_ON_DUCKABLE_LOSS -- loss: none -- notified: true -- uid: 10065 -- attr: AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null -- sdk:35
+
+
+No external focus policy
+
+
+
+ Notify on duck:  true
+
+ In ring or call: false
+
+
+Stream volumes (device: index)
+- STREAM_VOICE_CALL:
+   Muted: false
+   Min: 1
+   Max: 5
+   Current: 40000000 (default): 4
+   Devices: speaker
+- STREAM_SYSTEM:
+   Muted: false
+   Min: 0
+   Max: 7
+   Current: 40000000 (default): 5
+   Devices: speaker
+- STREAM_RING:
+   Muted: false
+   Min: 0
+   Max: 7
+   Current: 40000000 (default): 5
+   Devices: speaker
+- STREAM_MUSIC:
+   Muted: false
+   Min: 0
+   Max: 15
+   Current: 40000000 (default): 11
+   Devices: speaker
+- STREAM_ALARM:
+   Muted: false
+   Min: 0
+   Max: 7
+   Current: 40000000 (default): 6
+   Devices: speaker
+- STREAM_NOTIFICATION:
+   Muted: false
+   Min: 0
+   Max: 7
+   Current: 40000000 (default): 5
+   Devices: speaker
+- STREAM_BLUETOOTH_SCO:
+   Muted: false
+   Min: 0
+   Max: 15
+   Current: 40000000 (default): 7
+   Devices: speaker
+- STREAM_SYSTEM_ENFORCED:
+   Muted: false
+   Min: 0
+   Max: 7
+   Current: 40000000 (default): 5
+   Devices: speaker
+- STREAM_DTMF:
+   Muted: false
+   Min: 0
+   Max: 15
+   Current: 40000000 (default): 11
+   Devices: speaker
+- STREAM_TTS:
+   Muted: false
+   Min: 0
+   Max: 15
+   Current: 40000000 (default): 11
+   Devices: speaker
+- STREAM_ACCESSIBILITY:
+   Muted: false
+   Min: 0
+   Max: 15
+   Current: 40000000 (default): 11
+   Devices: speaker
+
+- mute affected streams = 0x2e
+
+Ringer mode: 
+- mode (internal) = NORMAL
+- mode (external) = NORMAL
+- ringer mode affected streams = 0x1a6 (STREAM_SYSTEM,STREAM_RING,STREAM_NOTIFICATION,STREAM_SYSTEM_ENFORCED,STREAM_DTMF)
+- ringer mode muted streams = 0x0
+- delegate = ZenModeHelper
+
+Audio routes:
+  mMainType=0x0
+  mBluetoothName=null
+
+Other state:
+  mVolumeController=VolumeController(android.os.BinderProxy@e444d90,mVisible=false)
+  mSafeMediaVolumeState=SAFE_MEDIA_VOLUME_DISABLED
+  mSafeMediaVolumeIndex=100
+  sIndependentA11yVolume=false
+  mPendingVolumeCommand=null
+  mMusicActiveMs=0
+  mMcc=310
+  mCameraSoundForced=false
+  mHasVibrator=false
+  mVolumePolicy=VolumePolicy[volumeDownToEnterSilent=true,volumeUpToExitSilent=true,doNotDisturbWhenSilent=true,vibrateToSilentDebounce=400]
+  mAvrcpAbsVolSupported=false
+
+Audio policies:
+
+PlaybackActivityMonitor dump time: 6:53:01 PM
+  ID:23 -- type:android.media.SoundPool -- u/pid:10023/1801 -- state:idle -- attr:AudioAttributes: usage=13 content=4 flags=0x0 tags= bundle=null
+  ID:119 -- type:android.media.MediaPlayer -- u/pid:10065/21931 -- state:started -- attr:AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null
+  ID:15 -- type:android.media.SoundPool -- u/pid:1000/1603 -- state:idle -- attr:AudioAttributes: usage=13 content=4 flags=0x0 tags= bundle=null
+
+  ducked players:
+
+  muted player piids:
