@@ -18,8 +18,12 @@ else
   check mushaf_fill FAIL "$(mlog | grep -E 'page 295|cannot' | tail -3 | tr '\n' ' ')"
 fi
 ui_has id mushaf_filled && check mushaf_filled_view PASS "page drawn to fill the screen" || check mushaf_filled_view FAIL "no filled page on screen"
+# Controls hidden (and the system's one-time "full screen" note dismissed): the page alone, its hizb label in the
+# header's free middle (the bars cover the header while they show).
+adb shell input tap 540 1300; sleep 2
+try_tap button "got it"; sleep 1
+cap 851_mushaf_filled_full
 MK=$(ui_text mushaf_hizb_mark); [ "$MK" = "ربع الحزب ٣٠" ] && check mushaf_hizb_mark PASS "$MK" || check mushaf_hizb_mark FAIL "'$MK'"
-adb shell input tap 540 1300; sleep 2; cap 851_mushaf_filled_full
 # The next page (296) is a left-hand page: its frame is on the other side of the paper, centred here too.
 adb shell input swipe 150 1300 950 1300 250
 if wait_log "filled page 296" 120; then
@@ -32,7 +36,10 @@ cap 852_mushaf_filled_296
 adb logcat -c
 shot 853_mushaf_filled_zoomed 12 "${M5[@]}" --es demo_route mushaf:295 --ef demo_zoom 2.5
 mlog | grep -q "rendered 295.pdf .*fill region" && check mushaf_fill_zoom PASS "$(mlog | grep -o 'rendered 295.pdf [0-9x]* fill region in [0-9]* ms' | head -1)" || check mushaf_fill_zoom FAIL "no zoomed drawing"
-shot 854_mushaf_filled_dark 10 "${M5[@]}" --es demo_quran night=DARK --es demo_route mushaf:295
+adb logcat -c
+start "${M5[@]}" --es demo_quran night=DARK --es demo_route mushaf:295
+wait_log "filled page 295" 40; sleep 3; cap 854_mushaf_filled_dark
+mlog | grep -q "filled page 295" && check mushaf_fill_dark PASS "drawn under the night filter" || check mushaf_fill_dark FAIL "$(mlog | tail -3 | tr '\n' ' ')"
 shot 855_mushaf_filled_warm 10 "${M5[@]}" --es demo_quran night=WARM --es demo_route mushaf:296
 # The option off: the page as printed, for comparison.
 shot 856_mushaf_as_printed 10 "${M5[@]}" --es demo_quran fill=0 --es demo_route mushaf:295
@@ -43,7 +50,7 @@ shot 857_mushaf_page1 9 "${M5[@]}" --es demo_route mushaf:1
 mlog | grep -q "frame page 1: none" && check mushaf_opening_printed PASS "page 1 as printed" || check mushaf_opening_printed FAIL "$(mlog | grep 'frame page 1' | head -1)"
 start "${M5[@]}" --es demo_route mushaf:295; sleep 8
 tap id mushaf_menu && sleep 1 && cap 858_mushaf_menu
-ui_has id mushaf_fill && check mushaf_fill_option PASS "option in the menu" || check mushaf_fill_option FAIL "no option"
+ui_has contains "ملء الشاشة" && check mushaf_fill_option PASS "option in the menu" || check mushaf_fill_option FAIL "no option"
 adb shell input keyevent 4; sleep 1
 
 # ---- Widgets: the raised look and the progress line in the gallery (16:20 in Riyadh, Maghrib next).
