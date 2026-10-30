@@ -309,6 +309,9 @@ fun HomeSetupScreen(vm: MainViewModel, s: AppSettings) {
             Box(Modifier.testTag("prayer_log_switch")) {
                 SwitchRow(s.prayerLog, str.prayerLogSetting, str.prayerLogNote) { v -> vm.update { it.copy(prayerLog = v) } }
             }
+            Box(Modifier.testTag("prayer_chips_switch")) {
+                SwitchRow(s.prayerChips, str.prayerChipsSetting, str.prayerChipsNote) { v -> vm.update { it.copy(prayerChips = v) } }
+            }
         }
     }
 }

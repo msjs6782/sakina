@@ -79,4 +79,20 @@ class FormatAndCitiesTest {
         assertEquals(null, CitySearch.nearest(cities, 0.0, -30.0))
         assertNotNull(SearchText.normalize("إسطنبول"))
     }
+
+    @Test
+    fun relativeChips() {
+        val t = java.time.Instant.parse("2026-10-30T12:05:00Z")
+        val r = com.sakina.app.core.format.Relative
+        // 58 min 44 s left reads as 58 minutes (as the countdown 00:58:44 does).
+        assertEquals(com.sakina.app.core.format.Relative(true, 58), r.of(t.minusSeconds(58 * 60 + 44), t))
+        // Under a minute left never reads as zero; just passed reads as now; then whole minutes since.
+        assertEquals(com.sakina.app.core.format.Relative(true, 1), r.of(t.minusSeconds(20), t))
+        assertTrue(r.of(t, t).isNow)
+        assertTrue(r.of(t.plusSeconds(59), t).isNow)
+        assertEquals(com.sakina.app.core.format.Relative(false, 549), r.of(t.plus(Duration.ofMinutes(549)).plusSeconds(30), t))
+        val ar = Fmt(Lang.AR, clock24 = false, arabicDigits = true)
+        assertEquals("٩ س ٩ د", ar.durationShort(r.of(t.plus(Duration.ofMinutes(549)), t).duration))
+        assertEquals("٥٨ د", ar.durationShort(r.of(t.minusSeconds(58 * 60 + 44), t).duration))
+    }
 }

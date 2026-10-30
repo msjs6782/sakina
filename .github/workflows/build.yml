@@ -136,7 +136,7 @@ jobs:
           profile: pixel_6
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
           disable-animations: true
-          script: ONLY=${{ contains(github.event.head_commit.message, '[ci:widgets]') && 'widgets' || (contains(github.event.head_commit.message, '[ci:visual]') && 'visual' || (contains(github.event.head_commit.message, '[ci:r10]') && 'r10' || (contains(github.event.head_commit.message, '[ci:r11]') && 'r11' || (contains(github.event.head_commit.message, '[ci:r12]') && 'r12' || (contains(github.event.head_commit.message, '[ci:r13]') && 'r13' || 'all'))))) }} bash ci/screenshots.sh out/sakina-debug.apk screenshots-${{ matrix.api }}-${{ matrix.suite }} ${{ matrix.suite }}
+          script: ONLY=${{ contains(github.event.head_commit.message, '[ci:widgets]') && 'widgets' || (contains(github.event.head_commit.message, '[ci:visual]') && 'visual' || (contains(github.event.head_commit.message, '[ci:r10]') && 'r10' || (contains(github.event.head_commit.message, '[ci:r11]') && 'r11' || (contains(github.event.head_commit.message, '[ci:r12]') && 'r12' || (contains(github.event.head_commit.message, '[ci:r13]') && 'r13' || (contains(github.event.head_commit.message, '[ci:r14]') && 'r14' || 'all')))))) }} bash ci/screenshots.sh out/sakina-debug.apk screenshots-${{ matrix.api }}-${{ matrix.suite }} ${{ matrix.suite }}
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -155,7 +155,7 @@ jobs:
   release:
     needs: [build, ui-check]
     # Partial runs ([ci:widgets] or [ci:visual] in the commit message) are for development and are never released.
-    if: needs.build.outputs.signed == 'true' && !contains(github.event.head_commit.message, '[ci:widgets]') && !contains(github.event.head_commit.message, '[ci:visual]') && !contains(github.event.head_commit.message, '[ci:r10]') && !contains(github.event.head_commit.message, '[ci:r11]') && !contains(github.event.head_commit.message, '[ci:r12]') && !contains(github.event.head_commit.message, '[ci:r13]') && !contains(github.event.head_commit.message, '[ci:build]')
+    if: needs.build.outputs.signed == 'true' && !contains(github.event.head_commit.message, '[ci:widgets]') && !contains(github.event.head_commit.message, '[ci:visual]') && !contains(github.event.head_commit.message, '[ci:r10]') && !contains(github.event.head_commit.message, '[ci:r11]') && !contains(github.event.head_commit.message, '[ci:r12]') && !contains(github.event.head_commit.message, '[ci:r13]') && !contains(github.event.head_commit.message, '[ci:r14]') && !contains(github.event.head_commit.message, '[ci:build]')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4

@@ -167,6 +167,8 @@ source "$HERE/r11.sh"
 source "$HERE/r12.sh"
 # shellcheck source=ci/r13.sh
 source "$HERE/r13.sh"
+# shellcheck source=ci/r14.sh
+source "$HERE/r14.sh"
 
 finish_run() {
   adb logcat -d >> "$OUT/logcat_part2.txt"
@@ -203,7 +205,7 @@ if [ "${ONLY:-}" = "widgets" ]; then
 fi
 # The "extras" suite (a second Android 14 job, run in parallel): widgets, paintings, rounds 10 and 11.
 if [ "$SUITE" = "extras" ]; then
-  if [ "${ONLY:-all}" = "all" ]; then phase8; visual; r10; r11; r12; r13; fi
+  if [ "${ONLY:-all}" = "all" ]; then phase8; visual; r10; r11; r12; r13; r14; fi
   adb logcat -d > "$OUT/logcat_part1.txt"; adb logcat -c
   finish_run
 fi
@@ -228,6 +230,12 @@ fi
 # [ci:r13] runs only round 13 (prayer log, silent at prayer, tasbih week).
 if [ "${ONLY:-}" = "r13" ]; then
   r13
+  adb logcat -d > "$OUT/logcat_part1.txt"; adb logcat -c
+  finish_run
+fi
+# [ci:r14] runs only round 14 (time to and since each prayer, the calendar's raised look).
+if [ "${ONLY:-}" = "r14" ]; then
+  r14
   adb logcat -d > "$OUT/logcat_part1.txt"; adb logcat -c
   finish_run
 fi
@@ -1141,6 +1149,6 @@ if [ "$SUITE" = "full" ]; then
 fi
 
 # ---------- Round 10: tabs, quick access, day-name widget, widget settings, Mushaf on an Arabic phone (ci/r10.sh) ----------
-if [ "$SUITE" != "full" ]; then r10; r11; r12; r13; fi
+if [ "$SUITE" != "full" ]; then r10; r11; r12; r13; r14; fi
 
 finish_run

@@ -350,33 +350,43 @@ fun TimeRow(
     passed: Boolean,
     offset: Int,
     trailing: (@Composable () -> Unit)? = null,
+    /** The "in 2 h 5 min" / "3 h ago" chip; beside the time, or under the name when [chipBelow]. */
+    chip: (@Composable () -> Unit)? = null,
+    chipBelow: Boolean = false,
 ) {
     val str = LocalStrings.current
     val fmt = LocalFmt.current
-    val bg = if (highlighted) MaterialTheme.colorScheme.primaryContainer else Color.Transparent
+    val cs = MaterialTheme.colorScheme
+    val bg = if (highlighted) cs.primaryContainer.copy(alpha = 0.7f) else Color.Transparent
     val fg = when {
-        highlighted -> MaterialTheme.colorScheme.onPrimaryContainer
-        passed -> MaterialTheme.colorScheme.onSurfaceVariant
-        else -> MaterialTheme.colorScheme.onSurface
+        highlighted -> cs.onPrimaryContainer
+        passed -> cs.onSurfaceVariant
+        else -> cs.onSurface
     }
+    val shape = RoundedCornerShape(16.dp)
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(bg).padding(horizontal = 12.dp, vertical = 10.dp),
+        Modifier.fillMaxWidth().clip(shape).background(bg)
+            .then(if (highlighted) Modifier.border(1.5.dp, cs.primary.copy(alpha = 0.45f), shape) else Modifier)
+            .padding(horizontal = 12.dp, vertical = if (chip != null) 12.dp else 10.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(prayerIcon(key), null, Modifier.size(22.dp), tint = if (highlighted) fg else MaterialTheme.colorScheme.primary.copy(alpha = if (passed) 0.6f else 1f))
+        Icon(prayerIcon(key), null, Modifier.size(22.dp), tint = if (highlighted) fg else cs.primary.copy(alpha = if (passed) 0.6f else 1f))
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {
-            Text(str.prayer(key), style = MaterialTheme.typography.bodyLarge.copy(fontWeight = if (highlighted) FontWeight.SemiBold else FontWeight.Normal), color = fg)
+            Text(str.prayer(key), style = MaterialTheme.typography.titleMedium.copy(fontWeight = if (highlighted) FontWeight.Bold else FontWeight.Medium), color = fg)
             if (status == TimeStatus.HIGH_LATITUDE_RULE) {
-                Text(str.highLatBadge, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.tertiary)
+                Text(str.highLatBadge, style = MaterialTheme.typography.labelSmall, color = cs.tertiary)
             }
+            if (chip != null && chipBelow) { Spacer(Modifier.height(4.dp)); chip() }
         }
+        if (chip != null && !chipBelow) { chip(); Spacer(Modifier.width(10.dp)) }
         if (offset != 0) {
             Badge(fmt.signed(offset) + " " + str.minutesShort)
             Spacer(Modifier.width(8.dp))
         }
         if (instant != null) {
-            Text(fmt.time(instant, zone), style = MaterialTheme.typography.titleMedium.copy(fontWeight = if (highlighted) FontWeight.Bold else FontWeight.Medium), color = fg)
+            Text(fmt.time(instant, zone), style = MaterialTheme.typography.titleMedium.copy(fontWeight = if (highlighted) FontWeight.Bold else FontWeight.Medium), color = fg,
+                maxLines = 1, softWrap = false)
         } else {
             Column(horizontalAlignment = Alignment.End) {
                 Text("—", style = MaterialTheme.typography.titleMedium, color = fg)
@@ -408,14 +418,48 @@ fun PrayedMark(done: Boolean, label: String, tag: String, onClick: () -> Unit) {
     }
 }
 
+/**
+ * "باقي ٣ س ٢٢ د" before a time, "منذ ٩ س ٩ د" after it. The next prayer's chip is outlined in the accent colour,
+ * the later ones are tinted, and the passed ones are quiet.
+ */
+@Composable
+fun TimeChip(now: Instant, at: Instant, next: Boolean, tag: String) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    val cs = MaterialTheme.colorScheme
+    val r = com.sakina.app.core.format.Relative.of(now, at)
+    val text = when {
+        r.future -> str.chipIn(fmt.durationShort(r.duration))
+        r.isNow -> str.chipNow
+        else -> str.chipAgo(fmt.durationShort(r.duration))
+    }
+    val shape = RoundedCornerShape(50)
+    val (bg, fg, line) = when {
+        next -> Triple(cs.surfaceContainerLowest, cs.primary, cs.primary)
+        r.future -> Triple(cs.primaryContainer.copy(alpha = 0.6f), cs.onPrimaryContainer, cs.primary.copy(alpha = 0.25f))
+        else -> Triple(Color.Transparent, cs.onSurfaceVariant, cs.outlineVariant)
+    }
+    Text(
+        text,
+        style = MaterialTheme.typography.labelMedium.copy(fontWeight = if (next) FontWeight.SemiBold else FontWeight.Medium),
+        color = fg, maxLines = 1, softWrap = false,
+        modifier = Modifier.clip(shape).background(bg).border(if (next) 1.5.dp else 1.dp, line, shape)
+            .padding(horizontal = 10.dp, vertical = 4.dp).testTag(tag),
+    )
+}
+
 @Composable
 private fun TodayList(m: HomeModel, s: AppSettings) {
     val str = LocalStrings.current
     SectionCard(title = str.todayTimes, icon = SakinaIcons.Clock, padding = PaddingValues(start = 8.dp, end = 8.dp, top = 14.dp, bottom = 8.dp)) {
+      androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxWidth()) {
+        // On narrow screens or with large text the chip goes under the prayer's name.
+        val chipBelow = maxWidth < 340.dp || androidx.compose.ui.platform.LocalDensity.current.fontScale > 1.15f
+      Column {
         val offsets = s.calcConfig.offsets
         val vm = LocalMainVm.current
         val tools = vm?.tools?.collectAsStateWithLifecycle()?.value
-        m.day.times.forEach { t ->
+        m.day.times.forEachIndexed { i, t ->
             val isNext = m.next?.let { it.key == t.key && it.date == m.today } ?: false
             val passed = t.instant != null && !t.instant.isAfter(m.now)
             // The prayer log: a mark beside each prayer whose time has come.
@@ -425,7 +469,15 @@ private fun TodayList(m: HomeModel, s: AppSettings) {
                     vm.updateTools { it.copy(prayed = com.sakina.app.core.prayer.PrayerLog.toggle(it.prayed, m.today, t.key, m.today)) }
                 }
             }) else null
-            TimeRow(t.key, t.instant, t.status, m.zone, isNext, passed, offsets[t.key], mark)
+            val chip: (@Composable () -> Unit)? = if (s.prayerChips && t.instant != null) ({
+                TimeChip(m.now, t.instant, isNext, "chip_${t.key.name.lowercase()}")
+            }) else null
+            // Hairlines between rows, except around the highlighted one.
+            val nextIdx = m.day.times.indexOfFirst { x -> m.next?.let { it.key == x.key && it.date == m.today } ?: false }
+            if (i > 0 && i != nextIdx && i - 1 != nextIdx) androidx.compose.material3.HorizontalDivider(
+                Modifier.padding(horizontal = 14.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f),
+            )
+            TimeRow(t.key, t.instant, t.status, m.zone, isNext, passed, offsets[t.key], mark, chip, chipBelow)
         }
         // The week and month tables (they used to be a tab of their own), and the prayer log.
         if (vm != null) Row(Modifier.fillMaxWidth()) {
@@ -437,6 +489,8 @@ private fun TodayList(m: HomeModel, s: AppSettings) {
                 Text(str.prayedToday(LocalFmt.current.num(com.sakina.app.core.prayer.PrayerLog.count(tools.prayed, m.today))))
             }
         }
+      }
+      }
     }
 }
 

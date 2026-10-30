@@ -37,9 +37,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -63,6 +60,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.core.tween
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -180,31 +185,38 @@ fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long, tabPa
             Column(Modifier.fillMaxSize().padding(pad)) {
                 MonthHeader(
                     str = str, fmt = fmt, kind = kind, current = current, offset = s.hijriOffset,
+                    drift = { pager.currentPageOffsetFraction },
                     onPrev = { scope.launch { pager.animateScrollToPage((pager.currentPage - 1).coerceAtLeast(0)) } },
                     onNext = { scope.launch { pager.animateScrollToPage((pager.currentPage + 1).coerceAtMost(PAGES - 1)) } },
                     onPick = { picker = true },
                 )
-                Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    SingleChoiceSegmentedButtonRow(Modifier.weight(1f)) {
-                        listOf(CalendarKind.HIJRI to str.hijriLabel, CalendarKind.GREGORIAN to str.gregorianLabel).forEachIndexed { i, (k, label) ->
-                            SegmentedButton(
-                                selected = kind == k,
-                                onClick = { vm.update { it.copy(calendar = it.calendar.copy(kind = k)) } },
-                                shape = SegmentedButtonDefaults.itemShape(i, 2),
-                                icon = {},
-                                modifier = Modifier.testTag(if (k == CalendarKind.HIJRI) "cal_kind_hijri" else "cal_kind_gregorian"),
-                            ) { Text(label, style = MaterialTheme.typography.labelLarge) }
-                        }
-                    }
+                Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+                    val kinds = listOf(CalendarKind.HIJRI, CalendarKind.GREGORIAN)
+                    RaisedSwitch(
+                        labels = listOf(str.hijriLabel, str.gregorianLabel),
+                        tags = listOf("cal_kind_hijri", "cal_kind_gregorian"),
+                        selected = kinds.indexOf(kind),
+                        onSelect = { i -> vm.update { it.copy(calendar = it.calendar.copy(kind = kinds[i])) } },
+                        modifier = Modifier.weight(1f),
+                    )
                     Spacer(Modifier.width(10.dp))
-                    FilledTonalButton(onClick = { scope.launch { pager.animateScrollToPage(SPAN) } }, modifier = Modifier.testTag("cal_today")) {
-                        Text(str.todayButton, style = MaterialTheme.typography.labelLarge)
-                    }
+                    GoldPill(str.todayButton, "cal_today") { scope.launch { pager.animateScrollToPage(SPAN) } }
                 }
+                val rtl = androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
                 HorizontalPager(pager, modifier = Modifier.fillMaxSize(), beyondViewportPageCount = 0, verticalAlignment = Alignment.Top) { page ->
                     val month = monthAt(page, base)
-                    if (s.calendar.listMode) MonthList(month, s, today) { selected = it.toEpochDay() }
-                    else MonthPage(month, s, today, selected, if (month == base) coming else emptyList()) { selected = it.toEpochDay() }
+                    Box(Modifier.fillMaxSize().graphicsLayer {
+                        // How far this page is from the settled one: 0 on screen, ±1 beside it.
+                        val off = ((pager.currentPage - page) + pager.currentPageOffsetFraction).coerceIn(-1f, 1f)
+                        val away = if (rtl) -off else off
+                        transformOrigin = TransformOrigin(if (away > 0) 1f else 0f, 0.4f)
+                        rotationY = -away * 38f
+                        cameraDistance = 14f * density
+                        alpha = 1f - 0.35f * kotlin.math.abs(off)
+                    }) {
+                        if (s.calendar.listMode) MonthList(month, s, today) { selected = it.toEpochDay() }
+                        else MonthPage(month, s, today, selected, if (month == base) coming else emptyList()) { selected = it.toEpochDay() }
+                    }
                 }
             }
         }
@@ -222,10 +234,11 @@ fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long, tabPa
 
 /**
  * The month on screen: its name large (tap for the month picker), the other calendar's months beneath it, and the
- * arrows either side.
+ * arrows either side. With the paintings on it sits on the night sky, raised, with a gold edge; the painting drifts
+ * a little as the months are swiped.
  */
 @Composable
-private fun MonthHeader(str: com.sakina.app.ui.Strings, fmt: com.sakina.app.core.format.Fmt, kind: CalendarKind, current: MonthRef, offset: Int, onPrev: () -> Unit, onNext: () -> Unit, onPick: () -> Unit) {
+private fun MonthHeader(str: com.sakina.app.ui.Strings, fmt: com.sakina.app.core.format.Fmt, kind: CalendarKind, current: MonthRef, offset: Int, drift: () -> Float, onPrev: () -> Unit, onNext: () -> Unit, onPick: () -> Unit) {
     val range = remember(current, offset) { MonthGrid.range(current, offset) }
     val other = range?.let { r ->
         if (kind == CalendarKind.HIJRI) {
@@ -241,37 +254,76 @@ private fun MonthHeader(str: com.sakina.app.ui.Strings, fmt: com.sakina.app.core
                 monthName(str, CalendarKind.HIJRI, b.month) + " " + fmt.num(b.year) + (if (str.isAr) " هـ" else " AH")
         }
     }
-    // With the paintings on, the month sits on the night sky with the new crescent (docs/ART.md).
-    val art = com.sakina.app.ui.theme.LocalExtras.current.art
-    val onHeader = if (art) Color.White else MaterialTheme.colorScheme.onPrimaryContainer
+    val days = range?.let { java.time.temporal.ChronoUnit.DAYS.between(it.start, it.endInclusive).toInt() + 1 }
+    val ex = com.sakina.app.ui.theme.LocalExtras.current
+    val art = ex.art
+    val cs = MaterialTheme.colorScheme
+    val onHeader = if (art) Color.White else cs.onPrimaryContainer
+    val shape = RoundedCornerShape(28.dp)
     Box(
-        Modifier.fillMaxWidth().padding(horizontal = 16.dp).clip(RoundedCornerShape(26.dp))
-            .background(if (art) Color(0xFF1C2E5C) else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f))
+        Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+            .shadow(14.dp, shape, ambientColor = Color(0xFF1C2E5C), spotColor = if (art) Color(0xFF0B1A3A) else cs.primary)
+            .clip(shape)
+            .background(if (art) Brush.verticalGradient(listOf(Color(0xFF1C2E5C), Color(0xFF101A38))) else lit(cs.primaryContainer, ex.dark, 1.4f))
+            .border(1.2.dp, goldEdge(if (art) 0.85f else 0.6f), shape)
             .testTag(if (art) "cal_header_art" else "cal_header"),
     ) {
         if (art) {
             androidx.compose.foundation.Image(
-                androidx.compose.ui.res.painterResource(com.sakina.app.R.drawable.art_calendar), null, Modifier.matchParentSize(),
+                androidx.compose.ui.res.painterResource(com.sakina.app.R.drawable.art_calendar), null,
+                Modifier.matchParentSize().graphicsLayer {
+                    // A slow parallax while swiping: the sky moves less than the page.
+                    val f = drift()
+                    scaleX = 1.12f; scaleY = 1.12f
+                    translationX = -f * size.width * 0.08f
+                },
                 contentScale = androidx.compose.ui.layout.ContentScale.Crop, alignment = Alignment.Center,
             )
-            Box(Modifier.matchParentSize().background(Color.Black.copy(alpha = 0.18f)))
+            Box(Modifier.matchParentSize().background(Brush.verticalGradient(listOf(Color.Black.copy(alpha = 0.05f), Color.Black.copy(alpha = 0.35f)))))
+        } else {
+            androidx.compose.foundation.Image(
+                androidx.compose.ui.res.painterResource(com.sakina.app.R.drawable.tex_geometric), null,
+                Modifier.matchParentSize().alpha(0.07f), contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+            )
         }
         androidx.compose.runtime.CompositionLocalProvider(androidx.compose.material3.LocalContentColor provides onHeader) {
-        Row(Modifier.padding(horizontal = 4.dp, vertical = if (art) 22.dp else 10.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onPrev, modifier = Modifier.testTag("cal_prev")) { DirectionalIcon(SakinaIcons.ChevronStart, str.prevMonth, tint = onHeader) }
+        Row(Modifier.padding(horizontal = 10.dp, vertical = if (art) 20.dp else 14.dp), verticalAlignment = Alignment.CenterVertically) {
+            GlassButton(!art, "cal_prev", onPrev) { DirectionalIcon(SakinaIcons.ChevronStart, str.prevMonth, tint = onHeader) }
             Column(
                 Modifier.weight(1f).clip(RoundedCornerShape(14.dp)).clickable(onClick = onPick).padding(vertical = 4.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(
-                    monthName(str, kind, current.month) + " " + fmt.num(current.year) + if (kind == CalendarKind.HIJRI && str.isAr) " هـ" else "",
-                    style = MaterialTheme.typography.headlineSmall.copy(fontFamily = com.sakina.app.ui.theme.Amiri, fontWeight = FontWeight.Bold),
-                    color = onHeader, textAlign = TextAlign.Center,
-                    modifier = Modifier.testTag("cal_title"),
+                val title = monthName(str, kind, current.month) + " " + fmt.num(current.year) + if (kind == CalendarKind.HIJRI && str.isAr) " هـ" else ""
+                androidx.compose.animation.AnimatedContent(
+                    targetState = title,
+                    transitionSpec = {
+                        (androidx.compose.animation.fadeIn(tween(260)) + androidx.compose.animation.scaleIn(tween(260), initialScale = 0.9f))
+                            .togetherWith(androidx.compose.animation.fadeOut(tween(160)))
+                    },
+                    label = "month",
+                ) { t ->
+                    // The year in gold; the name embossed (a soft shadow beneath it).
+                    val yearStart = t.indexOf(fmt.num(current.year)).takeIf { it >= 0 } ?: t.length
+                    Text(
+                        androidx.compose.ui.text.buildAnnotatedString {
+                            append(t)
+                            addStyle(androidx.compose.ui.text.SpanStyle(color = if (art) ex.gold else cs.secondary), yearStart, t.length)
+                        },
+                        style = MaterialTheme.typography.headlineMedium.copy(
+                            fontFamily = com.sakina.app.ui.theme.Amiri, fontWeight = FontWeight.Bold,
+                            shadow = androidx.compose.ui.graphics.Shadow(Color.Black.copy(alpha = if (art) 0.55f else 0.12f), Offset(0f, 4f), 10f),
+                        ),
+                        color = onHeader, textAlign = TextAlign.Center, maxLines = 1,
+                        modifier = Modifier.testTag("cal_title"),
+                    )
+                }
+                Ornament(if (art) ex.gold else cs.secondary, Modifier.padding(vertical = 4.dp))
+                if (other != null) Text(
+                    other + (days?.let { " · " + str.daysCount(fmt.num(it), it.toLong()) } ?: ""),
+                    style = MaterialTheme.typography.labelLarge, color = onHeader.copy(alpha = 0.85f), textAlign = TextAlign.Center,
                 )
-                if (other != null) Text(other, style = MaterialTheme.typography.labelLarge, color = onHeader.copy(alpha = 0.8f), textAlign = TextAlign.Center)
             }
-            IconButton(onClick = onNext, modifier = Modifier.testTag("cal_next")) { DirectionalIcon(SakinaIcons.ChevronEnd, str.nextMonth, tint = onHeader) }
+            GlassButton(!art, "cal_next", onNext) { DirectionalIcon(SakinaIcons.ChevronEnd, str.nextMonth, tint = onHeader) }
         }
         }
     }
@@ -281,24 +333,34 @@ private fun MonthHeader(str: com.sakina.app.ui.Strings, fmt: com.sakina.app.core
 private fun MonthPage(month: MonthRef, s: AppSettings, today: LocalDate, selected: Long, coming: List<Pair<LocalDate, String>>, onDay: (LocalDate) -> Unit) {
     val str = LocalStrings.current
     val fmt = LocalFmt.current
+    val cs = MaterialTheme.colorScheme
     val weekStart = weekStartFor(str.lang)
     val grid = remember(month, s.hijriOffset, weekStart) { MonthGrid.build(month, s.hijriOffset, weekStart) }
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 10.dp, vertical = 8.dp)) {
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 12.dp, vertical = 8.dp)) {
         if (grid == null) {
             NoteText(str.outOfRange, Modifier.padding(16.dp))
             return@Column
         }
-        Surface(shape = RoundedCornerShape(24.dp), color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth()) {
-            Column(Modifier.padding(horizontal = 4.dp, vertical = 8.dp)) {
-                Row(Modifier.fillMaxWidth()) {
+        val shape = RoundedCornerShape(28.dp)
+        Box(Modifier.fillMaxWidth().raisedCard(shape, 10.dp, edge = goldEdge(0.45f))) {
+            // A faint geometric pattern under the days.
+            androidx.compose.foundation.Image(
+                androidx.compose.ui.res.painterResource(com.sakina.app.R.drawable.tex_geometric), null,
+                Modifier.matchParentSize().alpha(if (com.sakina.app.ui.theme.LocalExtras.current.dark) 0.05f else 0.045f),
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+            )
+            Column(Modifier.padding(horizontal = 6.dp, vertical = 10.dp)) {
+                // The weekdays on a band; Friday stands out, as it does in printed calendars here.
+                Row(Modifier.fillMaxWidth().padding(horizontal = 2.dp).clip(RoundedCornerShape(14.dp)).background(cs.primary.copy(alpha = 0.07f))) {
                     MonthGrid.weekdays(weekStart).forEach { d ->
-                        // Friday stands out, as it does in printed calendars here.
-                        Text(fmt.weekday(d, short = true), style = MaterialTheme.typography.labelSmall,
-                            fontWeight = if (d == DayOfWeek.FRIDAY) FontWeight.SemiBold else FontWeight.Normal,
-                            color = if (d == DayOfWeek.FRIDAY) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center, maxLines = 1, modifier = Modifier.weight(1f).padding(vertical = 6.dp))
+                        val fri = d == DayOfWeek.FRIDAY
+                        Text(fmt.weekday(d, short = true), style = MaterialTheme.typography.labelMedium,
+                            fontWeight = if (fri) FontWeight.Bold else FontWeight.Medium,
+                            color = if (fri) cs.primary else cs.onSurfaceVariant,
+                            textAlign = TextAlign.Center, maxLines = 1, modifier = Modifier.weight(1f).padding(vertical = 8.dp))
                     }
                 }
+                Spacer(Modifier.height(4.dp))
                 grid.chunked(7).forEach { week ->
                     Row(Modifier.fillMaxWidth()) {
                         week.forEach { day -> DayCell(day, month.kind, s, today, day.date.toEpochDay() == selected, Modifier.weight(1f)) { onDay(day.date) } }
@@ -306,7 +368,7 @@ private fun MonthPage(month: MonthRef, s: AppSettings, today: LocalDate, selecte
                 }
             }
         }
-        Spacer(Modifier.height(10.dp))
+        Spacer(Modifier.height(12.dp))
         Legend()
         if (coming.isNotEmpty()) Upcoming(coming, today, onDay)
         Spacer(Modifier.height(8.dp))
@@ -316,42 +378,71 @@ private fun MonthPage(month: MonthRef, s: AppSettings, today: LocalDate, selecte
     }
 }
 
+/**
+ * A day as a raised tile: lit from above with a soft shadow. Today glows in the accent colour with a gold ring;
+ * the selected day lifts with a gold edge; the white days are tinted gold and the days when fasting is not allowed
+ * rose. Tiles of the next and last months stay flat and faint. The tile sinks a little while pressed.
+ */
 @Composable
 private fun DayCell(day: GridDay, kind: CalendarKind, s: AppSettings, today: LocalDate, selected: Boolean, modifier: Modifier, onClick: () -> Unit) {
     val fmt = LocalFmt.current
+    val ex = com.sakina.app.ui.theme.LocalExtras.current
     val m = remember(day.date, s.hijriOffset, s.calendar.occasions) { marks(day.date, s) }
     val isToday = day.date == today
     val primary = if (kind == CalendarKind.HIJRI) day.hijri?.day else day.date.dayOfMonth
     val secondary = if (kind == CalendarKind.HIJRI) day.date.dayOfMonth else day.hijri?.day
     val cs = MaterialTheme.colorScheme
-    val bg = when {
+    val white = day.inMonth && day.hijri?.day in 13..15 && !m.forbidden
+    val friday = day.date.dayOfWeek == DayOfWeek.FRIDAY
+    val base = when {
         isToday -> cs.primary
-        selected -> cs.secondaryContainer
-        m.forbidden -> cs.errorContainer.copy(alpha = 0.45f)
-        else -> Color.Transparent
+        m.forbidden -> lerp(cs.surfaceContainerLowest, cs.errorContainer, 0.75f)
+        white -> lerp(cs.surfaceContainerLowest, cs.secondaryContainer, if (ex.dark) 0.55f else 0.85f)
+        friday -> lerp(if (ex.dark) cs.surfaceContainerHigh else cs.surfaceContainerLowest, cs.primaryContainer, if (ex.dark) 0.35f else 0.45f)
+        else -> if (ex.dark) cs.surfaceContainerHigh else cs.surfaceContainerLowest
     }
     val ink = if (isToday) cs.onPrimary else cs.onSurface
-    val sub = if (isToday) cs.onPrimary.copy(alpha = 0.8f) else cs.onSurfaceVariant
+    val sub = if (isToday) cs.onPrimary.copy(alpha = 0.85f) else cs.onSurfaceVariant
+    val shape = RoundedCornerShape(15.dp)
+    val source = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+    val press = pressScale(source, 0.9f)
+    val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
+    val raised = day.inMonth
+    val lift = when { isToday -> 9.dp; selected -> 7.dp; raised -> 2.5.dp; else -> 0.dp }
     Box(
         modifier
-            .aspectRatio(0.86f)
+            .aspectRatio(0.84f)
             .padding(3.dp)
-            .clip(RoundedCornerShape(14.dp))
-            .background(bg)
-            .then(if (selected && !isToday) Modifier.border(1.5.dp, cs.secondary, RoundedCornerShape(14.dp)) else Modifier)
-            .clickable(onClick = onClick)
-            .alpha(if (day.inMonth) 1f else 0.32f)
+            .graphicsLayer { scaleX = press; scaleY = press }
+            .then(if (lift > 0.dp) Modifier.shadow(lift, shape, ambientColor = if (isToday) cs.primary else Color.Black, spotColor = if (isToday) cs.primary else Color.Black.copy(alpha = 0.45f)) else Modifier)
+            .clip(shape)
+            .then(if (raised || isToday) Modifier.background(lit(base, ex.dark, if (isToday) 1.3f else 1f)) else Modifier)
+            .then(
+                when {
+                    isToday -> Modifier.border(1.5.dp, goldEdge(), shape)
+                    selected -> Modifier.border(2.dp, goldEdge(), shape)
+                    raised -> Modifier.border(0.8.dp, Brush.verticalGradient(listOf(Color.White.copy(alpha = if (ex.dark) 0.10f else 0.9f), cs.outlineVariant.copy(alpha = 0.35f))), shape)
+                    else -> Modifier
+                },
+            )
+            .clickable(interactionSource = source, indication = androidx.compose.material3.ripple()) {
+                haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.TextHandleMove)
+                onClick()
+            }
+            .alpha(if (day.inMonth) 1f else 0.38f)
             .testTag("cal_day_${day.date}"),
         contentAlignment = Alignment.Center,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(primary?.let { fmt.num(it) } ?: "–", style = MaterialTheme.typography.titleMedium,
-                fontWeight = if (isToday) FontWeight.Bold else FontWeight.Medium, color = ink, maxLines = 1)
-            Text(secondary?.let { fmt.num(it) } ?: "", style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp), color = sub, maxLines = 1)
-            Row(horizontalArrangement = Arrangement.spacedBy(3.dp), modifier = Modifier.padding(top = 2.dp).height(5.dp)) {
+            Text(primary?.let { fmt.num(it) } ?: "–",
+                style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp, lineHeight = 24.sp,
+                    shadow = if (isToday) androidx.compose.ui.graphics.Shadow(Color.Black.copy(alpha = 0.25f), Offset(0f, 2f), 4f) else null),
+                fontWeight = if (isToday) FontWeight.Bold else FontWeight.SemiBold, color = ink, maxLines = 1)
+            Text(secondary?.let { fmt.num(it) } ?: "", style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp, lineHeight = 13.sp), color = sub, maxLines = 1)
+            Row(horizontalArrangement = Arrangement.spacedBy(3.dp), modifier = Modifier.padding(top = 3.dp).height(5.dp)) {
                 if (m.occasions) Dot(if (isToday) cs.onPrimary else cs.primary)
                 if (m.fasting) Dot(if (isToday) cs.onPrimary else cs.tertiary, hollow = true)
-                if (m.personal) Dot(if (isToday) cs.onPrimary else cs.secondary)
+                if (m.personal) Dot(if (isToday) ex.gold else cs.secondary)
             }
         }
     }
@@ -378,21 +469,38 @@ private fun upcoming(str: com.sakina.app.ui.Strings, s: AppSettings, today: Loca
 private fun Upcoming(items: List<Pair<LocalDate, String>>, today: LocalDate, onDay: (LocalDate) -> Unit) {
     val str = LocalStrings.current
     val fmt = LocalFmt.current
-    Column(Modifier.padding(top = 14.dp).testTag("cal_upcoming")) {
-        Text(str.upcomingTitle, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(start = 6.dp, bottom = 6.dp))
-        Surface(shape = RoundedCornerShape(18.dp), color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth()) {
-            Column(Modifier.padding(vertical = 4.dp)) {
-                items.forEach { (d, title) ->
-                    val days = java.time.temporal.ChronoUnit.DAYS.between(today, d).toInt()
-                    Row(
-                        Modifier.fillMaxWidth().clickable { onDay(d) }.padding(horizontal = 14.dp, vertical = 10.dp),
-                        verticalAlignment = Alignment.CenterVertically,
+    val cs = MaterialTheme.colorScheme
+    val ex = com.sakina.app.ui.theme.LocalExtras.current
+    Column(Modifier.padding(top = 16.dp).testTag("cal_upcoming")) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 6.dp, bottom = 8.dp)) {
+            Text(str.upcomingTitle, style = MaterialTheme.typography.titleMedium.copy(fontFamily = com.sakina.app.ui.theme.Amiri, fontWeight = FontWeight.Bold), color = cs.primary)
+            Spacer(Modifier.width(10.dp))
+            Ornament(ex.gold.copy(alpha = 0.8f), Modifier.weight(1f))
+        }
+        Column(Modifier.fillMaxWidth().raisedCard(RoundedCornerShape(24.dp), 6.dp).padding(vertical = 6.dp)) {
+            items.forEachIndexed { i, (d, title) ->
+                val days = java.time.temporal.ChronoUnit.DAYS.between(today, d).toInt()
+                if (i > 0) androidx.compose.material3.HorizontalDivider(Modifier.padding(start = 74.dp, end = 16.dp), color = cs.outlineVariant.copy(alpha = 0.5f))
+                Row(
+                    Modifier.fillMaxWidth().clickable { onDay(d) }.padding(horizontal = 14.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    // The days left on a raised medallion.
+                    Box(
+                        Modifier.size(46.dp).shadow(6.dp, CircleShape, ambientColor = cs.primary, spotColor = cs.primary)
+                            .clip(CircleShape).background(lit(cs.primary, ex.dark, 1.3f)).border(1.2.dp, goldEdge(), CircleShape),
+                        contentAlignment = Alignment.Center,
                     ) {
-                        Column(Modifier.weight(1f)) {
-                            Text(title, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                            Text(fmt.weekday(d.dayOfWeek) + " · " + fmt.gregorian(d, withYear = false), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                        Text(if (days == 1) str.tomorrow else str.inDays(str.daysCount(fmt.num(days), days.toLong())), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                        Text(fmt.num(days), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), color = cs.onPrimary, maxLines = 1)
+                    }
+                    Spacer(Modifier.width(14.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Text(
+                            (if (days == 1) str.tomorrow else str.inDays(str.daysCount(fmt.num(days), days.toLong()))) + " · " +
+                                fmt.weekday(d.dayOfWeek) + " " + fmt.gregorian(d, withYear = false),
+                            style = MaterialTheme.typography.labelMedium, color = cs.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                        )
                     }
                 }
             }
@@ -403,21 +511,27 @@ private fun Upcoming(items: List<Pair<LocalDate, String>>, today: LocalDate, onD
 @Composable
 private fun Dot(color: Color, hollow: Boolean = false) =
     // A ring for fasting days, so the markers differ in shape as well as colour.
-    Box(Modifier.size(5.dp).clip(CircleShape).then(if (hollow) Modifier.border(1.5.dp, color, CircleShape) else Modifier.background(color)))
+    Box(Modifier.size(6.dp).clip(CircleShape).then(if (hollow) Modifier.border(1.5.dp, color, CircleShape) else Modifier.background(color)))
 
 @Composable
 private fun Legend() {
     val str = LocalStrings.current
-    FlowRow(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.padding(horizontal = 6.dp)) {
+    val cs = MaterialTheme.colorScheme
+    val chip = Modifier.clip(RoundedCornerShape(50)).background(cs.surfaceContainerHigh.copy(alpha = 0.8f)).padding(horizontal = 10.dp, vertical = 5.dp)
+    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(horizontal = 4.dp)) {
         listOf(
-            Triple(MaterialTheme.colorScheme.primary, str.legendOccasion, false),
-            Triple(MaterialTheme.colorScheme.tertiary, str.legendFasting, true),
-            Triple(MaterialTheme.colorScheme.secondary, str.legendPersonal, false),
+            Triple(cs.primary, str.legendOccasion, false),
+            Triple(cs.tertiary, str.legendFasting, true),
+            Triple(cs.secondary, str.legendPersonal, false),
         ).forEach { (c, t, hollow) ->
-            Row(verticalAlignment = Alignment.CenterVertically) { Dot(c, hollow); Spacer(Modifier.width(6.dp)); Text(t, style = MaterialTheme.typography.labelMedium) }
+            Row(chip, verticalAlignment = Alignment.CenterVertically) { Dot(c, hollow); Spacer(Modifier.width(6.dp)); Text(t, style = MaterialTheme.typography.labelMedium) }
         }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.size(12.dp).clip(RoundedCornerShape(3.dp)).background(MaterialTheme.colorScheme.errorContainer))
+        Row(chip, verticalAlignment = Alignment.CenterVertically) {
+            Box(Modifier.size(11.dp).clip(RoundedCornerShape(3.dp)).background(cs.secondaryContainer).border(1.dp, goldEdge(), RoundedCornerShape(3.dp)))
+            Spacer(Modifier.width(6.dp)); Text(str.legendWhite, style = MaterialTheme.typography.labelMedium)
+        }
+        Row(chip, verticalAlignment = Alignment.CenterVertically) {
+            Box(Modifier.size(11.dp).clip(RoundedCornerShape(3.dp)).background(cs.errorContainer))
             Spacer(Modifier.width(6.dp)); Text(str.legendForbidden, style = MaterialTheme.typography.labelMedium)
         }
     }
@@ -444,7 +558,9 @@ private fun MonthList(month: MonthRef, s: AppSettings, today: LocalDate, onDay: 
             Surface(
                 onClick = { onDay(d) },
                 shape = RoundedCornerShape(14.dp),
-                color = if (d == today) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f) else MaterialTheme.colorScheme.surfaceContainerLow,
+                color = if (d == today) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerLowest,
+                shadowElevation = if (d == today) 6.dp else 2.dp,
+                border = if (d == today) BorderStroke(1.2.dp, goldEdge()) else null,
                 modifier = Modifier.fillMaxWidth().testTag("cal_row_$d"),
             ) {
                 Row(Modifier.padding(horizontal = 14.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -515,9 +631,17 @@ private fun DaySheet(vm: MainViewModel, s: AppSettings, date: LocalDate, onDismi
             Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp).padding(bottom = 28.dp).exposeTestTags(),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text(fmt.weekday(date.dayOfWeek), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            if (h != null) Text(fmt.hijri(h), style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.primary, modifier = Modifier.testTag("day_hijri"))
-            Text(fmt.gregorian(date, withYear = true), style = MaterialTheme.typography.titleMedium, modifier = Modifier.testTag("day_gregorian"))
+            // The day's dates beside its moon.
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text(fmt.weekday(date.dayOfWeek), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    if (h != null) Text(fmt.hijri(h),
+                        style = MaterialTheme.typography.headlineSmall.copy(fontFamily = com.sakina.app.ui.theme.Amiri, fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.primary, modifier = Modifier.testTag("day_hijri"))
+                    Text(fmt.gregorian(date, withYear = true), style = MaterialTheme.typography.titleMedium, modifier = Modifier.testTag("day_gregorian"))
+                }
+                if (h != null) Moon(h.day, Modifier.testTag("day_moon"), size = 58.dp)
+            }
             val occ = Occasions.on(date, s.hijriOffset)
             if (occ.isNotEmpty()) {
                 SectionCard(title = str.legendOccasion, icon = SakinaIcons.Calendar) {

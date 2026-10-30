@@ -87,6 +87,8 @@ data class AppSettings(
     val lockNote: Boolean = false,
     /** Lets the user mark prayers as prayed (on Home and from the prayer notification). */
     val prayerLog: Boolean = true,
+    /** Today's list shows how long until each coming prayer and how long since each passed one. */
+    val prayerChips: Boolean = true,
     /** Used by the printed Mushaf viewer (later phase); independent of the app theme. */
     val mushafNight: Boolean = false,
     val method: CalcMethod = CalcMethod.UMM_AL_QURA,
