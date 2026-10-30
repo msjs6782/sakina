@@ -1,0 +1,1 @@
+10-30 18:14:10.963  9229  9247 I SakinaQuran: Loaded 114 surahs, 6236 ayahs in 3779 ms

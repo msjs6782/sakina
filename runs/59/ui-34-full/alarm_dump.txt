@@ -1,0 +1,17 @@
+      policyWhenElapsed: requester=+5h16m55s723ms app_standby=-6m35s747ms device_idle=-- battery_saver=-26m59s361ms tare=-26m59s361ms
+      whenElapsed=+5h16m55s723ms maxWhenElapsed=+6h8m3s985ms
+      listener=android.os.BinderProxy@ce7480b
+    RTC_WAKEUP #24: Alarm{afdbc5c type 0 origWhen 1793410800000 whenElapsed 27315621 com.sakina.app.debug}
+      tag=*walarm*:com.sakina.app.ALERT_FIRE
+      type=RTC_WAKEUP origWhen=2026-10-31 01:40:00.000 window=0 exactAllowReason=permission repeatInterval=0 count=0 flags=0x5
+      policyWhenElapsed: requester=+6h50m17s613ms app_standby=-6s355ms device_idle=-- battery_saver=-6s355ms tare=-6s355ms
+      whenElapsed=+6h50m17s613ms maxWhenElapsed=+6h50m17s613ms
+      operation=PendingIntent{8956b65: PendingIntentRecord{375b03a com.sakina.app.debug broadcastIntent}}
+      idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=false, android:broadcast.temporaryAppAllowlistReasonCode=302, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=0, android:broadcast.flags=8}]
+    ELAPSED #25: Alarm{ed45c32 type 3 origWhen 43270820 whenElapsed 43270820 com.google.android.gms}
+      tag=*alarm*:com.google.android.gms.common.download.START
+      type=ELAPSED origWhen=+11h16m12s812ms window=+1h0m0s0ms repeatInterval=0 count=0 flags=0x0
+      policyWhenElapsed: requester=+11h16m12s812ms app_standby=-6m35s747ms device_idle=-- battery_saver=-43m47s159ms tare=-43m47s159ms
+      whenElapsed=+11h16m12s812ms maxWhenElapsed=+12h16m12s812ms
+      operation=PendingIntent{52ead83: PendingIntentRecord{40ffb00 com.google.android.gms/com.google.android.gms.core_download startService}}
+    ELAPSED #26: Alarm{b480f39 type 3 origWhen 43734051 whenElapsed 43734051 com.google.android.gms}

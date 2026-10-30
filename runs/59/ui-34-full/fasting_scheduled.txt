@@ -1,0 +1,1 @@
+10-30 18:42:46.489 19994 20013 I SakinaAlerts: Scheduled FASTING:2026-11-02:2026-11-01 at 2026-11-01T18:00:00Z exact=true alarmClock=false epochMs=1793556000000

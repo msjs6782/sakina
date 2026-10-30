@@ -1,0 +1,24 @@
+      policyWhenElapsed: requester=+5h17m52s798ms app_standby=-5m38s672ms device_idle=-- battery_saver=-26m2s286ms tare=-26m2s286ms
+      whenElapsed=+5h17m52s798ms maxWhenElapsed=+6h9m1s60ms
+      listener=android.os.BinderProxy@ce7480b
+    RTC_WAKEUP #24: Alarm{9ef36e8 type 0 origWhen 1793410800000 whenElapsed 27315620 com.sakina.app.debug}
+      tag=*walarm*:com.sakina.app.ALERT_FIRE
+      type=RTC_WAKEUP origWhen=2026-10-31 01:40:00.000 window=+1h0m0s0ms repeatInterval=0 count=0 flags=0x20
+      policyWhenElapsed: requester=+6h51m14s687ms app_standby=-6s355ms device_idle=-- battery_saver=-6s355ms tare=-6s355ms
+      whenElapsed=+6h51m14s687ms maxWhenElapsed=+7h51m14s687ms
+      operation=PendingIntent{d054101: PendingIntentRecord{cd12ba6 com.sakina.app.debug broadcastIntent}}
+      idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=false, android:broadcast.temporaryAppAllowlistReasonCode=-1, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=1, android:broadcast.flags=8}]
+    RTC_WAKEUP #25: Alarm{8c059e7 type 0 origWhen 1793410800000 whenElapsed 27315621 com.sakina.app.debug}
+      tag=*walarm*:com.sakina.app.ALERT_FIRE
+      type=RTC_WAKEUP origWhen=2026-10-31 01:40:00.000 window=+10m0s0ms repeatInterval=0 count=0 flags=0x0
+      policyWhenElapsed: requester=+6h51m14s688ms app_standby=-6s355ms device_idle=-- battery_saver=-6s355ms tare=-6s355ms
+      whenElapsed=+6h51m14s688ms maxWhenElapsed=+7h1m14s688ms
+      operation=PendingIntent{4f4d994: PendingIntentRecord{303ec3d com.sakina.app.debug broadcastIntent}}
+    ELAPSED #26: Alarm{ed45c32 type 3 origWhen 43270820 whenElapsed 43270820 com.google.android.gms}
+      tag=*alarm*:com.google.android.gms.common.download.START
+      type=ELAPSED origWhen=+11h17m9s887ms window=+1h0m0s0ms repeatInterval=0 count=0 flags=0x0
+      policyWhenElapsed: requester=+11h17m9s887ms app_standby=-5m38s672ms device_idle=-- battery_saver=-42m50s84ms tare=-42m50s84ms
+      whenElapsed=+11h17m9s887ms maxWhenElapsed=+12h17m9s887ms
+      operation=PendingIntent{52ead83: PendingIntentRecord{40ffb00 com.google.android.gms/com.google.android.gms.core_download startService}}
+    ELAPSED #27: Alarm{b480f39 type 3 origWhen 43734051 whenElapsed 43734051 com.google.android.gms}
+      tag=*alarm*:com.google.android.location.ALARM_WAKEUP_IN_OUT_DOOR_COLLECTOR

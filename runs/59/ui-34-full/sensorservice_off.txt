@@ -1,0 +1,301 @@
+Captured at: 18:35:39.458
+Sensor Device:
+Total 12 h/w sensors, 12 running 0 disabled clients:
+0x00000000) active-count = 2; sampling_period(ms) = {200.0, 66.7}, selected = 66.67 ms; batching_period(ms) = {2000.0, 100.0}, selected = 100.00 ms
+Sensor List:
+0000000000) Goldfish 3-axis Accelerometer | The Android Open Source Project | ver: 1 | type: android.sensor.accelerometer(1) | perm: n/a | flags: 0x00000050
+	continuous | minRate=2.00Hz | maxRate=100.00Hz | no batching | non-wakeUp | data-injection, has-additional-info, 
+0x00000001) Goldfish 3-axis Gyroscope | The Android Open Source Project | ver: 1 | type: android.sensor.gyroscope(4) | perm: n/a | flags: 0x00000050
+	continuous | minRate=2.00Hz | maxRate=100.00Hz | no batching | non-wakeUp | data-injection, has-additional-info, 
+0x00000002) Goldfish 3-axis Magnetic field sensor | The Android Open Source Project | ver: 1 | type: android.sensor.magnetic_field(2) | perm: n/a | flags: 0x00000010
+	continuous | minRate=2.00Hz | maxRate=100.00Hz | no batching | non-wakeUp | data-injection, 
+0x00000003) Goldfish Orientation sensor | The Android Open Source Project | ver: 1 | type: android.sensor.orientation(3) | perm: n/a | flags: 0x00000010
+	continuous | minRate=2.00Hz | maxRate=100.00Hz | no batching | non-wakeUp | data-injection, 
+0x00000004) Goldfish Ambient Temperature sensor | The Android Open Source Project | ver: 1 | type: android.sensor.ambient_temperature(13) | perm: n/a | flags: 0x00000012
+	on-change | maxDelay=0us | minDelay=0us | no batching | non-wakeUp | data-injection, 
+0x00000005) Goldfish Proximity sensor | The Android Open Source Project | ver: 1 | type: android.sensor.proximity(8) | perm: n/a | flags: 0x00000013
+	on-change | maxDelay=0us | minDelay=0us | no batching | wakeUp | data-injection, 
+0x00000006) Goldfish Light sensor     | The Android Open Source Project | ver: 1 | type: android.sensor.light(5) | perm: n/a | flags: 0x00000012
+	on-change | maxDelay=0us | minDelay=0us | no batching | non-wakeUp | data-injection, 
+0x00000007) Goldfish Pressure sensor  | The Android Open Source Project | ver: 1 | type: android.sensor.pressure(6) | perm: n/a | flags: 0x00000010
+	continuous | minRate=2.00Hz | maxRate=100.00Hz | no batching | non-wakeUp | data-injection, 
+0x00000008) Goldfish Humidity sensor  | The Android Open Source Project | ver: 1 | type: android.sensor.relative_humidity(12) | perm: n/a | flags: 0x00000012
+	on-change | maxDelay=0us | minDelay=0us | no batching | non-wakeUp | data-injection, 
+0x00000009) Goldfish 3-axis Magnetic field sensor (uncalibrated) | The Android Open Source Project | ver: 1 | type: android.sensor.magnetic_field_uncalibrated(14) | perm: n/a | flags: 0x00000010
+	continuous | minRate=2.00Hz | maxRate=100.00Hz | no batching | non-wakeUp | data-injection, 
+0x0000000a) Goldfish 3-axis Gyroscope (uncalibrated) | The Android Open Source Project | ver: 1 | type: android.sensor.gyroscope_uncalibrated(16) | perm: n/a | flags: 0x00000010
+	continuous | minRate=2.00Hz | maxRate=100.00Hz | no batching | non-wakeUp | data-injection, 
+0x00000011) Goldfish 3-axis Accelerometer Uncalibrated | The Android Open Source Project | ver: 1 | type: android.sensor.accelerometer_uncalibrated(35) | perm: n/a | flags: 0x00000050
+	continuous | minRate=2.00Hz | maxRate=100.00Hz | no batching | non-wakeUp | data-injection, has-additional-info, 
+0x5f636779) Corrected Gyroscope Sensor | AOSP            | ver: 1 | type: android.sensor.gyroscope(4) | perm: n/a | flags: 0x00000000
+	continuous | maxDelay=0us | maxRate=100.00Hz | no batching | non-wakeUp | 
+0x5f676172) Game Rotation Vector Sensor | AOSP            | ver: 3 | type: android.sensor.game_rotation_vector(15) | perm: n/a | flags: 0x00000000
+	continuous | maxDelay=0us | maxRate=100.00Hz | no batching | non-wakeUp | 
+0x5f676273) Gyroscope Bias (debug)    | AOSP            | ver: 1 | type: android.sensor.accelerometer(1) | perm: n/a | flags: 0x00000000
+	continuous | maxDelay=0us | maxRate=100.00Hz | no batching | non-wakeUp | 
+0x5f67656f) GeoMag Rotation Vector Sensor | AOSP            | ver: 3 | type: android.sensor.geomagnetic_rotation_vector(20) | perm: n/a | flags: 0x00000000
+	continuous | maxDelay=0us | maxRate=100.00Hz | no batching | non-wakeUp | 
+0x5f677276) Gravity Sensor            | AOSP            | ver: 3 | type: android.sensor.gravity(9) | perm: n/a | flags: 0x00000000
+	continuous | maxDelay=0us | maxRate=100.00Hz | no batching | non-wakeUp | 
+0x5f6c696e) Linear Acceleration Sensor | AOSP            | ver: 3 | type: android.sensor.linear_acceleration(10) | perm: n/a | flags: 0x00000000
+	continuous | maxDelay=0us | maxRate=100.00Hz | no batching | non-wakeUp | 
+0x5f726f76) Rotation Vector Sensor    | AOSP            | ver: 3 | type: android.sensor.rotation_vector(11) | perm: n/a | flags: 0x00000000
+	continuous | maxDelay=0us | maxRate=100.00Hz | no batching | non-wakeUp | 
+0x5f797072) Orientation Sensor        | AOSP            | ver: 1 | type: android.sensor.orientation(3) | perm: n/a | flags: 0x00000000
+	continuous | maxDelay=0us | maxRate=100.00Hz | no batching | non-wakeUp | 
+Fusion States:
+9-axis fusion disabled (0 clients), gyro-rate= 200.00Hz, q=< 0.00503325, -0.000174343, 0.00133776, 0.999986 > (1), b=< 8.72222e-05, 4.87275e-05, 0.000109268 >
+game fusion(no mag) disabled (0 clients), gyro-rate= 200.00Hz, q=< 0.479556, -0.478156, -0.519509, 0.52106 > (1), b=< 0, 0, 0 >
+geomag fusion (no gyro) disabled (0 clients), gyro-rate= 200.00Hz, q=< 0, 0, 0, 0 > (0), b=< 0, 0, 0 >
+Recent Sensor events:
+Rotation Vector Sensor: last 10 events
+	 1 (ts=1853.061298008, wall=18:35:37.441) 0.01, -0.00, 0.00, 1.00, 0.00, 
+	 2 (ts=1853.111298008, wall=18:35:37.491) 0.01, -0.00, 0.00, 1.00, 0.00, 
+	 3 (ts=1853.161298008, wall=18:35:37.541) 0.01, -0.00, 0.00, 1.00, 0.00, 
+	 4 (ts=1853.211298008, wall=18:35:37.591) 0.01, -0.00, 0.00, 1.00, 0.00, 
+	 5 (ts=1853.261298008, wall=18:35:37.641) 0.01, -0.00, 0.00, 1.00, 0.00, 
+	 6 (ts=1853.311298008, wall=18:35:37.691) 0.01, -0.00, 0.00, 1.00, 0.00, 
+	 7 (ts=1853.361298008, wall=18:35:37.741) 0.01, -0.00, 0.00, 1.00, 0.00, 
+	 8 (ts=1853.411298008, wall=18:35:37.791) 0.01, -0.00, 0.00, 1.00, 0.00, 
+	 9 (ts=1853.461298008, wall=18:35:37.841) 0.01, -0.00, 0.00, 1.00, 0.00, 
+	10 (ts=1853.511298008, wall=18:35:37.891) 0.01, -0.00, 0.00, 1.00, 0.00, 
+Goldfish 3-axis Gyroscope (uncalibrated): last 10 events
+	 1 (ts=1853.471597494, wall=18:35:37.851) 0.00, 0.00, 0.00, -0.00, 0.00, 0.00, 
+	 2 (ts=1853.476597494, wall=18:35:37.856) 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 
+	 3 (ts=1853.481597494, wall=18:35:37.861) 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 
+	 4 (ts=1853.486597494, wall=18:35:37.866) 0.00, 0.00, 0.00, -0.00, -0.00, -0.00, 
+	 5 (ts=1853.491597494, wall=18:35:37.871) 0.00, 0.00, 0.00, -0.00, -0.00, -0.00, 
+	 6 (ts=1853.496597494, wall=18:35:37.885) 0.00, 0.00, 0.00, 0.00, 0.00, -0.00, 
+	 7 (ts=1853.501597494, wall=18:35:37.885) 0.00, 0.00, 0.00, 0.00, 0.00, -0.00, 
+	 8 (ts=1853.506597494, wall=18:35:37.886) 0.00, 0.00, 0.00, -0.00, -0.00, 0.00, 
+	 9 (ts=1853.511597494, wall=18:35:37.891) 0.00, 0.00, 0.00, -0.00, -0.00, 0.00, 
+	10 (ts=1853.516597494, wall=18:35:37.896) 0.00, 0.00, 0.00, -0.00, 0.00, -0.00, 
+Goldfish Pressure sensor: last 10 events
+	 1 (ts=115.003903574, wall=18:06:39.383) 1013.25, 0.00, 0.00, 
+	 2 (ts=115.103903574, wall=18:06:39.483) 1013.25, 0.00, 0.00, 
+	 3 (ts=115.203903574, wall=18:06:39.583) 1013.25, 0.00, 0.00, 
+	 4 (ts=115.303903574, wall=18:06:39.683) 1013.25, 0.00, 0.00, 
+	 5 (ts=115.403903574, wall=18:06:39.783) 1013.25, 0.00, 0.00, 
+	 6 (ts=115.503903574, wall=18:06:39.900) 1013.25, 0.00, 0.00, 
+	 7 (ts=115.603903574, wall=18:06:40.029) 1013.25, 0.00, 0.00, 
+	 8 (ts=115.703903574, wall=18:06:40.101) 1013.25, 0.00, 0.00, 
+	 9 (ts=115.803903574, wall=18:06:40.185) 1013.25, 0.00, 0.00, 
+	10 (ts=115.903903574, wall=18:06:40.283) 1013.25, 0.00, 0.00, 
+Linear Acceleration Sensor: last 10 events
+	 1 (ts=236.557870335, wall=18:08:40.937) -0.00, 0.00, 0.00, 
+	 2 (ts=236.577870335, wall=18:08:40.957) -0.00, 0.00, 0.00, 
+	 3 (ts=236.597870335, wall=18:08:40.977) -0.00, 0.00, 0.00, 
+	 4 (ts=236.617870335, wall=18:08:40.997) -0.00, 0.00, 0.00, 
+	 5 (ts=236.637870335, wall=18:08:41.017) -0.00, 0.00, 0.00, 
+	 6 (ts=236.657870335, wall=18:08:41.037) -0.00, 0.00, 0.00, 
+	 7 (ts=236.677870335, wall=18:08:41.057) -0.00, 0.00, 0.00, 
+	 8 (ts=1255.742948335, wall=18:25:40.124) -0.00, 0.00, 0.00, 
+	 9 (ts=1255.762948335, wall=18:25:40.147) -0.00, 0.00, 0.00, 
+	10 (ts=1255.782948335, wall=18:25:40.162) -0.00, 0.00, 0.00, 
+Goldfish 3-axis Magnetic field sensor: last 10 events
+	 1 (ts=1852.899891489, wall=18:35:37.279) 0.00, 80.00, -40.00, 
+	 2 (ts=1852.966558489, wall=18:35:37.346) 0.00, 80.00, -40.00, 
+	 3 (ts=1853.033225489, wall=18:35:37.413) 0.00, 80.00, -40.00, 
+	 4 (ts=1853.099892489, wall=18:35:37.479) 0.00, 80.00, -40.00, 
+	 5 (ts=1853.166559489, wall=18:35:37.546) 0.00, 80.00, -40.00, 
+	 6 (ts=1853.233226489, wall=18:35:37.613) 0.00, 80.00, -40.00, 
+	 7 (ts=1853.299893489, wall=18:35:37.679) 0.00, 80.00, -40.00, 
+	 8 (ts=1853.366560489, wall=18:35:37.746) 0.00, 80.00, -40.00, 
+	 9 (ts=1853.433227489, wall=18:35:37.813) 0.00, 80.00, -40.00, 
+	10 (ts=1853.499894489, wall=18:35:37.885) 0.00, 80.00, -40.00, 
+Goldfish 3-axis Accelerometer: last 50 events
+	 1 (ts=1852.211298008, wall=18:35:36.591) 0.00, 0.00, 9.81, 
+	 2 (ts=1852.261298008, wall=18:35:36.641) 0.00, 0.00, 9.81, 
+	 3 (ts=1852.311298008, wall=18:35:36.691) 0.00, 0.00, 9.81, 
+	 4 (ts=1852.361298008, wall=18:35:36.741) 0.00, 0.00, 9.81, 
+	 5 (ts=1852.411298008, wall=18:35:36.791) 0.00, 0.00, 9.81, 
+	 6 (ts=1852.461298008, wall=18:35:36.841) 0.00, 0.00, 9.81, 
+	 7 (ts=1852.511298008, wall=18:35:36.891) 0.00, 0.00, 9.81, 
+	 8 (ts=1852.561298008, wall=18:35:36.941) 0.00, 0.00, 9.81, 
+	 9 (ts=1852.611298008, wall=18:35:36.991) 0.00, 0.00, 9.81, 
+	10 (ts=1852.661298008, wall=18:35:37.041) 0.00, 0.00, 9.81, 
+	11 (ts=1852.711298008, wall=18:35:37.091) 0.00, 0.00, 9.81, 
+	12 (ts=1852.761298008, wall=18:35:37.141) 0.00, 0.00, 9.81, 
+	13 (ts=1852.811298008, wall=18:35:37.191) 0.00, 0.00, 9.81, 
+	14 (ts=1852.861298008, wall=18:35:37.241) 0.00, 0.00, 9.81, 
+	15 (ts=1852.911298008, wall=18:35:37.291) 0.00, 0.00, 9.81, 
+	16 (ts=1852.961298008, wall=18:35:37.341) 0.00, 0.00, 9.81, 
+	17 (ts=1853.011298008, wall=18:35:37.391) 0.00, 0.00, 9.81, 
+	18 (ts=1853.061298008, wall=18:35:37.441) 0.00, 0.00, 9.81, 
+	19 (ts=1853.111298008, wall=18:35:37.491) 0.00, 0.00, 9.81, 
+	20 (ts=1853.161298008, wall=18:35:37.541) 0.00, 0.00, 9.81, 
+	21 (ts=1853.211298008, wall=18:35:37.591) 0.00, 0.00, 9.81, 
+	22 (ts=1853.261298008, wall=18:35:37.641) 0.00, 0.00, 9.81, 
+	23 (ts=1853.311298008, wall=18:35:37.691) 0.00, 0.00, 9.81, 
+	24 (ts=1853.361298008, wall=18:35:37.741) 0.00, 0.00, 9.81, 
+	25 (ts=1853.411298008, wall=18:35:37.791) 0.00, 0.00, 9.81, 
+	26 (ts=1853.461298008, wall=18:35:37.841) 0.00, 0.00, 9.81, 
+	27 (ts=1853.511298008, wall=18:35:37.891) 0.00, 0.00, 9.81, 
+	28 (ts=1853.561298008, wall=18:35:37.941) 0.00, 0.00, 9.81, 
+	29 (ts=1853.627965008, wall=18:35:38.007) 0.00, 0.00, 9.81, 
+	30 (ts=1853.694632008, wall=18:35:38.074) 0.00, 0.00, 9.81, 
+	31 (ts=1853.761299008, wall=18:35:38.141) 0.00, 0.00, 9.81, 
+	32 (ts=1853.827966008, wall=18:35:38.207) 0.00, 0.00, 9.81, 
+	33 (ts=1853.894633008, wall=18:35:38.274) 0.00, 0.00, 9.81, 
+	34 (ts=1853.961300008, wall=18:35:38.341) 0.00, 0.00, 9.81, 
+	35 (ts=1854.027967008, wall=18:35:38.407) 0.00, 0.00, 9.81, 
+	36 (ts=1854.094634008, wall=18:35:38.474) 0.00, 0.00, 9.81, 
+	37 (ts=1854.161301008, wall=18:35:38.542) 0.00, 0.00, 9.81, 
+	38 (ts=1854.227968008, wall=18:35:38.607) 0.00, 0.00, 9.81, 
+	39 (ts=1854.294635008, wall=18:35:38.674) 0.00, 0.00, 9.81, 
+	40 (ts=1854.361302008, wall=18:35:38.741) 0.00, 0.00, 9.81, 
+	41 (ts=1854.427969008, wall=18:35:38.807) 0.00, 0.00, 9.81, 
+	42 (ts=1854.494636008, wall=18:35:38.874) 0.00, 0.00, 9.81, 
+	43 (ts=1854.561303008, wall=18:35:38.941) 0.00, 0.00, 9.81, 
+	44 (ts=1854.627970008, wall=18:35:39.007) 0.00, 0.00, 9.81, 
+	45 (ts=1854.694637008, wall=18:35:39.074) 0.00, 0.00, 9.81, 
+	46 (ts=1854.761304008, wall=18:35:39.141) 0.00, 0.00, 9.81, 
+	47 (ts=1854.827971008, wall=18:35:39.207) 0.00, 0.00, 9.81, 
+	48 (ts=1854.894638008, wall=18:35:39.274) 0.00, 0.00, 9.81, 
+	49 (ts=1854.961305008, wall=18:35:39.341) 0.00, 0.00, 9.81, 
+	50 (ts=1855.027972008, wall=18:35:39.407) 0.00, 0.00, 9.81, 
+Active sensors:
+Goldfish 3-axis Accelerometer (handle=0x00000000, connections=2)
+Socket Buffer size = 39 events
+WakeLock Status: not held 
+Mode : NORMAL
+Sensor Privacy: disabled
+2 active connections
+Connection Number: 0 
+	Operating Mode: NORMAL
+	 com.android.server.power.FaceDownDetector | WakeLockRefCount 0 | uid 1000 | cache size 0 | max cache size 0
+	 Goldfish 3-axis Accelerometer 0x00000000 | status: active | pending flush events 0 
+Connection Number: 1 
+	Operating Mode: NORMAL
+	 com.android.server.wm.WindowOrientationListener | WakeLockRefCount 0 | uid 1000 | cache size 0 | max cache size 0
+	 Goldfish 3-axis Accelerometer 0x00000000 | status: active | pending flush events 0 
+0 direct connections
+Previous Registrations:
+18:35:37 - 0x5f726f76 pid=17122 uid=10192 package=com.sakina.app.data.CompassEngine
+18:35:37 - 0x00000002 pid=17122 uid=10192 package=com.sakina.app.data.CompassEngine
+18:35:20 + 0x00000002 pid=17122 uid=10192 package=com.sakina.app.data.CompassEngine samplingPeriod=66667us batchingPeriod=0us
+18:35:20 + 0x5f726f76 pid=17122 uid=10192 package=com.sakina.app.data.CompassEngine samplingPeriod=66667us batchingPeriod=0us
+18:35:08 + 0x00000002 pid=17042 uid=10192 package=com.sakina.app.data.CompassEngine samplingPeriod=66667us batchingPeriod=0us
+18:35:08 + 0x5f726f76 pid=17042 uid=10192 package=com.sakina.app.data.CompassEngine samplingPeriod=66667us batchingPeriod=0us
+18:34:41 + 0x00000002 pid=16894 uid=10192 package=com.sakina.app.data.CompassEngine samplingPeriod=66667us batchingPeriod=0us
+18:34:41 + 0x5f726f76 pid=16894 uid=10192 package=com.sakina.app.data.CompassEngine samplingPeriod=66667us batchingPeriod=0us
+18:29:31 - 0x00000000 pid= 5425 uid=10132 package=com.google.android.location.collectionlib.SensorScanner$SensorEventListenerAdapter
+18:29:27 + 0x00000000 pid= 5425 uid=10132 package=com.google.android.location.collectionlib.SensorScanner$SensorEventListenerAdapter samplingPeriod=20000us batchingPeriod=0us
+18:27:47 + 0x00000000 pid=  520 uid= 1000 package=com.android.server.wm.WindowOrientationListener samplingPeriod=66667us batchingPeriod=100000us
+18:27:47 + 0x00000000 pid=  520 uid= 1000 package=com.android.server.power.FaceDownDetector samplingPeriod=200000us batchingPeriod=2000000us
+18:27:37 - 0x00000000 pid=  520 uid= 1000 package=com.android.server.power.FaceDownDetector
+18:27:37 - 0x00000000 pid=  520 uid= 1000 package=com.android.server.wm.WindowOrientationListener
+18:25:40 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:25:40 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:25:40 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:25:40 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:18:17 - 0x00000000 pid= 5425 uid=10132 package=com.google.android.location.collectionlib.SensorScanner$SensorEventListenerAdapter
+18:18:13 + 0x00000000 pid= 5425 uid=10132 package=com.google.android.location.collectionlib.SensorScanner$SensorEventListenerAdapter samplingPeriod=20000us batchingPeriod=0us
+18:15:27 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:15:27 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:15:27 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:15:27 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:11:15 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:11:15 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:11:15 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:11:15 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:08:41 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:08:41 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:08:40 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:08:40 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:08:40 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:08:40 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:08:40 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:08:40 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:07:40 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:07:40 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:07:39 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:07:39 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:07:03 - 0x00000000 pid= 5425 uid=10132 package=com.google.android.location.collectionlib.SensorScanner$SensorEventListenerAdapter
+18:07:00 + 0x00000000 pid= 5425 uid=10132 package=com.google.android.location.collectionlib.SensorScanner$SensorEventListenerAdapter samplingPeriod=20000us batchingPeriod=0us
+18:06:55 - 0x00000000 pid= 5425 uid=10132 package=com.google.android.location.collectionlib.SensorScanner$SensorEventListenerAdapter
+18:06:51 + 0x00000000 pid= 5425 uid=10132 package=com.google.android.location.collectionlib.SensorScanner$SensorEventListenerAdapter samplingPeriod=20000us batchingPeriod=0us
+18:06:49 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:49 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:48 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:48 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:47 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:47 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:46 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:46 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:46 - 0x00000000 pid= 5425 uid=10132 package=com.google.android.location.collectionlib.SensorScanner$SensorEventListenerAdapter
+18:06:43 + 0x00000000 pid= 5425 uid=10132 package=com.google.android.location.collectionlib.SensorScanner$SensorEventListenerAdapter samplingPeriod=20000us batchingPeriod=0us
+18:06:40 - 0x00000007 pid= 5425 uid=10132 package=com.google.android.location.fused.PressureProvider
+18:06:39 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:39 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:39 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:39 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:38 + 0x00000007 pid= 5425 uid=10132 package=com.google.android.location.fused.PressureProvider samplingPeriod=100000us batchingPeriod=0us
+18:06:38 - 0x00000007 pid= 5425 uid=10132 package=com.google.android.location.fused.PressureProvider
+18:06:37 + 0x00000007 pid= 5425 uid=10132 package=com.google.android.location.fused.PressureProvider samplingPeriod=100000us batchingPeriod=0us
+18:06:32 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:32 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:31 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:31 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:30 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:30 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:30 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:30 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:09 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:09 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:09 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:09 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:07 - 0x00000000 pid= 1401 uid=10132 package=com.google.android.location.collectionlib.SensorScanner$SensorEventListenerAdapter
+18:06:04 + 0x00000000 pid= 1401 uid=10132 package=com.google.android.location.collectionlib.SensorScanner$SensorEventListenerAdapter samplingPeriod=20000us batchingPeriod=0us
+18:06:03 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:03 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:02 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:02 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:02 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:02 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:01 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:01 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:01 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:01 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:00 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:00 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:06:00 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:06:00 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:05:58 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:05:58 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:05:58 - 0x00000000 pid= 1401 uid=10132 package=com.google.android.location.collectionlib.SensorScanner$SensorEventListenerAdapter
+18:05:58 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:05:58 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:05:56 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:05:56 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:05:55 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:05:55 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:05:55 + 0x00000000 pid= 1401 uid=10132 package=com.google.android.location.collectionlib.SensorScanner$SensorEventListenerAdapter samplingPeriod=20000us batchingPeriod=0us
+18:05:54 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:05:54 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:05:51 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:05:51 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:05:51 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:05:51 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:05:49 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:05:49 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:05:49 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:05:49 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:05:49 - 0x00000000 pid= 1401 uid=10132 package=com.google.android.location.collectionlib.SensorScanner$SensorEventListenerAdapter
+18:05:48 - 0x00000007 pid= 1401 uid=10132 package=com.google.android.location.fused.PressureProvider
+18:05:46 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:05:46 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:05:46 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:05:46 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:05:46 + 0x00000007 pid= 1401 uid=10132 package=com.google.android.location.fused.PressureProvider samplingPeriod=100000us batchingPeriod=0us
+18:05:46 - 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:05:46 - 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b
+18:05:45 + 0x00000000 pid= 1401 uid=10132 package=com.google.android.location.collectionlib.SensorScanner$SensorEventListenerAdapter samplingPeriod=20000us batchingPeriod=0us
+18:05:43 - 0x00000007 pid= 1401 uid=10132 package=com.google.android.location.fused.PressureProvider
+18:05:41 + 0x00000007 pid= 1401 uid=10132 package=com.google.android.location.fused.PressureProvider samplingPeriod=100000us batchingPeriod=0us
+18:05:40 + 0x5f726f76 pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:05:40 + 0x5f6c696e pid= 3006 uid=10132 package=com.google.ccc.abuse.droidguard.events.b samplingPeriod=20000us batchingPeriod=0us
+18:05:27 - 0x00000007 pid= 1401 uid=10132 package=com.google.android.location.fused.PressureProvider
+18:05:24 + 0x00000007 pid= 1401 uid=10132 package=com.google.android.location.fused.PressureProvider samplingPeriod=100000us batchingPeriod=0us
+18:05:20 + 0x00000000 pid=  520 uid= 1000 package=com.android.server.wm.WindowOrientationListener samplingPeriod=66667us batchingPeriod=100000us
+18:05:15 + 0x00000000 pid=  520 uid= 1000 package=com.android.server.power.FaceDownDetector samplingPeriod=200000us batchingPeriod=2000000us
