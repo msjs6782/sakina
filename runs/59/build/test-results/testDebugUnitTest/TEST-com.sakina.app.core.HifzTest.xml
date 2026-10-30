@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.core.HifzTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-30T17:58:45.401Z" hostname="runnervmnwato" time="0.006">
+  <properties/>
+  <testcase name="wordsSkipPauseMarks" classname="com.sakina.app.core.HifzTest" time="0.001"/>
+  <testcase name="addAndReview" classname="com.sakina.app.core.HifzTest" time="0.004"/>
+  <testcase name="dueAndCount" classname="com.sakina.app.core.HifzTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

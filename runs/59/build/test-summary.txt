@@ -1,0 +1,2 @@
+app/build/test-results/testDebugUnitTest/binary/output.bin:;:GReference comparison: 25920 times, 25920 exact, worst difference 0 min
+app/build/test-results/testDebugUnitTest/TEST-com.sakina.app.core.PrayerReferenceTest.xml:  <system-out><![CDATA[Reference comparison: 25920 times, 25920 exact, worst difference 0 min

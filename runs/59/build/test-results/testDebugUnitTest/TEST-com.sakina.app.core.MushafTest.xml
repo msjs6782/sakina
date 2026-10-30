@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.core.MushafTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-30T17:58:45.412Z" hostname="runnervmnwato" time="0.26">
+  <properties/>
+  <testcase name="bundledPagesAreTheExactSourceFiles" classname="com.sakina.app.core.MushafTest" time="0.04"/>
+  <testcase name="aFailingMirrorFallsBackToTheNextOne" classname="com.sakina.app.core.MushafTest" time="0.049"/>
+  <testcase name="sizesAreShownInBinaryUnits" classname="com.sakina.app.core.MushafTest" time="0.013"/>
+  <testcase name="editionPagesMatchTheTanzilPageIndex" classname="com.sakina.app.core.MushafTest" time="0.055"/>
+  <testcase name="fetchedPageIsInflatedVerifiedAndMovedIntoPlace" classname="com.sakina.app.core.MushafTest" time="0.039"/>
+  <testcase name="manifestCoversAllPagesOfTheSourceZip" classname="com.sakina.app.core.MushafTest" time="0.034"/>
+  <testcase name="corruptOrWrongRepliesNeverLeaveAFile" classname="com.sakina.app.core.MushafTest" time="0.014"/>
+  <testcase name="verifierRejectsChangedFiles" classname="com.sakina.app.core.MushafTest" time="0.012"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

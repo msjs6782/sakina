@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.core.PageFillTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-30T17:58:45.675Z" hostname="runnervmnwato" time="0.368">
+  <properties/>
+  <testcase name="aTallScreenSpreadsTheLinesAndAWideOneDoesNot" classname="com.sakina.app.core.PageFillTest" time="0.037"/>
+  <testcase name="fillingAddsOnlyWhiteAndZoomingDrawsTheSameRows" classname="com.sakina.app.core.PageFillTest" time="0.16"/>
+  <testcase name="findsTheFrameOnRightAndLeftPagesAndCentresIt" classname="com.sakina.app.core.PageFillTest" time="0.089"/>
+  <testcase name="theCutsRunThroughTheWhiteBetweenLines" classname="com.sakina.app.core.PageFillTest" time="0.072"/>
+  <testcase name="theOpeningPagesAreLeftAsPrinted" classname="com.sakina.app.core.PageFillTest" time="0.01"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.data.SettingsTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-30T17:58:46.974Z" hostname="runnervmnwato" time="0.007">
+  <properties/>
+  <testcase name="unknownFieldsAndValuesFallBackToDefaults" classname="com.sakina.app.data.SettingsTest" time="0.001"/>
+  <testcase name="cardsReorderAndHide" classname="com.sakina.app.data.SettingsTest" time="0.001"/>
+  <testcase name="locationsAndTravel" classname="com.sakina.app.data.SettingsTest" time="0.002"/>
+  <testcase name="jsonRoundTripKeepsEverything" classname="com.sakina.app.data.SettingsTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

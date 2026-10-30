@@ -1,0 +1,6 @@
+total 35440
+drwxr-xr-x  2 runner runner     4096 Oct 30 18:03 .
+drwxr-xr-x 16 runner runner     4096 Oct 30 18:03 ..
+-rw-r--r--  1 runner runner 11669058 Oct 30 18:03 sakina-0.1.59.apk
+-rw-r--r--  1 runner runner 24605887 Oct 30 18:03 sakina-debug.apk
+-rw-r--r--  1 runner runner      153 Oct 30 18:03 signature.txt

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.data.RefsAssetTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-30T17:58:46.968Z" hostname="runnervmnwato" time="0.004">
+  <properties/>
+  <testcase name="everyUsedReferenceExistsAndIsGraded" classname="com.sakina.app.data.RefsAssetTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

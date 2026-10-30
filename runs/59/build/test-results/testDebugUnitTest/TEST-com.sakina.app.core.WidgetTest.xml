@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.core.WidgetTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2026-10-30T17:58:46.807Z" hostname="runnervmnwato" time="0.022">
+  <properties/>
+  <testcase name="progressFromTheLastPrayerToTheNext" classname="com.sakina.app.core.WidgetTest" time="0.004"/>
+  <testcase name="remainingIsRoundedUpAndNeverNegative" classname="com.sakina.app.core.WidgetTest" time="0.0"/>
+  <testcase name="blockFitting" classname="com.sakina.app.core.WidgetTest" time="0.001"/>
+  <testcase name="kashidaSharedOverAPhrase" classname="com.sakina.app.core.WidgetTest" time="0.002"/>
+  <testcase name="snapshotFollowsTheNextPrayerAndMovesToTomorrowAfterIsha" classname="com.sakina.app.core.WidgetTest" time="0.001"/>
+  <testcase name="kashidaGoesBeforeTheLastJoinedLetter" classname="com.sakina.app.core.WidgetTest" time="0.0"/>
+  <testcase name="dawnDuskCardAndRamadanContext" classname="com.sakina.app.core.WidgetTest" time="0.003"/>
+  <testcase name="polarDayIsReportedIncomplete" classname="com.sakina.app.core.WidgetTest" time="0.0"/>
+  <testcase name="refreshTimes" classname="com.sakina.app.core.WidgetTest" time="0.001"/>
+  <testcase name="kashidaFillsTheWidth" classname="com.sakina.app.core.WidgetTest" time="0.001"/>
+  <testcase name="contrastGuard" classname="com.sakina.app.core.WidgetTest" time="0.004"/>
+  <testcase name="dialAnglesAndClockZone" classname="com.sakina.app.core.WidgetTest" time="0.001"/>
+  <testcase name="contentPickerRotatesDailyAndSkipsItemsThatDoNotFit" classname="com.sakina.app.core.WidgetTest" time="0.003"/>
+  <testcase name="fittingShrinksToTheNarrowestLineAndStack" classname="com.sakina.app.core.WidgetTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
