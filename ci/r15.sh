@@ -74,12 +74,17 @@ scroll_to id gallery_calendar 40; into_view gallery_calendar; cap 872_gallery_en
 
 # ---- On the home screen: the calendar and the next prayer with its line.
 pin_kind calendar 873_pin_dialog_calendar
+CAL_ID=$(wlog | grep -o "pinned calendar id=[0-9]*" | tail -1 | grep -o "[0-9]*$")
 if home_find id w_cal; then cap 874_home_calendar; check widget_home_calendar PASS "on the home screen"; else cap 874_home_calendar; check widget_home_calendar FAIL "not found on the home screen"; fi
 pin_kind day 875_pin_dialog_day
 if home_find id w_cells; then cap 876_home_day; check widget_home_day PASS "$(ui_text w_n4) $(ui_text w_t4)"; else check widget_home_day FAIL "not found"; fi
-# Its settings: the look section.
-start "${WB[@]}" --es demo_route widgets; sleep 6
-scroll_to id placed_settings_calendar 10 && tap id placed_settings_calendar && sleep 3
+# Its settings: the look section (opened straight from its id; the list of placed widgets can be long).
+if [ -n "$CAL_ID" ]; then
+  adb shell am start -n "$PKG/com.sakina.app.widgets.WidgetConfigActivity" --ei appWidgetId "$CAL_ID" >/dev/null; sleep 5
+else
+  start "${WB[@]}" --es demo_route widgets; sleep 6
+  scroll_to id placed_settings_calendar 30 && tap id placed_settings_calendar && sleep 3
+fi
 scroll_to id wcfg_look 10; into_view wcfg_look; cap 877_config_look
 ui_has id wcfg_depth && check widget_look_setting PASS "raised look setting" || check widget_look_setting FAIL "no look setting"
 adb shell input keyevent 4; sleep 1
