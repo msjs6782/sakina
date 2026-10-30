@@ -28,6 +28,8 @@
     <string name="w_label_khatma">الختمة</string>
     <string name="w_desc_khatma">ورد اليوم من خطة الختمة</string>
     <string name="w_label_dhikr">ذكر ممدود</string>
+    <string name="w_label_calendar">التقويم الهجري</string>
+    <string name="w_desc_calendar">الشهر الهجري واليوم والمناسبات</string>
     <string name="w_desc_dhikr">ذكر قصير بخط كوفي ممدود</string>
     <string name="w_label_dayname">اليوم الممدود</string>
     <string name="w_desc_dayname">اسم اليوم ممدودًا مع التاريخين والصلوات</string>

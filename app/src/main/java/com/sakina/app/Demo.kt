@@ -146,6 +146,7 @@ object Demo {
                             "view" -> r.copy(view = com.sakina.app.data.QuranView.valueOf(v.uppercase()))
                             "night" -> r.copy(mushafNight = com.sakina.app.data.MushafNight.valueOf(v.uppercase()))
                             "auto" -> r.copy(autoDownload = v == "1")
+                            "fill" -> r.copy(mushafFill = v == "1")
                             else -> r
                         }
                     }

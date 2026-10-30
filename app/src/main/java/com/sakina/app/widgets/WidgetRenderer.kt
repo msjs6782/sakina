@@ -119,6 +119,7 @@ object WidgetRenderer {
         WidgetKind.DAYNAME -> SizeF(300f, 160f)
         WidgetKind.KHATMA -> SizeF(230f, 140f)
         WidgetKind.DHIKR -> SizeF(300f, 120f)
+        WidgetKind.CALENDAR -> SizeF(300f, 250f)
         else -> SizeF(300f, 150f)
     }
 
@@ -137,6 +138,7 @@ object WidgetRenderer {
         WidgetKind.DAYNAME -> listOf(SizeF(180f, 110f), defaultSize(kind), SizeF(380f, 230f))
         WidgetKind.KHATMA -> listOf(SizeF(140f, 110f), defaultSize(kind), SizeF(360f, 160f))
         WidgetKind.DHIKR -> listOf(SizeF(140f, 70f), defaultSize(kind), SizeF(380f, 200f))
+        WidgetKind.CALENDAR -> listOf(SizeF(200f, 170f), defaultSize(kind), SizeF(380f, 330f))
     }
 
     fun render(env: WidgetEnv, kind: WidgetKind, cfg: WidgetConfig, id: Int, sizes: List<SizeF>, preview: Boolean = false): WidgetRender {
@@ -195,6 +197,9 @@ object WidgetRenderer {
         }
         val key = StringBuilder()
         lateinit var rv: RemoteViews
+        val corner = WidgetConfig.CORNERS.minByOrNull { kotlin.math.abs(it - cfg.corner) } ?: 16
+        /** Gold for the raised look's edge and the progress line: deeper on light colours, brighter on dark ones. */
+        val gold: Int = if (colors.dark) 0xFFE5C57E.toInt() else 0xFFA47D2C.toInt()
 
         // Fonts used by the layouts (the Kufi setting picks the *_k layouts, whose styles use Noto Kufi Arabic).
         val kufi = cfg.font == WidgetFont.KUFI
@@ -210,7 +215,7 @@ object WidgetRenderer {
         /** px per sp at the user's text size and the system font scale. */
         val unit = density * ctx.resources.configuration.fontScale * cfg.textScale.coerceIn(WidgetConfig.SCALES) / 100f
         /** A roomy widget may grow its text up to this much beyond the chosen size. */
-        val maxUnit = unit * 1.35f
+        val maxUnit = unit * 1.55f
         val pad = (minOf(wDp, hDp) * 0.085f).coerceIn(6f, 14f) * density
         val boxW = wDp * density - 2 * pad
         val boxH = hDp * density - 2 * pad
@@ -244,6 +249,7 @@ object WidgetRenderer {
                 WidgetKind.DAYNAME -> pick(R.layout.w_dayname, R.layout.w_dayname_k)
                 WidgetKind.KHATMA -> pick(R.layout.w_khatma, R.layout.w_khatma_k)
                 WidgetKind.DHIKR -> pick(R.layout.w_dhikr, R.layout.w_dhikr_k)
+                WidgetKind.CALENDAR -> pick(R.layout.w_calendar, R.layout.w_calendar_k)
             }
         }
 
@@ -274,6 +280,7 @@ object WidgetRenderer {
                     WidgetKind.FAJR_MAGHRIB -> dawnDusk()
                     WidgetKind.KHATMA -> khatma()
                     WidgetKind.DHIKR -> dhikr()
+                    WidgetKind.CALENDAR -> calendar()
                     else -> prayers()
                 }
             }
@@ -282,7 +289,6 @@ object WidgetRenderer {
 
         /** Background, border, direction, padding and the tap target. */
         fun frame() {
-            val corner = WidgetConfig.CORNERS.minByOrNull { kotlin.math.abs(it - cfg.corner) } ?: 16
             rv.setImageViewResource(R.id.w_bg, when (corner) { 0 -> R.drawable.w_shape_0; 8 -> R.drawable.w_shape_8; 24 -> R.drawable.w_shape_24; else -> R.drawable.w_shape_16 })
             tint(R.id.w_bg, colors.bg, colors.bgAlpha)
             if (cfg.border > 0) {
@@ -295,9 +301,23 @@ object WidgetRenderer {
                 })
                 rv.setInt(R.id.w_border, "setColorFilter", colors.border)
                 rv.setViewVisibility(R.id.w_border, View.VISIBLE)
+            } else if (cfg.depth) {
+                // The raised look's gold hairline.
+                rv.setImageViewResource(R.id.w_border, when (corner) { 0 -> R.drawable.w_stroke_0_1; 8 -> R.drawable.w_stroke_8_1; 24 -> R.drawable.w_stroke_24_1; else -> R.drawable.w_stroke_16_1 })
+                rv.setInt(R.id.w_border, "setColorFilter", gold)
+                rv.setViewVisibility(R.id.w_border, View.VISIBLE)
             } else {
                 rv.setViewVisibility(R.id.w_border, View.GONE)
             }
+            // Light from above and a soft shade below, over the colour or the painting.
+            if (cfg.depth) {
+                rv.setImageViewResource(R.id.w_gloss, when (corner) { 0 -> R.drawable.w_gloss_0; 8 -> R.drawable.w_gloss_8; 24 -> R.drawable.w_gloss_24; else -> R.drawable.w_gloss_16 })
+                rv.setViewVisibility(R.id.w_gloss, View.VISIBLE)
+            } else {
+                rv.setViewVisibility(R.id.w_gloss, View.GONE)
+            }
+            rv.setViewVisibility(R.id.w_ring, View.GONE)
+            key.append("depth").append(cfg.depth).append('|')
             if (sky != null) {
                 // The launcher crops from the centre: wide widgets get a band from the bottom, so the skyline stays.
                 val wide = wDp >= hDp * 2.2f
@@ -330,6 +350,7 @@ object WidgetRenderer {
                     WidgetKind.CONTENT -> "discover"
                     WidgetKind.KHATMA -> "khatma"
                     WidgetKind.DHIKR -> "adhkar_lib"
+                    WidgetKind.CALENDAR -> com.sakina.app.MainActivity.OPEN_CALENDAR
                     else -> "times"
                 }
                 rv.setOnClickPendingIntent(R.id.w_root, WidgetIntents.open(ctx, target))
@@ -438,6 +459,7 @@ object WidgetRenderer {
             val name = str.prayer(next.key)
             val time = fmt.time(next.instant, zone)
             val remain = remainingText(snap) ?: ""
+            ring(snap.progress)
             val stamp = stampText()
             when (kind) {
                 WidgetKind.NEXT -> nextPrayer(name, time, remain, stamp)
@@ -463,7 +485,7 @@ object WidgetRenderer {
                 text(R.id.w_remain, r); color(R.id.w_remain, colors.muted)
                 solve(listOf(
                     place,
-                    Line(intArrayOf(R.id.w_name, R.id.w_time), listOf(name, time), 22f, semibold, padPx = 10f * density, inline = true),
+                    Line(intArrayOf(R.id.w_name, R.id.w_time), listOf(name, time), 25f, semibold, padPx = 10f * density, inline = true),
                     opt(R.id.w_remain, r, 13f, regular, drop = 2),
                 ))
             } else {
@@ -473,8 +495,8 @@ object WidgetRenderer {
                 text(R.id.w_stamp, st); color(R.id.w_stamp, colors.muted)
                 solve(listOf(
                     place,
-                    Line(intArrayOf(R.id.w_name), listOf(name), 20f, semibold),
-                    Line(intArrayOf(R.id.w_time), listOf(time), 22f, semibold),
+                    Line(intArrayOf(R.id.w_name), listOf(name), 21f, semibold),
+                    Line(intArrayOf(R.id.w_time), listOf(time), 26f, semibold),
                     opt(R.id.w_remain, rm, 13f, regular, drop = 2),
                     opt(R.id.w_stamp, st, 11f, regular, drop = 2),
                 ))
@@ -494,7 +516,7 @@ object WidgetRenderer {
             val roomy = listOf(
                 place,
                 Line(intArrayOf(R.id.w_label), listOf(label), 13f, medium),
-                Line(intArrayOf(R.id.w_big), listOf(big), 34f, semibold),
+                Line(intArrayOf(R.id.w_big), listOf(big), 39f, semibold),
                 Line(intArrayOf(R.id.w_time), listOf(time), 15f, medium),
                 opt(R.id.w_stamp, stamp, 11f, regular),
             )
@@ -509,7 +531,7 @@ object WidgetRenderer {
                 solve(listOf(
                     place,
                     Line(intArrayOf(R.id.w_label), listOf(merged), 13f, medium),
-                    Line(intArrayOf(R.id.w_big), listOf(big), 34f, semibold),
+                    Line(intArrayOf(R.id.w_big), listOf(big), 39f, semibold),
                     opt(R.id.w_stamp, stamp, 11f, regular),
                 ))
             }
@@ -523,13 +545,85 @@ object WidgetRenderer {
             for (i in 0 until 6) {
                 val wt = snap.times[i]
                 text(CELL_NAMES[i], names[i]); text(CELL_TIMES[i], times[i])
-                color(CELL_NAMES[i], if (wt.isNext) colors.accent else colors.muted)
-                color(CELL_TIMES[i], if (wt.isNext) colors.accent else colors.text)
+                cellColors(snap, i, colors.muted, colors.text)
                 tint(CELL_HL[i], colors.soft, colors.softAlpha)
                 visible(CELL_HL[i], wt.isNext && fill, gone = false)
                 visible(CELLS[i], i in cellIdx)
             }
             return cellIdx.map { names[it] } to cellIdx.map { times[it] }
+        }
+
+        /** The next prayer in the accent; prayers whose time has passed faded, so the day reads at a glance. */
+        fun cellColors(snap: PrayerSnapshot, i: Int, name: Int, time: Int) {
+            val wt = snap.times[i]
+            val passed = !wt.isNext && wt.at != null && !wt.at.isAfter(now)
+            fun fade(c: Int) = ((((c ushr 24) * 0.48f).toInt()) shl 24) or (c and 0xFFFFFF)
+            color(CELL_NAMES[i], if (wt.isNext) colors.accent else if (passed) fade(name) else name)
+            color(CELL_TIMES[i], if (wt.isNext) colors.accent else if (passed) fade(time) else time)
+            key.append(if (passed) 'p' else 'u')
+        }
+
+        /**
+         * The progress line: gold along the widget's edge from the top's middle, clockwise, as far as the time has
+         * gone from the last prayer to the next, with a small bead at its head. Drawn as a mask the launcher tints.
+         */
+        fun ring(progress: Float?) {
+            if (!cfg.progress || !kind.hasProgress || progress == null) { visible(R.id.w_ring, false); return }
+            val q = 0.75f
+            val w = (wDp * density * q).toInt().coerceIn(8, 1600)
+            val h = (hDp * density * q).toInt().coerceIn(8, 1600)
+            val bmp = android.graphics.Bitmap.createBitmap(w, h, android.graphics.Bitmap.Config.ALPHA_8)
+            val c = android.graphics.Canvas(bmp)
+            val stroke = 2.6f * density * q
+            val inset = 0.9f * density * q + stroke / 2
+            val path = WidgetRing.path(w.toFloat(), h.toFloat(), inset, (corner * density * q - inset).coerceAtLeast(0f))
+            val pm = android.graphics.PathMeasure(path, false)
+            val len = pm.length
+            val at = len * progress.coerceIn(0f, 1f)
+            val paint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
+                style = android.graphics.Paint.Style.STROKE; strokeWidth = stroke; strokeCap = android.graphics.Paint.Cap.ROUND; color = android.graphics.Color.BLACK
+            }
+            if (at > 0.5f) {
+                val seg = android.graphics.Path()
+                pm.getSegment(0f, at, seg, true)
+                c.drawPath(seg, paint)
+            }
+            val pos = FloatArray(2)
+            pm.getPosTan(at, pos, null)
+            paint.style = android.graphics.Paint.Style.FILL
+            c.drawCircle(pos[0], pos[1], stroke * 1.3f, paint)
+            rv.setImageViewBitmap(R.id.w_ring, bmp)
+            rv.setInt(R.id.w_ring, "setColorFilter", gold)
+            visible(R.id.w_ring, true)
+            key.append("ring").append((progress * 400).toInt()).append('|')
+        }
+
+        /** The Hijri month as one picture (see [WidgetCalendar]); it changes at midnight. */
+        fun calendar(): Instant {
+            val today = now.atZone(zone).toLocalDate()
+            val month = com.sakina.app.core.calendar.MonthRef.of(com.sakina.app.core.calendar.CalendarKind.HIJRI, today, s.hijriOffset)
+            val weekStart = if (lang == Lang.AR) java.time.DayOfWeek.SATURDAY else java.time.DayOfWeek.MONDAY
+            val grid = month?.let { com.sakina.app.core.calendar.MonthGrid.build(it, s.hijriOffset, weekStart) }
+            if (month == null || grid == null) {
+                message(str.wNoTimes, null)
+                return WidgetMath.nextMidnight(now, zone)
+            }
+            val coming = com.sakina.app.core.calendar.Occasions.next(today, s.hijriOffset)
+            val spec = WidgetCalendar.Spec(
+                width = boxW.toInt().coerceIn(40, 1600), height = boxH.toInt().coerceIn(40, 1600), density = density,
+                textScale = (cfg.textScale.coerceIn(WidgetConfig.SCALES) / 100f) * ctx.resources.configuration.fontScale.coerceIn(0.85f, 1.3f),
+                str = str, fmt = fmt, month = month, grid = grid, weekdays = com.sakina.app.core.calendar.MonthGrid.weekdays(weekStart),
+                today = today, hijriOffset = s.hijriOffset, gregorian = cfg.showDate,
+                coming = coming, colors = colors, gold = gold,
+                regular = regular, medium = medium, bold = semibold, title = Typo.face(ctx, if (kufi) R.font.kufi_bold else R.font.amiri_bold),
+            )
+            val drawn = WidgetCalendar.draw(spec)
+            rv.setImageViewBitmap(R.id.w_cal, drawn.bitmap)
+            rv.setContentDescription(R.id.w_cal, drawn.description)
+            text(R.id.w_msg, "")
+            visible(R.id.w_msg, false)
+            key.append("cal").append(today).append(s.hijriOffset).append(spec.width).append('x').append(spec.height).append(cfg.showDate).append('|')
+            return WidgetMath.nextMidnight(now, zone)
         }
 
         fun dateText(snap: PrayerSnapshot): String {
@@ -565,10 +659,10 @@ object WidgetRenderer {
             text(R.id.w_remain, r); color(R.id.w_remain, colors.muted)
             color(R.id.w_place, colors.muted)
             val (names, times) = cellTexts(snap)
-            for (i in 0 until 6) { color(CELL_NAMES[i], if (snap.times[i].isNext) colors.accent else colors.muted); color(CELL_TIMES[i], if (snap.times[i].isNext) colors.accent else colors.text) }
+            for (i in 0 until 6) cellColors(snap, i, colors.muted, colors.text)
             solve(listOf(
                 placeL,
-                Line(intArrayOf(R.id.w_name, R.id.w_time), listOf(name, time), 20f, regular, padPx = 10f * density, inline = true),
+                Line(intArrayOf(R.id.w_name, R.id.w_time), listOf(name, time), 23f, regular, padPx = 10f * density, inline = true),
                 opt(R.id.w_remain, r, 12f, regular, drop = 2),
                 Line(cellNameIds, names, 10f, regular, drop = 1, padPx = 4f * density, with = intArrayOf(R.id.w_cells)),
                 Line(cellTimeIds, times, 12f, regular, drop = 1, padPx = 4f * density),
@@ -580,10 +674,10 @@ object WidgetRenderer {
             val full = fmt.time(at, zone)
             val short = fmt.time(at, zone, suffix = false)
             val readable = density * 0.72f * minOf(1f, cfg.textScale / 100f)
-            val tryFull = Fit.scale(listOf(FitLine(name, 12f, measure = Typo.measure(medium), lineHeight = Typo.lineHeight(medium)), FitLine(full, 20f, measure = Typo.measure(semibold), lineHeight = Typo.lineHeight(semibold))), boxW, boxH, maxUnit, density * 0.4f, Typo.measure(regular), Typo.lineHeight(regular), 1f)
+            val tryFull = Fit.scale(listOf(FitLine(name, 12f, measure = Typo.measure(medium), lineHeight = Typo.lineHeight(medium)), FitLine(full, 22f, measure = Typo.measure(semibold), lineHeight = Typo.lineHeight(semibold))), boxW, boxH, maxUnit, density * 0.4f, Typo.measure(regular), Typo.lineHeight(regular), 1f)
             val t = if (tryFull != null && tryFull >= readable) full else short
             text(R.id.w_time, t); color(R.id.w_time, colors.text)
-            solve(listOf(Line(intArrayOf(R.id.w_name), listOf(name), 12f, medium), Line(intArrayOf(R.id.w_time), listOf(t), 20f, semibold)), gap = 1f)
+            solve(listOf(Line(intArrayOf(R.id.w_name), listOf(name), 12f, medium), Line(intArrayOf(R.id.w_time), listOf(t), 22f, semibold)), gap = 1f)
         }
 
         fun strip(snap: PrayerSnapshot) {
@@ -621,7 +715,7 @@ object WidgetRenderer {
             val clockIds = if (is24) intArrayOf(R.id.w_clock) else intArrayOf(R.id.w_clock, R.id.w_ampm)
             solve(listOf(
                 placeL,
-                Line(clockIds, listOfNotNull(clockSample, ampmSample.takeIf { it.isNotEmpty() }), 40f, semibold, padPx = 6f * density, inline = true),
+                Line(clockIds, listOfNotNull(clockSample, ampmSample.takeIf { it.isNotEmpty() }), 45f, semibold, padPx = 6f * density, inline = true),
                 opt(R.id.w_date, date, 11f, regular, drop = 1),
                 Line(intArrayOf(R.id.w_remain), listOf(r), 13f, medium, drop = 2),
                 opt(R.id.w_stamp, stamp, 10f, regular, drop = 2),
@@ -840,7 +934,7 @@ object WidgetRenderer {
             val lines = buildList {
                 add(placeL)
                 add(Line(intArrayOf(R.id.w_fajr_label, R.id.w_maghrib_label), listOf(fajrL, maghribL), 12f, medium))
-                add(Line(intArrayOf(R.id.w_fajr_time, R.id.w_maghrib_time), listOf(fajrT, maghribT), 20f, semibold, padPx = 4f * density))
+                add(Line(intArrayOf(R.id.w_fajr_time, R.id.w_maghrib_time), listOf(fajrT, maghribT), 22f, semibold, padPx = 4f * density))
                 if (hijri.isNotEmpty()) add(Line(intArrayOf(R.id.w_hijri), listOf(hijri), 12f, regular, drop = 1))
                 if (ctxLine.isNotEmpty()) add(Line(intArrayOf(R.id.w_ramadan), listOf(ctxLine), 12f, medium, drop = if (liveCtx) 0 else 2))
                 if (live && cfg.showStamp) add(Line(intArrayOf(R.id.w_stamp), listOf(stamp), 10f, regular))

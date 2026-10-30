@@ -28,6 +28,8 @@
     <string name="w_label_khatma">Khatma</string>
     <string name="w_desc_khatma">Today\'s pages of your khatma</string>
     <string name="w_label_dhikr">Stretched dhikr</string>
+    <string name="w_label_calendar">Hijri calendar</string>
+    <string name="w_desc_calendar">The Hijri month with today and the occasions</string>
     <string name="w_desc_dhikr">A short dhikr in stretched Kufi</string>
     <string name="w_label_dayname">Day name</string>
     <string name="w_desc_dayname">The day stretched across, with the dates and prayers</string>

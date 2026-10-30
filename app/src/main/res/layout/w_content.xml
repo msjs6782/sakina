@@ -32,12 +32,28 @@
         android:visibility="gone" />
 
     <ImageView
+        android:id="@+id/w_gloss"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="fitXY"
+        android:src="@drawable/w_gloss_16" />
+
+    <ImageView
         android:id="@+id/w_border"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:importantForAccessibility="no"
         android:scaleType="fitXY"
         android:src="@drawable/w_stroke_16_1"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/w_ring"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="fitXY"
         android:visibility="gone" />
 
     <LinearLayout

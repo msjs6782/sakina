@@ -86,6 +86,7 @@ class FajrMaghribWidget : SakinaWidgetProvider(WidgetKind.FAJR_MAGHRIB)
 class DayNameWidget : SakinaWidgetProvider(WidgetKind.DAYNAME)
 class KhatmaWidget : SakinaWidgetProvider(WidgetKind.KHATMA)
 class DhikrWidget : SakinaWidgetProvider(WidgetKind.DHIKR)
+class CalendarWidget : SakinaWidgetProvider(WidgetKind.CALENDAR)
 
 /** The non-waking alarm that redraws widgets when their content changes (every minute for remaining times). */
 class WidgetTickReceiver : BroadcastReceiver() {
@@ -153,6 +154,7 @@ object WidgetUpdater {
         WidgetKind.DAYNAME to DayNameWidget::class.java,
         WidgetKind.KHATMA to KhatmaWidget::class.java,
         WidgetKind.DHIKR to DhikrWidget::class.java,
+        WidgetKind.CALENDAR to CalendarWidget::class.java,
     )
 
     fun providerClass(kind: WidgetKind): Class<out SakinaWidgetProvider> = providers.getValue(kind)

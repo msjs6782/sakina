@@ -30,13 +30,18 @@ enum class WidgetKind(val id: String) {
     /** The khatma plan: today's pages, progress and whether the reader is on track. */
     KHATMA("khatma"),
     /** A short dhikr in heavy Kufi, stretched with kashida across the widget (never the divine name). */
-    DHIKR("dhikr");
+    DHIKR("dhikr"),
+    /** The Hijri month as a grid: today raised, Fridays, the white days and occasions marked, the next occasion. */
+    CALENDAR("calendar");
 
     /** Types that show a remaining time; it is a snapshot refreshed about once a minute and shown with its time. */
     val showsRemaining: Boolean get() = this in setOf(NEXT, COUNTDOWN, DAY, GLASS, DIGITAL, FAJR_MAGHRIB, DAYNAME)
 
     /** Types whose content depends on prayer times (and so on a place). */
-    val needsPlace: Boolean get() = this != CONTENT && this != KHATMA && this != DHIKR
+    val needsPlace: Boolean get() = this != CONTENT && this != KHATMA && this != DHIKR && this != CALENDAR
+
+    /** Types that can show the time since the last prayer filling up towards the next (a gold line along the edge). */
+    val hasProgress: Boolean get() = this in setOf(NEXT, COUNTDOWN, DAY, GLASS, MINI, STRIP, DIGITAL, ANALOG, DAYNAME)
 
     companion object {
         fun of(id: String): WidgetKind? = entries.firstOrNull { it.id == id }
@@ -59,6 +64,9 @@ data class PrayerSnapshot(
     val times: List<WidgetTime>,
     /** False when the day's times cannot be calculated here (polar day or night). */
     val complete: Boolean,
+    /** The last prayer before now, and how far the time has gone from it to the next one (0–1). */
+    val previous: Instant? = null,
+    val progress: Float? = null,
 )
 
 object WidgetMath {
@@ -78,7 +86,15 @@ object WidgetMath {
             val t = day[k]
             WidgetTime(k, t.instant, next != null && next.key == k && next.date == shown)
         }
-        return PrayerSnapshot(now, shown, next, next?.let { minutesLeft(now, it.instant) }, times, day.allAvailable)
+        val previous = schedule.previous(now)?.instant
+        return PrayerSnapshot(now, shown, next, next?.let { minutesLeft(now, it.instant) }, times, day.allAvailable, previous, progress(previous, next?.instant, now))
+    }
+
+    /** How far [now] is from [from] to [to], 0–1; null without both or when they are in the wrong order. */
+    fun progress(from: Instant?, to: Instant?, now: Instant): Float? {
+        if (from == null || to == null || !to.isAfter(from)) return null
+        val total = Duration.between(from, to).seconds.toDouble()
+        return (Duration.between(from, now).seconds / total).toFloat().coerceIn(0f, 1f)
     }
 
     /** The next whole minute (plus a second, so the minute has surely turned when the update runs). */

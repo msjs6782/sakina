@@ -78,6 +78,10 @@ data class WidgetConfig(
     val showStamp: Boolean = true,
     /** Sunrise in the prayer tables; null: the type's default (the day-name widget leaves it out). */
     val showSunrise: Boolean? = null,
+    /** The raised look: light from above, a soft shade below and a gold hairline edge. */
+    val depth: Boolean = true,
+    /** A gold line along the edge that grows from the last prayer to the next. */
+    val progress: Boolean = true,
     val contentMode: ContentMode = ContentMode.MIXED,
     /** Steps taken with the content widget's "next" button; added to the day's position in the list. */
     val contentShift: Int = 0,

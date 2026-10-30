@@ -208,12 +208,12 @@ fun WidgetsScreen(vm: MainViewModel, s: AppSettings) {
                         val psize = remember(w.id, tick) { WidgetUpdater.sizesOf(context, w.id, w.kind).maxByOrNull { it.height } ?: WidgetRenderer.defaultSize(w.kind) }
                         val pviews = remember(w, s, tick) { previewViews(app, s, w.kind, w.config, psize) }
                         RemoteViewPreview(pviews, psize.width, psize.height, "placed_preview_${w.kind.id}", Modifier.padding(vertical = 6.dp), maxHeightDp = 140f)
-                        val sub = if (w.kind.needsPlace) place else when (w.config.contentMode) {
+                        val sub = if (w.kind.needsPlace) place else if (w.kind != WidgetKind.CONTENT) "" else when (w.config.contentMode) {
                             ContentMode.MIXED -> str.wContentMixed
                             ContentMode.ADHKAR -> str.wContentAdhkar
                             ContentMode.VERSES -> str.wContentVerses
                         }
-                        Text(sub, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+                        if (sub.isNotEmpty()) Text(sub, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 6.dp)) {
                             OutlinedButton(onClick = {
                                 context.startActivity(
@@ -491,6 +491,11 @@ fun WidgetConfigScreen(
                 }
             }
 
+            SectionCard(title = str.wLook, modifier = Modifier.testTag("wcfg_look")) {
+                SwitchRow(cfg.depth, str.wDepth, str.wDepthNote, modifier = Modifier.testTag("wcfg_depth")) { cfg = cfg.copy(depth = it) }
+                if (kind.hasProgress) SwitchRow(cfg.progress, str.wProgress, str.wProgressNote, modifier = Modifier.testTag("wcfg_progress")) { cfg = cfg.copy(progress = it) }
+            }
+
             SectionCard(title = str.wCorners) {
                 Chips(WidgetConfig.CORNERS.map { it to str.digits("$it") }, cfg.corner, "wcfg_corner_") { cfg = cfg.copy(corner = it) }
                 Text(str.wBorder, style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 10.dp))
@@ -516,7 +521,7 @@ private fun ElementsCard(kind: WidgetKind, cfg: WidgetConfig, onChange: (WidgetC
     val str = LocalStrings.current
     val hasPlace = kind in setOf(WidgetKind.NEXT, WidgetKind.COUNTDOWN, WidgetKind.DAY, WidgetKind.GLASS, WidgetKind.DIGITAL, WidgetKind.ANALOG, WidgetKind.FAJR_MAGHRIB, WidgetKind.DAYNAME)
     val hasRefresh = hasPlace && kind != WidgetKind.ANALOG
-    val hasDate = kind in setOf(WidgetKind.DAY, WidgetKind.DIGITAL, WidgetKind.FAJR_MAGHRIB, WidgetKind.DAYNAME)
+    val hasDate = kind in setOf(WidgetKind.DAY, WidgetKind.DIGITAL, WidgetKind.FAJR_MAGHRIB, WidgetKind.DAYNAME, WidgetKind.CALENDAR)
     val hasRemaining = kind.showsRemaining && kind != WidgetKind.COUNTDOWN
     val hasTable = kind in setOf(WidgetKind.DAY, WidgetKind.GLASS, WidgetKind.STRIP, WidgetKind.DAYNAME)
     if (!hasPlace && !hasDate && !kind.showsRemaining && !hasTable) return

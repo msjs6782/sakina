@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sizes are suggestions; the launcher decides. The month is drawn again for the size it gets. -->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="com.sakina.app.widgets.WidgetConfigActivity"
+    android:description="@string/w_desc_calendar"
+    android:initialLayout="@layout/w_calendar"
+    android:minWidth="250dp"
+    android:minHeight="180dp"
+    android:minResizeWidth="180dp"
+    android:minResizeHeight="150dp"
+    android:previewImage="@drawable/w_preview_calendar"
+    android:previewLayout="@layout/w_calendar_preview"
+    android:resizeMode="horizontal|vertical"
+    android:targetCellWidth="4"
+    android:targetCellHeight="3"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="home_screen"
+    android:widgetFeatures="reconfigurable|configuration_optional" />

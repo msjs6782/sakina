@@ -92,6 +92,33 @@ object MushafRender {
      */
     suspend fun region(file: File, width: Int, height: Int, matrix: Matrix): Bitmap? = draw(file, width, height, matrix)
 
+    /** The whole page at [width]×[height] (for finding its frame). */
+    internal suspend fun whole(file: File, width: Int, height: Int): Bitmap? = draw(file, width, height, null)
+
+    internal fun cachedBitmap(key: String): Bitmap? = cache.get(key)
+    internal fun keep(key: String, bmp: Bitmap) { cache.put(key, bmp) }
+
+    /**
+     * Opens the page once and runs [block] with it, for drawings made of several parts (one page at a time, as
+     * PdfRenderer requires). Logged as "rendered <file> [label] in … ms".
+     */
+    internal suspend fun <T> withPage(file: File, label: String, block: (PdfRenderer.Page) -> T): T? = withContext(Dispatchers.IO) {
+        if (!file.isFile) return@withContext null
+        lock.withLock {
+            try {
+                val t0 = System.nanoTime()
+                val r = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY).use { fd ->
+                    PdfRenderer(fd).use { pr -> pr.openPage(0).use { p -> block(p) } }
+                }
+                Log.d(MushafRepository.TAG, "rendered ${file.name} $label in ${(System.nanoTime() - t0) / 1_000_000} ms")
+                r
+            } catch (t: Throwable) {
+                Log.w(MushafRepository.TAG, "cannot render ${file.name} ($label): $t")
+                null
+            }
+        }
+    }
+
     private suspend fun draw(file: File, width: Int, height: Int, matrix: Matrix?): Bitmap? = withContext(Dispatchers.IO) {
         if (width <= 0 || height <= 0 || !file.isFile) return@withContext null
         lock.withLock {

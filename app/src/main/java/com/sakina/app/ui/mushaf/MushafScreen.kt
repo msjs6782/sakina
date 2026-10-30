@@ -94,6 +94,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sakina.app.core.mushaf.MushafManifest
 import com.sakina.app.core.quran.Khatma
 import com.sakina.app.data.LastRead
+import com.sakina.app.data.MushafFill
 import com.sakina.app.data.MushafNight
 import com.sakina.app.data.MushafRender
 import com.sakina.app.data.NetState
@@ -214,7 +215,8 @@ private fun MushafViewer(vm: MainViewModel, d: QuranData, startPage: Int, focus:
                     val p = index + 1
                     if (p in available) {
                         PageImage(
-                            file = repo.file(p), page = p, night = prefs.mushafNight, trim = prefs.mushafTrim,
+                            file = repo.file(p), page = p, night = prefs.mushafNight, trim = prefs.mushafTrim, fill = prefs.mushafFill,
+                            mark = hizbMark(d, p, str, fmt),
                             initialZoom = if (p == startPage) MushafDebug.initialZoom else 1f,
                             onZoomed = { z -> zoomedPage = if (z) p else if (zoomedPage == p) 0 else zoomedPage },
                             onTap = { barsVisible = !barsVisible },
@@ -319,7 +321,13 @@ private fun TopBar(vm: MainViewModel, d: QuranData, page: Int, a: MenuActions, o
                     }
                     androidx.compose.material3.HorizontalDivider()
                     DropdownMenuItem(
-                        text = { Text((if (qs.reader.mushafTrim) "✓ " else "    ") + str.mushafTrim) },
+                        text = { Text((if (qs.reader.mushafFill) "✓ " else "    ") + str.mushafFill) },
+                        onClick = { vm.updateQuran { it.copy(reader = it.reader.copy(mushafFill = !it.reader.mushafFill)) }; onMenuClose() },
+                        modifier = Modifier.testTag("mushaf_fill"),
+                    )
+                    DropdownMenuItem(
+                        text = { Text((if (qs.reader.mushafTrim || qs.reader.mushafFill) "✓ " else "    ") + str.mushafTrim) },
+                        enabled = !qs.reader.mushafFill,
                         onClick = { vm.updateQuran { it.copy(reader = it.reader.copy(mushafTrim = !it.reader.mushafTrim)) }; onMenuClose() },
                         modifier = Modifier.testTag("mushaf_trim"),
                     )
@@ -402,45 +410,93 @@ private class ZoomState {
 
 private class Detail(val bitmap: Bitmap, val scale: Float, val tx: Float, val ty: Float)
 
+/** What a page shows: its drawing, its size on screen and, when it fills the screen, how it was laid out. */
+private class Look(val base: Bitmap, val fw: Float, val fh: Float, val crop: MushafRender.Crop, val filled: MushafFill.Filled?)
+
+private fun fitted(c: MushafRender.Crop, cw: Int, ch: Int): Pair<Float, Float> {
+    val fw = if (cw.toFloat() / ch < c.ratio) cw.toFloat() else ch * c.ratio
+    return fw to fw / c.ratio
+}
+
+/** The look already drawn this session, or null while it is still to be drawn. */
+private fun cachedLook(page: Int, fill: Boolean, trim: Boolean, cw: Int, ch: Int): Look? {
+    if (cw <= 0 || ch <= 0) return null
+    if (fill) {
+        MushafFill.cached(page, cw, ch)?.let { return Look(it.bitmap, cw.toFloat(), ch.toFloat(), MushafRender.Crop.FULL, it) }
+        val f = MushafFill.cachedFrame(page)
+        if (f == null && !MushafFill.knownWithout(page)) return null
+        if (f != null && com.sakina.app.core.mushaf.PageFill.plan(f, cw, ch) != null) return null
+    }
+    val c = if (trim || fill) MushafRender.cachedCrop(page) ?: return null else MushafRender.Crop.FULL
+    val (fw, fh) = fitted(c, cw, ch)
+    val b = MushafRender.cached(page, fw.roundToInt(), c) ?: return null
+    return Look(b, fw, fh, c, null)
+}
+
+private suspend fun loadLook(file: File, page: Int, fill: Boolean, trim: Boolean, cw: Int, ch: Int): Look? {
+    if (cw <= 0 || ch <= 0) return null
+    if (fill) MushafFill.page(file, page, cw, ch)?.let { return Look(it.bitmap, cw.toFloat(), ch.toFloat(), MushafRender.Crop.FULL, it) }
+    // As printed: the frame without the paper around it (found once per page), or the whole page.
+    val c = if (trim || fill) MushafRender.crop(file, page) else MushafRender.Crop.FULL
+    val (fw, fh) = fitted(c, cw, ch)
+    val b = MushafRender.page(file, page, fw.roundToInt(), c) ?: return null
+    return Look(b, fw, fh, c, null)
+}
+
+/** The hizb quarter that starts on a page, as the printed margin names it (the margin is cut when the page fills the screen). */
+private fun hizbMark(d: QuranData, page: Int, str: com.sakina.app.ui.Strings, fmt: com.sakina.app.core.format.Fmt): String? {
+    val q = d.meta.pageRange(page).firstOrNull { d.meta.startsQuarter(it) }?.let { d.meta.quarterOf(it) } ?: return null
+    if (q <= 1) return null
+    val hizb = (q - 1) / 4 + 1
+    val part = (q - 1) % 4
+    return if (part == 0) { if (hizb % 2 == 1) str.juzN(fmt.num((hizb + 1) / 2)) else str.hizbN(fmt.num(hizb)) } else str.hizbPart(part, fmt.num(hizb))
+}
+
 @Composable
-private fun PageImage(file: File, page: Int, night: MushafNight, trim: Boolean, initialZoom: Float, onZoomed: (Boolean) -> Unit, onTap: () -> Unit) {
+private fun PageImage(
+    file: File, page: Int, night: MushafNight, trim: Boolean, fill: Boolean, mark: String?,
+    initialZoom: Float, onZoomed: (Boolean) -> Unit, onTap: () -> Unit,
+) {
     val zoom = remember(page) { ZoomState() }
     val scope = rememberCoroutineScope()
     val filter = remember(night) { nightFilter(night) }
-    // The printed frame without the white paper around it (found once per page), or the whole page.
-    val crop by produceState(if (trim) MushafRender.cachedCrop(page) else MushafRender.Crop.FULL, file, trim) {
-        value = if (trim) MushafRender.crop(file, page) else MushafRender.Crop.FULL
-    }
-    val c = crop ?: return
     BoxWithConstraints(Modifier.fillMaxSize()) {
-        val cw = constraints.maxWidth.toFloat()
-        val ch = constraints.maxHeight.toFloat()
-        val ratio = c.ratio
-        val fw = if (cw / ch < ratio) cw else ch * ratio
-        val fh = fw / ratio
-        zoom.cw = cw; zoom.ch = ch; zoom.fw = fw; zoom.fh = fh
-        val base by produceState<Bitmap?>(MushafRender.cached(page, fw.roundToInt(), c), file, fw, c) {
-            value = MushafRender.page(file, page, fw.roundToInt(), c)
+        val cwi = constraints.maxWidth
+        val chi = constraints.maxHeight
+        val cw = cwi.toFloat()
+        val ch = chi.toFloat()
+        // Filled to the screen (centred, the lines spread to its height), or as printed.
+        val look by produceState(cachedLook(page, fill, trim, cwi, chi), file, fill, trim, cwi, chi) {
+            value = loadLook(file, page, fill, trim, cwi, chi)
         }
-        LaunchedEffect(initialZoom, fw) {
-            if (initialZoom > 1f && fw > 0) zoom.set(initialZoom, 0f, -fh * 0.25f)
+        val l = look
+        val fw = l?.fw ?: cw
+        val fh = l?.fh ?: ch
+        zoom.cw = cw; zoom.ch = ch; zoom.fw = fw; zoom.fh = fh
+        LaunchedEffect(initialZoom, l != null) {
+            if (initialZoom > 1f && l != null) zoom.set(initialZoom, 0f, -fh * 0.25f)
         }
         LaunchedEffect(zoom.zoomed) { onZoomed(zoom.zoomed) }
         // When the zoom settles, draw the visible part again at full sharpness.
         var detail by remember { mutableStateOf<Detail?>(null) }
-        LaunchedEffect(zoom.scale, zoom.tx, zoom.ty, fw, c) {
-            if (!zoom.zoomed) { detail = null; return@LaunchedEffect }
+        LaunchedEffect(zoom.scale, zoom.tx, zoom.ty, l) {
+            if (!zoom.zoomed || l == null) { detail = null; return@LaunchedEffect }
             delay(180)
             val s = zoom.scale; val x = zoom.tx; val y = zoom.ty
-            val k = fw / c.w
-            val m = Matrix().apply {
-                setTranslate(-c.x, -c.y)
-                postScale(k * s, k * s)
-                postTranslate((cw - fw) / 2 + fw / 2 * (1 - s) + x, (ch - fh) / 2 + fh / 2 * (1 - s) + y)
+            val ox = (cw - fw) / 2 + fw / 2 * (1 - s) + x
+            val oy = (ch - fh) / 2 + fh / 2 * (1 - s) + y
+            val filled = l.filled
+            val bmp = if (filled != null) MushafFill.region(file, filled.layout, s, ox, oy, cwi, chi) else {
+                val c = l.crop
+                val k = fw / c.w
+                MushafRender.region(file, cwi, chi, Matrix().apply { setTranslate(-c.x, -c.y); postScale(k * s, k * s); postTranslate(ox, oy) })
             }
-            MushafRender.region(file, cw.roundToInt(), ch.roundToInt(), m)?.let { detail = Detail(it, s, x, y) }
+            bmp?.let { detail = Detail(it, s, x, y) }
         }
         val density = LocalDensity.current
+        val layer = Modifier.graphicsLayer {
+            scaleX = zoom.scale; scaleY = zoom.scale; translationX = zoom.tx; translationY = zoom.ty
+        }
         Box(
             Modifier.fillMaxSize()
                 .pointerInput(page) {
@@ -474,18 +530,48 @@ private fun PageImage(file: File, page: Int, night: MushafNight, trim: Boolean, 
                 .testTag("mushaf_page_$page"),
             contentAlignment = Alignment.Center,
         ) {
-            val b = base
-            if (b != null) {
+            val size = with(density) { Modifier.size(fw.toDp(), fh.toDp()) }
+            if (l != null) {
                 Image(
-                    b.asImageBitmap(), contentDescription = null, contentScale = ContentScale.FillBounds, colorFilter = filter,
-                    modifier = with(density) { Modifier.size(fw.toDp(), fh.toDp()) }.graphicsLayer {
-                        scaleX = zoom.scale; scaleY = zoom.scale; translationX = zoom.tx; translationY = zoom.ty
-                    },
+                    l.base.asImageBitmap(), contentDescription = null, contentScale = ContentScale.FillBounds, colorFilter = filter,
+                    modifier = size.then(layer).then(if (l.filled != null) Modifier.testTag("mushaf_filled") else Modifier),
                 )
             }
             val dt = detail
             if (dt != null && dt.scale == zoom.scale && dt.tx == zoom.tx && dt.ty == zoom.ty) {
                 Image(dt.bitmap.asImageBitmap(), contentDescription = null, contentScale = ContentScale.FillBounds, colorFilter = filter, modifier = Modifier.fillMaxSize().testTag("mushaf_detail"))
+            }
+            val filled = l?.filled
+            if (filled != null && mark != null) HizbMark(filled, mark, night, size.then(layer))
+        }
+    }
+}
+
+/**
+ * The hizb quarter's name in the middle of the header line, where the printed margin had it beside the frame (the
+ * margin is cut when the page fills the screen). Left out when the header has no room for it.
+ */
+@Composable
+private fun HizbMark(filled: MushafFill.Filled, text: String, night: MushafNight, modifier: Modifier) {
+    val (bg, ink) = when (night) {
+        MushafNight.DARK -> Color(0xFF243A2B) to Color(0xFFCFE6D3)
+        MushafNight.WARM -> Color(0xFFD9E4C4) to Color(0xFF3B4A2A)
+        MushafNight.OFF -> Color(0xFFCDEBD2) to Color(0xFF24553A)
+    }
+    androidx.compose.ui.layout.Layout(
+        content = {
+            Text(
+                text, color = ink, maxLines = 1, softWrap = false,
+                style = MaterialTheme.typography.labelSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold),
+                modifier = Modifier.background(bg, RoundedCornerShape(50)).padding(horizontal = 8.dp, vertical = 1.dp).testTag("mushaf_hizb_mark"),
+            )
+        },
+        modifier = modifier,
+    ) { measurables, constraints ->
+        val pl = measurables.first().measure(androidx.compose.ui.unit.Constraints())
+        layout(constraints.maxWidth, constraints.maxHeight) {
+            if (pl.width <= filled.headerRoom * 0.92f) {
+                pl.place((filled.headerX - pl.width / 2f).roundToInt(), (filled.headerY - pl.height / 2f).roundToInt())
             }
         }
     }

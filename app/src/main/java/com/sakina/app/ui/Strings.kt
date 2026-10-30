@@ -600,6 +600,12 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     fun pageN(n: String) = t("صفحة $n", "Page $n")
     fun juzN(n: String) = t("الجزء $n", "Juz $n")
     fun hizbN(n: String) = t("الحزب $n", "Hizb $n")
+    /** A quarter of a hizb, as the printed margin names it: [part] 1 = a quarter, 2 = half, 3 = three quarters. */
+    fun hizbPart(part: Int, n: String) = when (part) {
+        1 -> t("ربع الحزب $n", "¼ Hizb $n")
+        2 -> t("نصف الحزب $n", "½ Hizb $n")
+        else -> t("ثلاثة أرباع الحزب $n", "¾ Hizb $n")
+    }
     fun quarterName(q: Int, fmtNum: (Int) -> String): String {
         val hizb = (q - 1) / 4 + 1
         return when ((q - 1) % 4) {
@@ -1233,6 +1239,11 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val wReset get() = t("الإعدادات الافتراضية", "Defaults")
     val wPreview get() = t("المعاينة", "Preview")
     val wSaved get() = t("حُفظت الإعدادات", "Settings saved")
+    val wLook get() = t("المظهر", "Look")
+    val wDepth get() = t("بارز بلمسة ذهبية", "Raised, with a gold edge")
+    val wDepthNote get() = t("ضوء من الأعلى وظل خفيف في الأسفل وحافة ذهبية رفيعة.", "Light from above, a soft shade below and a fine gold edge.")
+    val wProgress get() = t("خط ذهبي يمتلئ حتى الصلاة القادمة", "A gold line filling up to the next prayer")
+    val wProgressNote get() = t("يسري على حافة الويدجت من الصلاة الماضية إلى القادمة، ويُحدَّث مع المتبقي.", "Runs along the widget's edge from the last prayer to the next, updated with the time left.")
     fun widgetName(id: String) = when (id) {
         "next" -> t("الصلاة التالية", "Next prayer")
         "countdown" -> t("المتبقي الكبير", "Big countdown")
@@ -1246,6 +1257,7 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
         "dayname" -> t("اليوم الممدود", "Day name")
         "khatma" -> t("الختمة", "Khatma")
         "dhikr" -> t("ذكر ممدود", "Stretched dhikr")
+        "calendar" -> t("التقويم الهجري", "Hijri calendar")
         else -> t("الفجر والمغرب", "Fajr and Maghrib")
     }
     fun widgetDesc(id: String) = when (id) {
@@ -1260,6 +1272,7 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
         "content" -> t("ذكر قصير أو آية مختارة مع المصدر.", "A short dhikr or a selected verse with its source.")
         "khatma" -> t("ورد اليوم من خطة الختمة ونسبة التقدم، ويفتح على صفحتك.", "Today's pages of your khatma and your progress; opens on your page.")
         "dhikr" -> t("ذكر قصير بخط كوفي ثقيل ممدود بالكشيدة على عرض الويدجت، ويتبدّل كل يوم.", "A short dhikr in heavy Kufi stretched with kashida across the widget; a new one each day.")
+        "calendar" -> t("الشهر الهجري كاملًا: اليوم بارز بإطار ذهبي، والجمعة والأيام البيض والمناسبات معلّمة، والمناسبة القادمة أسفله.", "The whole Hijri month: today raised with a gold edge, Fridays, the white days and occasions marked, and the next occasion below.")
         "dayname" -> t("اسم اليوم بخط كوفي ممدود بالكشيدة على عرض الويدجت، مع التاريخين والصلوات والمتبقي.", "The day's name in bold Kufi stretched with kashida across the widget, with both dates, the prayers and the time left.")
         else -> t("الفجر والمغرب والتاريخ الهجري وسياق رمضان.", "Fajr, Maghrib, the Hijri date and the Ramadan context.")
     }
@@ -1348,6 +1361,7 @@ class Strings(val lang: Lang, val arabicDigits: Boolean = lang == Lang.AR) {
     val lockNoteTitleSetting get() = t("الصلاة القادمة على شاشة القفل", "Next prayer on the lock screen")
     val lockNoteBody get() = t("إشعار صامت ثابت يعرض الصلاة القادمة وعدًّا تنازليًا يحدّثه النظام بنفسه، ويختفي عند وقتها ليظهر التالي.", "A silent, ongoing notification with the next prayer and a countdown the system keeps itself; it leaves at the prayer's time and the next one appears.")
     val mushafTrim get() = t("الصفحة بعرض الشاشة (دون الهوامش)", "Page fills the screen (no margins)")
+    val mushafFill get() = t("ملء الشاشة (تباعد الأسطر)", "Fill the screen (lines spaced out)")
 
 
     // Round 12: recitation with the reading, memorisation.

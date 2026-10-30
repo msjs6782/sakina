@@ -249,6 +249,18 @@
                 android:resource="@xml/widget_dhikr" />
         </receiver>
 
+        <receiver
+            android:name=".widgets.CalendarWidget"
+            android:exported="true"
+            android:label="@string/w_label_calendar">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_calendar" />
+        </receiver>
+
         <!-- Redraws widgets when their content changes; a non-waking alarm. -->
         <receiver android:name=".widgets.WidgetTickReceiver" android:exported="false" />
 

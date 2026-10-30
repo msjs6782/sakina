@@ -83,7 +83,29 @@ class WidgetTest {
         assertEquals(WidgetMath.nextMidnight(now, riyadh), WidgetMath.nextChange(WidgetKind.CONTENT, now, riyadh, null))
         assertTrue(WidgetKind.entries.count { it.showsRemaining } == 7)
         assertEquals(WidgetKind.FAJR_MAGHRIB, WidgetKind.of("fajr_maghrib"))
-        assertEquals(13, WidgetKind.entries.map { it.id }.toSet().size)
+        assertEquals(14, WidgetKind.entries.map { it.id }.toSet().size)
+        assertFalse(WidgetKind.CALENDAR.needsPlace)
+        assertEquals(WidgetMath.nextMidnight(now, riyadh), WidgetMath.nextChange(WidgetKind.CALENDAR, now, riyadh, null))
+    }
+
+    @Test
+    fun progressFromTheLastPrayerToTheNext() {
+        // 16:20 in Riyadh: Asr has passed, Maghrib is next; the time has gone part of the way.
+        val now = Instant.parse("2026-10-14T13:20:00Z")
+        val s = WidgetMath.snapshot(schedule, now)
+        assertEquals(PrayerKey.MAGHRIB, s.next!!.key)
+        val asr = schedule.day(LocalDate.of(2026, 10, 14))[PrayerKey.ASR].instant!!
+        assertEquals(asr, s.previous)
+        val expected = java.time.Duration.between(asr, now).seconds.toFloat() / java.time.Duration.between(asr, s.next!!.instant).seconds
+        assertEquals(expected, s.progress!!, 0.001f)
+        assertTrue(s.progress!! in 0.3f..0.9f)
+        // Just after Isha the line starts again; before Fajr it runs from last night's Isha.
+        assertEquals(0f, WidgetMath.progress(asr, s.next!!.instant, asr)!!, 0f)
+        assertEquals(1f, WidgetMath.progress(asr, s.next!!.instant, s.next!!.instant.plusSeconds(30))!!, 0f)
+        assertNull(WidgetMath.progress(null, s.next!!.instant, now))
+        val night = WidgetMath.snapshot(schedule, Instant.parse("2026-10-14T23:30:00Z"))
+        assertEquals(PrayerKey.FAJR, night.next!!.key)
+        assertTrue(night.progress!! in 0.01f..0.99f)
     }
 
     @Test
