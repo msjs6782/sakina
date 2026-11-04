@@ -893,7 +893,7 @@ adb shell input keyevent 4; sleep 1
 # Add an occasion from a day, then delete it and undo the delete.
 start "${C[@]}" --es demo_route calendar_day:2026-10-22; sleep 7
 cap 204_day_sheet
-scroll_to id day_add_occasion && tap id day_add_occasion && sleep 2
+scroll_to id day_add_occasion && bring_up day_add_occasion; tap id day_add_occasion && sleep 2
 tap id occ_title && adb shell input text "Family%svisit" && hide_ime
 scroll_to id occ_repeat_yearly_hijri && tap id occ_repeat_yearly_hijri
 scroll_to contains "تنبيه في يومها" && tap contains "تنبيه في يومها"
@@ -905,9 +905,9 @@ echo "$J" | grep -q '"title":"Family visit"' && echo "$J" | grep -q '"repeat":"Y
 # Back on the calendar, which opened on this day: its details now list the new occasion.
 scroll_to exact "Family visit" && check occ_back PASS "day details list the new occasion" || check occ_back FAIL "not listed"
 start "${C[@]}" --es demo_occasions 2026-10-22:Family_visit --es demo_route calendar_day:2026-10-22; sleep 7
-scroll_to id occasion_delete_demo0 && tap id occasion_delete_demo0 && sleep 1 && cap 207_occasion_deleted
+scroll_to id occasion_delete_demo0 && bring_up occasion_delete_demo0; tap id occasion_delete_demo0 && sleep 1 && cap 207_occasion_deleted
 settings_json | grep -q '"occasions":\[\]' && check occ_delete PASS "deleted" || check occ_delete FAIL "still stored"
-tap id day_undo && sleep 2
+bring_up day_undo; tap id day_undo && sleep 2
 settings_json | grep -q '"title":"Family visit"' && check occ_undo PASS "delete undone" || check occ_undo FAIL "$(settings_json | grep -o '"occasions":\[[^]]*' | head -c 200)"
 # List mode is a separate choice: a larger font keeps the grid.
 shot 208_calendar_list 8 "${C[@]}" --ez demo_cal_list true --es demo_occasions 2026-10-22:Family_visit --es demo_route month
