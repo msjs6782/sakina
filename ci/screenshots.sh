@@ -905,6 +905,8 @@ echo "$J" | grep -q '"title":"Family visit"' && echo "$J" | grep -q '"repeat":"Y
 # Back on the calendar, which opened on this day: its details now list the new occasion.
 scroll_to exact "Family visit" && check occ_back PASS "day details list the new occasion" || check occ_back FAIL "not listed"
 start "${C[@]}" --es demo_occasions 2026-10-22:Family_visit --es demo_route calendar_day:2026-10-22; sleep 7
+# To the end of the sheet first: the delete button is then clear of the navigation bar.
+for _ in 1 2 3; do adb shell input swipe 540 1600 540 700 500; sleep 1; done
 scroll_to id occasion_delete_demo0 && bring_up occasion_delete_demo0; tap id occasion_delete_demo0 && sleep 1 && cap 207_occasion_deleted
 settings_json | grep -q '"occasions":\[\]' && check occ_delete PASS "deleted" || check occ_delete FAIL "still stored"
 bring_up day_undo; tap id day_undo && sleep 2

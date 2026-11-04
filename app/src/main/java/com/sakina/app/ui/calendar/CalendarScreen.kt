@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -638,7 +639,7 @@ private fun DaySheet(vm: MainViewModel, s: AppSettings, date: LocalDate, onDismi
     val h = UmmAlQura.displayed(date, s.hijriOffset)
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet) {
         Column(
-            Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp).padding(bottom = 28.dp).exposeTestTags(),
+            Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp).navigationBarsPadding().padding(bottom = 28.dp).exposeTestTags(),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             // The day's dates beside its moon.
