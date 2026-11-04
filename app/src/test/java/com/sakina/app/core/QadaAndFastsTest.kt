@@ -74,5 +74,12 @@ class QadaAndFastsTest {
         assertFalse(FastLog.canMark(today.plusDays(1), today, 0))
         assertTrue(FastLog.canMark(today, today, 0))
         assertFalse(FastLog.canMark(LocalDate.of(2027, 3, 9), LocalDate.of(2027, 3, 20), 0))
+        // Days owed count from 1 Shawwal of the last Ramadan: 1447's ended on 19 March 2026.
+        val season = FastLog.seasonStart(today, 0)!!
+        assertEquals(com.sakina.app.core.calendar.HijriDate(1447, 10, 1), com.sakina.app.core.calendar.UmmAlQura.displayed(season, 0))
+        assertEquals(2026, season.year)
+        assertEquals(3, season.monthValue)
+        // In Shawwal itself the season is the one just begun.
+        assertEquals(LocalDate.of(2027, 3, 9), FastLog.seasonStart(LocalDate.of(2027, 3, 15), 0))
     }
 }

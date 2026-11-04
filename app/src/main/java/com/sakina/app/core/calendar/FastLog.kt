@@ -39,6 +39,16 @@ object FastLog {
             d != null && !d.isBefore(from) && !d.isAfter(to) && (mark == null || v == mark.code)
         }
 
+    /**
+     * The day after the latest Ramadan that has ended by [today] (1 Shawwal): the days owed are counted from there, so
+     * a make-up fast marked late (yesterday's, say) still counts.
+     */
+    fun seasonStart(today: LocalDate, hijriOffset: Int): LocalDate? {
+        val h = UmmAlQura.displayed(today, hijriOffset) ?: return null
+        val year = if (h.month >= 10) h.year else h.year - 1
+        return DateConvert.hijriToGregorian(HijriDate(year, 10, 1), hijriOffset)
+    }
+
     /** Ramadan days still owed: [owed] (counted from [since]) less the make-up fasts marked on or after [since]. */
     fun qadaRemaining(log: Map<String, Int>, owed: Int, since: LocalDate?): Int {
         if (owed <= 0) return 0

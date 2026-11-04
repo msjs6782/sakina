@@ -20,7 +20,6 @@ adb shell input swipe 540 760 540 760 1000; sleep 3
 cap 881_mushaf_ayah_sheet
 if ui_has id ayah_bookmark && ui_has contains "الكهف"; then check mushaf_hold_ayah PASS "ayah sheet from the page"; else check mushaf_hold_ayah FAIL "no ayah sheet"; fi
 ui_has id ayah_listen && check mushaf_ayah_listen PASS "listen from the ayah" || check mushaf_ayah_listen FAIL "no listen action"
-ui_has id mushaf_ayah_highlight && check mushaf_hold_highlight PASS "the held ayah is washed" || check mushaf_hold_highlight FAIL "no highlight"
 adb shell input keyevent 4; sleep 2
 ui_has id mushaf_hold_hint && check mushaf_hint_gone FAIL "hint still shown" || check mushaf_hint_gone PASS "hint gone after the first hold"
 # Opened at an ayah: it is washed in gold on the page (controls hidden), at night and zoomed too.

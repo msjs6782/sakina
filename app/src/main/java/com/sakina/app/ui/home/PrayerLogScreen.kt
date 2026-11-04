@@ -147,7 +147,7 @@ private fun MonthStats(log: Map<String, Int>, today: java.time.LocalDate) {
                     Box(Modifier.weight(1f).height(10.dp).clip(RoundedCornerShape(50)).background(cs.outlineVariant.copy(alpha = 0.35f))) {
                         Box(Modifier.fillMaxWidth(v / 100f).fillMaxHeight().clip(RoundedCornerShape(50)).background(if (v == 100) ex.gold else cs.primary))
                     }
-                    Text(str.digits("$v%"), style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.End, modifier = Modifier.width(48.dp).testTag("prayer_share_${k.name.lowercase()}"))
+                    Text(if (str.isAr) fmt.num(v) + "٪" else "$v%", style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.End, modifier = Modifier.width(48.dp).testTag("prayer_share_${k.name.lowercase()}"))
                 }
             }
             Text(str.prayerBestStreak(fmt.num(PrayerStats.bestStreak(log))), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("prayer_best_streak"))

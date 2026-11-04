@@ -750,7 +750,7 @@ private fun MyFast(vm: MainViewModel, s: AppSettings, date: LocalDate) {
                 vm.updateTools { t -> val o = maxOf(0, t.fastOwed - 1); t.copy(fastOwed = o, fastOwedSince = if (o == 0) null else t.fastOwedSince) }
             }, modifier = Modifier.testTag("day_fast_owed_minus")) { Text("−", style = MaterialTheme.typography.titleLarge) }
             IconButton(onClick = {
-                vm.updateTools { t -> t.copy(fastOwed = minOf(60, t.fastOwed + 1), fastOwedSince = t.fastOwedSince ?: today.toString()) }
+                vm.updateTools { t -> t.copy(fastOwed = minOf(60, t.fastOwed + 1), fastOwedSince = t.fastOwedSince ?: (FastLog.seasonStart(today, s.hijriOffset) ?: today).toString()) }
             }, modifier = Modifier.testTag("day_fast_owed_plus")) { Text("+", style = MaterialTheme.typography.titleLarge) }
         }
         NoteText(str.myFastNote)
