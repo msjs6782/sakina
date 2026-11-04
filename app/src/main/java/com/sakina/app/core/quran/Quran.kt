@@ -92,6 +92,12 @@ class QuranMeta(
 
     /** True when an ayah starts a new hizb quarter (shown as ۞ in the Uthmani text). */
     fun startsQuarter(global: Int): Boolean = quarterGlobal.binarySearch(global) >= 0
+
+    /** The same structure with another edition's page starts (the printed 1441H pages). */
+    fun withPages(starts: List<AyahRef>): QuranMeta {
+        require(starts.size == pageStarts.size && starts.all { isValid(it) }) { "page starts do not fit" }
+        return QuranMeta(suras, juzStarts, quarterStarts, starts, sajdas)
+    }
 }
 
 /** The Uthmani text (verbatim from Tanzil) and the per-surah basmala as Tanzil gives it. */

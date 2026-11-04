@@ -249,6 +249,13 @@ object PageFill {
             }
         }
 
+        /** Where source row [src] (text-area rows, scale k) of column [col] lands, counted from the text area's top on screen. */
+        fun screenRow(col: Int, src: Float): Float {
+            var out = topPad + src
+            for (j in 0 until LINES - 1) if (cut(j, col) <= src) out += inserts[j]
+            return out
+        }
+
         /**
          * The source rows (scale k, from the frame's top) needed for the screen rows [y0]..[y1] of the filled page
          * (counted from the page's top, below [Plan.yOff]).

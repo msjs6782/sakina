@@ -27,6 +27,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sakina.app.core.prayer.PrayerKey
 import com.sakina.app.core.prayer.PrayerLog
+import com.sakina.app.core.prayer.PrayerStats
+import com.sakina.app.core.prayer.Qada
+import com.sakina.app.core.prayer.QadaState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.ui.draw.clip
 import com.sakina.app.data.AppClock
 import com.sakina.app.data.AppSettings
 import com.sakina.app.ui.LocalFmt
@@ -68,6 +74,8 @@ fun PrayerLogScreen(vm: MainViewModel, s: AppSettings) {
                     }
                 }
                 if (log.isEmpty()) NoteText(str.prayerLogEmpty)
+                MonthStats(log, today)
+                QadaCard(vm, tools.qada)
                 Surface(shape = RoundedCornerShape(22.dp), color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(horizontal = 10.dp, vertical = 12.dp)) {
                         Row(Modifier.fillMaxWidth().padding(bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -101,3 +109,89 @@ fun PrayerLogScreen(vm: MainViewModel, s: AppSettings) {
         }
     }
 }
+
+/** The last thirty days as bars (gold for a full day), each prayer's share, and the best run of full days. */
+@Composable
+private fun MonthStats(log: Map<String, Int>, today: java.time.LocalDate) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    val cs = MaterialTheme.colorScheme
+    val ex = com.sakina.app.ui.theme.LocalExtras.current
+    val rtl = androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
+    val days = androidx.compose.runtime.remember(log, today) { PrayerStats.daily(log, today.minusDays(29), today) }
+    val per = androidx.compose.runtime.remember(log, today) { PrayerStats.perPrayer(log, today.minusDays(29), today) }
+    Surface(shape = RoundedCornerShape(22.dp), color = cs.surfaceContainerLow, modifier = Modifier.fillMaxWidth().testTag("prayer_stats")) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text(str.prayerStatsTitle, style = MaterialTheme.typography.titleMedium.copy(fontFamily = Amiri, fontWeight = FontWeight.Bold), color = cs.primary)
+            // Thirty bars, today at the reading end.
+            androidx.compose.foundation.Canvas(Modifier.fillMaxWidth().height(86.dp).testTag("prayer_stats_bars")) {
+                val n = days.size
+                val slot = size.width / n
+                val bw = slot * 0.62f
+                val r = androidx.compose.ui.geometry.CornerRadius(bw / 2)
+                days.forEachIndexed { i, (_, c) ->
+                    val x = if (rtl) size.width - (i + 1) * slot + (slot - bw) / 2 else i * slot + (slot - bw) / 2
+                    drawRoundRect(cs.outlineVariant.copy(alpha = 0.35f), androidx.compose.ui.geometry.Offset(x, 0f), androidx.compose.ui.geometry.Size(bw, size.height), r)
+                    if (c > 0) {
+                        val h = size.height * c / 5f
+                        drawRoundRect(if (c == 5) ex.gold else cs.primary, androidx.compose.ui.geometry.Offset(x, size.height - h), androidx.compose.ui.geometry.Size(bw, h), r)
+                    }
+                }
+            }
+            Text(str.prayerBars, style = MaterialTheme.typography.labelSmall, color = cs.onSurfaceVariant)
+            PrayerKey.prayers.forEach { k ->
+                val v = per[k] ?: 0
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(str.prayer(k), style = MaterialTheme.typography.labelLarge, modifier = Modifier.width(64.dp), maxLines = 1)
+                    Box(Modifier.weight(1f).height(10.dp).clip(RoundedCornerShape(50)).background(cs.outlineVariant.copy(alpha = 0.35f))) {
+                        Box(Modifier.fillMaxWidth(v / 100f).fillMaxHeight().clip(RoundedCornerShape(50)).background(if (v == 100) ex.gold else cs.primary))
+                    }
+                    Text(str.digits("$v%"), style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.End, modifier = Modifier.width(48.dp).testTag("prayer_share_${k.name.lowercase()}"))
+                }
+            }
+            Text(str.prayerBestStreak(fmt.num(PrayerStats.bestStreak(log))), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("prayer_best_streak"))
+        }
+    }
+}
+
+/** Missed prayers to make up: what is owed of each, a tap for each one made up, and the progress. */
+@Composable
+private fun QadaCard(vm: MainViewModel, q: QadaState) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    val cs = MaterialTheme.colorScheme
+    var last by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf<PrayerKey?>(null) }
+    Surface(shape = RoundedCornerShape(22.dp), color = cs.surfaceContainerLow, modifier = Modifier.fillMaxWidth().testTag("qada_card")) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(str.qadaTitle, style = MaterialTheme.typography.titleMedium.copy(fontFamily = Amiri, fontWeight = FontWeight.Bold), color = cs.primary, modifier = Modifier.weight(1f))
+                last?.let { k ->
+                    androidx.compose.material3.TextButton(onClick = { vm.updateTools { it.copy(qada = Qada.undoMakeUp(it.qada, k)) }; last = null }, modifier = Modifier.testTag("qada_undo")) { Text(str.undo) }
+                }
+            }
+            if (Qada.totalOwed(q) == 0) NoteText(str.qadaEmpty)
+            else {
+                Text(str.qadaSummary(fmt.num(Qada.totalRemaining(q)), fmt.num(Qada.totalDone(q)), fmt.num(Qada.percent(q))), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.testTag("qada_summary"))
+                androidx.compose.material3.LinearProgressIndicator(progress = { Qada.percent(q) / 100f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(50)))
+            }
+            PrayerKey.prayers.forEach { k ->
+                val rem = Qada.remaining(q, k)
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                    Text(str.prayer(k), style = MaterialTheme.typography.titleSmall, modifier = Modifier.width(64.dp), maxLines = 1)
+                    Text(fmt.num(rem), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold), color = if (rem > 0) cs.onSurface else cs.onSurfaceVariant,
+                        modifier = Modifier.weight(1f).testTag("qada_left_${k.name.lowercase()}"))
+                    androidx.compose.material3.IconButton(onClick = { vm.updateTools { it.copy(qada = Qada.removeOwed(it.qada, k)) } }, modifier = Modifier.testTag("qada_minus_${k.name.lowercase()}")) { Text("−", style = MaterialTheme.typography.titleLarge) }
+                    androidx.compose.material3.IconButton(onClick = { vm.updateTools { it.copy(qada = Qada.addOwed(it.qada, k)) } }, modifier = Modifier.testTag("qada_plus_${k.name.lowercase()}")) { Text("+", style = MaterialTheme.typography.titleLarge) }
+                    androidx.compose.material3.FilledTonalButton(
+                        onClick = { vm.updateTools { it.copy(qada = Qada.makeUp(it.qada, k)) }; last = k },
+                        enabled = rem > 0,
+                        modifier = Modifier.testTag("qada_done_${k.name.lowercase()}"),
+                    ) { Text(str.qadaMadeUp) }
+                }
+            }
+            androidx.compose.material3.OutlinedButton(onClick = { vm.updateTools { it.copy(qada = Qada.addDay(it.qada)) } }, modifier = Modifier.fillMaxWidth().testTag("qada_add_day")) { Text(str.qadaAddDay) }
+            NoteText(str.qadaNote)
+        }
+    }
+}
+

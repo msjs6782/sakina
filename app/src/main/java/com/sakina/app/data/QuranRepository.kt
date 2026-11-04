@@ -35,6 +35,8 @@ class QuranData(
     val search: QuranSearch,
     /** The copyright block of the Uthmani text, shown in the sources screen. */
     val textHeader: List<String>,
+    /** Where each ayah is on the printed pages; its page starts are [meta]'s (this edition breaks 25 pages differently from Tanzil). */
+    val printed: com.sakina.app.core.mushaf.PrintedLayout? = null,
 )
 
 /** Loads the bundled Quran files once, off the main thread, and keeps them in memory. */
@@ -48,13 +50,18 @@ class QuranRepository(private val context: Context) {
     suspend fun load(): QuranData = _data.value ?: lock.withLock {
         _data.value ?: withContext(Dispatchers.Default) {
             val t0 = System.nanoTime()
-            val meta = TanzilParser.parseMeta(read("quran-data.xml"))
+            val printed = runCatching {
+                com.sakina.app.core.mushaf.PrintedLayout.parse(context.assets.open("mushaf/ayahs.tsv").bufferedReader(Charsets.UTF_8).use { it.readText() })
+            }.onFailure { android.util.Log.e("SakinaQuran", "printed layout unreadable", it) }.getOrNull()
+            val tanzil = TanzilParser.parseMeta(read("quran-data.xml"))
+            // Pages as printed in the 1441H edition the app shows.
+            val meta = printed?.let { tanzil.withPages(it.pageStarts) } ?: tanzil
             val xml = read("quran-uthmani.xml")
             val text = TanzilParser.parseUthmaniXml(xml, meta)
             val simple = TanzilParser.parseTxt2("simple-clean", read("quran-simple-clean.txt"), meta)
             val translation = TanzilParser.parseTxt2("en.itani", read("en.itani.txt"), meta)
             val tafsir = TanzilParser.parseTxt2("ar.jalalayn", read("ar.jalalayn.txt"), meta)
-            QuranData(meta, text, translation, tafsir, QuranSearch(meta, simple, translation), TanzilParser.header(xml.substringAfter("<!--")))
+            QuranData(meta, text, translation, tafsir, QuranSearch(meta, simple, translation), TanzilParser.header(xml.substringAfter("<!--")), printed)
                 .also { android.util.Log.i("SakinaQuran", "Loaded ${meta.suras.size} surahs, ${text.ayahs.size} ayahs in ${(System.nanoTime() - t0) / 1_000_000} ms") }
         }.also { _data.value = it }
     }
@@ -80,6 +87,8 @@ data class ReaderPrefs(
     val mushafTrim: Boolean = true,
     /** The printed frame centred and stretched to the screen's height, the lines spaced out to fill it. */
     val mushafFill: Boolean = true,
+    /** The one-time hint that a long press on an ayah opens it. */
+    val holdHint: Boolean = true,
     /** Fetch a printed page when it is opened, without asking each time. Off unless the user turns it on. */
     val autoDownload: Boolean = false,
 ) {

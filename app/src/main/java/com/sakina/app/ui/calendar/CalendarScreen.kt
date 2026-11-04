@@ -91,6 +91,9 @@ import com.sakina.app.core.format.Lang
 import com.sakina.app.core.prayer.PrayerKey
 import com.sakina.app.core.prayer.PrayerSchedule
 import com.sakina.app.data.AppClock
+import com.sakina.app.core.calendar.FastLog
+import com.sakina.app.core.calendar.FastMark
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sakina.app.data.AppSettings
 import com.sakina.app.ui.LocalFmt
 import com.sakina.app.ui.LocalStrings
@@ -169,6 +172,7 @@ fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long, tabPa
     }
     val current = monthAt(pager.currentPage, base)
     val coming = remember(today, s.hijriOffset, s.calendar.occasions, str.lang) { upcoming(str, s, today) }
+    val tools by vm.tools.collectAsStateWithLifecycle()
     val body: @Composable () -> Unit = {
         Scaffold(
             containerColor = MaterialTheme.colorScheme.background,
@@ -215,7 +219,7 @@ fun CalendarScreen(vm: MainViewModel, s: AppSettings, focusEpochDay: Long, tabPa
                         alpha = 1f - 0.35f * kotlin.math.abs(off)
                     }) {
                         if (s.calendar.listMode) MonthList(month, s, today) { selected = it.toEpochDay() }
-                        else MonthPage(month, s, today, selected, if (month == base) coming else emptyList()) { selected = it.toEpochDay() }
+                        else MonthPage(month, s, today, selected, if (month == base) coming else emptyList(), tools) { selected = it.toEpochDay() }
                     }
                 }
             }
@@ -330,7 +334,7 @@ private fun MonthHeader(str: com.sakina.app.ui.Strings, fmt: com.sakina.app.core
 }
 
 @Composable
-private fun MonthPage(month: MonthRef, s: AppSettings, today: LocalDate, selected: Long, coming: List<Pair<LocalDate, String>>, onDay: (LocalDate) -> Unit) {
+private fun MonthPage(month: MonthRef, s: AppSettings, today: LocalDate, selected: Long, coming: List<Pair<LocalDate, String>>, tools: com.sakina.app.data.ToolsState, onDay: (LocalDate) -> Unit) {
     val str = LocalStrings.current
     val fmt = LocalFmt.current
     val cs = MaterialTheme.colorScheme
@@ -363,13 +367,14 @@ private fun MonthPage(month: MonthRef, s: AppSettings, today: LocalDate, selecte
                 Spacer(Modifier.height(4.dp))
                 grid.chunked(7).forEach { week ->
                     Row(Modifier.fillMaxWidth()) {
-                        week.forEach { day -> DayCell(day, month.kind, s, today, day.date.toEpochDay() == selected, Modifier.weight(1f)) { onDay(day.date) } }
+                        week.forEach { day -> DayCell(day, month.kind, s, today, day.date.toEpochDay() == selected, FastLog.mark(tools.fasts, day.date) != null, Modifier.weight(1f)) { onDay(day.date) } }
                     }
                 }
             }
         }
         Spacer(Modifier.height(12.dp))
         Legend()
+        FastSummary(month, s, tools)
         if (coming.isNotEmpty()) Upcoming(coming, today, onDay)
         Spacer(Modifier.height(8.dp))
         NoteText(str.occasionNote)
@@ -384,7 +389,7 @@ private fun MonthPage(month: MonthRef, s: AppSettings, today: LocalDate, selecte
  * rose. Tiles of the next and last months stay flat and faint. The tile sinks a little while pressed.
  */
 @Composable
-private fun DayCell(day: GridDay, kind: CalendarKind, s: AppSettings, today: LocalDate, selected: Boolean, modifier: Modifier, onClick: () -> Unit) {
+private fun DayCell(day: GridDay, kind: CalendarKind, s: AppSettings, today: LocalDate, selected: Boolean, fasted: Boolean, modifier: Modifier, onClick: () -> Unit) {
     val fmt = LocalFmt.current
     val ex = com.sakina.app.ui.theme.LocalExtras.current
     val m = remember(day.date, s.hijriOffset, s.calendar.occasions) { marks(day.date, s) }
@@ -443,6 +448,7 @@ private fun DayCell(day: GridDay, kind: CalendarKind, s: AppSettings, today: Loc
                 if (m.occasions) Dot(if (isToday) cs.onPrimary else cs.primary)
                 if (m.fasting) Dot(if (isToday) cs.onPrimary else cs.tertiary, hollow = true)
                 if (m.personal) Dot(if (isToday) ex.gold else cs.secondary)
+                if (fasted) Box(Modifier.size(6.dp).clip(RoundedCornerShape(1.5.dp)).background(ex.gold).testTag("cal_fasted_${day.date}"))
             }
         }
     }
@@ -529,6 +535,10 @@ private fun Legend() {
         Row(chip, verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(11.dp).clip(RoundedCornerShape(3.dp)).background(cs.secondaryContainer).border(1.dp, goldEdge(), RoundedCornerShape(3.dp)))
             Spacer(Modifier.width(6.dp)); Text(str.legendWhite, style = MaterialTheme.typography.labelMedium)
+        }
+        Row(chip, verticalAlignment = Alignment.CenterVertically) {
+            Box(Modifier.size(6.dp).clip(RoundedCornerShape(1.5.dp)).background(com.sakina.app.ui.theme.LocalExtras.current.gold))
+            Spacer(Modifier.width(6.dp)); Text(str.legendMyFast, style = MaterialTheme.typography.labelMedium)
         }
         Row(chip, verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(11.dp).clip(RoundedCornerShape(3.dp)).background(cs.errorContainer))
@@ -657,6 +667,7 @@ private fun DaySheet(vm: MainViewModel, s: AppSettings, date: LocalDate, onDismi
                 }
                 FastingRefs(vm, fasting)
             }
+            MyFast(vm, s, date)
             val loc = s.activeLocation
             val zone = loc?.zoneId
             if (loc != null && zone != null && loc.isUsable) {
@@ -689,6 +700,60 @@ private fun DaySheet(vm: MainViewModel, s: AppSettings, date: LocalDate, onDismi
                 }
             }
         }
+    }
+}
+
+/** The month's fasts and the Ramadan days still owed, under the legend. */
+@Composable
+private fun FastSummary(month: MonthRef, s: AppSettings, tools: com.sakina.app.data.ToolsState) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    val range = remember(month, s.hijriOffset) { MonthGrid.range(month, s.hijriOffset) } ?: return
+    val n = FastLog.count(tools.fasts, range.start, range.endInclusive)
+    val left = FastLog.qadaRemaining(tools.fasts, tools.fastOwed, tools.fastOwedSince?.let { runCatching { LocalDate.parse(it) }.getOrNull() })
+    if (n == 0 && left == 0) return
+    Text(
+        listOfNotNull(str.fastsThisMonth(fmt.num(n), n.toLong()).takeIf { n > 0 }, str.fastOwedLeft(fmt.num(left)).takeIf { left > 0 }).joinToString(" · "),
+        style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(start = 8.dp, top = 8.dp).testTag("cal_fast_summary"),
+    )
+}
+
+/** The user's own fast on a day: voluntary or making up Ramadan, and the Ramadan days still owed. */
+@Composable
+private fun MyFast(vm: MainViewModel, s: AppSettings, date: LocalDate) {
+    val str = LocalStrings.current
+    val fmt = LocalFmt.current
+    val tools by vm.tools.collectAsStateWithLifecycle()
+    val zone = s.activeLocation?.zoneId ?: ZoneId.systemDefault()
+    val today = AppClock.now().atZone(zone).toLocalDate()
+    val mark = FastLog.mark(tools.fasts, date)
+    val can = FastLog.canMark(date, today, s.hijriOffset)
+    SectionCard(title = str.myFastTitle, icon = SakinaIcons.Moon, modifier = Modifier.testTag("day_my_fast")) {
+        if (!can && mark == null) NoteText(if (date.isAfter(today)) str.fastFuture else str.fastForbidden)
+        else FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            listOf(FastMark.VOLUNTARY to str.fastVoluntary, FastMark.QADA to str.fastQada).forEach { (m, label) ->
+                FilterChip(
+                    selected = mark == m,
+                    onClick = { vm.updateTools { t -> t.copy(fasts = FastLog.set(t.fasts, date, if (mark == m) null else m, today)) } },
+                    label = { Text(label) },
+                    modifier = Modifier.testTag("day_fast_${m.name.lowercase()}"),
+                )
+            }
+        }
+        val since = tools.fastOwedSince?.let { runCatching { LocalDate.parse(it) }.getOrNull() }
+        val left = FastLog.qadaRemaining(tools.fasts, tools.fastOwed, since)
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 6.dp)) {
+            Text(if (tools.fastOwed == 0) str.fastOwedNone else str.fastOwedLeft(fmt.num(left)), style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.weight(1f).testTag("day_fast_owed"))
+            IconButton(onClick = {
+                vm.updateTools { t -> val o = maxOf(0, t.fastOwed - 1); t.copy(fastOwed = o, fastOwedSince = if (o == 0) null else t.fastOwedSince) }
+            }, modifier = Modifier.testTag("day_fast_owed_minus")) { Text("−", style = MaterialTheme.typography.titleLarge) }
+            IconButton(onClick = {
+                vm.updateTools { t -> t.copy(fastOwed = minOf(60, t.fastOwed + 1), fastOwedSince = t.fastOwedSince ?: today.toString()) }
+            }, modifier = Modifier.testTag("day_fast_owed_plus")) { Text("+", style = MaterialTheme.typography.titleLarge) }
+        }
+        NoteText(str.myFastNote)
     }
 }
 

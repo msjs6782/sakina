@@ -55,7 +55,7 @@ import java.time.LocalDate
 
 /** Actions for one ayah: bookmark, copy, share, khatma progress, translation and tafsir. */
 @Composable
-fun AyahSheet(vm: MainViewModel, d: QuranData, qs: QuranState, global: Int, onDismiss: () -> Unit) {
+fun AyahSheet(vm: MainViewModel, d: QuranData, qs: QuranState, global: Int, onListen: (() -> Unit)? = null, onDismiss: () -> Unit) {
     val str = LocalStrings.current
     val fmt = LocalFmt.current
     val context = LocalContext.current
@@ -88,6 +88,12 @@ fun AyahSheet(vm: MainViewModel, d: QuranData, qs: QuranState, global: Int, onDi
             }
             Spacer(Modifier.height(12.dp))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                if (onListen != null) AssistChip(
+                    onClick = { onDismiss(); onListen() },
+                    label = { Text(str.listenFromAyah) },
+                    leadingIcon = { Icon(SakinaIcons.Headphones, null, Modifier.size(18.dp)) },
+                    modifier = Modifier.testTag("ayah_listen"),
+                )
                 AssistChip(
                     onClick = { vm.updateQuran { QuranOps.toggleBookmark(it, ref.sura, ref.aya, System.currentTimeMillis()) } },
                     label = { Text(if (marked) str.removeBookmark else str.bookmark) },

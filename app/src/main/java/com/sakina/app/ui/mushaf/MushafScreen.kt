@@ -92,6 +92,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sakina.app.core.mushaf.MushafManifest
+import com.sakina.app.core.mushaf.PrintedPage
 import com.sakina.app.core.quran.Khatma
 import com.sakina.app.data.LastRead
 import com.sakina.app.data.MushafFill
@@ -160,7 +161,11 @@ private fun MushafViewer(vm: MainViewModel, d: QuranData, startPage: Int, focus:
     val controller = com.sakina.app.ui.listen.rememberRecitationController()
     val follow = com.sakina.app.ui.listen.rememberFollow(vm, controller)
     var following by remember { mutableStateOf(true) }
-    val recitedPage = follow.global(d)?.let { d.meta.pageOf(it) }
+    val recited = follow.global(d)
+    val recitedPage = recited?.let { d.meta.pageOf(it) }
+    // An ayah held on the page (its sheet is open), else the one being recited, else the one this view was opened at.
+    var selected by remember { mutableStateOf<Int?>(null) }
+    val shown = selected ?: recited?.takeIf { follow.recording != null } ?: focus.takeIf { it >= 0 && !focusDismissed }
     LaunchedEffect(recitedPage, following, follow.playing) {
         val p = recitedPage ?: return@LaunchedEffect
         if (following && follow.playing && p != pager.currentPage + 1 && zoomedPage == 0) pager.animateScrollToPage(p - 1)
@@ -217,6 +222,13 @@ private fun MushafViewer(vm: MainViewModel, d: QuranData, startPage: Int, focus:
                         PageImage(
                             file = repo.file(p), page = p, night = prefs.mushafNight, trim = prefs.mushafTrim, fill = prefs.mushafFill,
                             mark = hizbMark(d, p, str, fmt),
+                            printed = d.printed?.page(p)?.takeIf { it.interactive },
+                            firstGlobal = d.meta.pageRange(p).first,
+                            highlight = shown?.takeIf { it in d.meta.pageRange(p) },
+                            onAyah = { g ->
+                                selected = g
+                                if (prefs.holdHint) vm.updateQuran { it.copy(reader = it.reader.copy(holdHint = false)) }
+                            },
                             initialZoom = if (p == startPage) MushafDebug.initialZoom else 1f,
                             onZoomed = { z -> zoomedPage = if (z) p else if (zoomedPage == p) 0 else zoomedPage },
                             onTap = { barsVisible = !barsVisible },
@@ -248,6 +260,19 @@ private fun MushafViewer(vm: MainViewModel, d: QuranData, startPage: Int, focus:
                     }
                 }
             }
+            if (prefs.holdHint && barsVisible && d.printed != null && page in available && page > 2) {
+                Surface(
+                    shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.tertiaryContainer, tonalElevation = 2.dp,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp).fillMaxWidth().testTag("mushaf_hold_hint"),
+                ) {
+                    Row(Modifier.padding(start = 14.dp, end = 4.dp, top = 2.dp, bottom = 2.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(SakinaIcons.Book, null, Modifier.size(18.dp), tint = MaterialTheme.colorScheme.onTertiaryContainer)
+                        Spacer(Modifier.size(8.dp))
+                        Text(str.mushafHoldHint, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onTertiaryContainer, modifier = Modifier.weight(1f))
+                        IconButton(onClick = { vm.updateQuran { it.copy(reader = it.reader.copy(holdHint = false)) } }) { Icon(SakinaIcons.Close, str.close, Modifier.size(18.dp)) }
+                    }
+                }
+            }
             if (controller != null && follow.recording != null && (barsVisible || follow.playing)) {
                 com.sakina.app.ui.listen.FollowBar(vm, d, controller, follow, following, onFollow = { following = it })
             }
@@ -255,6 +280,13 @@ private fun MushafViewer(vm: MainViewModel, d: QuranData, startPage: Int, focus:
                 BottomBar(vm, page, page in available, playing = follow.playing && follow.recording != null, onListen = listenHere)
             }
         }
+    }
+
+    selected?.let { g ->
+        com.sakina.app.ui.quran.AyahSheet(
+            vm, d, qs, g,
+            onListen = controller?.let { c -> { d.meta.ref(g).let { r -> com.sakina.app.ui.listen.startRecitation(vm, c, d, str, r.sura, r.aya) } } },
+        ) { selected = null }
     }
 
     if (showIndex) {
@@ -455,8 +487,11 @@ private fun hizbMark(d: QuranData, page: Int, str: com.sakina.app.ui.Strings, fm
 @Composable
 private fun PageImage(
     file: File, page: Int, night: MushafNight, trim: Boolean, fill: Boolean, mark: String?,
+    printed: PrintedPage?, firstGlobal: Int, highlight: Int?, onAyah: (Int) -> Unit,
     initialZoom: Float, onZoomed: (Boolean) -> Unit, onTap: () -> Unit,
 ) {
+    val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
+    val onAyahNow by androidx.compose.runtime.rememberUpdatedState(onAyah)
     val zoom = remember(page) { ZoomState() }
     val scope = rememberCoroutineScope()
     val filter = remember(night) { nightFilter(night) }
@@ -499,9 +534,21 @@ private fun PageImage(
         }
         Box(
             Modifier.fillMaxSize()
-                .pointerInput(page) {
+                .pointerInput(page, l, printed, firstGlobal) {
                     detectTapGestures(
                         onTap = { onTap() },
+                        // A long press on an ayah opens it (its sheet: tafsir, translation, listening).
+                        onLongPress = { at ->
+                            val lk = l ?: return@detectTapGestures
+                            val pp = printed ?: return@detectTapGestures
+                            val ix = (at.x - (cw - fw) / 2 - fw / 2 - zoom.tx) / zoom.scale + fw / 2
+                            val iy = (at.y - (ch - fh) / 2 - fh / 2 - zoom.ty) / zoom.scale + fh / 2
+                            val (xp, yp) = PagePoints(lk).toPage(ix, iy)
+                            pp.ayahAt(xp, yp)?.let { k ->
+                                haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
+                                onAyahNow(firstGlobal + k)
+                            }
+                        },
                         onDoubleTap = { at ->
                             val (s1, x1, y1) = zoom.doubleTapTarget(at)
                             val s0 = zoom.scale; val x0 = zoom.tx; val y0 = zoom.ty
@@ -541,8 +588,62 @@ private fun PageImage(
             if (dt != null && dt.scale == zoom.scale && dt.tx == zoom.tx && dt.ty == zoom.ty) {
                 Image(dt.bitmap.asImageBitmap(), contentDescription = null, contentScale = ContentScale.FillBounds, colorFilter = filter, modifier = Modifier.fillMaxSize().testTag("mushaf_detail"))
             }
+            if (l != null && printed != null && highlight != null) AyahHighlight(printed, highlight - firstGlobal, PagePoints(l), night, size.then(layer))
             val filled = l?.filled
             if (filled != null && mark != null) HizbMark(filled, mark, night, size.then(layer))
+        }
+    }
+}
+
+/** Page points to pixels of the drawn page (filled or as printed), and back. */
+private class PagePoints(val l: Look) {
+    private val k = l.fw / l.crop.w
+
+    fun x(pt: Float): Float {
+        val f = l.filled ?: return (pt - l.crop.x) * k
+        val p = f.layout.plan
+        return (pt - p.frame.cropX) * p.k
+    }
+
+    /** The band of a line (centre [cy], [pitch] apart) on the drawing; filled pages have their lines spread. */
+    fun band(cy: Float, pitch: Float): Pair<Float, Float> {
+        val f = l.filled ?: return ((cy - pitch / 2) - l.crop.y) * k to ((cy + pitch / 2) - l.crop.y) * k
+        val p = f.layout.plan
+        val centre = p.yOff + p.a + f.layout.screenRow((p.x1 - p.x0) / 2, (cy - p.innerTop) * p.k)
+        val half = pitch * p.k * p.stretch / 2
+        return centre - half to centre + half
+    }
+
+    fun toPage(ix: Float, iy: Float): Pair<Float, Float> {
+        val f = l.filled ?: return l.crop.x + ix / k to l.crop.y + iy / k
+        val p = f.layout.plan
+        val y = iy - p.yOff
+        val yp = when {
+            y < p.a -> p.frame.cropY + y / p.k
+            y >= p.a + p.bOut -> p.innerBottom + (y - p.a - p.bOut) / p.k
+            else -> p.innerTop + f.layout.Walker((ix - p.x0).toInt().coerceIn(0, max(0, p.x1 - p.x0 - 1))).source(y - p.a) / p.k
+        }
+        return p.frame.cropX + ix / p.k to yp
+    }
+}
+
+/** A soft gold wash over the ayah held or being recited, line by line. */
+@Composable
+private fun AyahHighlight(page: PrintedPage, ayah: Int, pts: PagePoints, night: MushafNight, modifier: Modifier) {
+    val wash = if (night == MushafNight.DARK) Color(0x47E9C77F) else Color(0x3DC69A2E)
+    val edge = if (night == MushafNight.DARK) Color(0x8CE9C77F) else Color(0x80A47D2C)
+    val segs = remember(page, ayah) { page.segmentsOf(ayah) }
+    androidx.compose.foundation.Canvas(modifier.testTag("mushaf_ayah_highlight")) {
+        val pad = 2.dp.toPx()
+        val r = androidx.compose.ui.geometry.CornerRadius(7.dp.toPx())
+        for (sg in segs) {
+            val (t, b) = pts.band(page.lines[sg.line].cy, page.pitch)
+            val x0 = pts.x(sg.x0) - pad
+            val x1 = pts.x(sg.x1) + pad
+            val tl = Offset(x0, t + pad)
+            val sz = androidx.compose.ui.geometry.Size(x1 - x0, b - t - 2 * pad)
+            drawRoundRect(wash, tl, sz, r)
+            drawRoundRect(edge, tl, sz, r, style = androidx.compose.ui.graphics.drawscope.Stroke(1.dp.toPx()))
         }
     }
 }

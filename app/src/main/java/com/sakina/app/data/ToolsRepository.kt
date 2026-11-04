@@ -49,6 +49,13 @@ data class ToolsState(
     val prayed: Map<String, Int> = emptyMap(),
     /** Tasbih taps per day (core/adhkar/TasbihLog). */
     val tasbihDays: Map<String, Int> = emptyMap(),
+    /** Missed prayers owed and made up (core/prayer/Qada). */
+    val qada: com.sakina.app.core.prayer.QadaState = com.sakina.app.core.prayer.QadaState(),
+    /** Days fasted: civil date (ISO) → FastMark code (core/calendar/FastLog). */
+    val fasts: Map<String, Int> = emptyMap(),
+    /** Ramadan days owed, counted from [fastOwedSince] (ISO date). */
+    val fastOwed: Int = 0,
+    val fastOwedSince: String? = null,
 ) {
     companion object {
         /** Days of wird progress kept (today included). */

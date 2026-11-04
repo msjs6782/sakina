@@ -69,6 +69,24 @@ class PageFillTest {
     }
 
     @Test
+    fun screenRowsAndSourceRowsAgree() {
+        val img = load(295)
+        val f = PageFill.detect(img.px, img.w, img.h, unit)!!
+        val w = (f.cropW / unit).roundToInt()
+        val p = PageFill.plan(f, w, (w * 2.1f).toInt())!!
+        val L = PageFill.Layout(p, PageFill.seams(source(img, p), p))
+        val lh = p.b.toFloat() / PageFill.LINES
+        // The middle of every line, in every column: on screen and back again.
+        for (j in 0 until PageFill.LINES) for (c in listOf(0, (p.x1 - p.x0) / 2, p.x1 - p.x0 - 1)) {
+            val src = (j + 0.5f) * lh
+            val out = L.screenRow(c, src)
+            assertEquals("line $j column $c", src, L.Walker(c).source(out + 0.25f) - 0.25f, 0.6f)
+        }
+        // Lines move down by their share of the added room.
+        assertTrue(L.screenRow(0, 14.5f * lh) - L.screenRow(0, 0.5f * lh) > 14 * lh * 1.2f)
+    }
+
+    @Test
     fun theOpeningPagesAreLeftAsPrinted() {
         val img = load(1)
         assertNull(PageFill.detect(img.px, img.w, img.h, unit))
