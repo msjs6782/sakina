@@ -667,7 +667,6 @@ private fun DaySheet(vm: MainViewModel, s: AppSettings, date: LocalDate, onDismi
                 }
                 FastingRefs(vm, fasting)
             }
-            MyFast(vm, s, date)
             val loc = s.activeLocation
             val zone = loc?.zoneId
             if (loc != null && zone != null && loc.isUsable) {
@@ -699,6 +698,7 @@ private fun DaySheet(vm: MainViewModel, s: AppSettings, date: LocalDate, onDismi
                     Icon(SakinaIcons.Plus, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text(str.addOccasion)
                 }
             }
+            MyFast(vm, s, date)
         }
     }
 }

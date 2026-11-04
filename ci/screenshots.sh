@@ -893,7 +893,7 @@ adb shell input keyevent 4; sleep 1
 # Add an occasion from a day, then delete it and undo the delete.
 start "${C[@]}" --es demo_route calendar_day:2026-10-22; sleep 7
 cap 204_day_sheet
-scroll_to id day_add_occasion && into_view day_add_occasion; tap id day_add_occasion && sleep 2
+scroll_to id day_add_occasion && tap id day_add_occasion && sleep 2
 tap id occ_title && adb shell input text "Family%svisit" && hide_ime
 scroll_to id occ_repeat_yearly_hijri && tap id occ_repeat_yearly_hijri
 scroll_to contains "تنبيه في يومها" && tap contains "تنبيه في يومها"
