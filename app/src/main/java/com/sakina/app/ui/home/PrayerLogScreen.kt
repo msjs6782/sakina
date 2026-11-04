@@ -75,8 +75,6 @@ fun PrayerLogScreen(vm: MainViewModel, s: AppSettings) {
                     }
                 }
                 if (log.isEmpty()) NoteText(str.prayerLogEmpty)
-                MonthStats(log, today)
-                QadaCard(vm, tools.qada)
                 Surface(shape = RoundedCornerShape(22.dp), color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(horizontal = 10.dp, vertical = 12.dp)) {
                         Row(Modifier.fillMaxWidth().padding(bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -104,6 +102,8 @@ fun PrayerLogScreen(vm: MainViewModel, s: AppSettings) {
                         }
                     }
                 }
+                MonthStats(log, today)
+                QadaCard(vm, tools.qada)
                 NoteText(str.prayerLogNote)
                 Spacer(Modifier.height(16.dp))
             }
