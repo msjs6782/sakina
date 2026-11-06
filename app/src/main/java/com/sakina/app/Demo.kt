@@ -1,5 +1,6 @@
 package com.sakina.app
 
+import com.sakina.app.data.withOptions
 import android.content.Intent
 import android.util.Log
 import com.sakina.app.alerts.AlertsCenter
@@ -207,6 +208,24 @@ object Demo {
         com.sakina.app.ui.mushaf.MushafDebug.initialZoom = e.getFloat("demo_zoom", 1f)
         com.sakina.app.ui.widgets.WidgetsDebug.sizes = e.getBoolean("demo_widget_sizes")
         com.sakina.app.ui.widgets.WidgetsDebug.gallerySky = e.getBoolean("demo_gallery_sky")
+        com.sakina.app.ui.widgets.WidgetsDebug.galleryBg = e.getString("demo_gallery_bg")?.let { runCatching { com.sakina.app.data.WidgetBackground.valueOf(it.uppercase()) }.getOrNull() }
+        val galleryOpts = e.getString("demo_gallery_opts") ?: ""
+        com.sakina.app.ui.widgets.WidgetsDebug.galleryCfg = { c -> c.withOptions(galleryOpts) }
+        // Settings for the widgets on the home screen, by kind: "glass:bg=SCENE,glass3d=1;dayname:word=GOLD".
+        e.getString("demo_widget_opts")?.let { spec ->
+            runBlocking {
+                val placed = com.sakina.app.widgets.WidgetUpdater.placed(app)
+                for (part in spec.split(';')) {
+                    val kindId = part.substringBefore(':').trim()
+                    val opts = part.substringAfter(':', "")
+                    for (w in placed.filter { it.kind.id == kindId || kindId == "*" }) {
+                        app.widgets.put(w.id, w.config.withOptions(opts))
+                        Log.i(TAG, "widget ${w.id} ${w.kind.id} set $opts")
+                    }
+                }
+            }
+            com.sakina.app.widgets.WidgetUpdater.request(app, "demo", force = true)
+        }
         if (e.containsKey("demo_idle_ms")) com.sakina.app.audio.RecitationService.idleEndMs = e.getLong("demo_idle_ms")
         com.sakina.app.data.RecitationRepository.debugSlowMs = e.getLong("demo_dl_slow_ms", 0)
         if (e.getBoolean("demo_mushaf_clear")) runBlocking {

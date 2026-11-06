@@ -43,6 +43,9 @@ enum class WidgetKind(val id: String) {
     /** Types that can show the time since the last prayer filling up towards the next (a gold line along the edge). */
     val hasProgress: Boolean get() = this in setOf(NEXT, COUNTDOWN, DAY, GLASS, MINI, STRIP, DIGITAL, ANALOG, DAYNAME)
 
+    /** Whether the widget has a table of the day's prayers (its size is set apart). */
+    val hasTable: Boolean get() = this in setOf(DAY, GLASS, STRIP, DAYNAME)
+
     companion object {
         fun of(id: String): WidgetKind? = entries.firstOrNull { it.id == id }
     }

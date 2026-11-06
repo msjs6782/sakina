@@ -127,6 +127,14 @@
                 android:layout_weight="1">
 
                 <ImageView
+                    android:id="@+id/w_chip0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:importantForAccessibility="no"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/w_chip_light" />
+
+                <ImageView
                     android:id="@+id/w_hl0"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -167,6 +175,14 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/w_chip1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:importantForAccessibility="no"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/w_chip_light" />
 
                 <ImageView
                     android:id="@+id/w_hl1"
@@ -211,6 +227,14 @@
                 android:layout_weight="1">
 
                 <ImageView
+                    android:id="@+id/w_chip2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:importantForAccessibility="no"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/w_chip_light" />
+
+                <ImageView
                     android:id="@+id/w_hl2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -251,6 +275,14 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/w_chip3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:importantForAccessibility="no"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/w_chip_light" />
 
                 <ImageView
                     android:id="@+id/w_hl3"
@@ -295,6 +327,14 @@
                 android:layout_weight="1">
 
                 <ImageView
+                    android:id="@+id/w_chip4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:importantForAccessibility="no"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/w_chip_light" />
+
+                <ImageView
                     android:id="@+id/w_hl4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -335,6 +375,14 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/w_chip5"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:importantForAccessibility="no"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/w_chip_light" />
 
                 <ImageView
                     android:id="@+id/w_hl5"

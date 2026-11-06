@@ -31,10 +31,14 @@ enum class WidgetFont { APP, KUFI }
 enum class WidgetHighlight { FILL, TEXT }
 
 /**
- * A plain colour, the painted sky of the time of day at the widget's place, or a painted texture: a geometric
- * pattern, old paper, or a gold lattice on night blue (docs/ART.md).
+ * A plain colour, the painted sky of the time of day at the widget's place, a 3D scene that follows the time the same
+ * way, or a painted texture: a geometric pattern, old paper, a gold lattice on night blue, white or navy marble with
+ * gold veins, a gold lattice on emerald, or carved ivory (docs/ART.md). Behind the glass panel, COLOR is the wallpaper.
  */
-enum class WidgetBackground { COLOR, SKY, GEOMETRIC, PAPER, NIGHT }
+enum class WidgetBackground { COLOR, SKY, GEOMETRIC, PAPER, NIGHT, SCENE, MARBLE, MARBLE_NAVY, EMERALD, IVORY }
+
+/** How the day-name and dhikr widgets draw their large word: gold in relief, raised in the text colour, or flat. */
+enum class WidgetWordLook { GOLD, RAISED, FLAT }
 
 /**
  * One widget's own settings. Colours are ARGB; null means "from the visual style". Stored per widget id on the
@@ -55,6 +59,18 @@ data class WidgetConfig(
     val clock: WidgetClock = WidgetClock.APP,
     /** Text size in percent of the type's default; the widget still shrinks text that would not fit. */
     val textScale: Int = 100,
+    /**
+     * Each part's size in percent, on top of [textScale]: the large text (the time, the day, the countdown), the
+     * prayer table, and the small lines (the place, the date, the time left). Parts keep these proportions when the
+     * widget has to shrink its text to fit.
+     */
+    val heroScale: Int = 100,
+    val tableScale: Int = 100,
+    val smallScale: Int = 100,
+    /** Heavier weights for all of the widget's text. */
+    val bold: Boolean = false,
+    /** The smallest text the widget accepts before it leaves out less important lines: 0 as fits, 1 clear, 2 large. */
+    val clarity: Int = 0,
     val background: WidgetBackground = WidgetBackground.COLOR,
     val textColor: Long? = null,
     val backgroundColor: Long? = null,
@@ -82,6 +98,10 @@ data class WidgetConfig(
     val depth: Boolean = true,
     /** A gold line along the edge that grows from the last prayer to the next. */
     val progress: Boolean = true,
+    /** The day-name and dhikr widgets' large word. */
+    val wordLook: WidgetWordLook = WidgetWordLook.GOLD,
+    /** Glass panel: a bevelled rim, a sheen across the glass and frosted chips under the prayers. */
+    val glass3d: Boolean = true,
     val contentMode: ContentMode = ContentMode.MIXED,
     /** Steps taken with the content widget's "next" button; added to the day's position in the list. */
     val contentShift: Int = 0,
@@ -91,7 +111,10 @@ data class WidgetConfig(
         const val DEFAULT_OPACITY = 92
         const val GLASS_OPACITY = 45
         val CORNERS = listOf(0, 8, 16, 24)
-        val SCALES = 80..140
+        val SCALES = 70..170
+        val PART_SCALES = 60..200
+        /** The smallest size per unit of the type's size each [clarity] step accepts (in dp per sp). */
+        val CLARITY = floatArrayOf(0.72f, 0.92f, 1.12f)
 
         fun defaultsFor(kind: String) = WidgetConfig(kind = kind, opacity = if (kind == "glass") GLASS_OPACITY else DEFAULT_OPACITY)
     }
@@ -167,3 +190,31 @@ fun WidgetConfig.clock24(s: AppSettings): Boolean = when (clock) {
 /** The place the widget shows: its own, or the app's current one (the travel destination while travelling). */
 fun WidgetConfig.resolvePlace(s: AppSettings): SavedLocation? =
     (if (placeMode == WidgetPlaceMode.FIXED) place else s.activeLocation)?.takeIf { it.isUsable }
+
+/**
+ * Applies settings written as "bg=SCENE,bold=1,hero=140,table=130,small=120,clarity=1,word=RAISED,glass3d=0,
+ * font=KUFI,scale=120,theme=DARK" (for demos and checks); unknown keys and values are ignored.
+ */
+fun WidgetConfig.withOptions(spec: String): WidgetConfig = spec.split(',').map { it.trim() }.filter { '=' in it }.fold(this) { c, kv ->
+    val (k, v) = kv.split('=', limit = 2).let { it[0].trim() to it[1].trim() }
+    fun on() = v == "1" || v.equals("true", true)
+    fun num(range: IntRange) = v.toIntOrNull()?.coerceIn(range)
+    runCatching {
+        when (k) {
+            "bg" -> c.copy(background = WidgetBackground.valueOf(v.uppercase()))
+            "bold" -> c.copy(bold = on())
+            "hero" -> num(WidgetConfig.PART_SCALES)?.let { c.copy(heroScale = it) } ?: c
+            "table" -> num(WidgetConfig.PART_SCALES)?.let { c.copy(tableScale = it) } ?: c
+            "small" -> num(WidgetConfig.PART_SCALES)?.let { c.copy(smallScale = it) } ?: c
+            "scale" -> num(WidgetConfig.SCALES)?.let { c.copy(textScale = it) } ?: c
+            "clarity" -> num(0 until WidgetConfig.CLARITY.size)?.let { c.copy(clarity = it) } ?: c
+            "word" -> c.copy(wordLook = WidgetWordLook.valueOf(v.uppercase()))
+            "glass3d" -> c.copy(glass3d = on())
+            "depth" -> c.copy(depth = on())
+            "font" -> c.copy(font = WidgetFont.valueOf(v.uppercase()))
+            "theme" -> c.copy(theme = WidgetTheme.valueOf(v.uppercase()))
+            "opacity" -> num(0..100)?.let { c.copy(opacity = it) } ?: c
+            else -> c
+        }
+    }.getOrDefault(c)
+}

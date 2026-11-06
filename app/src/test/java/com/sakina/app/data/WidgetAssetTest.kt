@@ -86,4 +86,33 @@ class WidgetAssetTest {
         assertFalse(cfg.copy(clock = WidgetClock.APP).clock24(s))
         assertEquals(WidgetConfig.GLASS_OPACITY, WidgetConfig.defaultsFor("glass").opacity)
     }
+
+    @Test
+    fun newLookSettingsDefaultForOldSettingsAndParse() {
+        // Settings saved before the size, bold, clarity, word and glass options read as before.
+        val old = SettingsJson.decodeFromString(WidgetsState.serializer(), """{"configs":{"3":{"kind":"dayname","textScale":120,"background":"SKY"}}}""")
+        val c = old.configs.getValue("3")
+        assertEquals(120, c.textScale)
+        assertEquals(listOf(100, 100, 100), listOf(c.heroScale, c.tableScale, c.smallScale))
+        assertFalse(c.bold)
+        assertEquals(0, c.clarity)
+        assertEquals(WidgetWordLook.GOLD, c.wordLook)
+        assertTrue(c.glass3d)
+        assertEquals(WidgetBackground.SKY, c.background)
+        // The demo option strings: known keys set, values kept in range, the rest ignored.
+        val d = WidgetConfig.defaultsFor("glass").withOptions("bg=scene, bold=1,hero=500,table=130,small=40,clarity=2,word=raised,glass3d=0,font=KUFI,nope=1,scale=x")
+        assertEquals(WidgetBackground.SCENE, d.background)
+        assertTrue(d.bold)
+        assertEquals(WidgetConfig.PART_SCALES.last, d.heroScale)
+        assertEquals(130, d.tableScale)
+        assertEquals(WidgetConfig.PART_SCALES.first, d.smallScale)
+        assertEquals(2, d.clarity)
+        assertEquals(WidgetWordLook.RAISED, d.wordLook)
+        assertFalse(d.glass3d)
+        assertEquals(WidgetFont.KUFI, d.font)
+        assertEquals(100, d.textScale)
+        assertEquals(d, d.withOptions("bg=nothing,word=bent"))
+        val back = SettingsJson.decodeFromString(WidgetsState.serializer(), SettingsJson.encodeToString(WidgetsState.serializer(), WidgetsState(mapOf("1" to d))))
+        assertEquals(d, back.configs.getValue("1"))
+    }
 }

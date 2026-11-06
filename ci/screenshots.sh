@@ -173,6 +173,8 @@ source "$HERE/r14.sh"
 source "$HERE/r15.sh"
 # shellcheck source=ci/r16.sh
 source "$HERE/r16.sh"
+# shellcheck source=ci/r17.sh
+source "$HERE/r17.sh"
 
 finish_run() {
   adb logcat -d >> "$OUT/logcat_part2.txt"
@@ -209,7 +211,7 @@ if [ "${ONLY:-}" = "widgets" ]; then
 fi
 # The "extras" suite (a second Android 14 job, run in parallel): widgets, paintings, rounds 10 and 11.
 if [ "$SUITE" = "extras" ]; then
-  if [ "${ONLY:-all}" = "all" ]; then phase8; visual; r10; r11; r12; r13; r14; r15; r16; fi
+  if [ "${ONLY:-all}" = "all" ]; then phase8; visual; r10; r11; r12; r13; r14; r15; r16; r17; fi
   adb logcat -d > "$OUT/logcat_part1.txt"; adb logcat -c
   finish_run
 fi
@@ -252,6 +254,12 @@ fi
 # [ci:r16] runs only round 16 (the interactive Mushaf, prayer statistics and make-up prayers, fasts).
 if [ "${ONLY:-}" = "r16" ]; then
   r16
+  adb logcat -d > "$OUT/logcat_part1.txt"; adb logcat -c
+  finish_run
+fi
+# [ci:r17] runs only round 17 (the widgets in 3D and the new text settings).
+if [ "${ONLY:-}" = "r17" ]; then
+  r17
   adb logcat -d > "$OUT/logcat_part1.txt"; adb logcat -c
   finish_run
 fi
@@ -1167,6 +1175,6 @@ if [ "$SUITE" = "full" ]; then
 fi
 
 # ---------- Round 10: tabs, quick access, day-name widget, widget settings, Mushaf on an Arabic phone (ci/r10.sh) ----------
-if [ "$SUITE" != "full" ]; then r10; r11; r12; r13; r14; r15; r16; fi
+if [ "$SUITE" != "full" ]; then r10; r11; r12; r13; r14; r15; r16; r17; fi
 
 finish_run

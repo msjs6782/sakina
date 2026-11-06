@@ -156,6 +156,12 @@ class WidgetTest {
         assertTrue(Contrast.minScrimPercent(white, black, 3.0) < p)
         // Text the same colour as its scrim can never pass.
         assertEquals(100, Contrast.minScrimPercent(black, black, 4.5))
+        // The veil that brings a bright background to 3:1 under white text: none when already dark enough.
+        assertEquals(0.0, Contrast.veilForWhite(0.2, 3.0), 1e-9)
+        val v = Contrast.veilForWhite(0.6, 3.0)
+        assertEquals(0.5, v, 1e-9)
+        assertTrue(Contrast.ratio(0xFFFFFFFF.toInt(), 0xFF000000.toInt()) > 3.0)
+        assertEquals(3.0, 1.05 / (0.6 * (1 - v) + 0.05), 1e-9)
     }
 
     /** Every character is 0.5 em wide; lines are 1.2 em tall. */

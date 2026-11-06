@@ -35,6 +35,12 @@ object Contrast {
      */
     fun minScrimPercent(text: Int, scrim: Int, target: Double): Int =
         (0..100).firstOrNull { worst(text, scrim, it / 100f) >= target } ?: 100
+
+    /** The black veil (0–1) that brings a background of luminance [l] to [target] against white text. */
+    fun veilForWhite(l: Double, target: Double): Double {
+        val most = 1.05 / target - 0.05
+        return if (l <= most) 0.0 else (1 - most / l).coerceIn(0.0, 1.0)
+    }
 }
 
 /** Measures one line of text at a size in pixels (Paint.measureText on the device; a fake in tests). */

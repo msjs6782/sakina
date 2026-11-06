@@ -51,6 +51,15 @@ import java.time.ZoneId
 /** Everything a widget needs to draw itself at one moment. */
 class WidgetEnv(val context: Context, val settings: AppSettings, val now: Instant, val pack: ContentPack?, val quran: com.sakina.app.data.QuranState? = null)
 
+/**
+ * A painting behind a widget: the picture for this size, the veil that keeps its text readable (0–1; white under
+ * dark ink when [light]), the colour beyond the picture's edges, and a key for what is shown.
+ */
+class Art(val res: Int, val veil: Float, val light: Boolean, val top: Int, val key: String)
+
+/** The parts of a widget whose sizes are set apart: the large text, the prayer table, the small lines. */
+enum class Part { HERO, TABLE, SMALL }
+
 /** A widget's views (possibly one per size), a key that changes when anything shown changes, and when to redraw. */
 class WidgetRender(val views: RemoteViews, val key: String, val nextChange: Instant)
 
@@ -109,6 +118,8 @@ object WidgetRenderer {
     private val CELL_TIMES = intArrayOf(R.id.w_t0, R.id.w_t1, R.id.w_t2, R.id.w_t3, R.id.w_t4, R.id.w_t5)
     private val CELL_HL = intArrayOf(R.id.w_hl0, R.id.w_hl1, R.id.w_hl2, R.id.w_hl3, R.id.w_hl4, R.id.w_hl5)
     private val CELLS = intArrayOf(R.id.w_cell0, R.id.w_cell1, R.id.w_cell2, R.id.w_cell3, R.id.w_cell4, R.id.w_cell5)
+    /** The glass panel's frosted chips under the prayers (in the glass layouts only). */
+    private val CHIPS = intArrayOf(R.id.w_chip0, R.id.w_chip1, R.id.w_chip2, R.id.w_chip3, R.id.w_chip4, R.id.w_chip5)
 
     /** Default sizes (dp) when the launcher has not reported any yet. */
     fun defaultSize(kind: WidgetKind): SizeF = when (kind) {
@@ -178,21 +189,32 @@ object WidgetRenderer {
         val zone: ZoneId = place?.zoneId ?: ZoneId.systemDefault()
         val schedule: PrayerSchedule? = place?.let { PrayerSchedule(it.point, zone, s.calcConfig) }
         val glass = kind == WidgetKind.GLASS
-        /** The painted sky behind the widget (null for a plain colour): the time of day at the widget's place. */
-        val sky: SkyPeriod? = if (cfg.background != WidgetBackground.SKY || glass) null else {
+        /** The time of day at the widget's place, for the paintings that follow it. */
+        val period: SkyPeriod by lazy {
             val sch = schedule ?: s.activeLocation?.takeIf { it.isUsable }?.let { l -> PrayerSchedule(l.point, l.zoneId!!, s.calcConfig) }
             sch?.let { skyPeriod(it.day(it.localDate(now)), now) } ?: SkyPeriod.NOON
         }
-        /** A painted texture behind the widget (pattern, paper, night lattice), or null. */
-        val texture: Int? = if (glass) null else when (cfg.background) {
-            WidgetBackground.GEOMETRIC -> R.drawable.tex_geometric
-            WidgetBackground.PAPER -> R.drawable.tex_paper
-            WidgetBackground.NIGHT -> R.drawable.tex_night
-            else -> null
+        /** The launcher crops from the centre: wide widgets get a band from the bottom, so the skyline stays. */
+        val wideArt = wDp >= hDp * 2.2f
+        /** The painting behind the widget, or null for a plain colour (behind the glass panel: the wallpaper). */
+        val art: Art? = when (cfg.background) {
+            WidgetBackground.COLOR -> null
+            WidgetBackground.SKY -> Art(if (wideArt) SkyArt.wideDrawable(period) else SkyArt.drawable(period), SkyArt.scrim(period, false), false, SkyArt.topColor(period), "sky$period$wideArt")
+            WidgetBackground.SCENE -> Art(if (wideArt) SceneArt.wideDrawable(period) else SceneArt.drawable(period), SceneArt.scrim(period), false, SceneArt.topColor(period), "scene$period$wideArt")
+            // A veil under light text on the teal pattern and the emerald lattice, a whitening one under dark ink on
+            // marble and ivory; the paper, night lattice and navy marble need little or none.
+            WidgetBackground.GEOMETRIC -> Art(R.drawable.tex_geometric, 50 / 255f, false, 0xFF4C7975.toInt(), "geo")
+            WidgetBackground.PAPER -> Art(R.drawable.tex_paper, 0f, true, 0xFFEAD7B2.toInt(), "paper")
+            WidgetBackground.NIGHT -> Art(R.drawable.tex_night, 0f, false, 0xFF24313F.toInt(), "night")
+            WidgetBackground.MARBLE -> Art(R.drawable.tex_marble, 0.12f, true, 0xFFE2E1E1.toInt(), "marble")
+            WidgetBackground.MARBLE_NAVY -> Art(R.drawable.tex_marble_navy, 0.08f, false, 0xFF0E1F32.toInt(), "navy")
+            WidgetBackground.EMERALD -> Art(R.drawable.tex_emerald, 0.36f, false, 0xFF1F4A2C.toInt(), "emerald")
+            WidgetBackground.IVORY -> Art(R.drawable.tex_ivory, 0.2f, true, 0xFFE6CFB4.toInt(), "ivory")
         }
         val colors = when {
-            sky != null -> WidgetPalette.sky(cfg, SkyArt.topColor(sky))
-            texture != null -> WidgetPalette.texture(cfg, cfg.background)
+            glass && art != null -> WidgetPalette.glassOver(cfg, art.light)
+            art != null && (cfg.background == WidgetBackground.SKY || cfg.background == WidgetBackground.SCENE) -> WidgetPalette.sky(cfg, art.top)
+            art != null -> WidgetPalette.texture(cfg, cfg.background)
             else -> WidgetPalette.resolve(ctx, cfg, s, now, glass)
         }
         val key = StringBuilder()
@@ -201,11 +223,13 @@ object WidgetRenderer {
         /** Gold for the raised look's edge and the progress line: deeper on light colours, brighter on dark ones. */
         val gold: Int = if (colors.dark) 0xFFE5C57E.toInt() else 0xFFA47D2C.toInt()
 
-        // Fonts used by the layouts (the Kufi setting picks the *_k layouts, whose styles use Noto Kufi Arabic).
+        // Fonts used by the layouts (the Kufi setting picks the *_k layouts, whose styles use Noto Kufi Arabic; bold
+        // text the *_b and *_kb ones, a weight heavier throughout).
         val kufi = cfg.font == WidgetFont.KUFI
-        val regular = Typo.face(ctx, if (kufi) R.font.kufi_regular else R.font.plex_regular)
-        val medium = Typo.face(ctx, if (kufi) R.font.kufi_medium else R.font.plex_medium)
-        val semibold = Typo.face(ctx, if (kufi) R.font.kufi_bold else R.font.plex_semibold)
+        val bold = cfg.bold
+        val regular = Typo.face(ctx, when { kufi && bold -> R.font.kufi_medium; kufi -> R.font.kufi_regular; bold -> R.font.plex_medium; else -> R.font.plex_regular })
+        val medium = Typo.face(ctx, when { kufi && bold -> R.font.kufi_bold; kufi -> R.font.kufi_medium; bold -> R.font.plex_semibold; else -> R.font.plex_medium })
+        val semibold = Typo.face(ctx, when { kufi && bold -> R.font.kufi_black; kufi -> R.font.kufi_bold; bold -> R.font.plex_bold; else -> R.font.plex_semibold })
         /** Sunrise in the tables (the day-name widget leaves it out by default). */
         val sunrise = cfg.showSunrise ?: (kind != WidgetKind.DAYNAME)
         val cellIdx: List<Int> = (0 until 6).filter { it != 1 || sunrise }
@@ -216,9 +240,20 @@ object WidgetRenderer {
         val unit = density * ctx.resources.configuration.fontScale * cfg.textScale.coerceIn(WidgetConfig.SCALES) / 100f
         /** A roomy widget may grow its text up to this much beyond the chosen size. */
         val maxUnit = unit * 1.55f
-        val pad = (minOf(wDp, hDp) * 0.085f).coerceIn(6f, 14f) * density
+        /** Below this scale the optional lines are left out (the clarity setting raises it). */
+        val readable = density * WidgetConfig.CLARITY[cfg.clarity.coerceIn(0, WidgetConfig.CLARITY.size - 1)] * minOf(1f, cfg.textScale / 100f)
+        /** A glass panel over a painting floats inside it, this far from the edge. */
+        val glassInset = if (glass && art != null) (minOf(wDp, hDp) * 0.045f).coerceIn(4f, 8f) * density else 0f
+        val pad = (minOf(wDp, hDp) * 0.085f).coerceIn(6f, 14f) * density + glassInset
         val boxW = wDp * density - 2 * pad
         val boxH = hDp * density - 2 * pad
+
+        /** The size setting of each part, as a factor. */
+        fun partFactor(p: Part): Float = (when (p) {
+            Part.HERO -> cfg.heroScale
+            Part.TABLE -> cfg.tableScale
+            Part.SMALL -> cfg.smallScale
+        }).coerceIn(WidgetConfig.PART_SCALES) / 100f
 
         fun text(id: Int, value: String) { rv.setTextViewText(id, value); key.append(id).append('=').append(value).append('|') }
         private val lastSize = HashMap<Int, Float>()
@@ -234,22 +269,32 @@ object WidgetRenderer {
         }
 
         fun layoutFor(): Int {
-            fun pick(plex: Int, kufiLayout: Int) = if (kufi) kufiLayout else plex
+            /** One of the four variants of a layout: as is, Kufi, bold, bold Kufi. */
+            fun pick(plex: Int, kufiLayout: Int, plexBold: Int, kufiBold: Int) = when {
+                kufi && bold -> kufiBold
+                kufi -> kufiLayout
+                bold -> plexBold
+                else -> plex
+            }
             return when (kind) {
-                WidgetKind.NEXT -> if (wDp >= hDp * 1.5f) pick(R.layout.w_next_wide, R.layout.w_next_wide_k) else pick(R.layout.w_next_tall, R.layout.w_next_tall_k)
-                WidgetKind.COUNTDOWN -> pick(R.layout.w_countdown, R.layout.w_countdown_k)
-                WidgetKind.DAY -> if (hDp > wDp * 1.1f) pick(R.layout.w_day_tall, R.layout.w_day_tall_k) else pick(R.layout.w_day_wide, R.layout.w_day_wide_k)
-                WidgetKind.GLASS -> if (colors.dark) pick(R.layout.w_glass_dark, R.layout.w_glass_dark_k) else pick(R.layout.w_glass_light, R.layout.w_glass_light_k)
-                WidgetKind.MINI -> pick(R.layout.w_mini, R.layout.w_mini_k)
-                WidgetKind.STRIP -> pick(R.layout.w_strip, R.layout.w_strip_k)
-                WidgetKind.DIGITAL -> pick(R.layout.w_digital, R.layout.w_digital_k)
-                WidgetKind.ANALOG -> if (colors.lightInk) pick(R.layout.w_analog_light, R.layout.w_analog_light_k) else pick(R.layout.w_analog_dark, R.layout.w_analog_dark_k)
-                WidgetKind.CONTENT -> pick(R.layout.w_content, R.layout.w_content_k)
-                WidgetKind.FAJR_MAGHRIB -> pick(R.layout.w_fajr_maghrib, R.layout.w_fajr_maghrib_k)
-                WidgetKind.DAYNAME -> pick(R.layout.w_dayname, R.layout.w_dayname_k)
-                WidgetKind.KHATMA -> pick(R.layout.w_khatma, R.layout.w_khatma_k)
-                WidgetKind.DHIKR -> pick(R.layout.w_dhikr, R.layout.w_dhikr_k)
-                WidgetKind.CALENDAR -> pick(R.layout.w_calendar, R.layout.w_calendar_k)
+                WidgetKind.NEXT -> if (wDp >= hDp * 1.5f) pick(R.layout.w_next_wide, R.layout.w_next_wide_k, R.layout.w_next_wide_b, R.layout.w_next_wide_kb)
+                else pick(R.layout.w_next_tall, R.layout.w_next_tall_k, R.layout.w_next_tall_b, R.layout.w_next_tall_kb)
+                WidgetKind.COUNTDOWN -> pick(R.layout.w_countdown, R.layout.w_countdown_k, R.layout.w_countdown_b, R.layout.w_countdown_kb)
+                WidgetKind.DAY -> if (hDp > wDp * 1.1f) pick(R.layout.w_day_tall, R.layout.w_day_tall_k, R.layout.w_day_tall_b, R.layout.w_day_tall_kb)
+                else pick(R.layout.w_day_wide, R.layout.w_day_wide_k, R.layout.w_day_wide_b, R.layout.w_day_wide_kb)
+                WidgetKind.GLASS -> if (colors.dark) pick(R.layout.w_glass_dark, R.layout.w_glass_dark_k, R.layout.w_glass_dark_b, R.layout.w_glass_dark_kb)
+                else pick(R.layout.w_glass_light, R.layout.w_glass_light_k, R.layout.w_glass_light_b, R.layout.w_glass_light_kb)
+                WidgetKind.MINI -> pick(R.layout.w_mini, R.layout.w_mini_k, R.layout.w_mini_b, R.layout.w_mini_kb)
+                WidgetKind.STRIP -> pick(R.layout.w_strip, R.layout.w_strip_k, R.layout.w_strip_b, R.layout.w_strip_kb)
+                WidgetKind.DIGITAL -> pick(R.layout.w_digital, R.layout.w_digital_k, R.layout.w_digital_b, R.layout.w_digital_kb)
+                WidgetKind.ANALOG -> if (colors.lightInk) pick(R.layout.w_analog_light, R.layout.w_analog_light_k, R.layout.w_analog_light_b, R.layout.w_analog_light_kb)
+                else pick(R.layout.w_analog_dark, R.layout.w_analog_dark_k, R.layout.w_analog_dark_b, R.layout.w_analog_dark_kb)
+                WidgetKind.CONTENT -> pick(R.layout.w_content, R.layout.w_content_k, R.layout.w_content_b, R.layout.w_content_kb)
+                WidgetKind.FAJR_MAGHRIB -> pick(R.layout.w_fajr_maghrib, R.layout.w_fajr_maghrib_k, R.layout.w_fajr_maghrib_b, R.layout.w_fajr_maghrib_kb)
+                WidgetKind.DAYNAME -> pick(R.layout.w_dayname, R.layout.w_dayname_k, R.layout.w_dayname_b, R.layout.w_dayname_kb)
+                WidgetKind.KHATMA -> pick(R.layout.w_khatma, R.layout.w_khatma_k, R.layout.w_khatma_b, R.layout.w_khatma_kb)
+                WidgetKind.DHIKR -> pick(R.layout.w_dhikr, R.layout.w_dhikr_k, R.layout.w_dhikr_b, R.layout.w_dhikr_kb)
+                WidgetKind.CALENDAR -> pick(R.layout.w_calendar, R.layout.w_calendar_k, R.layout.w_calendar_b, R.layout.w_calendar_kb)
             }
         }
 
@@ -289,8 +334,12 @@ object WidgetRenderer {
 
         /** Background, border, direction, padding and the tap target. */
         fun frame() {
+            val floating = glass && art != null
+            /** The glass panel in relief: its rim, light and sheen replace the raised look's gloss and gold edge. */
+            val glassRelief = glass && cfg.glass3d
             rv.setImageViewResource(R.id.w_bg, when (corner) { 0 -> R.drawable.w_shape_0; 8 -> R.drawable.w_shape_8; 24 -> R.drawable.w_shape_24; else -> R.drawable.w_shape_16 })
             tint(R.id.w_bg, colors.bg, colors.bgAlpha)
+            rv.setViewVisibility(R.id.w_bg, if (floating) View.GONE else View.VISIBLE)
             if (cfg.border > 0) {
                 val thick = cfg.border >= 2
                 rv.setImageViewResource(R.id.w_border, when (corner) {
@@ -301,7 +350,7 @@ object WidgetRenderer {
                 })
                 rv.setInt(R.id.w_border, "setColorFilter", colors.border)
                 rv.setViewVisibility(R.id.w_border, View.VISIBLE)
-            } else if (cfg.depth) {
+            } else if (cfg.depth && !glassRelief) {
                 // The raised look's gold hairline.
                 rv.setImageViewResource(R.id.w_border, when (corner) { 0 -> R.drawable.w_stroke_0_1; 8 -> R.drawable.w_stroke_8_1; 24 -> R.drawable.w_stroke_24_1; else -> R.drawable.w_stroke_16_1 })
                 rv.setInt(R.id.w_border, "setColorFilter", gold)
@@ -310,30 +359,47 @@ object WidgetRenderer {
                 rv.setViewVisibility(R.id.w_border, View.GONE)
             }
             // Light from above and a soft shade below, over the colour or the painting.
-            if (cfg.depth) {
+            if (glassRelief && !floating) {
+                val q = 0.85f
+                val w = (wDp * density * q).toInt().coerceIn(8, 1600)
+                val h = (hDp * density * q).toInt().coerceIn(8, 1600)
+                rv.setImageViewBitmap(R.id.w_gloss, WidgetGlass.overlay(w, h, density * q, corner * density * q, colors.dark))
+                rv.setViewVisibility(R.id.w_gloss, View.VISIBLE)
+            } else if (cfg.depth && !floating) {
                 rv.setImageViewResource(R.id.w_gloss, when (corner) { 0 -> R.drawable.w_gloss_0; 8 -> R.drawable.w_gloss_8; 24 -> R.drawable.w_gloss_24; else -> R.drawable.w_gloss_16 })
                 rv.setViewVisibility(R.id.w_gloss, View.VISIBLE)
             } else {
                 rv.setViewVisibility(R.id.w_gloss, View.GONE)
             }
             rv.setViewVisibility(R.id.w_ring, View.GONE)
-            key.append("depth").append(cfg.depth).append('|')
-            if (sky != null) {
-                // The launcher crops from the centre: wide widgets get a band from the bottom, so the skyline stays.
-                val wide = wDp >= hDp * 2.2f
-                rv.setImageViewResource(R.id.w_sky, if (wide) SkyArt.wideDrawable(sky) else SkyArt.drawable(sky))
+            key.append("depth").append(cfg.depth).append(glassRelief).append('|')
+            if (floating) {
+                // The glass floats over the painting: drawn here as one picture, the painting frosted behind it.
+                val q = 0.8f
+                val w = (wDp * density * q).toInt().coerceIn(8, 1600)
+                val h = (hDp * density * q).toInt().coerceIn(8, 1600)
+                val pic = WidgetGlass.picture(ctx, art!!.res, w)
+                if (pic != null) {
+                    val (bmp, veil) = WidgetGlass.panel(pic, w, h, density * q, corner * density * q, glassInset * q, colors.dark,
+                        cfg.opacity.coerceIn(0, 100) / 100f * 0.7f, cfg.contrastGuard, art.top)
+                    rv.setImageViewBitmap(R.id.w_sky, bmp)
+                    rv.setViewVisibility(R.id.w_sky, View.VISIBLE)
+                    key.append("glassart").append(art.key).append((veil * 100).toInt()).append('|')
+                } else {
+                    rv.setViewVisibility(R.id.w_sky, View.GONE)
+                }
+                rv.setViewVisibility(R.id.w_scrim, View.GONE)
+            } else if (art != null) {
+                rv.setImageViewResource(R.id.w_sky, art.res)
                 rv.setViewVisibility(R.id.w_sky, View.VISIBLE)
-                rv.setViewVisibility(R.id.w_scrim, View.VISIBLE)
-                rv.setInt(R.id.w_scrim, "setImageAlpha", (SkyArt.scrim(sky, false) * 255).toInt())
-                key.append("sky").append(sky).append(wide).append('|')
-            } else if (texture != null) {
-                rv.setImageViewResource(R.id.w_sky, texture)
-                rv.setViewVisibility(R.id.w_sky, View.VISIBLE)
-                // A light veil under light text on the teal pattern; the paper and night lattice need none.
-                val veil = if (cfg.background == WidgetBackground.GEOMETRIC) 50 else 0
+                val veil = (art.veil * 255).toInt()
                 rv.setViewVisibility(R.id.w_scrim, if (veil > 0) View.VISIBLE else View.GONE)
-                if (veil > 0) rv.setInt(R.id.w_scrim, "setImageAlpha", veil)
-                key.append("tex").append(cfg.background).append('|')
+                if (veil > 0) {
+                    rv.setInt(R.id.w_scrim, "setImageAlpha", veil)
+                    // A light veil under dark ink.
+                    if (art.light) rv.setInt(R.id.w_scrim, "setColorFilter", 0xFFFFFFFF.toInt())
+                }
+                key.append("art").append(art.key).append('|')
             } else {
                 rv.setViewVisibility(R.id.w_sky, View.GONE)
                 rv.setViewVisibility(R.id.w_scrim, View.GONE)
@@ -380,8 +446,17 @@ object WidgetRenderer {
             val with: IntArray = IntArray(0),
             /** Views always hidden when this line is drawn (a setting turned them off). */
             val hide: IntArray = IntArray(0),
+            /** Which size setting applies; by default the table's cells, large text (17 and up), or a small line. */
+            part: Part? = null,
         ) {
-            fun fit() = FitLine(texts, rel, padPx, inline, Typo.measure(face), Typo.lineHeight(face))
+            val part: Part = part ?: when {
+                ids.any { it in CELL_NAMES || it in CELL_TIMES } -> Part.TABLE
+                rel >= 17f -> Part.HERO
+                else -> Part.SMALL
+            }
+            /** The size relative to the others, with the part's own setting. */
+            val size: Float = rel * partFactor(this.part)
+            fun fit() = FitLine(texts, size, padPx, inline, Typo.measure(face), Typo.lineHeight(face))
         }
 
         /**
@@ -389,7 +464,6 @@ object WidgetRenderer {
          * droppable lines from the highest level down. Hidden lines are set gone; the rest get their sizes.
          */
         fun solve(lines: List<Line>, w: Float = boxW, h: Float = boxH, gap: Float = 2f): Float {
-            val readable = density * 0.72f * minOf(1f, cfg.textScale / 100f)
             val levels = lines.map { it.drop }.filter { it > 0 }.distinct().sortedDescending()
             var chosen = lines
             var scale: Float? = null
@@ -414,7 +488,7 @@ object WidgetRenderer {
                 for (v in l.ids) visible(v, on)
                 for (v in l.with) visible(v, on)
                 for (v in l.hide) visible(v, false)
-                if (on) for (v in l.ids) size(v, scale * l.rel)
+                if (on) for (v in l.ids) size(v, scale * l.size)
             }
             return scale
         }
@@ -520,7 +594,6 @@ object WidgetRenderer {
                 Line(intArrayOf(R.id.w_time), listOf(time), 15f, medium),
                 opt(R.id.w_stamp, stamp, 11f, regular),
             )
-            val readable = density * 0.72f * minOf(1f, cfg.textScale / 100f)
             val probe = Fit.scale(roomy.filter { it.drop == 0 }.map { it.fit() }, boxW, boxH, maxUnit, density * 0.4f, Typo.measure(regular), Typo.lineHeight(regular), 2f)
             if (probe != null && probe >= readable) {
                 solve(roomy)
@@ -659,7 +732,10 @@ object WidgetRenderer {
             text(R.id.w_remain, r); color(R.id.w_remain, colors.muted)
             color(R.id.w_place, colors.muted)
             val (names, times) = cellTexts(snap)
-            for (i in 0 until 6) cellColors(snap, i, colors.muted, colors.text)
+            for (i in 0 until 6) {
+                cellColors(snap, i, colors.muted, colors.text)
+                visible(CHIPS[i], cfg.glass3d, gone = false)
+            }
             solve(listOf(
                 placeL,
                 Line(intArrayOf(R.id.w_name, R.id.w_time), listOf(name, time), 23f, regular, padPx = 10f * density, inline = true),
@@ -673,8 +749,8 @@ object WidgetRenderer {
             text(R.id.w_name, name); color(R.id.w_name, colors.accent)
             val full = fmt.time(at, zone)
             val short = fmt.time(at, zone, suffix = false)
-            val readable = density * 0.72f * minOf(1f, cfg.textScale / 100f)
-            val tryFull = Fit.scale(listOf(FitLine(name, 12f, measure = Typo.measure(medium), lineHeight = Typo.lineHeight(medium)), FitLine(full, 22f, measure = Typo.measure(semibold), lineHeight = Typo.lineHeight(semibold))), boxW, boxH, maxUnit, density * 0.4f, Typo.measure(regular), Typo.lineHeight(regular), 1f)
+            val tryFull = Fit.scale(listOf(Line(intArrayOf(R.id.w_name), listOf(name), 12f, medium).fit(), Line(intArrayOf(R.id.w_time), listOf(full), 22f, semibold).fit()),
+                boxW, boxH, maxUnit, density * 0.4f, Typo.measure(regular), Typo.lineHeight(regular), 1f)
             val t = if (tryFull != null && tryFull >= readable) full else short
             text(R.id.w_time, t); color(R.id.w_time, colors.text)
             solve(listOf(Line(intArrayOf(R.id.w_name), listOf(name), 12f, medium), Line(intArrayOf(R.id.w_time), listOf(t), 22f, semibold)), gap = 1f)
@@ -730,20 +806,14 @@ object WidgetRenderer {
         fun measureWidth(face: Typeface, text: String) = Typo.measure(face).width(text, 100f)
 
         /**
-         * Large display text drawn here as an alpha mask and tinted by the launcher: the heavy Kufi and the kashida
-         * width then look the same on every launcher (some draw widget text in the system font).
+         * Large display text drawn here (see [WidgetWord]): in relief or flat, the heavy Kufi and the kashida width
+         * then look the same on every launcher (some draw widget text in the system font).
          */
-        fun bigText(id: Int, value: String, px: Float, face: Typeface, color: Int) {
-            val p = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply { typeface = face; textSize = px }
-            val fm = p.fontMetrics
-            val w = (kotlin.math.ceil(p.measureText(value).toDouble()).toInt() + 2).coerceIn(1, 2000)
-            val h = kotlin.math.ceil((fm.descent - fm.ascent).toDouble()).toInt().coerceIn(1, 600)
-            val bmp = android.graphics.Bitmap.createBitmap(w, h, android.graphics.Bitmap.Config.ALPHA_8)
-            android.graphics.Canvas(bmp).drawText(value, 1f, -fm.ascent, p)
+        fun bigText(id: Int, value: String, px: Float, face: Typeface) {
+            val bmp = WidgetWord.draw(value, px, face, cfg.wordLook, colors.text, colors.dark, density)
             rv.setImageViewBitmap(id, bmp)
-            rv.setInt(id, "setColorFilter", color)
             rv.setContentDescription(id, value)
-            key.append(id).append('=').append(value).append('@').append(px.toInt()).append('|')
+            key.append(id).append('=').append(value).append('@').append(px.toInt()).append(cfg.wordLook).append('|')
         }
 
         /**
@@ -764,23 +834,28 @@ object WidgetRenderer {
             val (names, times) = cellTexts(snap)
             val left = snap.minutesLeft?.let { str.wLeftUntil(name, fmt.durationShort(Duration.ofMinutes(it))) } ?: ""
             val r = tail(left, stamp)
-            text(R.id.w_remain, r); color(R.id.w_remain, colors.accent)
+            // Gold reads on a plain colour; over a painting the text colour keeps the line clear.
+            text(R.id.w_remain, r); color(R.id.w_remain, if (art != null) colors.text else colors.accent)
             val word = fmt.weekday(today.dayOfWeek).let { if (lang == Lang.AR) it else it.uppercase() }
-            // The day takes up to 44% of the height, less on a short widget so the prayers still fit.
+            // The day takes up to 44% of the height (with the large text's setting), less on a short widget so the
+            // prayers still fit; its relief takes a little of that.
             val lh = Typo.lineHeight(dayFace)
-            val share = if (hDp < 120f) 0.5f else 0.44f
+            val share = ((if (hDp < 120f) 0.5f else 0.44f) * partFactor(Part.HERO)).coerceIn(0.22f, 0.62f)
             val base = if (Kashida.point(word) != null) Kashida.stretch(word, 2) else word
             val perPx = Typo.rawWidth(dayFace, base, 100f) / 100f
-            val px = minOf(boxH * share / lh, boxW * (if (lang == Lang.AR) 0.82f else 0.94f) / perPx, 64f * maxUnit)
-            val target = boxW * 0.97f
+            var px = minOf(boxH * share / lh, boxW * (if (lang == Lang.AR) 0.82f else 0.94f) / perPx, 64f * maxUnit * partFactor(Part.HERO))
+            val (_, down) = WidgetWord.extra(px, cfg.wordLook, density)
+            if (px * lh + down > boxH * share) px *= boxH * share / (px * lh + down)
+            val (across, below) = WidgetWord.extra(px, cfg.wordLook, density)
+            val target = boxW * 0.97f - across
             val stretched = Kashida.fill(word, target) { Typo.rawWidth(dayFace, it, px) }
-            bigText(R.id.w_dayname, stretched, px, dayFace, colors.text)
+            bigText(R.id.w_dayname, stretched, px, dayFace)
             solve(listOf(
                 top,
                 Line(cellNameIds, names, 10.5f, regular, drop = 1, padPx = 4f * density, with = intArrayOf(R.id.w_cells)),
                 Line(cellTimeIds, times, 13f, semibold, drop = 1, padPx = 4f * density),
                 opt(R.id.w_remain, r, 10.5f, regular, drop = 2),
-            ), h = boxH - px * lh - 4f * density, gap = 3f)
+            ), h = boxH - px * lh - below - 4f * density, gap = 3f)
         }
 
         fun analog(snap: PrayerSnapshot, name: String, time: String) {
@@ -808,12 +883,12 @@ object WidgetRenderer {
             val pack = env.pack ?: ContentPack()
             val today = now.atZone(zone).toLocalDate()
             val headerH = 22f * density
-            val sourcePx = (11f * unit).coerceAtMost(14f * density)
+            val sourcePx = (11f * unit * partFactor(Part.SMALL)).coerceAtMost(14f * density * partFactor(Part.SMALL))
             val sourceH = sourcePx * Typo.lineHeight(regular) + 4f * density
             val textH = boxH - headerH - sourceH
             val ayahFace = Typo.face(ctx, R.font.amiri_quran)
             val dhikrFace = Typo.face(ctx, R.font.amiri_regular)
-            val maxPx = 24f * unit
+            val maxPx = 24f * unit * partFactor(Part.HERO)
             val minPx = 12.5f * density
             fun sizeFor(item: ContentItem): Float? =
                 Fit.block(item.text, boxW, textH, maxPx, minPx, Typo.block(if (item.isAyah) ayahFace else dhikrFace, 1.1f))
@@ -892,15 +967,19 @@ object WidgetRenderer {
             if (!preview) rv.setOnClickPendingIntent(R.id.w_next_btn, WidgetIntents.next(ctx, kind, id))
             rv.setInt(R.id.w_next_btn, "setColorFilter", colors.muted)
             text(R.id.w_label, str.wLabelDhikr); color(R.id.w_label, colors.accent)
-            val labelPx = (11f * unit).coerceAtMost(14f * density)
+            val labelPx = (11f * unit * partFactor(Part.SMALL)).coerceAtMost(14f * density * partFactor(Part.SMALL))
             size(R.id.w_label, labelPx)
             val dayFace = Typo.face(ctx, R.font.kufi_black)
             val lh = Typo.lineHeight(dayFace)
             val room = boxH - 24f * density
             val perPx = Typo.rawWidth(dayFace, phrase, 100f) / 100f
-            val px = minOf(room * 0.9f / lh, boxW * 0.97f / perPx, 72f * maxUnit).coerceAtLeast(9f * density)
-            val shown = Kashida.fillPhrase(phrase, boxW * 0.97f) { Typo.rawWidth(dayFace, it, px) }
-            bigText(R.id.w_dayname, shown, px, dayFace, colors.text)
+            var px = minOf(room * 0.9f / lh, boxW * 0.97f / perPx, 72f * maxUnit * partFactor(Part.HERO)).coerceAtLeast(9f * density)
+            val (across0, down) = WidgetWord.extra(px, cfg.wordLook, density)
+            val fits = minOf((room * 0.9f) / (px * lh + down), (boxW * 0.97f) / (px * perPx + across0))
+            if (fits < 1f) px = (px * fits).coerceAtLeast(9f * density)
+            val (across, _) = WidgetWord.extra(px, cfg.wordLook, density)
+            val shown = Kashida.fillPhrase(phrase, boxW * 0.97f - across) { Typo.rawWidth(dayFace, it, px) }
+            bigText(R.id.w_dayname, shown, px, dayFace)
             return WidgetMath.nextMidnight(now, zone)
         }
 

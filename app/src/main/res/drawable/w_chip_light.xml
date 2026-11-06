@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A frosted chip under each prayer on the light glass panel in relief: milky white with a bright rim and a soft
+     shade below. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:bottom="1dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="10dp" />
+            <solid android:color="#1A000000" />
+        </shape>
+    </item>
+    <item
+        android:bottom="2dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="1dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="10dp" />
+            <gradient
+                android:angle="270"
+                android:endColor="#40FFFFFF"
+                android:startColor="#8CFFFFFF" />
+            <stroke
+                android:width="0.8dp"
+                android:color="#B3FFFFFF" />
+        </shape>
+    </item>
+</layer-list>

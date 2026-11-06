@@ -7,6 +7,7 @@ import com.sakina.app.core.widgets.Contrast
 import com.sakina.app.data.AppSettings
 import com.sakina.app.data.ThemeMode
 import com.sakina.app.data.VisualStyle
+import com.sakina.app.data.WidgetBackground
 import com.sakina.app.data.WidgetConfig
 import com.sakina.app.data.WidgetTheme
 import com.sakina.app.ui.sunIsUp
@@ -113,18 +114,46 @@ object WidgetPalette {
         return WidgetColors(top, 255, text, withAlpha(text, 0.86f), accent, 0xFFFFFFFF.toInt(), accent, dark = true, softAlpha = 60)
     }
 
-    /** Colours over a painted texture: light text on the teal pattern and night lattice, dark ink on paper. */
-    fun texture(cfg: WidgetConfig, bg: com.sakina.app.data.WidgetBackground): WidgetColors {
-        val paper = bg == com.sakina.app.data.WidgetBackground.PAPER
+    /** Pictures with dark ink over them (the rest take light text). */
+    fun lightArt(bg: WidgetBackground) = bg == WidgetBackground.PAPER || bg == WidgetBackground.MARBLE || bg == WidgetBackground.IVORY
+
+    /**
+     * Colours over a painted texture: light text on the teal pattern, the night lattice, navy marble and emerald; dark
+     * ink on paper, white marble and ivory.
+     */
+    fun texture(cfg: WidgetConfig, bg: WidgetBackground): WidgetColors {
+        val light = lightArt(bg)
         val base = when (bg) {
-            com.sakina.app.data.WidgetBackground.PAPER -> 0xFFEAD7B2.toInt()
-            com.sakina.app.data.WidgetBackground.GEOMETRIC -> 0xFF4C7975.toInt()
+            WidgetBackground.PAPER -> 0xFFEAD7B2.toInt()
+            WidgetBackground.GEOMETRIC -> 0xFF4C7975.toInt()
+            WidgetBackground.MARBLE -> 0xFFE2E1E1.toInt()
+            WidgetBackground.MARBLE_NAVY -> 0xFF0E1F32.toInt()
+            WidgetBackground.EMERALD -> 0xFF1F4A2C.toInt()
+            WidgetBackground.IVORY -> 0xFFE6CFB4.toInt()
             else -> 0xFF24313F.toInt()
         }
-        val text = cfg.textColor?.let { it.toInt() or (0xFF shl 24) } ?: if (paper) 0xFF2B2118.toInt() else 0xFFFFFFFF.toInt()
-        val accent = cfg.accentColor?.let { it.toInt() or (0xFF shl 24) } ?: if (paper) 0xFF8A4F1D.toInt() else 0xFFF3D58B.toInt()
-        return WidgetColors(base, 255, text, withAlpha(text, if (paper) 0.78f else 0.86f), accent,
-            if (paper) 0xFF000000.toInt() else 0xFFFFFFFF.toInt(), accent, dark = !paper, softAlpha = if (paper) 28 else 60)
+        val ink = when (bg) {
+            WidgetBackground.MARBLE -> 0xFF1D2430.toInt()
+            WidgetBackground.IVORY -> 0xFF35261A.toInt()
+            else -> 0xFF2B2118.toInt()
+        }
+        val deepGold = when (bg) {
+            WidgetBackground.MARBLE -> 0xFF8C6418.toInt()
+            WidgetBackground.IVORY -> 0xFF84531A.toInt()
+            else -> 0xFF8A4F1D.toInt()
+        }
+        val text = cfg.textColor?.let { it.toInt() or (0xFF shl 24) } ?: if (light) ink else 0xFFFFFFFF.toInt()
+        val accent = cfg.accentColor?.let { it.toInt() or (0xFF shl 24) } ?: if (light) deepGold else 0xFFF3D58B.toInt()
+        return WidgetColors(base, 255, text, withAlpha(text, if (light) 0.78f else 0.86f), accent,
+            if (light) 0xFF000000.toInt() else 0xFFFFFFFF.toInt(), accent, dark = !light, softAlpha = if (light) 28 else 60)
+    }
+
+    /** Colours on a glass panel floating over a painting: white text on dark glass, dark ink on light glass. */
+    fun glassOver(cfg: WidgetConfig, light: Boolean): WidgetColors {
+        val text = cfg.textColor?.let { it.toInt() or (0xFF shl 24) } ?: if (light) 0xFF15140F.toInt() else 0xFFFFFFFF.toInt()
+        val accent = cfg.accentColor?.let { it.toInt() or (0xFF shl 24) } ?: if (light) 0xFF8A5E14.toInt() else 0xFFF3D58B.toInt()
+        return WidgetColors(if (light) 0xFFFFFFFF.toInt() else 0xFF000000.toInt(), 0, text, withAlpha(text, 0.8f), accent,
+            if (light) 0xFF000000.toInt() else 0xFFFFFFFF.toInt(), accent, dark = !light, softAlpha = if (light) 30 else 56)
     }
 
     /** The minimum glass opacity the contrast guard keeps for these colours, in percent. */

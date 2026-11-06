@@ -75,6 +75,7 @@ import com.sakina.app.data.AppSettings
 import com.sakina.app.data.SettingsOps
 import com.sakina.app.data.VisualStyle
 import com.sakina.app.data.WidgetBackground
+import com.sakina.app.data.WidgetWordLook
 import com.sakina.app.data.WidgetClock
 import com.sakina.app.data.WidgetConfig
 import com.sakina.app.data.WidgetFont
@@ -104,7 +105,24 @@ object WidgetsDebug {
     @Volatile var sizes = false
     /** Opens the gallery with the painted-sky previews (CI screenshots). */
     @Volatile var gallerySky = false
+    /** Opens the gallery on this background, with these settings over each widget's defaults (CI screenshots). */
+    @Volatile var galleryBg: WidgetBackground? = null
+    @Volatile var galleryCfg: (WidgetConfig) -> WidgetConfig = { it }
 }
+
+/** The backgrounds offered, in order; behind the glass panel the plain choice is the wallpaper. */
+fun backgroundChoices(str: com.sakina.app.ui.Strings, glass: Boolean): List<Pair<WidgetBackground, String>> = listOf(
+    WidgetBackground.COLOR to (if (glass) str.wBgWallpaper else str.wBgColorMode),
+    WidgetBackground.SCENE to str.wBgScene,
+    WidgetBackground.SKY to str.wBgSkyMode,
+    WidgetBackground.MARBLE to str.wBgMarble,
+    WidgetBackground.MARBLE_NAVY to str.wBgMarbleNavy,
+    WidgetBackground.EMERALD to str.wBgEmerald,
+    WidgetBackground.IVORY to str.wBgIvory,
+    WidgetBackground.GEOMETRIC to str.wBgGeometric,
+    WidgetBackground.PAPER to str.wBgPaper,
+    WidgetBackground.NIGHT to str.wBgNight,
+)
 
 /**
  * The colours of the phone's wallpaper (Android 8.1+, no permission needed), for a backdrop that shows a widget's
@@ -247,14 +265,11 @@ fun WidgetsScreen(vm: MainViewModel, s: AppSettings) {
             NoteText(str.widgetsGalleryNote)
             NoteText(str.wPreviewOnWallpaper)
             // Preview every widget on a plain colour or on the painted sky (a setting of each widget).
-            var gallerySky by remember { mutableStateOf(if (WidgetsDebug.gallerySky) WidgetBackground.SKY else WidgetBackground.COLOR) }
-            Chips(listOf(
-                WidgetBackground.COLOR to str.wBgColorMode, WidgetBackground.SKY to str.wBgSkyMode, WidgetBackground.GEOMETRIC to str.wBgGeometric,
-                WidgetBackground.PAPER to str.wBgPaper, WidgetBackground.NIGHT to str.wBgNight,
-            ), gallerySky, "gallery_bg_") { gallerySky = it }
+            var gallerySky by remember { mutableStateOf(WidgetsDebug.galleryBg ?: if (WidgetsDebug.gallerySky) WidgetBackground.SKY else WidgetBackground.COLOR) }
+            Chips(backgroundChoices(str, glass = false), gallerySky, "gallery_bg_") { gallerySky = it }
             for (kind in WidgetKind.entries) {
                 val size = WidgetRenderer.defaultSize(kind)
-                fun base() = WidgetConfig.defaultsFor(kind.id).let { if (kind != WidgetKind.GLASS) it.copy(background = gallerySky) else it }
+                fun base() = WidgetsDebug.galleryCfg(WidgetConfig.defaultsFor(kind.id).copy(background = gallerySky))
                 val views = remember(kind, s, tick, gallerySky) { previewViews(app, s, kind, base(), size) }
                 SectionCard(modifier = Modifier.testTag("gallery_${kind.id}")) {
                     Text(str.widgetName(kind.id), style = MaterialTheme.typography.titleMedium)
@@ -456,29 +471,42 @@ fun WidgetConfigScreen(
                 Chips(listOf(WidgetFont.APP to str.wFontApp, WidgetFont.KUFI to str.wFontKufi), cfg.font, "wcfg_font_") { cfg = cfg.copy(font = it) }
             }
 
-            SectionCard(title = str.wTextSize) {
-                Text(str.digits("${cfg.textScale}%"), style = MaterialTheme.typography.titleMedium, modifier = Modifier.testTag("wcfg_scale_value"))
-                Slider(
-                    value = cfg.textScale.toFloat(), onValueChange = { cfg = cfg.copy(textScale = kotlin.math.round(it / 10f).toInt() * 10) },
-                    valueRange = 80f..140f, steps = 5, modifier = Modifier.testTag("wcfg_scale"),
-                )
+            SectionCard(title = str.wTextSize, modifier = Modifier.testTag("wcfg_text")) {
+                PercentSlider(str.wSizeAll, cfg.textScale, WidgetConfig.SCALES, "wcfg_scale") { cfg = cfg.copy(textScale = it) }
                 NoteText(str.wTextSizeNote)
+                Text(str.wSizeParts, style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 10.dp))
+                PercentSlider(str.wSizeHero, cfg.heroScale, WidgetConfig.PART_SCALES, "wcfg_hero") { cfg = cfg.copy(heroScale = it) }
+                if (kind.hasTable) PercentSlider(str.wSizeTable, cfg.tableScale, WidgetConfig.PART_SCALES, "wcfg_table") { cfg = cfg.copy(tableScale = it) }
+                PercentSlider(str.wSizeSmall, cfg.smallScale, WidgetConfig.PART_SCALES, "wcfg_small") { cfg = cfg.copy(smallScale = it) }
+                NoteText(str.wSizePartsNote)
+                if (cfg.heroScale != 100 || cfg.tableScale != 100 || cfg.smallScale != 100 || cfg.textScale != 100) {
+                    androidx.compose.material3.TextButton(
+                        onClick = { cfg = cfg.copy(textScale = 100, heroScale = 100, tableScale = 100, smallScale = 100) },
+                        modifier = Modifier.testTag("wcfg_sizes_reset"),
+                    ) { Text(str.wReset2) }
+                }
+                SwitchRow(cfg.bold, str.wBold, str.wBoldNote, modifier = Modifier.testTag("wcfg_bold")) { cfg = cfg.copy(bold = it) }
+                Text(str.wClarity, style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 10.dp))
+                Chips(listOf(0 to str.wClarityFit, 1 to str.wClarityClear, 2 to str.wClarityLarge), cfg.clarity, "wcfg_clarity_") { cfg = cfg.copy(clarity = it) }
+                NoteText(str.wClarityNote, Modifier.padding(top = 4.dp))
             }
 
-            if (kind != WidgetKind.GLASS) SectionCard(title = str.wBackground) {
-                Chips(listOf(
-                    WidgetBackground.COLOR to str.wBgColorMode, WidgetBackground.SKY to str.wBgSkyMode, WidgetBackground.GEOMETRIC to str.wBgGeometric,
-                    WidgetBackground.PAPER to str.wBgPaper, WidgetBackground.NIGHT to str.wBgNight,
-                ), cfg.background, "wcfg_background_") { cfg = cfg.copy(background = it) }
-                if (cfg.background == WidgetBackground.SKY) NoteText(str.wBgSkyNote, Modifier.padding(top = 6.dp))
+            SectionCard(title = str.wBackground, modifier = Modifier.testTag("wcfg_bg_card")) {
+                val glass = kind == WidgetKind.GLASS
+                Chips(backgroundChoices(str, glass), cfg.background, "wcfg_background_") { cfg = cfg.copy(background = it) }
+                when {
+                    glass && cfg.background != WidgetBackground.COLOR -> NoteText(str.wGlassArtNote, Modifier.padding(top = 6.dp))
+                    cfg.background == WidgetBackground.SKY -> NoteText(str.wBgSkyNote, Modifier.padding(top = 6.dp))
+                    cfg.background == WidgetBackground.SCENE -> NoteText(str.wBgSceneNote, Modifier.padding(top = 6.dp))
+                }
             }
 
-            val sky = cfg.background != WidgetBackground.COLOR && kind != WidgetKind.GLASS
+            val painted = cfg.background != WidgetBackground.COLOR
             SectionCard(title = str.wColors) {
                 SwatchRow(str.wTextColor, cfg.textColor, "wcfg_text_") { cfg = cfg.copy(textColor = it) }
-                if (!sky) SwatchRow(str.wBgColor, cfg.backgroundColor, "wcfg_bg_") { cfg = cfg.copy(backgroundColor = it) }
+                if (!painted) SwatchRow(str.wBgColor, cfg.backgroundColor, "wcfg_bg_") { cfg = cfg.copy(backgroundColor = it) }
                 SwatchRow(str.wAccentColor, cfg.accentColor, "wcfg_accent_") { cfg = cfg.copy(accentColor = it) }
-                if (!sky) {
+                if (!painted || kind == WidgetKind.GLASS) {
                     Text("${str.wOpacity}: ${str.digits("${cfg.opacity}")}%", style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 10.dp))
                     Slider(
                         value = cfg.opacity.toFloat(), onValueChange = { cfg = cfg.copy(opacity = it.toInt()) },
@@ -492,6 +520,11 @@ fun WidgetConfigScreen(
             }
 
             SectionCard(title = str.wLook, modifier = Modifier.testTag("wcfg_look")) {
+                if (kind == WidgetKind.GLASS) SwitchRow(cfg.glass3d, str.wGlass3d, str.wGlass3dNote, modifier = Modifier.testTag("wcfg_glass3d")) { cfg = cfg.copy(glass3d = it) }
+                if (kind == WidgetKind.DAYNAME || kind == WidgetKind.DHIKR) {
+                    Text(str.wWordLook, style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 4.dp))
+                    Chips(listOf(WidgetWordLook.GOLD to str.wWordGold, WidgetWordLook.RAISED to str.wWordRaised, WidgetWordLook.FLAT to str.wWordFlat), cfg.wordLook, "wcfg_word_") { cfg = cfg.copy(wordLook = it) }
+                }
                 SwitchRow(cfg.depth, str.wDepth, str.wDepthNote, modifier = Modifier.testTag("wcfg_depth")) { cfg = cfg.copy(depth = it) }
                 if (kind.hasProgress) SwitchRow(cfg.progress, str.wProgress, str.wProgressNote, modifier = Modifier.testTag("wcfg_progress")) { cfg = cfg.copy(progress = it) }
             }
@@ -513,6 +546,20 @@ fun WidgetConfigScreen(
             Spacer(Modifier.height(24.dp))
         }
     }
+}
+
+/** A percentage slider in steps of ten, with its value. */
+@Composable
+private fun PercentSlider(title: String, value: Int, range: IntRange, tag: String, onChange: (Int) -> Unit) {
+    val str = LocalStrings.current
+    Row(Modifier.fillMaxWidth().padding(top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+        Text(title, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+        Text(str.digits("$value%"), style = MaterialTheme.typography.titleSmall, modifier = Modifier.testTag("${tag}_value"))
+    }
+    Slider(
+        value = value.toFloat(), onValueChange = { onChange((kotlin.math.round(it / 10f).toInt() * 10).coerceIn(range)) },
+        valueRange = range.first.toFloat()..range.last.toFloat(), steps = (range.last - range.first) / 10 - 1, modifier = Modifier.testTag(tag),
+    )
 }
 
 /** Which parts the widget shows, for the parts its type has. */

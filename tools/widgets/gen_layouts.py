@@ -3,8 +3,9 @@
 
 The layouts are plain RemoteViews layouts (FrameLayout, LinearLayout, TextView, ImageView, TextClock,
 AnalogClock only). Each starts with a background and a border image that the app tints at runtime, so
-colours, opacity, corners and borders are per widget; a painted sky and its veil can replace the colour. Over
-them lie the raised look's gloss and the progress line drawn along the edge. Default texts come from string resources and are
+colours, opacity, corners and borders are per widget; a painting and its veil can replace the colour. Over
+them lie the raised look's gloss (or the glass panel's relief) and the progress line drawn along the edge. Each layout
+comes in four styles: as is, Kufi (_k), bold (_b) and bold Kufi (_kb). Default texts come from string resources and are
 what the launcher's preview (previewLayout, Android 12+) shows. Sizes and colours are set at runtime.
 Run from the repository root after changing it: python3 tools/widgets/gen_layouts.py
 """
@@ -136,10 +137,20 @@ def content(inner, gravity="center_vertical", orientation="vertical"):
 '''
 
 
-def cells(style_name="W.Cell", style_time="W.Cell.Time", vertical=False):
-    """Six prayer cells, each with a highlight pill behind it (shown for the next prayer)."""
+def cells(style_name="W.Cell", style_time="W.Cell.Time", vertical=False, chip=None):
+    """Six prayer cells, each with a highlight pill behind it (shown for the next prayer); with [chip], a frosted
+    chip under each (the glass panel in relief)."""
     out = []
     for i, p in enumerate(PRAYERS):
+        chip_view = "" if chip is None else f'''
+
+                <ImageView
+                    android:id="@+id/w_chip{i}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:importantForAccessibility="no"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/{chip}" />'''
         if vertical:
             cell = f'''
             <FrameLayout
@@ -189,7 +200,7 @@ def cells(style_name="W.Cell", style_time="W.Cell.Time", vertical=False):
                 android:id="@+id/w_cell{i}"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1">{chip_view}
 
                 <ImageView
                     android:id="@+id/w_hl{i}"
@@ -264,7 +275,7 @@ LAYOUTS["w_day_wide"] = frame(content(refresh_row() + cells() + text("w_remain",
 LAYOUTS["w_day_tall"] = frame(content(refresh_row() + cells("W.Text", "W.Text.Medium", vertical=True) + text("w_remain", "W.Text.Small", "w_sample_remain_stamp")))
 # 4. Glass panel (dark scrim, light text) and its light variant.
 for tone, st in (("dark", "W.Glass"), ("light", "W.Glass.Light")):
-    glass_cells = cells(st, st).replace(f'style="@style/{st}"', f'style="@style/{st}"\n                        android:gravity="center"\n                        android:textAlignment="center"\n                        android:ellipsize="none"')
+    glass_cells = cells(st, st, chip=f"w_chip_{tone}").replace(f'style="@style/{st}"', f'style="@style/{st}"\n                        android:gravity="center"\n                        android:textAlignment="center"\n                        android:ellipsize="none"')
     LAYOUTS[f"w_glass_{tone}"] = frame(content(refresh_row(st) + name_time_row(st) + text("w_remain", st, "w_sample_remain_stamp") + glass_cells),
                                         glass=True, msg_style=st)
 # 5. Mini square: name over time.
@@ -494,14 +505,17 @@ LAYOUTS["w_calendar_preview"] = '''<?xml version="1.0" encoding="utf-8"?>
 '''
 
 
-def kufi(xml):
-    """The same layout in Noto Kufi Arabic: every W.* style becomes its WK.* copy (the day name keeps its font)."""
-    return xml.replace('style="@style/W.', 'style="@style/WK.').replace("@style/WK.Day", "@style/W.Day")
+def restyle(xml, prefix):
+    """The same layout with every W.* style replaced by its [prefix] copy: WK (Noto Kufi Arabic), WB (bold), WKB (bold
+    Kufi). The day name keeps its font."""
+    return xml.replace('style="@style/W.', f'style="@style/{prefix}.').replace(f"@style/{prefix}.Day", "@style/W.Day")
 
 
 for name, xml in list(LAYOUTS.items()):
     if not name.endswith("_preview"):
-        LAYOUTS[name + "_k"] = kufi(xml)
+        LAYOUTS[name + "_k"] = restyle(xml, "WK")
+        LAYOUTS[name + "_b"] = restyle(xml, "WB")
+        LAYOUTS[name + "_kb"] = restyle(xml, "WKB")
 
 for name, xml in LAYOUTS.items():
     (OUT / f"{name}.xml").write_text(xml, encoding="utf-8")
