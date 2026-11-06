@@ -1,0 +1,17 @@
+      whenElapsed=+4h5m7s564ms maxWhenElapsed=+4h5m7s564ms
+      listener=android.app.AlarmManager$ListenerWrapper@e14983c
+      idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=false, android:broadcast.temporaryAppAllowlistReasonCode=302, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=0, android:broadcast.flags=8}]
+    RTC_WAKEUP #20: Alarm{f8f49c5 type 0 origWhen 1794015840000 whenElapsed 20995443 com.sakina.app.debug}
+      tag=*walarm*:com.sakina.app.ALERT_FIRE
+      type=RTC_WAKEUP origWhen=2026-11-07 01:44:00.000 window=0 exactAllowReason=permission repeatInterval=0 count=0 flags=0x5
+      policyWhenElapsed: requester=+5h49m7s563ms app_standby=-2s600ms device_idle=-- battery_saver=-2s600ms tare=-2s600ms
+      whenElapsed=+5h49m7s563ms maxWhenElapsed=+5h49m7s563ms
+      operation=PendingIntent{bda9f1a: PendingIntentRecord{abda4b com.sakina.app.debug broadcastIntent}}
+      idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=false, android:broadcast.temporaryAppAllowlistReasonCode=302, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=0, android:broadcast.flags=8}]
+    ELAPSED_WAKEUP #21: Alarm{6b0fc28 type 2 origWhen 21600000 whenElapsed 21600000 com.android.providers.calendar}
+      tag=*walarm*:com.android.providers.calendar.intent.CalendarProvider2
+      type=ELAPSED_WAKEUP origWhen=+5h59m12s120ms window=+4h30m0s0ms repeatInterval=21600000 count=0 flags=0x0
+      policyWhenElapsed: requester=+5h59m12s120ms app_standby=-2s438ms device_idle=-- battery_saver=-7s441ms tare=-7s441ms
+      whenElapsed=+5h59m12s120ms maxWhenElapsed=+10h29m12s120ms
+      operation=PendingIntent{51fbd41: PendingIntentRecord{b7392e6 com.android.providers.calendar broadcastIntent}}
+    ELAPSED_WAKEUP #22: Alarm{adbd027 type 2 origWhen 21616813 whenElapsed 21616813 com.google.android.bluetooth}
