@@ -12,7 +12,10 @@ gallery17() {
   local pre="$1"; shift
   for k in "$@"; do
     scroll_to id "gallery_$k" 40; into_view "gallery_$k"; sleep 1; cap "${pre}_$k"
-    ui_has id "preview_$k" || G17_MISSING="$G17_MISSING ${pre}_$k"
+    # The preview's own views are on screen (the card's tag is on the host; its views carry their ids).
+    local v=w_cells
+    case "$k" in next) v=w_time ;; dayname|dhikr) v=w_dayname ;; esac
+    ui_has id "$v" || G17_MISSING="$G17_MISSING ${pre}_$k"
   done
 }
 
