@@ -1,0 +1,33 @@
+      window=0 repeatInterval=0 count=0 flags=0x1
+      operation=PendingIntent{81b6c7c: PendingIntentRecord{2a32905 android broadcastIntent}}
+Batch{4d62d5a num=1 start=3081035 end=3081035 flgs=0x1}:
+    RTC #0: Alarm{e9eeb8b type 1 when 1793985901117 com.sakina.app.debug}
+      tag=*alarm*:com.sakina.app.widget.TICK
+      type=1 whenElapsed=+38s451ms when=2026-11-06 17:25:01
+      window=0 repeatInterval=0 count=0 flags=0x1
+      operation=PendingIntent{df0d468: PendingIntentRecord{b25081 com.sakina.app.debug broadcastIntent}}
+Batch{539c526 num=2 start=3091198 end=3096216 flgs=0x8}:
+    ELAPSED_WAKEUP #1: Alarm{50eb567 type 2 when 3091198 android}
+      tag=*walarm*:WifiConnectivityManager Schedule Periodic Scan Timer
+      type=2 whenElapsed=+48s614ms when=+48s614ms
+      window=+2m0s0ms repeatInterval=0 count=0 flags=0x8
+      operation=null
+      listener=android.app.AlarmManager$ListenerWrapper@732cf14
+    ELAPSED #0: Alarm{93273bd type 3 when 3051217 com.android.phone}
+--
+      window=0 repeatInterval=0 count=0 flags=0x1
+      operation=PendingIntent{bed8dc: PendingIntentRecord{d7d8de5 android broadcastIntent}}
+Batch{3cf60ba num=1 start=33019918 end=33019918 flgs=0x5}:
+    RTC_WAKEUP #0: Alarm{8a10b6b type 0 when 1794015840000 com.sakina.app.debug}
+      tag=*walarm*:com.sakina.app.ALERT_FIRE
+      type=0 whenElapsed=+8h19m37s334ms when=2026-11-07 01:44:00
+      window=0 repeatInterval=0 count=0 flags=0x5
+      operation=PendingIntent{dcea6c8: PendingIntentRecord{e7e2361 com.sakina.app.debug broadcastIntent}}
+Batch{882ce86 num=1 start=44779943 end=44779943 flgs=0x9}:
+    ELAPSED_WAKEUP #0: Alarm{c42f347 type 2 when 44779943 android}
+      tag=*walarm*:NotificationManagerService.TIMEOUT
+      type=2 whenElapsed=+11h35m37s359ms when=+11h35m37s359ms
+      window=0 repeatInterval=0 count=0 flags=0x9
+      operation=PendingIntent{e8b6774: PendingIntentRecord{298949d android broadcastIntent}}
+Batch{6ad4d12 num=1 start=86431921 end=86431921 flgs=0x9}:
+    RTC_WAKEUP #0: Alarm{3317ce3 type 0 when 1794069252003 android}

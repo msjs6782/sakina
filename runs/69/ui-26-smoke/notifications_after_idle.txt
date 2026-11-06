@@ -1,0 +1,421 @@
+Current Notification Manager state:
+  Notification List:
+    NotificationRecord(0x0e4446f8: pkg=android user=UserHandle{-1} id=26 tag=null importance=2 key=-1|android|26|null|1000 channel=DEVELOPER: Notification(channel=DEVELOPER pri=0 contentView=null vibrate=null sound=null tick defaults=0x0 flags=0x2 color=0xff607d8b vis=PUBLIC))
+      uid=1000 userId=-1
+      icon=Icon(typ=RESOURCE pkg=android id=0x01080704) / android:drawable/stat_sys_adb
+      pri=0
+      key=-1|android|26|null|1000
+      seen=true
+      groupKey=-1|android|26|null|1000
+      fullscreenIntent=null
+      contentIntent=PendingIntent{c81f7d1: PendingIntentRecord{4d2a18a android startActivity}}
+      deleteIntent=null
+      tickerText=USB debugging connected
+      contentView=null
+      bigContentView=null
+      headsUpContentView=null
+      color=0xff607d8b      timeout=unknown
+      extras={
+          android.title=String (USB debugging connected)
+          android.text=String (Tap to disable USB debugging.)
+          android.appInfo=ApplicationInfo (ApplicationInfo{97e6236 android})
+          android.tv.EXTENSIONS=Bundle (Bundle[{channel_id=usbdevicemanager.adb.tv, flags=1}])
+      }
+      stats=SingleNotificationStats{posttimeElapsedMs=11824, posttimeToFirstClickMs=-1, posttimeToDismissMs=-1, airtimeCount=1, airtimeMs=2625, currentAirtimeStartElapsedMs=-1, airtimeExpandedMs=0, posttimeToFirstVisibleExpansionMs=-1, currentAirtimeExpandedStartElapsedMs=-1, requestedImportance=3, naturalImportance=2, isNoisy=true}
+      mContactAffinity=0.0
+      mRecentlyIntrusive=false
+      mPackagePriority=0
+      mPackageVisibility=-1000
+      mUserImportance=LOW
+      mImportance=LOW
+      mImportanceExplanation=You set the importance of these notifications.
+      mIntercept=false
+      mGlobalSortKey=intrsv=1:grnk=0x0001:gsmry=1:nsk:rnk=0x0001
+      mRankingTimeMs=1793982830188
+      mCreationTimeMs=1793982830188
+      mVisibleSinceMs=1793983356871
+      mUpdateTimeMs=1793982830188
+      mSuppressedVisualEffects= 0
+      mSound= content://settings/system/notification_sound
+      mVibration= null
+      mAttributes= AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null
+      mLight= null
+      mShowBadge=false
+      effectiveNotificationChannel=NotificationChannel{mId='DEVELOPER', mName=Developer messages, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+    NotificationRecord(0x08807537: pkg=android user=UserHandle{-1} id=32 tag=null importance=1 key=-1|android|32|null|1000 channel=USB: Notification(channel=USB pri=0 contentView=null vibrate=null sound=null tick defaults=0x0 flags=0x2 color=0xff607d8b vis=PUBLIC))
+      uid=1000 userId=-1
+      icon=Icon(typ=RESOURCE pkg=android id=0x01080704) / android:drawable/stat_sys_adb
+      pri=0
+      key=-1|android|32|null|1000
+      seen=true
+      groupKey=-1|android|32|null|1000
+      fullscreenIntent=null
+      contentIntent=PendingIntent{1f2daa4: PendingIntentRecord{5a303fb android startActivity}}
+      deleteIntent=null
+      tickerText=USB charging this device
+      contentView=null
+      bigContentView=null
+      headsUpContentView=null
+      color=0xff607d8b      timeout=unknown
+      extras={
+          android.title=String (USB charging this device)
+          android.text=String (Tap for more options.)
+          android.appInfo=ApplicationInfo (ApplicationInfo{97e6236 android})
+      }
+      stats=SingleNotificationStats{posttimeElapsedMs=11824, posttimeToFirstClickMs=-1, posttimeToDismissMs=-1, airtimeCount=1, airtimeMs=2624, currentAirtimeStartElapsedMs=-1, airtimeExpandedMs=0, posttimeToFirstVisibleExpansionMs=-1, currentAirtimeExpandedStartElapsedMs=-1, requestedImportance=3, naturalImportance=1, isNoisy=true}
+      mContactAffinity=0.0
+      mRecentlyIntrusive=false
+      mPackagePriority=0
+      mPackageVisibility=-1000
+      mUserImportance=MIN
+      mImportance=MIN
+      mImportanceExplanation=You set the importance of these notifications.
+      mIntercept=false
+      mGlobalSortKey=intrsv=1:grnk=0x0002:gsmry=1:nsk:rnk=0x0002
+      mRankingTimeMs=1793982830188
+      mCreationTimeMs=1793982830188
+      mVisibleSinceMs=1793983356871
+      mUpdateTimeMs=1793982830188
+      mSuppressedVisualEffects= 0
+      mSound= content://settings/system/notification_sound
+      mVibration= null
+      mAttributes= AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null
+      mLight= null
+      mShowBadge=false
+      effectiveNotificationChannel=NotificationChannel{mId='USB', mName=USB connection, mDescription=, mImportance=1, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+  
+  mUseAttentionLight=false
+  mNotificationPulseEnabled=true
+  mSoundNotificationKey=null
+  mVibrateNotificationKey=null
+  mDisableNotificationEffects=true
+  mCallState=CALL_STATE_IDLE
+  mSystemReady=true
+  mMaxPackageEnqueueRate=10.0
+  mArchive=Archive (5 notifications)
+    StatusBarNotification(pkg=com.sakina.app.debug user=UserHandle{0} id=4001 tag=null key=0|com.sakina.app.debug|4001|null|10065: Notification(channel=recitation pri=0 contentView=null vibrate=null sound=null defaults=0x0 flags=0x8 color=0x00000000 category=transport groupKey=media3_group_key actions=1 vis=PUBLIC))
+    StatusBarNotification(pkg=com.sakina.app.debug user=UserHandle{0} id=4001 tag=null key=0|com.sakina.app.debug|4001|null|10065: Notification(channel=recitation pri=0 contentView=null vibrate=null sound=null defaults=0x0 flags=0x6a color=0x00000000 category=transport groupKey=media3_group_key actions=2 vis=PUBLIC))
+    StatusBarNotification(pkg=com.sakina.app.debug user=UserHandle{0} id=4001 tag=null key=0|com.sakina.app.debug|4001|null|10065: Notification(channel=recitation pri=0 contentView=null vibrate=null sound=null defaults=0x0 flags=0x6a color=0x00000000 category=transport groupKey=media3_group_key actions=1 vis=PUBLIC))
+    StatusBarNotification(pkg=com.sakina.app.debug user=UserHandle{0} id=2 tag=null key=0|com.sakina.app.debug|2|null|10065: Notification(channel=adhan_playback pri=1 contentView=null vibrate=null sound=null defaults=0x0 flags=0x62 color=0xff0e6b5e category=alarm actions=1 vis=PRIVATE))
+    StatusBarNotification(pkg=android user=UserHandle{0} id=13 tag=PreBootBroadcaster key=0|android|13|PreBootBroadcaster|1000: Notification(channel=UPDATES pri=0 contentView=null vibrate=null sound=null tick defaults=0x0 flags=0x2 color=0xff607d8b vis=PUBLIC))
+
+  Snoozed notifications:
+
+  Ranking Config:
+Records:
+      AppSettings: android (1000) showBadge=true
+        NotificationChannel{mId='DEVICE_ADMIN', mName=Device administration, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='NETWORK_ALERTS', mName=Network alerts, mDescription=, mImportance=4, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='DEVELOPER', mName=Developer messages, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='NETWORK_STATUS', mName=Network status, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='PHYSICAL_KEYBOARD', mName=Physical keyboard, mDescription=, mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='ACCOUNT', mName=Account status, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='FOREGROUND_SERVICE', mName=Apps running in background, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='USB', mName=USB connection, mDescription=, mImportance=1, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='VPN', mName=VPN status, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='UPDATES', mName=Updates, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='RETAIL_MODE', mName=Retail demo, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='CAR_MODE', mName=Car mode, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='VIRTUAL_KEYBOARD', mName=Virtual keyboard, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='SECURITY', mName=Security, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='NETWORK_AVAILABLE', mName=Network available, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='ALERTS', mName=Alerts, mDescription=, mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+      AppSettings: com.android.contacts (10004) showBadge=true
+        NotificationChannel{mId='miscellaneous', mName=Uncategorized, mDescription=, mImportance=-1000, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='DEFAULT_CHANNEL', mName=Notifications, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+      AppSettings: com.android.server.telecom (1000) showBadge=true
+        NotificationChannel{mId='TelecomMissedCalls', mName=Missed calls, mDescription=, mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=, mLights=true, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=true, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=0 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='TelecomIncomingCalls', mName=Incoming calls, mDescription=, mImportance=5, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=, mLights=true, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=false, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=0 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+      AppSettings: com.sakina.app.debug (10065) showBadge=true
+        NotificationChannel{mId='prayer_sound', mName=وقت الصلاة: إشعار بصوت, mDescription=hasDescription , mImportance=4, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=false, mDeleted=false, mGroup='group_prayer', mAudioAttributes=AudioAttributes: usage=10 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='adhan_playback', mName=تشغيل الأذان, mDescription=hasDescription , mImportance=4, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=null, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=false, mDeleted=false, mGroup='group_prayer', mAudioAttributes=null, mBlockableSystem=false}
+        NotificationChannel{mId='prayer_silent', mName=وقت الصلاة: صامت, mDescription=hasDescription , mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=null, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=false, mDeleted=false, mGroup='group_prayer', mAudioAttributes=null, mBlockableSystem=false}
+        NotificationChannel{mId='recitation', mName=Quran recitation, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=false, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='next_prayer_card', mName=بطاقة الصلاة القادمة, mDescription=hasDescription , mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=null, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=false, mDeleted=false, mGroup='null', mAudioAttributes=null, mBlockableSystem=false}
+        NotificationChannel{mId='reminder_sound', mName=تذكيرات: بصوت, mDescription=hasDescription , mImportance=4, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=false, mDeleted=false, mGroup='group_reminder', mAudioAttributes=AudioAttributes: usage=10 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='prayer_vibrate', mName=وقت الصلاة: اهتزاز, mDescription=hasDescription , mImportance=4, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=null, mLights=false, mLightColor=0, mVibration=[0, 450, 250, 450, 250, 700], mUserLockedFields=0, mVibrationEnabled=true, mShowBadge=false, mDeleted=false, mGroup='group_prayer', mAudioAttributes=null, mBlockableSystem=false}
+        NotificationChannel{mId='reminder_silent', mName=تذكيرات: صامتة, mDescription=hasDescription , mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=null, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=false, mDeleted=false, mGroup='group_reminder', mAudioAttributes=null, mBlockableSystem=false}
+        NotificationChannel{mId='reminder_vibrate', mName=تذكيرات: اهتزاز, mDescription=hasDescription , mImportance=4, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=null, mLights=false, mLightColor=0, mVibration=[0, 450, 250, 450, 250, 700], mUserLockedFields=0, mVibrationEnabled=true, mShowBadge=false, mDeleted=false, mGroup='group_reminder', mAudioAttributes=null, mBlockableSystem=false}
+        NotificationChannelGroup{mId='group_prayer', mName=الصلوات, mChannels=[]}
+        NotificationChannelGroup{mId='group_reminder', mName=التذكيرات, mChannels=[]}
+      AppSettings: com.android.printspooler (10052) showBadge=true
+        NotificationChannel{mId='PRINT_PROGRESS', mName=Running print jobs, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='PRINT_FAILURES', mName=Failed print jobs, mDescription=, mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+      AppSettings: com.android.dialer (10015) showBadge=true
+        NotificationChannel{mId='incomingCall:89014103211118510720', mName=Incoming calls, mDescription=, mImportance=5, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=null, mLights=true, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=false, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=0 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='missedCall', mName=Missed calls, mDescription=, mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=null, mLights=true, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=true, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=0 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='ongoingCall2:89014103211118510720', mName=Ongoing calls, mDescription=, mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=null, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=false, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=0 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='voicemail:89014103211118510720', mName=Voicemails, mDescription=, mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=true, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=0 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='default', mName=Default, mDescription=, mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=true, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=true, mShowBadge=false, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannelGroup{mId='89014103211118510720', mName=Android, mChannels=[]}
+      AppSettings: com.android.systemui (10022) showBadge=true
+        NotificationChannel{mId='ALR', mName=Alerts, mDescription=, mImportance=4, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='DSK', mName=Storage, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='GEN', mName=General Messages, mDescription=, mImportance=1, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='SCN', mName=Screenshots, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+      AppSettings: com.android.phone (1001) showBadge=true
+        NotificationChannel{mId='callForward', mName=Call forwarding, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='voiceMail', mName=Voicemail messages, mDescription=, mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=0 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='sms', mName=SMS messages, mDescription=, mImportance=4, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='wfc', mName=Wi-Fi calling, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='alert', mName=Alerts, mDescription=, mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=0 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='mobileDataAlert', mName=Mobile data alerts, mDescription=, mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='miscellaneous', mName=Uncategorized, mDescription=, mImportance=-1000, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+      AppSettings: com.android.providers.downloads (10010) showBadge=true
+        NotificationChannel{mId='active', mName=In progress, mDescription=, mImportance=2, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='complete', mName=Done, mDescription=, mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+        NotificationChannel{mId='waiting', mName=Queued, mDescription=, mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=5 content=4 flags=0x0 tags= bundle=null, mBlockableSystem=false}
+Restored without uid:
+
+  Notification listeners:
+    All notification listeners (0) enabled for current profiles:
+    Live notification listeners (1):
+      ComponentInfo{com.android.systemui/com.android.systemui.statusbar.phone.StatusBar} (user -1): android.service.notification.INotificationListener$Stub$Proxy@1dd400d SYSTEM
+    Snoozed notification listeners (0):
+    mListenerHints: 0
+    mListenersDisablingEffects: ()
+
+  Notification assistant services:
+    All notification assistant services (0) enabled for current profiles:
+    Live notification assistant services (0):
+    Snoozed notification assistant services (0):
+
+  Zen Mode:
+    mInterruptionFilter=1
+    mZenMode=ZEN_MODE_OFF
+    mConfigs[u=0]=allow(calls=true,callsFrom=contacts,repeatCallers=false,messages=false,messagesFrom=contacts,events=true,reminders=true,whenScreenOff=true,whenScreenOn=true)
+      manualRule=null
+      automaticRules=ZenRule[enabled=false,snoozing=false,name=Weekend,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/schedule?days=6.7&start=23.30&end=10.0&exitAtAlarm=false,condition=Condition[id=condition://android/schedule?days=6.7&start=23.30&end=10.0&exitAtAlarm=false,summary=...,line1=...,line2=...,icon=0,state=STATE_FALSE,flags=2],component=ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider},id=ef76d1fae9f14bdf98d00fc65087a384,creationTime=1793982829937,enabler=null]
+                     ZenRule[enabled=false,snoozing=false,name=Weeknight,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/schedule?days=1.2.3.4.5&start=22.0&end=7.0&exitAtAlarm=false,condition=Condition[id=condition://android/schedule?days=1.2.3.4.5&start=22.0&end=7.0&exitAtAlarm=false,summary=...,line1=...,line2=...,icon=0,state=STATE_FALSE,flags=2],component=ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider},id=2d5e328b9bd74036b41b935531513c12,creationTime=1793982829936,enabler=null]
+                     ZenRule[enabled=false,snoozing=false,name=Event,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/event?userId=-10000&calendar=&reply=1,condition=Condition[id=condition://android/event?userId=-10000&calendar=&reply=1,summary=...,line1=...,line2=...,icon=0,state=STATE_FALSE,flags=2],component=ComponentInfo{android/com.android.server.notification.EventConditionProvider},id=008ce1c4f3174e06b0639f5bf61c903c,creationTime=1793982829937,enabler=null]
+    mUser=0
+    mConfig=allow(calls=true,callsFrom=contacts,repeatCallers=false,messages=false,messagesFrom=contacts,events=true,reminders=true,whenScreenOff=true,whenScreenOn=true)
+      manualRule=null
+      automaticRules=ZenRule[enabled=false,snoozing=false,name=Weekend,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/schedule?days=6.7&start=23.30&end=10.0&exitAtAlarm=false,condition=Condition[id=condition://android/schedule?days=6.7&start=23.30&end=10.0&exitAtAlarm=false,summary=...,line1=...,line2=...,icon=0,state=STATE_FALSE,flags=2],component=ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider},id=ef76d1fae9f14bdf98d00fc65087a384,creationTime=1793982829937,enabler=null]
+                     ZenRule[enabled=false,snoozing=false,name=Weeknight,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/schedule?days=1.2.3.4.5&start=22.0&end=7.0&exitAtAlarm=false,condition=Condition[id=condition://android/schedule?days=1.2.3.4.5&start=22.0&end=7.0&exitAtAlarm=false,summary=...,line1=...,line2=...,icon=0,state=STATE_FALSE,flags=2],component=ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider},id=2d5e328b9bd74036b41b935531513c12,creationTime=1793982829936,enabler=null]
+                     ZenRule[enabled=false,snoozing=false,name=Event,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/event?userId=-10000&calendar=&reply=1,condition=Condition[id=condition://android/event?userId=-10000&calendar=&reply=1,summary=...,line1=...,line2=...,icon=0,state=STATE_FALSE,flags=2],component=ComponentInfo{android/com.android.server.notification.EventConditionProvider},id=008ce1c4f3174e06b0639f5bf61c903c,creationTime=1793982829937,enabler=null]
+    mSuppressedEffects=0
+    mDefaultPhoneApp=ComponentInfo{com.android.dialer/com.android.dialer.DialtactsActivity}
+    RepeatCallers.mThresholdMinutes=0
+    mSubscriptions={condition://android/schedule?days=6.7&start=23.30&end=10.0&exitAtAlarm=false=ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider}, condition://android/schedule?days=1.2.3.4.5&start=22.0&end=7.0&exitAtAlarm=false=ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider}, condition://android/event?userId=-10000&calendar=&reply=1=ComponentInfo{android/com.android.server.notification.EventConditionProvider}}
+
+  Zen Log:
+    11-06 16:33:49.938 set_zen_mode: off,init
+    11-06 16:33:50.021 config: cleanUpZenRules,ZenModeConfig[user=0,allowCalls=true,allowRepeatCallers=false,allowMessages=false,allowCallsFrom=contacts,allowMessagesFrom=contacts,allowReminders=true,allowEvents=true,allowWhenScreenOff=true,allowWhenScreenOn=true,automaticRules={ef76d1fae9f14bdf98d00fc65087a384=ZenRule[enabled=false,snoozing=false,name=Weekend,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/schedule?days=6.7&start=23.30&end=10.0&exitAtAlarm=false,condition=null,component=ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider},id=ef76d1fae9f14bdf98d00fc65087a384,creationTime=1793982829937,enabler=null], 2d5e328b9bd74036b41b935531513c12=ZenRule[enabled=false,snoozing=false,name=Weeknight,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/schedule?days=1.2.3.4.5&start=22.0&end=7.0&exitAtAlarm=false,condition=null,component=ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider},id=2d5e328b9bd74036b41b935531513c12,creationTime=1793982829936,enabler=null], 008ce1c4f3174e06b0639f5bf61c903c=ZenRule[enabled=false,snoozing=false,name=Event,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/event?userId=-10000&calendar=&reply=1,condition=null,component=ComponentInfo{android/com.android.server.notification.EventConditionProvider},id=008ce1c4f3174e06b0639f5bf61c903c,creationTime=1793982829937,enabler=null]},manualRule=null],Diff[]
+    11-06 16:33:50.022 set_zen_mode: off,onSystemReady
+    11-06 16:33:50.359 set_zen_mode: off,cleanUpZenRules
+    11-06 16:33:50.359 subscribe: condition://android/schedule?days=6.7&start=23.30&end=10.0&exitAtAlarm=false,ok
+    11-06 16:33:50.359 subscribe: condition://android/schedule?days=1.2.3.4.5&start=22.0&end=7.0&exitAtAlarm=false,ok
+    11-06 16:33:50.359 subscribe: condition://android/event?userId=-10000&calendar=&reply=1,ok
+    11-06 16:33:50.824 disable_effects: -1|android|32|null|1000,booleanState
+    11-06 16:33:50.824 disable_effects: -1|android|26|null|1000,booleanState
+    11-06 16:33:50.826 config: conditionChanged,ZenModeConfig[user=0,allowCalls=true,allowRepeatCallers=false,allowMessages=false,allowCallsFrom=contacts,allowMessagesFrom=contacts,allowReminders=true,allowEvents=true,allowWhenScreenOff=true,allowWhenScreenOn=true,automaticRules={ef76d1fae9f14bdf98d00fc65087a384=ZenRule[enabled=false,snoozing=false,name=Weekend,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/schedule?days=6.7&start=23.30&end=10.0&exitAtAlarm=false,condition=Condition[id=condition://android/schedule?days=6.7&start=23.30&end=10.0&exitAtAlarm=false,summary=...,line1=...,line2=...,icon=0,state=STATE_FALSE,flags=2],component=ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider},id=ef76d1fae9f14bdf98d00fc65087a384,creationTime=1793982829937,enabler=null], 2d5e328b9bd74036b41b935531513c12=ZenRule[enabled=false,snoozing=false,name=Weeknight,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/schedule?days=1.2.3.4.5&start=22.0&end=7.0&exitAtAlarm=false,condition=null,component=ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider},id=2d5e328b9bd74036b41b935531513c12,creationTime=1793982829936,enabler=null], 008ce1c4f3174e06b0639f5bf61c903c=ZenRule[enabled=false,snoozing=false,name=Event,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/event?userId=-10000&calendar=&reply=1,condition=null,component=ComponentInfo{android/com.android.server.notification.EventConditionProvider},id=008ce1c4f3174e06b0639f5bf61c903c,creationTime=1793982829937,enabler=null]},manualRule=null],Diff[automaticRule[ef76d1fae9f14bdf98d00fc65087a384].condition:null->Condition[id=condition://android/schedule?days=6.7&start=23.30&end=10.0&exitAtAlarm=false,summary=...,line1=...,line2=...,icon=0,state=STATE_FALSE,flags=2]]
+    11-06 16:33:50.826 config: conditionChanged,ZenModeConfig[user=0,allowCalls=true,allowRepeatCallers=false,allowMessages=false,allowCallsFrom=contacts,allowMessagesFrom=contacts,allowReminders=true,allowEvents=true,allowWhenScreenOff=true,allowWhenScreenOn=true,automaticRules={ef76d1fae9f14bdf98d00fc65087a384=ZenRule[enabled=false,snoozing=false,name=Weekend,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/schedule?days=6.7&start=23.30&end=10.0&exitAtAlarm=false,condition=Condition[id=condition://android/schedule?days=6.7&start=23.30&end=10.0&exitAtAlarm=false,summary=...,line1=...,line2=...,icon=0,state=STATE_FALSE,flags=2],component=ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider},id=ef76d1fae9f14bdf98d00fc65087a384,creationTime=1793982829937,enabler=null], 2d5e328b9bd74036b41b935531513c12=ZenRule[enabled=false,snoozing=false,name=Weeknight,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/schedule?days=1.2.3.4.5&start=22.0&end=7.0&exitAtAlarm=false,condition=Condition[id=condition://android/schedule?days=1.2.3.4.5&start=22.0&end=7.0&exitAtAlarm=false,summary=...,line1=...,line2=...,icon=0,state=STATE_FALSE,flags=2],component=ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider},id=2d5e328b9bd74036b41b935531513c12,creationTime=1793982829936,enabler=null], 008ce1c4f3174e06b0639f5bf61c903c=ZenRule[enabled=false,snoozing=false,name=Event,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/event?userId=-10000&calendar=&reply=1,condition=null,component=ComponentInfo{android/com.android.server.notification.EventConditionProvider},id=008ce1c4f3174e06b0639f5bf61c903c,creationTime=1793982829937,enabler=null]},manualRule=null],Diff[automaticRule[2d5e328b9bd74036b41b935531513c12].condition:null->Condition[id=condition://android/schedule?days=1.2.3.4.5&start=22.0&end=7.0&exitAtAlarm=false,summary=...,line1=...,line2=...,icon=0,state=STATE_FALSE,flags=2]]
+    11-06 16:33:50.826 config: conditionChanged,ZenModeConfig[user=0,allowCalls=true,allowRepeatCallers=false,allowMessages=false,allowCallsFrom=contacts,allowMessagesFrom=contacts,allowReminders=true,allowEvents=true,allowWhenScreenOff=true,allowWhenScreenOn=true,automaticRules={ef76d1fae9f14bdf98d00fc65087a384=ZenRule[enabled=false,snoozing=false,name=Weekend,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/schedule?days=6.7&start=23.30&end=10.0&exitAtAlarm=false,condition=Condition[id=condition://android/schedule?days=6.7&start=23.30&end=10.0&exitAtAlarm=false,summary=...,line1=...,line2=...,icon=0,state=STATE_FALSE,flags=2],component=ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider},id=ef76d1fae9f14bdf98d00fc65087a384,creationTime=1793982829937,enabler=null], 2d5e328b9bd74036b41b935531513c12=ZenRule[enabled=false,snoozing=false,name=Weeknight,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/schedule?days=1.2.3.4.5&start=22.0&end=7.0&exitAtAlarm=false,condition=Condition[id=condition://android/schedule?days=1.2.3.4.5&start=22.0&end=7.0&exitAtAlarm=false,summary=...,line1=...,line2=...,icon=0,state=STATE_FALSE,flags=2],component=ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider},id=2d5e328b9bd74036b41b935531513c12,creationTime=1793982829936,enabler=null], 008ce1c4f3174e06b0639f5bf61c903c=ZenRule[enabled=false,snoozing=false,name=Event,zenMode=ZEN_MODE_ALARMS,conditionId=condition://android/event?userId=-10000&calendar=&reply=1,condition=Condition[id=condition://android/event?userId=-10000&calendar=&reply=1,summary=...,line1=...,line2=...,icon=0,state=STATE_FALSE,flags=2],component=ComponentInfo{android/com.android.server.notification.EventConditionProvider},id=008ce1c4f3174e06b0639f5bf61c903c,creationTime=1793982829937,enabler=null]},manualRule=null],Diff[automaticRule[008ce1c4f3174e06b0639f5bf61c903c].condition:null->Condition[id=condition://android/event?userId=-10000&calendar=&reply=1,summary=...,line1=...,line2=...,icon=0,state=STATE_FALSE,flags=2]]
+    11-06 16:33:50.827 set_zen_mode: off,conditionChanged
+    11-06 16:33:50.827 set_zen_mode: off,conditionChanged
+    11-06 16:33:50.860 set_zen_mode: off,conditionChanged
+    11-06 16:33:48.830 disable_effects: 0|android|13|PreBootBroadcaster|1000,booleanState
+    11-06 16:33:50.127 disable_effects: 0|android|13|PreBootBroadcaster|1000,booleanState
+    11-06 16:33:50.336 disable_effects: 0|android|13|PreBootBroadcaster|1000,booleanState
+    11-06 16:33:50.367 disable_effects: 0|android|13|PreBootBroadcaster|1000,booleanState
+    11-06 16:33:50.413 disable_effects: 0|android|13|PreBootBroadcaster|1000,booleanState
+    11-06 16:42:31.718 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:42:31.731 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:42:32.003 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:42:32.016 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:42:32.029 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:42:32.049 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:42:32.116 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:42:40.693 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:42:40.957 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:42:48.174 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:42:48.224 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:42:56.696 disable_effects: 0|com.sakina.app.debug|2|null|10065,booleanState
+    11-06 16:42:56.710 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:43:08.437 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:43:15.704 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:43:20.115 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:43:20.129 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:43:20.296 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:43:20.326 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:43:20.345 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:43:43.596 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:43:43.609 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:43:43.858 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:43:43.961 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:43:55.114 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:43:55.133 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:00.842 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:00.864 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:06.586 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:06.609 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:12.360 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:12.373 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:26.856 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:26.883 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:26.898 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:26.946 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:26.976 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:27.021 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:27.099 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:55.606 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:55.618 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:55.854 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:55.873 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:55.886 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:44:55.901 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:45:13.139 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+    11-06 16:45:38.132 disable_effects: 0|com.sakina.app.debug|4001|null|10065,booleanState
+
+  Policy access:
+    mPolicyAccess: com.android.server.notification.NotificationManagerService$PolicyAccess@bc66bc2
+
+  Condition providers:
+    All condition providers (0) enabled for current profiles:
+    Live condition providers (3):
+      ComponentInfo{android/com.android.server.notification.CountdownConditionProvider} (user 0): android.service.notification.ConditionProviderService$Provider@25d2dd3 SYSTEM
+      ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider} (user 0): android.service.notification.ConditionProviderService$Provider@9d4fd10 SYSTEM
+      ComponentInfo{android/com.android.server.notification.EventConditionProvider} (user 0): android.service.notification.ConditionProviderService$Provider@f2ad009 SYSTEM
+    Snoozed condition providers (0):
+    mRecords(3):
+      ConditionRecord[id=condition://android/schedule?days=6.7&start=23.30&end=10.0&exitAtAlarm=false,component=ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider},subscribed=true]
+      ConditionRecord[id=condition://android/schedule?days=1.2.3.4.5&start=22.0&end=7.0&exitAtAlarm=false,component=ComponentInfo{android/com.android.server.notification.ScheduleConditionProvider},subscribed=true]
+      ConditionRecord[id=condition://android/event?userId=-10000&calendar=&reply=1,component=ComponentInfo{android/com.android.server.notification.EventConditionProvider},subscribed=true]
+    mSystemConditionProviders: {schedule, event, countdown}
+    ScheduleConditionProvider:
+      mConnected=true
+      mRegistered=true
+      mSubscriptions=
+          condition://android/schedule?days=6.7&start=23.30&end=10.0&exitAtAlarm=false
+            ScheduleCalendar[mDays={6, 7}, mSchedule=ScheduleInfo{days=[6, 7], startHour=23, startMinute=30, endHour=10, endMinute=0, exitAtAlarm=false, nextAlarm=Thu Jan 01 00:00:00 UTC 1970 (0)}]
+          condition://android/schedule?days=1.2.3.4.5&start=22.0&end=7.0&exitAtAlarm=false
+            ScheduleCalendar[mDays={1, 2, 3, 4, 5}, mSchedule=ScheduleInfo{days=[1, 2, 3, 4, 5], startHour=22, startMinute=0, endHour=7, endMinute=0, exitAtAlarm=false, nextAlarm=Thu Jan 01 00:00:00 UTC 1970 (0)}]
+      snoozed due to alarm: 
+      mNextAlarmTime=Fri Nov 06 22:00:00 UTC 2026 (1794002400000), in +5h14m21s362ms, now=Fri Nov 06 16:45:38 UTC 2026 (1793983538638)
+    CountdownConditionProvider:
+      mConnected=true
+      mTime=0
+    EventConditionProvider:
+      mConnected=true
+      mRegistered=true
+      mBootComplete=true
+      mNextAlarmTime=Sat Nov 07 16:34:12 UTC 2026 (1794069252003), in +23h48m33s365ms, now=Fri Nov 06 16:45:38 UTC 2026 (1793983538638)
+      mSubscriptions=
+        condition://android/event?userId=-10000&calendar=&reply=1
+      mTrackers=
+        user=0
+          mCallback=com.android.server.notification.EventConditionProvider$1@93820e
+          mRegistered=true
+          u=0
+
+  Group summaries:
+
+  Usage Stats:
+    AggregatedStats{
+      key='android',
+      numEnqueuedByApp=7,
+      numPostedByApp=3,
+      numUpdatedByApp=4,
+      numRemovedByApp=1,
+      numPeopleCacheHit=21,
+      numWithStaredPeople=0,
+      numWithValidPeople=0,
+      numPeopleCacheMiss=0,
+      numBlocked=0,
+      numSuspendedByAdmin=0,
+      numWithActions=0,
+      numPrivate=0,
+      numSecret=0,
+      numInterrupt=0,
+      numWithBigText=0,
+      numWithBigPicture=0
+      numForegroundService=0
+      numOngoing=7
+      numAutoCancel=0
+      numWithLargeIcon=0
+      numWithInbox=0
+      numWithMediaSession=0
+      numWithTitle=7
+      numWithText=2
+      numWithSubText=0
+      numWithInfoText=0
+numRateViolations=0
+numQuotaViolations=0
+      note_imp_noisy_: [0, 0, 0, 7, 0, 0]
+      note_imp_quiet_: [0, 0, 0, 0, 0, 0]
+      note_importance_: [0, 1, 6, 0, 0, 0]
+    }
+    AggregatedStats{
+      key='com.sakina.app.debug',
+      numEnqueuedByApp=47,
+      numPostedByApp=4,
+      numUpdatedByApp=43,
+      numRemovedByApp=4,
+      numPeopleCacheHit=57,
+      numWithStaredPeople=0,
+      numWithValidPeople=0,
+      numPeopleCacheMiss=0,
+      numBlocked=0,
+      numSuspendedByAdmin=0,
+      numWithActions=47,
+      numPrivate=1,
+      numSecret=0,
+      numInterrupt=0,
+      numWithBigText=0,
+      numWithBigPicture=0
+      numForegroundService=40
+      numOngoing=1
+      numAutoCancel=0
+      numWithLargeIcon=47
+      numWithInbox=0
+      numWithMediaSession=46
+      numWithTitle=45
+      numWithText=45
+      numWithSubText=0
+      numWithInfoText=0
+numRateViolations=0
+numQuotaViolations=0
+      note_imp_noisy_: [0, 0, 0, 46, 0, 0]
+      note_imp_quiet_: [0, 0, 0, 0, 1, 0]
+      note_importance_: [0, 0, 46, 0, 1, 0]
+    }
+    AggregatedStats{
+      key='__global',
+      numEnqueuedByApp=54,
+      numPostedByApp=7,
+      numUpdatedByApp=47,
+      numRemovedByApp=5,
+      numPeopleCacheHit=78,
+      numWithStaredPeople=0,
+      numWithValidPeople=0,
+      numPeopleCacheMiss=0,
+      numBlocked=0,
+      numSuspendedByAdmin=0,
+      numWithActions=47,
+      numPrivate=1,
+      numSecret=0,
+      numInterrupt=0,
+      numWithBigText=0,
+      numWithBigPicture=0
+      numForegroundService=40
+      numOngoing=8
+      numAutoCancel=0
+      numWithLargeIcon=47
+      numWithInbox=0
+      numWithMediaSession=46
+      numWithTitle=52
+      numWithText=47
+      numWithSubText=0
+      numWithInfoText=0
+numRateViolations=0
+numQuotaViolations=0
+      note_imp_noisy_: [0, 0, 0, 53, 0, 0]
+      note_imp_quiet_: [0, 0, 0, 0, 1, 0]
+      note_importance_: [0, 1, 52, 0, 1, 0]
+    }
+    mStatsArrays.size(): 1
+    mStats.size(): 3
+    post_frequency{user_id=-1,pkg=android,day=0,count=2,muted=2/2,demoted=2}
+    post_frequency{user_id=0,pkg=android,day=0,count=5,muted=5/5,demoted=5}
+    post_frequency{user_id=0,pkg=com.sakina.app.debug,day=0,count=47,muted=46/46,demoted=46}

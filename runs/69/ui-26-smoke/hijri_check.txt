@@ -1,0 +1,1 @@
+11-06 16:36:33.891  3999  3999 I SakinaDemo: HijriCheck compared=2557 mismatches=0
