@@ -127,14 +127,6 @@
                 android:layout_weight="1">
 
                 <ImageView
-                    android:id="@+id/w_chip0"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:importantForAccessibility="no"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/w_chip_light" />
-
-                <ImageView
                     android:id="@+id/w_hl0"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -144,8 +136,10 @@
                     android:visibility="invisible" />
 
                 <LinearLayout
+                    android:id="@+id/w_box0"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -177,14 +171,6 @@
                 android:layout_weight="1">
 
                 <ImageView
-                    android:id="@+id/w_chip1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:importantForAccessibility="no"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/w_chip_light" />
-
-                <ImageView
                     android:id="@+id/w_hl1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -194,8 +180,10 @@
                     android:visibility="invisible" />
 
                 <LinearLayout
+                    android:id="@+id/w_box1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -227,14 +215,6 @@
                 android:layout_weight="1">
 
                 <ImageView
-                    android:id="@+id/w_chip2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:importantForAccessibility="no"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/w_chip_light" />
-
-                <ImageView
                     android:id="@+id/w_hl2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -244,8 +224,10 @@
                     android:visibility="invisible" />
 
                 <LinearLayout
+                    android:id="@+id/w_box2"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -277,14 +259,6 @@
                 android:layout_weight="1">
 
                 <ImageView
-                    android:id="@+id/w_chip3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:importantForAccessibility="no"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/w_chip_light" />
-
-                <ImageView
                     android:id="@+id/w_hl3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -294,8 +268,10 @@
                     android:visibility="visible" />
 
                 <LinearLayout
+                    android:id="@+id/w_box3"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -327,14 +303,6 @@
                 android:layout_weight="1">
 
                 <ImageView
-                    android:id="@+id/w_chip4"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:importantForAccessibility="no"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/w_chip_light" />
-
-                <ImageView
                     android:id="@+id/w_hl4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -344,8 +312,10 @@
                     android:visibility="invisible" />
 
                 <LinearLayout
+                    android:id="@+id/w_box4"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -377,14 +347,6 @@
                 android:layout_weight="1">
 
                 <ImageView
-                    android:id="@+id/w_chip5"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:importantForAccessibility="no"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/w_chip_light" />
-
-                <ImageView
                     android:id="@+id/w_hl5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -394,8 +356,10 @@
                     android:visibility="invisible" />
 
                 <LinearLayout
+                    android:id="@+id/w_box5"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:gravity="center"
                     android:orientation="vertical">
 

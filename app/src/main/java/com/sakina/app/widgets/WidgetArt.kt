@@ -9,6 +9,8 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
@@ -126,8 +128,6 @@ object WidgetGlass {
         val c = Canvas(out)
         val full = RectF(0f, 0f, w.toFloat(), h.toFloat())
         val filter = Paint(Paint.FILTER_BITMAP_FLAG or Paint.ANTI_ALIAS_FLAG)
-        c.save()
-        c.clipPath(roundRect(full, corner))
         c.drawColor(back)
         c.drawBitmap(pic, centerCrop(pic, w, h), Rect(0, 0, w, h), filter)
         val r = RectF(inset, inset, w - inset, h - inset)
@@ -150,7 +150,9 @@ object WidgetGlass {
         sheen(c, r, dark)
         c.restore()
         rim(c, r, rr, d, dark)
-        c.restore()
+        // The widget's own corners, smooth (older Android does not clip widgets to them).
+        val outside = Path().apply { fillType = Path.FillType.INVERSE_WINDING; addRoundRect(full, corner, corner, Path.Direction.CW) }
+        c.drawPath(outside, Paint(Paint.ANTI_ALIAS_FLAG).apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_OUT) })
         small.recycle()
         return out to a
     }

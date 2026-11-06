@@ -118,8 +118,8 @@ object WidgetRenderer {
     private val CELL_TIMES = intArrayOf(R.id.w_t0, R.id.w_t1, R.id.w_t2, R.id.w_t3, R.id.w_t4, R.id.w_t5)
     private val CELL_HL = intArrayOf(R.id.w_hl0, R.id.w_hl1, R.id.w_hl2, R.id.w_hl3, R.id.w_hl4, R.id.w_hl5)
     private val CELLS = intArrayOf(R.id.w_cell0, R.id.w_cell1, R.id.w_cell2, R.id.w_cell3, R.id.w_cell4, R.id.w_cell5)
-    /** The glass panel's frosted chips under the prayers (in the glass layouts only). */
-    private val CHIPS = intArrayOf(R.id.w_chip0, R.id.w_chip1, R.id.w_chip2, R.id.w_chip3, R.id.w_chip4, R.id.w_chip5)
+    /** The box of each cell in a row of prayers (not in the tall table), whose background can be a frosted chip. */
+    private val BOXES = intArrayOf(R.id.w_box0, R.id.w_box1, R.id.w_box2, R.id.w_box3, R.id.w_box4, R.id.w_box5)
 
     /** Default sizes (dp) when the launcher has not reported any yet. */
     fun defaultSize(kind: WidgetKind): SizeF = when (kind) {
@@ -208,7 +208,7 @@ object WidgetRenderer {
             WidgetBackground.NIGHT -> Art(R.drawable.tex_night, 0f, false, 0xFF24313F.toInt(), "night")
             WidgetBackground.MARBLE -> Art(R.drawable.tex_marble, 0.12f, true, 0xFFE2E1E1.toInt(), "marble")
             WidgetBackground.MARBLE_NAVY -> Art(R.drawable.tex_marble_navy, 0.08f, false, 0xFF0E1F32.toInt(), "navy")
-            WidgetBackground.EMERALD -> Art(R.drawable.tex_emerald, 0.36f, false, 0xFF1F4A2C.toInt(), "emerald")
+            WidgetBackground.EMERALD -> Art(R.drawable.tex_emerald, 0.55f, false, 0xFF1F4A2C.toInt(), "emerald")
             WidgetBackground.IVORY -> Art(R.drawable.tex_ivory, 0.2f, true, 0xFFE6CFB4.toInt(), "ivory")
         }
         val colors = when {
@@ -610,19 +610,41 @@ object WidgetRenderer {
             }
         }
 
+        /**
+         * Frosted chips under the prayers in a row: on the glass in relief, and over paintings with the raised look
+         * (the next prayer's chip has a gold rim). Not in the tall table.
+         */
+        val chips: Boolean get() = !(kind == WidgetKind.DAY && hDp > wDp * 1.1f) && kind.hasTable &&
+            ((glass && cfg.glass3d) || (!glass && art != null && cfg.depth))
+        /** The height the chips add above and below the names and times. */
+        val chipPad: Float get() = if (chips) 6f * density else 0f
+
         /** Fills the table cells; returns the names and times of the cells shown (sunrise may be left out). */
         fun cellTexts(snap: PrayerSnapshot): Pair<List<String>, List<String>> {
             val names = snap.times.map { str.prayer(it.key) }
             val times = snap.times.map { t -> t.at?.let { fmt.time(it, zone, suffix = false) } ?: "—" }
             val fill = cfg.highlight == WidgetHighlight.FILL
+            val boxes = kind != WidgetKind.DAY || hDp <= wDp * 1.1f
+            val cp = (chipPad / 2).toInt()
             for (i in 0 until 6) {
                 val wt = snap.times[i]
                 text(CELL_NAMES[i], names[i]); text(CELL_TIMES[i], times[i])
                 cellColors(snap, i, colors.muted, colors.text)
                 tint(CELL_HL[i], colors.soft, colors.softAlpha)
-                visible(CELL_HL[i], wt.isNext && fill, gone = false)
+                visible(CELL_HL[i], wt.isNext && fill && !chips, gone = false)
                 visible(CELLS[i], i in cellIdx)
+                if (boxes) {
+                    // Frosted on the glass, smoked over a painting with light text, milky under dark ink.
+                    val smoke = !glass && colors.dark
+                    rv.setInt(BOXES[i], "setBackgroundResource", when {
+                        !chips -> 0
+                        wt.isNext && fill -> if (smoke) R.drawable.w_chip_smoke_next else if (colors.dark) R.drawable.w_chip_dark_next else R.drawable.w_chip_light_next
+                        else -> if (smoke) R.drawable.w_chip_smoke else if (colors.dark) R.drawable.w_chip_dark else R.drawable.w_chip_light
+                    })
+                    rv.setViewPadding(BOXES[i], 0, cp, 0, cp)
+                }
             }
+            key.append("chips").append(chips).append('|')
             return cellIdx.map { names[it] } to cellIdx.map { times[it] }
         }
 
@@ -630,7 +652,9 @@ object WidgetRenderer {
         fun cellColors(snap: PrayerSnapshot, i: Int, name: Int, time: Int) {
             val wt = snap.times[i]
             val passed = !wt.isNext && wt.at != null && !wt.at.isAfter(now)
-            fun fade(c: Int) = ((((c ushr 24) * 0.48f).toInt()) shl 24) or (c and 0xFFFFFF)
+            // Fainter on a plain colour; less so over paintings and glass, where the background already competes.
+            val f = if (art != null || glass) 0.62f else 0.48f
+            fun fade(c: Int) = ((((c ushr 24) * f).toInt()) shl 24) or (c and 0xFFFFFF)
             color(CELL_NAMES[i], if (wt.isNext) colors.accent else if (passed) fade(name) else name)
             color(CELL_TIMES[i], if (wt.isNext) colors.accent else if (passed) fade(time) else time)
             key.append(if (passed) 'p' else 'u')
@@ -720,7 +744,7 @@ object WidgetRenderer {
                     Line(cellNameIds, names, 11f, regular, padPx = 4f * density),
                     Line(cellTimeIds, times, 14f, semibold, padPx = 4f * density),
                     opt(R.id.w_remain, r, 11f, regular, drop = 2),
-                ), gap = 3f)
+                ), h = boxH - chipPad, gap = 3f)
             }
         }
 
@@ -732,17 +756,14 @@ object WidgetRenderer {
             text(R.id.w_remain, r); color(R.id.w_remain, colors.muted)
             color(R.id.w_place, colors.muted)
             val (names, times) = cellTexts(snap)
-            for (i in 0 until 6) {
-                cellColors(snap, i, colors.muted, colors.text)
-                visible(CHIPS[i], cfg.glass3d, gone = false)
-            }
+            for (i in 0 until 6) cellColors(snap, i, colors.muted, colors.text)
             solve(listOf(
                 placeL,
                 Line(intArrayOf(R.id.w_name, R.id.w_time), listOf(name, time), 23f, regular, padPx = 10f * density, inline = true),
                 opt(R.id.w_remain, r, 12f, regular, drop = 2),
                 Line(cellNameIds, names, 10f, regular, drop = 1, padPx = 4f * density, with = intArrayOf(R.id.w_cells)),
                 Line(cellTimeIds, times, 12f, regular, drop = 1, padPx = 4f * density),
-            ), gap = 3f)
+            ), h = boxH - chipPad, gap = 3f)
         }
 
         fun mini(name: String, at: Instant) {
@@ -761,7 +782,7 @@ object WidgetRenderer {
             solve(listOf(
                 Line(cellNameIds, names, 10.5f, regular, padPx = 4f * density),
                 Line(cellTimeIds, times, 13f, semibold, padPx = 4f * density),
-            ), gap = 1f)
+            ), h = boxH - chipPad, gap = 1f)
         }
 
         fun digital(name: String, time: String, remain: String, stamp: String) {
@@ -855,7 +876,7 @@ object WidgetRenderer {
                 Line(cellNameIds, names, 10.5f, regular, drop = 1, padPx = 4f * density, with = intArrayOf(R.id.w_cells)),
                 Line(cellTimeIds, times, 13f, semibold, drop = 1, padPx = 4f * density),
                 opt(R.id.w_remain, r, 10.5f, regular, drop = 2),
-            ), h = boxH - px * lh - below - 4f * density, gap = 3f)
+            ), h = boxH - px * lh - below - 4f * density - chipPad, gap = 3f)
         }
 
         fun analog(snap: PrayerSnapshot, name: String, time: String) {

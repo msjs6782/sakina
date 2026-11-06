@@ -211,11 +211,12 @@ object Demo {
         com.sakina.app.ui.widgets.WidgetsDebug.galleryBg = e.getString("demo_gallery_bg")?.let { runCatching { com.sakina.app.data.WidgetBackground.valueOf(it.uppercase()) }.getOrNull() }
         val galleryOpts = e.getString("demo_gallery_opts") ?: ""
         com.sakina.app.ui.widgets.WidgetsDebug.galleryCfg = { c -> c.withOptions(galleryOpts) }
-        // Settings for the widgets on the home screen, by kind: "glass:bg=SCENE,glass3d=1;dayname:word=GOLD".
+        // Settings for the widgets on the home screen, by kind: "glass:bg=SCENE,glass3d=1/dayname:word=GOLD" (a
+        // semicolon also separates kinds, but adb's shell would split the command there).
         e.getString("demo_widget_opts")?.let { spec ->
             runBlocking {
                 val placed = com.sakina.app.widgets.WidgetUpdater.placed(app)
-                for (part in spec.split(';')) {
+                for (part in spec.split(';', '/')) {
                     val kindId = part.substringBefore(':').trim()
                     val opts = part.substringAfter(':', "")
                     for (w in placed.filter { it.kind.id == kindId || kindId == "*" }) {

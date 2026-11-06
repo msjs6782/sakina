@@ -137,20 +137,11 @@ def content(inner, gravity="center_vertical", orientation="vertical"):
 '''
 
 
-def cells(style_name="W.Cell", style_time="W.Cell.Time", vertical=False, chip=None):
-    """Six prayer cells, each with a highlight pill behind it (shown for the next prayer); with [chip], a frosted
-    chip under each (the glass panel in relief)."""
+def cells(style_name="W.Cell", style_time="W.Cell.Time", vertical=False):
+    """Six prayer cells, each with a highlight pill behind it (shown for the next prayer). In a row, each cell's
+    name and time sit in a box whose background can be a frosted chip (the glass in relief, paintings)."""
     out = []
     for i, p in enumerate(PRAYERS):
-        chip_view = "" if chip is None else f'''
-
-                <ImageView
-                    android:id="@+id/w_chip{i}"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:importantForAccessibility="no"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/{chip}" />'''
         if vertical:
             cell = f'''
             <FrameLayout
@@ -200,7 +191,7 @@ def cells(style_name="W.Cell", style_time="W.Cell.Time", vertical=False, chip=No
                 android:id="@+id/w_cell{i}"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1">{chip_view}
+                android:layout_weight="1">
 
                 <ImageView
                     android:id="@+id/w_hl{i}"
@@ -212,8 +203,10 @@ def cells(style_name="W.Cell", style_time="W.Cell.Time", vertical=False, chip=No
                     android:visibility="{'visible' if p == 'asr' else 'invisible'}" />
 
                 <LinearLayout
+                    android:id="@+id/w_box{i}"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -275,7 +268,7 @@ LAYOUTS["w_day_wide"] = frame(content(refresh_row() + cells() + text("w_remain",
 LAYOUTS["w_day_tall"] = frame(content(refresh_row() + cells("W.Text", "W.Text.Medium", vertical=True) + text("w_remain", "W.Text.Small", "w_sample_remain_stamp")))
 # 4. Glass panel (dark scrim, light text) and its light variant.
 for tone, st in (("dark", "W.Glass"), ("light", "W.Glass.Light")):
-    glass_cells = cells(st, st, chip=f"w_chip_{tone}").replace(f'style="@style/{st}"', f'style="@style/{st}"\n                        android:gravity="center"\n                        android:textAlignment="center"\n                        android:ellipsize="none"')
+    glass_cells = cells(st, st).replace(f'style="@style/{st}"', f'style="@style/{st}"\n                        android:gravity="center"\n                        android:textAlignment="center"\n                        android:ellipsize="none"')
     LAYOUTS[f"w_glass_{tone}"] = frame(content(refresh_row(st) + name_time_row(st) + text("w_remain", st, "w_sample_remain_stamp") + glass_cells),
                                         glass=True, msg_style=st)
 # 5. Mini square: name over time.
