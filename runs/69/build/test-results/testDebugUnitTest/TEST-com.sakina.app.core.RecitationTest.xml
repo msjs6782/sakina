@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sakina.app.core.RecitationTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-11-06T16:28:56.205Z" hostname="runnervmwuk1x" time="0.126">
+  <properties/>
+  <testcase name="everyRecordingFitsTheSingleRecordingLimit" classname="com.sakina.app.core.RecitationTest" time="0.006"/>
+  <testcase name="libraryLimits" classname="com.sakina.app.core.RecitationTest" time="0.001"/>
+  <testcase name="timingSourceIsTiedToTheRecordingSet" classname="com.sakina.app.core.RecitationTest" time="0.001"/>
+  <testcase name="brokenTimingMapsDisableRepeat" classname="com.sakina.app.core.RecitationTest" time="0.013"/>
+  <testcase name="validTimingMapsAreAccepted" classname="com.sakina.app.core.RecitationTest" time="0.008"/>
+  <testcase name="recordingsAndUrls" classname="com.sakina.app.core.RecitationTest" time="0.001"/>
+  <testcase name="repeatPlaysTheRangeTheChosenNumberOfTimes" classname="com.sakina.app.core.RecitationTest" time="0.0"/>
+  <testcase name="latinDigitsUnderArabicLocale" classname="com.sakina.app.core.RecitationTest" time="0.095"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
